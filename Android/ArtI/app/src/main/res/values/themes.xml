@@ -32,6 +32,11 @@
         <item name="android:layout_width">260dp</item>
     </style>
 
+    <style name="CustomShapeFab" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 
     <style name="Theme.ArtI" parent="Base.Theme.ArtI" />
 </resources>
