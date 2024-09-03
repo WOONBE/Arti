@@ -6,38 +6,42 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 
-abstract class BaseFragment<B : ViewBinding>(
-    private val bind: (View) -> B,
-    @LayoutRes layoutResId: Int
-) : Fragment(layoutResId) {
-    private var _binding: B? = null
-    protected val binding
-        get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+abstract class BaseFragment<T : ViewDataBinding>(
+    @LayoutRes val layoutResId: Int
+) : Fragment() {
+    private var _binding: T? = null
+    protected val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = bind(super.onCreateView(inflater, container, savedInstanceState)!!)
+        _binding = DataBindingUtil.inflate(inflater, layoutResId, container, false)
         return binding.root
     }
 
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+        init()
     }
 
-    fun showToast(message: String) {
-        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+    abstract fun init()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
+
+    fun makeToast(message: String) =
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
 }

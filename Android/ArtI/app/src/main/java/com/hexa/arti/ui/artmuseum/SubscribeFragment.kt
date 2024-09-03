@@ -10,7 +10,8 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentSubscribeBinding
 
-class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(FragmentSubscribeBinding::bind,R.layout.fragment_subscribe) {
+class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(R.layout.fragment_subscribe) {
+    override fun init() {
 
-
+    }
 }

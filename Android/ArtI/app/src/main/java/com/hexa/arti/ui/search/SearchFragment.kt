@@ -11,6 +11,8 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentSearchBinding
 
 
-class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::bind, R.layout.fragment_search) {
+class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
+    override fun init() {
 
+    }
 }

@@ -10,17 +10,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment :
-    BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind, R.layout.fragment_home) {
+    BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
 
     private val viewModel: HomeViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun init() {
 
-        viewModel.testGet("2") { userListModel ->
-            println("확인 ${userListModel}")
-        }
     }
 
 }

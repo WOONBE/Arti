@@ -10,7 +10,10 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentArtworkUploadBinding
 
-class ArtworkUploadFragment : BaseFragment<FragmentArtworkUploadBinding>(FragmentArtworkUploadBinding::bind,R.layout.fragment_artwork_upload) {
+class ArtworkUploadFragment : BaseFragment<FragmentArtworkUploadBinding>(R.layout.fragment_artwork_upload) {
+    override fun init() {
+
+    }
 
 
 }
