@@ -1,11 +1,11 @@
 package com.hexa.arti.ui.home
 
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentHomeBinding
+import com.hexa.arti.ui.home.adapter.ViewpageAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -16,10 +16,7 @@ class HomeFragment :
     private val viewModel: HomeViewModel by viewModels()
 
     override fun init() {
-
-//        viewModel.testGet("2"){ modelList ->
-//            println("확인 ${modelList.data}")
-//        }
+        binding.viewpager2.adapter = ViewpageAdapter()
     }
 
 }

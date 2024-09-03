@@ -39,32 +39,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.btnArtUpload.setOnClickListener {
             navController.navigate(R.id.artworkUploadFragment)
         }
-
-        // BottomNavigationView의 '홈' 버튼 선택 시 스택 제거 로직 추가
-        binding.bnMenu.setOnItemSelectedListener { item ->
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(navController.graph.startDestinationId, false)  // 스택에서 HomeFragment 이전 프래그먼트 모두 제거
-                .build()
-            when (item.itemId) {
-
-                R.id.homeFragment -> {
-                    navController.navigate(R.id.homeFragment,null, navOptions)
-                    true
-                }
-                R.id.searchFragment -> {
-                    navController.navigate(R.id.searchFragment,null, navOptions)
-                    true
-                }
-                R.id.subscribeFragment -> {
-                    navController.navigate(R.id.subscribeFragment,null, navOptions)
-                    true
-                }
-                R.id.portfolioFragment -> {
-                    navController.navigate(R.id.portfolioFragment,null, navOptions)
-                    true
-                }
-                else -> false
-            }
-        }
     }
 }

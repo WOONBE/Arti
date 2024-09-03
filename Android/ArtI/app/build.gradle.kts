@@ -73,4 +73,6 @@ dependencies {
     implementation(libs.glide)
     //timber
     implementation(libs.timber)
+    //ViewPager2
+    implementation(libs.viewpager2)
 }
