@@ -12,8 +12,7 @@
         android:title="@string/menu_search" />
 
     <item
-        android:id="@+id/blankFragment"
-        android:enabled="false"
+        android:id="@+id/artworkUploadFragment"
         android:title="" />
 
     <item

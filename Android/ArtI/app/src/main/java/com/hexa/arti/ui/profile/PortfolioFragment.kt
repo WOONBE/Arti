@@ -1,12 +1,9 @@
 package com.hexa.arti.ui.profile
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.hexa.arti.R
+import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.databinding.FragmentPortfolioBinding
 
-class PortfolioFragment : Fragment() {
+class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(FragmentPortfolioBinding::bind, R.layout.fragment_portfolio) {
 
 }
