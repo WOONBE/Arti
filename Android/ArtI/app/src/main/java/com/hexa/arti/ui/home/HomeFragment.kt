@@ -17,6 +17,9 @@ class HomeFragment :
 
     override fun init() {
 
+//        viewModel.testGet("2"){ modelList ->
+//            println("확인 ${modelList.data}")
+//        }
     }
 
 }
