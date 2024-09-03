@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import dagger.hilt.android.AndroidEntryPoint
+
 
 abstract class BaseFragment<B : ViewBinding>(
     private val bind: (View) -> B,
