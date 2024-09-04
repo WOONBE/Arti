@@ -37,6 +37,18 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="LoginEditInput" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/shape_login_edit_text</item>
+        <item name="android:paddingVertical">10dp</item>
+        <item name="android:layout_margin">10dp</item>
+    </style>
+
+    <style name="LoginTextTitle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+    </style>
 
     <style name="Theme.ArtI" parent="Base.Theme.ArtI" />
 </resources>
