@@ -76,11 +76,11 @@ class SurveyFragment : BaseFragment<FragmentSurveyBinding>(R.layout.fragment_sur
     private fun fadeOutAndIn(view: View) {
         view.animate()
             .alpha(0f)
-            .setDuration(500)
+            .setDuration(250)
             .withEndAction {
                 view.animate()
                     .alpha(1f)
-                    .setDuration(500)
+                    .setDuration(250)
                     .start()
             }
             .start()
