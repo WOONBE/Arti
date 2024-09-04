@@ -1,11 +1,13 @@
 package com.hexa.arti.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentHomeBinding
+import com.hexa.arti.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,11 +17,19 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels()
 
-    override fun init() {
+    private lateinit var mainActivity: MainActivity
 
-//        viewModel.testGet("2"){ modelList ->
-//            println("확인 ${modelList.data}")
-//        }
+    override fun init() {
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(false)
     }
 
 }
