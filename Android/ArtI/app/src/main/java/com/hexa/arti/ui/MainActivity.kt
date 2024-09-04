@@ -1,6 +1,7 @@
 package com.hexa.arti.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
+    private val isFirst = true
+
     override fun onResume() {
         super.onResume()
 
@@ -27,7 +30,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
     }
+
 
     override fun setupBinding(binding: ActivityMainBinding) {
 
@@ -36,35 +41,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         binding.bnMenu.setupWithNavController(navController)
 
+
+        if (isFirst) navController.navigate(R.id.surveyFragment)
+
         binding.btnArtUpload.setOnClickListener {
             navController.navigate(R.id.artworkUploadFragment)
         }
 
-        // BottomNavigationView의 '홈' 버튼 선택 시 스택 제거 로직 추가
-        binding.bnMenu.setOnItemSelectedListener { item ->
-            val navOptions = NavOptions.Builder()
-                .setPopUpTo(navController.graph.startDestinationId, false)  // 스택에서 HomeFragment 이전 프래그먼트 모두 제거
-                .build()
-            when (item.itemId) {
+    }
 
-                R.id.homeFragment -> {
-                    navController.navigate(R.id.homeFragment,null, navOptions)
-                    true
-                }
-                R.id.searchFragment -> {
-                    navController.navigate(R.id.searchFragment,null, navOptions)
-                    true
-                }
-                R.id.subscribeFragment -> {
-                    navController.navigate(R.id.subscribeFragment,null, navOptions)
-                    true
-                }
-                R.id.portfolioFragment -> {
-                    navController.navigate(R.id.portfolioFragment,null, navOptions)
-                    true
-                }
-                else -> false
-            }
+    fun hideBottomNav(isHide: Boolean) {
+        if (isHide) {
+            binding.bnMenu.visibility = View.GONE
+            binding.btnArtUpload.visibility = View.GONE
+        } else {
+            binding.bnMenu.visibility = View.VISIBLE
+            binding.btnArtUpload.visibility = View.VISIBLE
         }
     }
 }
