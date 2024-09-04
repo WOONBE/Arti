@@ -31,4 +31,16 @@
         android:name="com.hexa.arti.ui.profile.PortfolioFragment"
         android:label="fragment_portfolio"
         tools:layout="@layout/fragment_portfolio" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.hexa.arti.ui.MainActivity"
+        android:label="MainActivity" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="com.hexa.arti.ui.LoginActivity"
+        android:label="LoginActivity" />
+    <activity
+        android:id="@+id/splashActivity"
+        android:name="com.hexa.arti.ui.SplashActivity"
+        android:label="SplashActivity" />
 </navigation>

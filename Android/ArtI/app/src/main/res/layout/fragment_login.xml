@@ -30,49 +30,44 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                style="@style/LoginTextTitle"
                 android:id="@+id/login_id_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
-                android:textSize="30sp"
                 android:text="ID"
-                android:layout_marginStart="10dp"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toTopOf="@id/login_id_et"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_logo_iv" />
 
             <EditText
+                style="@style/LoginEditInput"
                 android:id="@+id/login_id_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/shape_login_edit_text"
-                android:layout_marginHorizontal="10dp"
-                android:paddingVertical="10dp"
                 app:layout_constraintBottom_toTopOf="@id/login_pw_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_id_tv" />
 
             <TextView
+                style="@style/LoginTextTitle"
                 android:id="@+id/login_pw_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="PW"
                 android:layout_marginTop="40dp"
-                android:textColor="@color/white"
-                android:textSize="30sp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toTopOf="@id/login_pw_et"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_id_et" />
 
             <EditText
+                style="@style/LoginEditInput"
                 android:id="@+id/login_pw_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:paddingVertical="10dp"
                 android:background="@drawable/shape_login_edit_text"
                 app:layout_constraintBottom_toTopOf="@id/login_btn_layout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -86,6 +81,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="60dp"
                 android:paddingVertical="10dp"
+                android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/login_pw_et">
