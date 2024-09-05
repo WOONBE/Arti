@@ -1,6 +1,5 @@
-package com.d106.arti.artwork;
+package com.d106.arti.gallery;
 
-import com.d106.arti.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,33 +11,21 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class Artwork extends BaseEntity {
+public class Theme {
 
     @Id
-    @Column(name = "ARTWORK_ID")
+    @Column(name = "THEME_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "ARTWORK_YEAR")
-    private Integer year;
+    //미술관과 n : 1
 
-    @Column(name = "ARTWORK_TITLE")
-    private String title;
-
-    @Column(name = "ARTWORK_IMAGE")
-    private String image;
-
-    @Column(name = "ARTWORK_DESC")
-    private String description;
-
-
-
+    //미술품과 1:n
 
 
 }

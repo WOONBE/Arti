@@ -12,32 +12,27 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class Artwork extends BaseEntity {
+public class Artist extends BaseEntity {
 
     @Id
-    @Column(name = "ARTWORK_ID")
+    @Column(name = "ARTIST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(name = "ARTIST_ENG_NAME")
+    private String eng_name;
 
-    @Column(name = "ARTWORK_YEAR")
-    private Integer year;
+    @Column(name = "ARTIST_KOR_NAME")
+    private String kor_name;
 
-    @Column(name = "ARTWORK_TITLE")
-    private String title;
-
-    @Column(name = "ARTWORK_IMAGE")
+    @Column(name = "ARTIST_IMAGE")
     private String image;
-
-    @Column(name = "ARTWORK_DESC")
+    @Column(name = "ARTIST_DESC")
     private String description;
-
-
 
 
 
