@@ -1,6 +1,6 @@
-package com.d106.arti.member;
+package com.d106.arti.member.domain;
 
-
+import com.d106.arti.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,24 +13,26 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Entity
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
-    @Column(name = "MEMBER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column
-    private String nickname;
-    private String profile;
-
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "nickname", unique = true, nullable = false)
+    private String nickname;
+
+    @Column(name = "image")
+    private String image;
 }
