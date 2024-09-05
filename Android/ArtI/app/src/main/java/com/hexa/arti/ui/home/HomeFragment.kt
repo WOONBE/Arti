@@ -1,6 +1,8 @@
 package com.hexa.arti.ui.home
 
+import android.os.SystemClock
 import android.util.Log
+import android.view.MotionEvent
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -25,6 +27,17 @@ class HomeFragment :
             },
             onNormal = {
                 binding.viewpager2.isUserInputEnabled = true
+            },
+            blockTouch = {
+//                val cancelEvent = MotionEvent.obtain(
+//                    SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+//                    MotionEvent.ACTION_CANCEL, 0f, 0f, 0
+//                )
+//                view?.dispatchTouchEvent(cancelEvent)
+//                cancelEvent.recycle()
+            },
+            unBlockTouch = {
+
             }
         )
     }
