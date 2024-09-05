@@ -15,6 +15,6 @@
 
     <color name="login_edit_color">#80FFFFFF</color>
 
-
+    <color name="disable_color">#350B0712</color>
 
 </resources>
