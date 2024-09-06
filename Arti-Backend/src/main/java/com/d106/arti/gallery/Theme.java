@@ -1,10 +1,15 @@
 package com.d106.arti.gallery;
 
+import com.d106.arti.artwork.domain.AiArtWork;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +30,23 @@ public class Theme {
 
     //미술관과 n : 1
 
+
     //미술품과 1:n
+    // 테마와 AiArtWork는 1:N 관계
+    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AiArtWork> artworks = new ArrayList<>();
+
+    // AiArtWork 추가 편의 메서드
+    public void addArtwork(AiArtWork artwork) {
+        artworks.add(artwork);
+        artwork.updateTheme(this);
+    }
+
+    // AiArtWork 삭제 편의 메서드
+    public void removeArtwork(AiArtWork artwork) {
+        artworks.remove(artwork);
+        artwork.updateTheme(null);
+    }
 
 
 }
