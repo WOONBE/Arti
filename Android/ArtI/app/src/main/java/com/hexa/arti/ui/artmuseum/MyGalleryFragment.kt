@@ -31,7 +31,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     }
     private lateinit var adapter: MyGalleryThemeAdapter
     private  val sampleData = listOf(
-        MyGalleryThemeItem("병현이의 절망", listOf(R.drawable.survey_example, R.drawable.survey_example, R.drawable.survey_example)),
+        MyGalleryThemeItem("병현이의 절망", listOf(R.drawable.survey_example, R.drawable.survey_example, R.drawable.survey_example, R.drawable.survey_example)),
         MyGalleryThemeItem("미술관 테마2", listOf(R.drawable.survey_example, R.drawable.survey_example,R.drawable.survey_example))
     )
 

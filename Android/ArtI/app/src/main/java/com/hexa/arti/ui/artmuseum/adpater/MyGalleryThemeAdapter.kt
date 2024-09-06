@@ -1,6 +1,7 @@
 package com.hexa.arti.ui.artmuseum.adpater
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -27,17 +28,24 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
         private val themeTitleTv: TextView = view.findViewById(R.id.theme_title_tv)
         private val gridLayout: GridLayout = view.findViewById(R.id.my_gallery_theme_gridLayout)
         private val themeKebabMenuIv: ImageView = view.findViewById(R.id.theme_kebab_menu_iv)
-        private var isGridVisible = false  // GridLayout이 보이는지 여부 추적
 
         // 각 아이템에 데이터 바인딩
         fun bind(item: MyGalleryThemeItem) {
             themeTitleTv.text = item.title
             // 이미지 리스트를 GridLayout에 동적으로 추가 (이미지 로드)
             gridLayout.removeAllViews() // 이전 이미지 제거
-            item.images.forEach { imageResId ->
+            item.images.forEachIndexed { index, imageResId ->
                 val imageView = LayoutInflater.from(gridLayout.context).inflate(R.layout.gallery_theme_img, gridLayout, false) as ImageView
                 imageView.setImageResource(imageResId)
                 gridLayout.addView(imageView)
+
+                // 이미지에 long click listener 추가
+                imageView.setOnLongClickListener {
+                    showDeleteConfirmationDialog(imageView.context) {
+                        removeImage(item, index) // 삭제 확인 후 이미지 삭제
+                    }
+                    true
+                }
             }
 
             // 초기 GridLayout은 보이지 않도록 설정 (scaleY를 0으로)
@@ -137,6 +145,31 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
             val dialog = builder.create()
             dialog.show()
         }
+
+        private fun showDeleteConfirmationDialog(context: Context, onConfirm: () -> Unit) {
+            val builder = android.app.AlertDialog.Builder(context)
+            builder.setTitle("이미지 삭제")
+                .setMessage("이미지를 삭제하시겠습니까?")
+                .setPositiveButton("삭제") { dialog, _ ->
+                    onConfirm() // 확인 버튼 클릭 시 실행할 동작 (이미지 삭제)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    dialog.dismiss() // 취소 버튼 클릭 시 다이얼로그 닫기
+                }
+            val dialog = builder.create()
+            dialog.show()
+        }
+        private fun removeImage(item: MyGalleryThemeItem, imageIndex: Int) {
+            val updatedImages = item.images.toMutableList()
+            updatedImages.removeAt(imageIndex)
+
+            // 새로운 리스트로 갱신 (ListAdapter는 이 데이터를 기반으로 UI를 갱신함)
+            submitList(currentList.map {
+                if (it == item) it.copy(images = updatedImages) else it
+            })
+        }
+
     }
 
     // onCreateViewHolder: ViewHolder 생성
