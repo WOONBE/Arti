@@ -1,6 +1,7 @@
 package com.hexa.arti.ui
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +20,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
+    private val isFirst = true
+
     override fun onResume() {
         super.onResume()
 
@@ -27,7 +30,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
     }
+
 
     override fun setupBinding(binding: ActivityMainBinding) {
 
@@ -36,8 +41,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         binding.bnMenu.setupWithNavController(navController)
 
+
+        if (isFirst) navController.navigate(R.id.surveyFragment)
+
         binding.btnArtUpload.setOnClickListener {
             navController.navigate(R.id.artworkUploadFragment)
+        }
+
+    }
+
+    fun hideBottomNav(isHide: Boolean) {
+        if (isHide) {
+            binding.bnMenu.visibility = View.GONE
+            binding.btnArtUpload.visibility = View.GONE
+        } else {
+            binding.bnMenu.visibility = View.VISIBLE
+            binding.btnArtUpload.visibility = View.VISIBLE
         }
     }
 }

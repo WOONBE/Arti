@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/login_background">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/trans_cover_color"
+            tools:context=".ui.login.LoginFragment">
+
+            <ImageView
+                android:id="@+id/login_logo_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_logo_white"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintBottom_toTopOf="@id/login_id_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                style="@style/LoginTextTitle"
+                android:id="@+id/login_id_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="ID"
+                app:layout_constraintBottom_toTopOf="@id/login_id_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_logo_iv" />
+
+            <EditText
+                style="@style/LoginEditInput"
+                android:id="@+id/login_id_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_login_edit_text"
+                app:layout_constraintBottom_toTopOf="@id/login_pw_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_id_tv" />
+
+            <TextView
+                style="@style/LoginTextTitle"
+                android:id="@+id/login_pw_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PW"
+                android:layout_marginTop="40dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toTopOf="@id/login_pw_et"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_id_et" />
+
+            <EditText
+                style="@style/LoginEditInput"
+                android:id="@+id/login_pw_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_login_edit_text"
+                app:layout_constraintBottom_toTopOf="@id/login_btn_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_pw_tv" />
+
+            <LinearLayout
+                android:id="@+id/login_btn_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="60dp"
+                android:paddingVertical="10dp"
+                android:clickable="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/login_pw_et">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/login_btn"
+                    style="@style/ButtonRoundShort8"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="30dp"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="30dp"
+                    android:text="Login" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/sign_btn"
+                    style="@style/ButtonRoundShort8"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="10dp"
+                    android:layout_marginHorizontal="30dp"
+                    android:text="Sign Up" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>
