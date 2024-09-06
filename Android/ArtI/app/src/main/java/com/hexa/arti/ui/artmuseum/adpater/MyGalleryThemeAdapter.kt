@@ -25,13 +25,16 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
 
     // ViewHolder 정의
     inner class MyGalleryThemeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val themeTitleTv: TextView = view.findViewById(R.id.theme_title_tv)
+        private val themeTitleTv: EditText = view.findViewById(R.id.theme_title_tv)
         private val gridLayout: GridLayout = view.findViewById(R.id.my_gallery_theme_gridLayout)
         private val themeKebabMenuIv: ImageView = view.findViewById(R.id.theme_kebab_menu_iv)
+        private val themeModifyIv: ImageView = view.findViewById(R.id.theme_check_iv)
+        private val themeCancelIv: ImageView = view.findViewById(R.id.theme_cancel_iv)
+        private var initString = ""
 
         // 각 아이템에 데이터 바인딩
         fun bind(item: MyGalleryThemeItem) {
-            themeTitleTv.text = item.title
+            themeTitleTv.setText(item.title)
             // 이미지 리스트를 GridLayout에 동적으로 추가 (이미지 로드)
             gridLayout.removeAllViews() // 이전 이미지 제거
             item.images.forEachIndexed { index, imageResId ->
@@ -59,6 +62,27 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
             themeKebabMenuIv.setOnClickListener { view ->
                 showPopupMenu(view)
             }
+            themeModifyIv.setOnClickListener {
+                themeModifyIv.visibility = View.GONE
+                themeCancelIv.visibility = View.GONE
+                themeTitleTv.apply {
+                    isEnabled = false
+                    isFocusable = false
+                    isClickable = false
+                }
+
+            }
+            themeCancelIv.setOnClickListener {
+                themeModifyIv.visibility = View.GONE
+                themeCancelIv.visibility = View.GONE
+                themeTitleTv.apply {
+                    setText(initString)
+                    isEnabled = false
+                    isFocusable = false
+                    isClickable = false
+                }
+            }
+
         }
         fun toggleGridLayout(gridLayout: GridLayout) {
             val isExpanded = gridLayout.visibility == View.VISIBLE
@@ -106,7 +130,16 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.my_gallery_modify -> {
-                        showEditDialog()
+                        themeModifyIv.visibility = View.VISIBLE
+                        themeCancelIv.visibility = View.VISIBLE
+                        themeTitleTv.apply {
+                            initString = this.text.toString()
+                            isEnabled = true
+                            isFocusableInTouchMode = true
+                            isClickable = true
+                            requestFocus() // 포커스를 EditText로 이동
+                            setSelection(text.length) // 커서를 텍스트 끝으로 이동
+                        }
                         true
                     }
                     R.id.my_gallery_delete -> {
@@ -119,32 +152,7 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
             popupMenu.show()
         }
 
-        private fun showEditDialog() {
-            val context = themeTitleTv.context
-            val builder = android.app.AlertDialog.Builder(context)
 
-            // 다이얼로그 안에 EditText를 추가
-            val inflater = LayoutInflater.from(context)
-            val dialogView = inflater.inflate(R.layout.dialog_edit_theme_title, null)
-            val editText = dialogView.findViewById<EditText>(R.id.edit_theme_title)
-
-            // 현재 themeTitleTv의 텍스트를 EditText에 설정
-            editText.setText(themeTitleTv.text.toString())
-
-            builder.setView(dialogView)
-                .setTitle("테마 제목 수정")
-                .setPositiveButton("수정") { dialog, id ->
-                    // 사용자가 수정한 텍스트를 TextView에 반영
-                    val newText = editText.text.toString()
-                    themeTitleTv.text = newText
-                }
-                .setNegativeButton("취소") { dialog, id ->
-                    dialog.cancel()
-                }
-
-            val dialog = builder.create()
-            dialog.show()
-        }
 
         private fun showDeleteConfirmationDialog(context: Context, onConfirm: () -> Unit) {
             val builder = android.app.AlertDialog.Builder(context)

@@ -35,6 +35,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         MyGalleryThemeItem("미술관 테마2", listOf(R.drawable.survey_example, R.drawable.survey_example,R.drawable.survey_example))
     )
 
+    private var initString = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,10 +47,14 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         adapter.submitList(sampleData)
 
         binding.myGalleryNameModifyBtn.setOnClickListener {
+
+
             // 제목 버전
             binding.myGalleryNameModifyBtn.visibility = View.GONE
             binding.myGalleryNameCheckBtn.visibility = View.VISIBLE
+            binding.myGalleryNameCancelBtn.visibility = View.VISIBLE
             binding.myGalleryNameTv.apply {
+                initString = this.text.toString()
                 isClickable = true
                 isFocusableInTouchMode = true
                 isEnabled = true
@@ -61,11 +66,24 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         binding.myGalleryNameCheckBtn.setOnClickListener {
             binding.myGalleryNameModifyBtn.visibility = View.VISIBLE
             binding.myGalleryNameCheckBtn.visibility = View.GONE
+            binding.myGalleryNameCancelBtn.visibility = View.GONE
             binding.myGalleryNameTv.apply {
                 isClickable = false
                 isFocusable = false
                 isEnabled = false
 
+            }
+        }
+
+        binding.myGalleryNameCancelBtn.setOnClickListener {
+            binding.myGalleryNameModifyBtn.visibility = View.VISIBLE
+            binding.myGalleryNameCheckBtn.visibility = View.GONE
+            binding.myGalleryNameCancelBtn.visibility = View.GONE
+            binding.myGalleryNameTv.apply {
+                isClickable = false
+                isFocusable = false
+                isEnabled = false
+                setText(initString)
             }
         }
 

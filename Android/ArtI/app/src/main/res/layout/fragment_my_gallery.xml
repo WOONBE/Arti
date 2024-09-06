@@ -110,6 +110,15 @@
                     app:layout_constraintTop_toTopOf="@+id/my_gallery_name_tv" />
 
                 <ImageView
+                    android:id="@+id/my_gallery_name_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_clear_24"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/my_gallery_name_tv"
+                    app:layout_constraintStart_toEndOf="@+id/my_gallery_name_check_btn"
+                    app:layout_constraintTop_toTopOf="@+id/my_gallery_name_tv" />
+                <ImageView
                     android:id="@+id/my_gallery_play_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
