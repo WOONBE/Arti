@@ -6,6 +6,7 @@ import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
@@ -97,7 +98,7 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.my_gallery_modify -> {
-                        // "수정" 메뉴 클릭 처리
+                        showEditDialog()
                         true
                     }
                     R.id.my_gallery_delete -> {
@@ -108,6 +109,33 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
                 }
             }
             popupMenu.show()
+        }
+
+        private fun showEditDialog() {
+            val context = themeTitleTv.context
+            val builder = android.app.AlertDialog.Builder(context)
+
+            // 다이얼로그 안에 EditText를 추가
+            val inflater = LayoutInflater.from(context)
+            val dialogView = inflater.inflate(R.layout.dialog_edit_theme_title, null)
+            val editText = dialogView.findViewById<EditText>(R.id.edit_theme_title)
+
+            // 현재 themeTitleTv의 텍스트를 EditText에 설정
+            editText.setText(themeTitleTv.text.toString())
+
+            builder.setView(dialogView)
+                .setTitle("테마 제목 수정")
+                .setPositiveButton("수정") { dialog, id ->
+                    // 사용자가 수정한 텍스트를 TextView에 반영
+                    val newText = editText.text.toString()
+                    themeTitleTv.text = newText
+                }
+                .setNegativeButton("취소") { dialog, id ->
+                    dialog.cancel()
+                }
+
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 

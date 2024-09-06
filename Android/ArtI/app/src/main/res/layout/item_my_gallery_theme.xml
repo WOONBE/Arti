@@ -7,12 +7,13 @@
 
     <TextView
         android:id="@+id/theme_title_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="병현이의 절망"
         android:textStyle="bold"
         android:textSize="20dp"
         android:layout_margin="20dp"
+        app:layout_constraintEnd_toStartOf="@id/theme_kebab_menu_iv"
         app:layout_constraintBottom_toTopOf="@+id/my_gallery_theme_gridLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,11 +22,13 @@
         android:id="@+id/theme_kebab_menu_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
         android:scaleX="1.2"
         android:scaleY="1.2"
-        android:layout_marginEnd="20dp"
         android:src="@drawable/icon_menu"
+        app:layout_constraintBottom_toBottomOf="@+id/theme_title_tv"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/theme_title_tv"
         app:layout_constraintTop_toTopOf="@+id/theme_title_tv" />
     <GridLayout
         android:id="@+id/my_gallery_theme_gridLayout"
