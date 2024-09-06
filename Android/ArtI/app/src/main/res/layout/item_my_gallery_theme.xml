@@ -13,7 +13,6 @@
         android:text="병현이의 절망"
         android:textStyle="bold"
         android:textSize="20dp"
-        android:enabled="false"
         android:focusable="false"
         android:clickable="false"
         android:textColor="@color/black"

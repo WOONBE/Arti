@@ -66,7 +66,6 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
                 themeModifyIv.visibility = View.GONE
                 themeCancelIv.visibility = View.GONE
                 themeTitleTv.apply {
-                    isEnabled = false
                     isFocusable = false
                     isClickable = false
                 }
@@ -77,7 +76,6 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
                 themeCancelIv.visibility = View.GONE
                 themeTitleTv.apply {
                     setText(initString)
-                    isEnabled = false
                     isFocusable = false
                     isClickable = false
                 }
@@ -134,7 +132,6 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
                         themeCancelIv.visibility = View.VISIBLE
                         themeTitleTv.apply {
                             initString = this.text.toString()
-                            isEnabled = true
                             isFocusableInTouchMode = true
                             isClickable = true
                             requestFocus() // 포커스를 EditText로 이동
