@@ -37,9 +37,9 @@
             android:id="@+id/iv_preview_image2"
             android:layout_width="100dp"
             android:layout_height="160dp"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:scaleType="fitXY"
+            app:layout_constraintEnd_toStartOf="@id/iv_preview_image3"
             android:src="@drawable/temp_preview_image2"
             app:layout_constraintStart_toEndOf="@id/iv_preview_image1"
             app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
@@ -48,9 +48,9 @@
             android:id="@+id/iv_preview_image3"
             android:layout_width="100dp"
             android:layout_height="160dp"
-            android:layout_marginStart="12dp"
             android:layout_marginTop="8dp"
             android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
             android:src="@drawable/temp_preview_image3"
             app:layout_constraintStart_toEndOf="@id/iv_preview_image2"
             app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />

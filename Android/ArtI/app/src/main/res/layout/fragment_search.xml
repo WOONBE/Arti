@@ -1,25 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="16dp"
         tools:context=".ui.search.SearchFragment">
 
         <TextView
+            android:id="@+id/tv_search_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="검색 프래그먼트"
+            android:layout_marginTop="32dp"
+            android:fontFamily="@font/inter_18pt_medium"
+            android:text="@string/tv_doing_search"
+            android:textSize="28sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/search_hint"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_search_title">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:minHeight="0dp"
+                android:paddingTop="12dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_doing_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_18pt_bold"
+            android:text="@string/doing_search"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_search" />
+
+        <View
+            android:id="@+id/line_search"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/grey"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_doing_search" />
+
+        <ImageView
+            android:id="@+id/iv_banner_art"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/banner_art"
+            app:layout_constraintEnd_toStartOf="@id/iv_banner_artist"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line_search" />
+
+        <ImageView
+            android:id="@+id/iv_gradation_art"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:alpha="0.7"
+            android:scaleType="fitXY"
+            android:src="@drawable/gradation_black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_art"
+            app:layout_constraintEnd_toEndOf="@id/iv_banner_art"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_art" />
+
+        <TextView
+            android:id="@+id/tv_art"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/art"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_art"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_art" />
+
+        <ImageView
+            android:id="@+id/iv_banner_artist"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="16dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/banner_artist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_banner_art"
+            app:layout_constraintTop_toBottomOf="@id/line_search" />
+
+        <ImageView
+            android:id="@+id/iv_gradation_artist"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:alpha="0.7"
+            android:scaleType="fitXY"
+            android:src="@drawable/gradation_black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_artist"
+            app:layout_constraintEnd_toEndOf="@id/iv_banner_artist"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_artist" />
+
+        <TextView
+            android:id="@+id/tv_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/artist"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_artist"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_artist" />
+
+        <ImageView
+            android:id="@+id/iv_banner_genre"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="6dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/banner_genre"
+            app:layout_constraintEnd_toStartOf="@id/iv_banner_art_museum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_banner_art" />
+
+        <ImageView
+            android:id="@+id/iv_gradation_genre"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:alpha="0.7"
+            android:scaleType="fitXY"
+            android:src="@drawable/gradation_black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_genre"
+            app:layout_constraintEnd_toEndOf="@id/iv_banner_genre"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_genre" />
+
+        <TextView
+            android:id="@+id/tv_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/genre"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_gradation_genre"
+            app:layout_constraintStart_toStartOf="@id/iv_gradation_genre" />
+
+        <ImageView
+            android:id="@+id/iv_banner_art_museum"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="20dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/banner_art_museum"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/iv_banner_genre"
+            app:layout_constraintTop_toBottomOf="@id/iv_banner_art" />
+
+        <ImageView
+            android:id="@+id/iv_gradation_art_museum"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:alpha="0.7"
+            android:scaleType="fitXY"
+            android:src="@drawable/gradation_black"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_art_museum"
+            app:layout_constraintEnd_toEndOf="@id/iv_banner_art_museum"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_art_museum" />
+
+        <TextView
+            android:id="@+id/tv_art_museum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/art_museum"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_banner_art_museum"
+            app:layout_constraintStart_toStartOf="@id/iv_banner_art_museum" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
