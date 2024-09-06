@@ -23,7 +23,7 @@ class SurveyFragment : BaseFragment<FragmentSurveyBinding>(R.layout.fragment_sur
     private var status = 0
     override fun init() {
     }
-
+    private var click = true
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -38,7 +38,9 @@ class SurveyFragment : BaseFragment<FragmentSurveyBinding>(R.layout.fragment_sur
         super.onViewCreated(view, savedInstanceState)
 
         binding.surveyGridLayout.setOnClickListener{
+            if (!click) return@setOnClickListener
 
+            click = false
             status += 20
 
             CoroutineScope(Dispatchers.Main).launch {
@@ -48,6 +50,7 @@ class SurveyFragment : BaseFragment<FragmentSurveyBinding>(R.layout.fragment_sur
 
                     binding.surveyProgressTv.text = "$i%"
                 }
+                click = true
                 if(status >= 99) navigate(R.id.action_surveyFragment_to_homeFragment)
             }
 

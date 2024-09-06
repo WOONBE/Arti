@@ -25,7 +25,11 @@
         android:id="@+id/subscribeFragment"
         android:name="com.hexa.arti.ui.artmuseum.SubscribeFragment"
         android:label="fragment_subscribe"
-        tools:layout="@layout/fragment_subscribe" />
+        tools:layout="@layout/fragment_subscribe" >
+        <action
+            android:id="@+id/action_subscribeFragment_to_myGalleryFragment"
+            app:destination="@id/myGalleryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/portfolioFragment"
         android:name="com.hexa.arti.ui.profile.PortfolioFragment"
@@ -49,6 +53,16 @@
         android:label="SurveyFragment" >
         <action
             android:id="@+id/action_surveyFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/myGalleryFragment"
+        android:name="com.hexa.arti.ui.artmuseum.MyGalleryFragment"
+        android:label="MyGalleryFragment" >
+        <action
+            android:id="@+id/action_myGalleryFragment_to_subscribeFragment"
+            app:destination="@id/subscribeFragment" />
     </fragment>
 </navigation>

@@ -30,7 +30,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
+        }
     }
 
 
@@ -42,7 +46,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.bnMenu.setupWithNavController(navController)
 
 
-        if (isFirst) navController.navigate(R.id.surveyFragment)
+//        if (isFirst) navController.navigate(R.id.surveyFragment)
 
         binding.btnArtUpload.setOnClickListener {
             navController.navigate(R.id.artworkUploadFragment)
