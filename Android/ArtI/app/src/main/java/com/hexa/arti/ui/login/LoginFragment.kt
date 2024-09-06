@@ -34,13 +34,10 @@ class LoginFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.loginBtn.setOnClickListener {
-            Toast.makeText(requireContext(),"로그인",Toast.LENGTH_SHORT).show()
             startActivity(Intent(requireContext(),MainActivity::class.java))
             loginActivity.finish()
         }
         binding.signBtn.setOnClickListener {
-            Toast.makeText(requireContext(),"회원가입",Toast.LENGTH_SHORT).show()
-
             findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
         }
     }
