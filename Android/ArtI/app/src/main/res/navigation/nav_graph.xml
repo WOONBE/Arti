@@ -10,7 +10,11 @@
         android:id="@+id/homeFragment"
         android:name="com.hexa.arti.ui.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_artGalleryDetailFragment"
+            app:destination="@id/artGalleryDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.hexa.arti.ui.search.SearchFragment"
@@ -64,5 +68,12 @@
         <action
             android:id="@+id/action_myGalleryFragment_to_subscribeFragment"
             app:destination="@id/subscribeFragment" />
+        <action
+            android:id="@+id/action_myGalleryFragment_to_artGalleryDetailFragment"
+            app:destination="@id/artGalleryDetailFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/artGalleryDetailFragment"
+        android:name="com.hexa.arti.ui.artGalleryDetail.ArtGalleryDetailFragment"
+        android:label="ArtGalleryDetailFragment" />
 </navigation>

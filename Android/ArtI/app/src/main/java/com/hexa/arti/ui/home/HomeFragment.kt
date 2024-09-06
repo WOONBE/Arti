@@ -12,6 +12,7 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentHomeBinding
 import com.hexa.arti.ui.home.adapter.ViewpageAdapter
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,6 +41,7 @@ class HomeFragment :
         binding.viewpager2.adapter = ViewpageAdapter(
             onPlayClick = { itemNumber ->
                 Log.d("확인", "클릭 확인요 ${itemNumber}")
+                navigate(R.id.action_homeFragment_to_artGalleryDetailFragment)
             },
             onSliding = {
                 binding.viewpager2.isUserInputEnabled = false

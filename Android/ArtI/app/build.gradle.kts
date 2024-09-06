@@ -75,4 +75,6 @@ dependencies {
     implementation(libs.timber)
     //ViewPager2
     implementation(libs.viewpager2)
+    //drawerLayout
+    implementation(libs.androidx.drawerlayout)
 }

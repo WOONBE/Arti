@@ -78,5 +78,13 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+    <!-- 미술관 디테일 -->
+    <style name="GalleryDetailMenuText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Theme.ArtI" parent="Base.Theme.ArtI" />
 </resources>
