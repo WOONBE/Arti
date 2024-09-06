@@ -1,4 +1,4 @@
-package com.d106.arti.artwork;
+package com.d106.arti.artwork.domain;
 
 import com.d106.arti.global.common.BaseEntity;
 import jakarta.persistence.Column;
@@ -23,6 +23,7 @@ public class Artist extends BaseEntity {
     @Column(name = "ARTIST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(name = "ARTIST_ENG_NAME")
     private String eng_name;
 
@@ -31,6 +32,7 @@ public class Artist extends BaseEntity {
 
     @Column(name = "ARTIST_IMAGE")
     private String image;
+
     @Column(name = "ARTIST_DESC")
     private String description;
 

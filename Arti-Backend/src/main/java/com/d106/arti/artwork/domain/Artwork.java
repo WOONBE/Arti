@@ -1,11 +1,6 @@
-package com.d106.arti.artwork;
-
+package com.d106.arti.artwork.domain;
 import com.d106.arti.global.common.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,8 +32,10 @@ public class Artwork extends BaseEntity {
     @Column(name = "ARTWORK_DESC")
     private String description;
 
-
-
-
+    // 작가와의 ManyToOne 관계 설정
+    @ManyToOne
+    @JoinColumn(name = "artist_id", nullable = false)
+    private Artist artist;
 
 }
+

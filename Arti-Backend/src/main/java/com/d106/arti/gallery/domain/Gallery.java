@@ -1,4 +1,8 @@
-package com.d106.arti.gallery;
+package com.d106.arti.gallery.domain;
+
+import com.d106.arti.member.domain.Member;
+import jakarta.persistence.*;
+import lombok.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,5 +39,14 @@ public class Gallery {
 
     @Column(name = "GALLERY_DESC")
     private String description;
+
+    //최근 일주일간 조회수(정렬)
+    @Column(name = "GALLERY_WEEKLY_VIEW")
+    private Integer weeklyView;
+
+    // 소유인(Member)과의 ManyToOne 관계 설정
+    @ManyToOne
+    @JoinColumn(name = "OWNER_ID", nullable = false)
+    private Member owner;
 
 }
