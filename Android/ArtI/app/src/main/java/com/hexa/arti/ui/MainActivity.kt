@@ -42,7 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.bnMenu.setupWithNavController(navController)
 
 
-//        if (isFirst) navController.navigate(R.id.surveyFragment)
+        if (isFirst) navController.navigate(R.id.surveyFragment)
 
         binding.btnArtUpload.setOnClickListener {
             navController.navigate(R.id.artworkUploadFragment)
