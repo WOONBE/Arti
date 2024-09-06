@@ -7,4 +7,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="theme_title">테마 : %s</string>
     <string name="survey_title">마음에 드는 이미지를 골라주세요</string>
+    <string name="search_hint">작품, 화가..등 검색</string>
+    <string name="tv_doing_search">검색하기</string>
+    <string name="doing_search">탐색하기</string>
+    <string name="art">작품</string>
+    <string name="artist">화가</string>
+    <string name="genre">장르</string>
+    <string name="art_museum">미술관</string>
 </resources>

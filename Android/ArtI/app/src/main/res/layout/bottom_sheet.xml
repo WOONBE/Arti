@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/background_bottom_sheet"
-            app:behavior_peekHeight="200dp"
+            app:behavior_peekHeight="240dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"> <!-- BottomSheetBehavior 설정 -->
 
             <TextView

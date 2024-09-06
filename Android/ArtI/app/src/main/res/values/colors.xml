@@ -14,7 +14,7 @@
     <color name="selected_color">#386Bf6</color>
 
     <color name="login_edit_color">#80FFFFFF</color>
-
+    <color name="grey">#80C5C5C5</color>
 
 
 </resources>
