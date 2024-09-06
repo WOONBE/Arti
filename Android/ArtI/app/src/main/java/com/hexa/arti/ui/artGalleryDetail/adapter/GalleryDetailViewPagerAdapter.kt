@@ -27,8 +27,9 @@ class GalleryDetailViewPagerAdapter(private val originalList: List<Int>,
     inner class GalleryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(imageResId: Int) {
             itemView.findViewById<ImageView>(R.id.gallery_iv).setImageResource(imageResId)
-
-            onImgClick(imageResId)
+            itemView.setOnClickListener {
+                onImgClick(imageResId)
+            }
 
         }
     }

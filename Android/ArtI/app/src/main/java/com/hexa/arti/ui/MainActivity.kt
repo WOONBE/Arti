@@ -1,5 +1,6 @@
 package com.hexa.arti.ui
 
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
@@ -40,7 +41,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun setupBinding(binding: ActivityMainBinding) {
 
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
 
         binding.bnMenu.setupWithNavController(navController)
@@ -63,4 +65,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             binding.btnArtUpload.visibility = View.VISIBLE
         }
     }
+
+
+    // 가로 모드
+    fun changeLandScope() {
+
+        // 가로모드로 고정
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION  // 내비게이션 바 숨기기
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN       // 상태바 숨기기
+                )
+    }
+
+    fun changePortrait() {
+
+        // 기본 모드로 복원
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        window.decorView.systemUiVisibility = (
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                )
+    }
+
 }

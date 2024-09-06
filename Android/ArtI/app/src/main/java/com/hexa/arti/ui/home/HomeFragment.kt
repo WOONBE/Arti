@@ -35,6 +35,7 @@ class HomeFragment :
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
+        mainActivity.changePortrait()
     }
 
     private fun initAdapter(){

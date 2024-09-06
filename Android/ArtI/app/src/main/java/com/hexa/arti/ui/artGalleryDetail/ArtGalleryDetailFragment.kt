@@ -14,6 +14,7 @@ import com.hexa.arti.databinding.FragmentArtGalleryDetailBinding
 import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.artGalleryDetail.adapter.GalleryDetailViewPagerAdapter
 import com.hexa.arti.ui.artGalleryDetail.adapter.GalleryThemeMenuAdapter
+import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
 
 private const val TAG = "ArtGalleryDetailFragmen"
@@ -50,7 +51,10 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
 
         adapter = GalleryDetailViewPagerAdapter(images,
             onImgClick = { imgId ->
-
+                val action = ArtGalleryDetailFragmentDirections.actionArtGalleryDetailFragmentToArtDetailFragment(
+                    imgId
+                )
+                navigate(action)
 
             })
         binding.viewPager.adapter = adapter
@@ -117,24 +121,8 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
 
     override fun onResume() {
         super.onResume()
-        // 가로모드로 고정
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        mainActivity.window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION  // 내비게이션 바 숨기기
-                        or View.SYSTEM_UI_FLAG_FULLSCREEN       // 상태바 숨기기
-                )
+        mainActivity.changeLandScope()
         mainActivity.hideBottomNav(true)
     }
 
-    override fun onPause() {
-        super.onPause()
-        // 기본 모드로 복원
-        requireActivity().requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        mainActivity.window.decorView.systemUiVisibility = (
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                )
-    }
 }

@@ -75,5 +75,17 @@
     <fragment
         android:id="@+id/artGalleryDetailFragment"
         android:name="com.hexa.arti.ui.artGalleryDetail.ArtGalleryDetailFragment"
-        android:label="ArtGalleryDetailFragment" />
+        android:label="ArtGalleryDetailFragment" >
+        <action
+            android:id="@+id/action_artGalleryDetailFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/artDetailFragment"
+        android:name="com.hexa.arti.ui.artGalleryDetail.ArtDetailFragment"
+        android:label="ArtDetailFragment" >
+        <argument
+            android:name="imgId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
