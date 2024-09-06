@@ -18,6 +18,10 @@ class HomeFragment :
     private val viewModel: HomeViewModel by viewModels()
 
     override fun init() {
+        initAdapter()
+    }
+
+    private fun initAdapter(){
         binding.viewpager2.adapter = ViewpageAdapter(
             onPlayClick = { itemNumber ->
                 Log.d("확인", "클릭 확인요 ${itemNumber}")
@@ -40,6 +44,7 @@ class HomeFragment :
 
             }
         )
+
     }
 
 

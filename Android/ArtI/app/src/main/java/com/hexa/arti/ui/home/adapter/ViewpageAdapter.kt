@@ -1,10 +1,12 @@
 package com.hexa.arti.ui.home.adapter
 
+import android.content.res.Resources.Theme
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.hexa.arti.data.model.home.ArtTheme
 import com.hexa.arti.databinding.ItemHomepageBinding
 
 class ViewpageAdapter(
@@ -24,6 +26,8 @@ class ViewpageAdapter(
         private val unBlockTouch: () -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val themeAdapter = ThemeAdapter()
 
         fun bind(item: Int) {
             val bottomSheet = binding.includeBottomSheet.bottomSheetLayout
@@ -92,6 +96,16 @@ class ViewpageAdapter(
                 onPlayClick(item)
             }
 
+            binding.includeBottomSheet.rvTheme.apply{
+                adapter = themeAdapter
+                val artThemeList = listOf(
+                    ArtTheme("절망"),
+                    ArtTheme("희망"),
+                    ArtTheme("병현")
+                )
+
+                themeAdapter.submitList(artThemeList)
+            }
         }
 
     }

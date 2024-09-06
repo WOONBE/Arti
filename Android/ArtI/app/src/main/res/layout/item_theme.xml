@@ -15,39 +15,45 @@
             android:id="@+id/tv_theme_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="테마 : 희망"
+            android:layout_margin="16dp"
             android:fontFamily="@font/inter_28pt_black"
+            android:text="테마 : 희망"
             android:textSize="24sp"
-            android:layout_margin="20dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_preview_image1"
-            android:layout_marginStart="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_theme_title"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
             android:src="@drawable/temp_preview_image1"
-            android:layout_height="wrap_content" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
 
         <ImageView
             android:id="@+id/iv_preview_image2"
+            android:layout_width="100dp"
+            android:layout_height="160dp"
             android:layout_marginStart="12dp"
-            app:layout_constraintStart_toEndOf="@id/iv_preview_image1"
-            app:layout_constraintTop_toBottomOf="@id/tv_theme_title"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
             android:src="@drawable/temp_preview_image2"
-            android:layout_height="wrap_content" />
+            app:layout_constraintStart_toEndOf="@id/iv_preview_image1"
+            app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
 
         <ImageView
             android:id="@+id/iv_preview_image3"
+            android:layout_width="100dp"
+            android:layout_height="160dp"
             android:layout_marginStart="12dp"
-            app:layout_constraintStart_toEndOf="@id/iv_preview_image2"
-            app:layout_constraintTop_toBottomOf="@id/tv_theme_title"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scaleType="fitXY"
             android:src="@drawable/temp_preview_image3"
-            android:layout_height="wrap_content" />
+            app:layout_constraintStart_toEndOf="@id/iv_preview_image2"
+            app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
