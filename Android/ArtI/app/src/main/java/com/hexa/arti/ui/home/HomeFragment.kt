@@ -21,14 +21,10 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels()
 
-<<<<<<< Android/ArtI/app/src/main/java/com/hexa/arti/ui/home/HomeFragment.kt
     override fun init() {
         initAdapter()
-=======
-    private lateinit var mainActivity: MainActivity
-
-    override fun init() {
     }
+    private lateinit var mainActivity: MainActivity
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,7 +34,6 @@ class HomeFragment :
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
->>>>>>> Android/ArtI/app/src/main/java/com/hexa/arti/ui/home/HomeFragment.kt
     }
 
     private fun initAdapter(){
