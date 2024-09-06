@@ -1,5 +1,8 @@
 package com.hexa.arti.ui.home
 
+import android.os.SystemClock
+import android.util.Log
+import android.view.MotionEvent
 import android.content.Context
 import android.os.Bundle
 import android.view.View
@@ -7,6 +10,7 @@ import androidx.fragment.app.viewModels
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentHomeBinding
+import com.hexa.arti.ui.home.adapter.ViewpageAdapter
 import com.hexa.arti.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +21,10 @@ class HomeFragment :
 
     private val viewModel: HomeViewModel by viewModels()
 
+<<<<<<< Android/ArtI/app/src/main/java/com/hexa/arti/ui/home/HomeFragment.kt
+    override fun init() {
+        initAdapter()
+=======
     private lateinit var mainActivity: MainActivity
 
     override fun init() {
@@ -30,6 +38,34 @@ class HomeFragment :
     override fun onResume() {
         super.onResume()
         mainActivity.hideBottomNav(false)
+>>>>>>> Android/ArtI/app/src/main/java/com/hexa/arti/ui/home/HomeFragment.kt
     }
+
+    private fun initAdapter(){
+        binding.viewpager2.adapter = ViewpageAdapter(
+            onPlayClick = { itemNumber ->
+                Log.d("확인", "클릭 확인요 ${itemNumber}")
+            },
+            onSliding = {
+                binding.viewpager2.isUserInputEnabled = false
+            },
+            onNormal = {
+                binding.viewpager2.isUserInputEnabled = true
+            },
+            blockTouch = {
+//                val cancelEvent = MotionEvent.obtain(
+//                    SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
+//                    MotionEvent.ACTION_CANCEL, 0f, 0f, 0
+//                )
+//                view?.dispatchTouchEvent(cancelEvent)
+//                cancelEvent.recycle()
+            },
+            unBlockTouch = {
+
+            }
+        )
+
+    }
+
 
 }

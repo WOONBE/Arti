@@ -13,14 +13,10 @@ class HomeViewModel @Inject constructor(
     private val testRepository: TestRepository
 ) : ViewModel() {
 
-
-
-
-
     fun testGet(
         page: String,
         onSuccess: (UserListModel) -> Unit
-    ){
+    ) {
 
         viewModelScope.launch {
             testRepository.getUser(page).onSuccess { userListModel ->
