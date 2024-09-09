@@ -87,6 +87,9 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
             }
         }
 
+        binding.myGalleryPlayBtn.setOnClickListener {
+            navigate(R.id.action_myGalleryFragment_to_artGalleryDetailFragment)
+        }
         binding.myGalleryThumbnailIv.setOnClickListener {
             openImagePicker()
         }

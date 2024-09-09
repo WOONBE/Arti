@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ArtI" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+         <item name="colorPrimary">@color/point_color</item>
     </style>
 
     <style name="ButtonTextWhiteBold" parent="Widget.AppCompat.Button">
@@ -78,5 +78,19 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+
+    <!-- 미술관 디테일 -->
+    <style name="GalleryDetailMenuText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- 미술관 내부 디테일 -->
+    <style name="ArtGalleryRadioBtn" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_margin">20dp</item>
+        <item name="android:paddingStart">20dp</item>
+    </style>
     <style name="Theme.ArtI" parent="Base.Theme.ArtI" />
 </resources>
