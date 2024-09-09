@@ -42,7 +42,11 @@
         android:id="@+id/portfolioFragment"
         android:name="com.hexa.arti.ui.profile.PortfolioFragment"
         android:label="fragment_portfolio"
-        tools:layout="@layout/fragment_portfolio" />
+        tools:layout="@layout/fragment_portfolio" >
+        <action
+            android:id="@+id/action_portfolioFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.hexa.arti.ui.MainActivity"
@@ -96,4 +100,12 @@
         android:id="@+id/artBannerFragment"
         android:name="com.hexa.arti.ui.search.ArtBannerFragment"
         android:label="ArtBannerFragment" />
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.hexa.arti.ui.profile.MyPageFragment"
+        android:label="MyPageFragment" >
+        <action
+            android:id="@+id/action_myPageFragment_to_portfolioFragment"
+            app:destination="@id/portfolioFragment" />
+    </fragment>
 </navigation>
