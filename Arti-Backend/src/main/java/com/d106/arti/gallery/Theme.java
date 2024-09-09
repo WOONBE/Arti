@@ -1,6 +1,6 @@
 package com.d106.arti.gallery;
 
-import com.d106.arti.artwork.domain.AiArtWork;
+import com.d106.arti.artwork.domain.AiArtwork;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,16 +34,16 @@ public class Theme {
     //미술품과 1:n
     // 테마와 AiArtWork는 1:N 관계
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AiArtWork> artworks = new ArrayList<>();
+    private List<AiArtwork> artworks = new ArrayList<>();
 
     // AiArtWork 추가 편의 메서드
-    public void addArtwork(AiArtWork artwork) {
+    public void addArtwork(AiArtwork artwork) {
         artworks.add(artwork);
         artwork.updateTheme(this);
     }
 
     // AiArtWork 삭제 편의 메서드
-    public void removeArtwork(AiArtWork artwork) {
+    public void removeArtwork(AiArtwork artwork) {
         artworks.remove(artwork);
         artwork.updateTheme(null);
     }

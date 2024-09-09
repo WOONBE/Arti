@@ -12,7 +12,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.SpringApplication;
 
 @Getter
 @Builder
@@ -20,7 +19,7 @@ import org.springframework.boot.SpringApplication;
 @AllArgsConstructor
 @Entity
 @DiscriminatorValue("AI")
-public class AiArtWork extends Artwork {
+public class AiArtwork extends Artwork {
 
     @Column(name = "AI_ARTWORK_TITLE")
      private String aiArtworkTitle;
