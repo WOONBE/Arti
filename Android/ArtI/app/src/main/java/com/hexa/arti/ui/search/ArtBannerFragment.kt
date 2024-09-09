@@ -1,6 +1,7 @@
 package com.hexa.arti.ui.search
 
 import android.util.Log
+import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Art
@@ -17,6 +18,9 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     override fun init() {
         binding.rvArt.adapter = artAdapter
 
+        binding.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val mockData = listOf(
             Art(id = 0, title = "0번"),
