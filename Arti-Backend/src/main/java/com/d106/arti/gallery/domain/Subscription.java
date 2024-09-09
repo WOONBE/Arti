@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class Subscription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GALLERY_ID")
