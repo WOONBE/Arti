@@ -34,6 +34,7 @@ public class Theme {
     //미술품과 1:n
     // 테마와 AiArtWork는 1:N 관계
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<AiArtwork> artworks = new ArrayList<>();
 
     // AiArtWork 추가 편의 메서드

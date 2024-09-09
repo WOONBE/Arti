@@ -21,4 +21,13 @@ public class ArtworkController {
         csvService.readCSVAndSaveData(filePath, limit);
         return "Successfully imported 100 records from " + filename;
     }
+
+    // 새로운 Artist CSV 파일 처리 엔드포인트
+    @GetMapping("/import-artist-csv/{filename}")
+    public String importArtistCSV(@PathVariable String filename) {
+        String filePath = "src/main/resources/" + filename;
+        int limit = 100; // 최대 100개의 데이터를 가져옴
+        csvService.readArtistCSVAndSaveData(filePath, limit);
+        return "성공적으로 " + filename + " 파일에서 100개의 아티스트 데이터를 가져왔습니다.";
+    }
 }

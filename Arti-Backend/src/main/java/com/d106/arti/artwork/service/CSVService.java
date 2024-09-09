@@ -1,6 +1,8 @@
 package com.d106.arti.artwork.service;
 
+import com.d106.arti.artwork.domain.Artist;
 import com.d106.arti.artwork.domain.NormalArtWork;
+import com.d106.arti.artwork.repository.ArtistRepository;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 import com.opencsv.CSVReader;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import java.util.List;
 public class CSVService {
 
     private final ArtworkRepository artworkRepository;
+
+    private final ArtistRepository artistRepository;
 
     public void readCSVAndSaveData(String filePath, int limit) {
         try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
@@ -53,6 +57,41 @@ public class CSVService {
             e.printStackTrace();
         }
     }
+    public void readArtistCSVAndSaveData(String filePath, int limit) {
+        try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
+            String[] nextLine;
+            List<Artist> artists = new ArrayList<>();
+
+            csvReader.readNext(); // 첫 번째 줄(헤더) 건너뜀
+            int count = 0;
+            while ((nextLine = csvReader.readNext()) != null && count < limit) {
+                if (nextLine.length < 4) {
+                    System.out.println("잘못된 데이터 형식: " + String.join(",", nextLine));
+                    continue;
+                }
+
+                String engName = nextLine.length > 0 ? nextLine[0] : "";
+                String korName = nextLine.length > 1 ? nextLine[1] : "";
+                String summary = nextLine.length > 2 ? nextLine[2] : "";
+                String imageUrl = nextLine.length > 3 ? nextLine[3] : "";
+
+                Artist artist = Artist.builder()
+                    .eng_name(engName)
+                    .kor_name(korName)
+                    .summary(summary)
+                    .image(imageUrl)
+                    .build();
+
+                artists.add(artist);
+                count++;
+            }
+
+            artistRepository.saveAll(artists); // 아티스트 데이터 DB에 저장
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private int parseInteger(String value, String fieldName) {
         if (value == null || value.trim().isEmpty()) {
@@ -66,4 +105,6 @@ public class CSVService {
             return 0; // 기본값으로 0을 사용하거나, 필요에 따라 다른 값을 사용할 수 있습니다.
         }
     }
+
+
 }
