@@ -6,6 +6,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentSearchBinding
@@ -45,6 +46,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 }
             })
 
+        initViews()
+    }
+
+    private fun initViews(){
         binding.tietSearch.setOnFocusChangeListener { _, hasFocus ->
             viewLifecycleOwner.lifecycleScope.launch {
                 if (hasFocus) {
@@ -64,6 +69,18 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.tietSearch.addTextChangedListener { text ->
             if (text.toString().isEmpty()) binding.ivClearText.visibility = View.GONE
             else binding.ivClearText.visibility = View.VISIBLE
+        }
+
+        binding.ivBannerArt.setOnClickListener {
+            moveToArtBannerFragment()
+        }
+
+        binding.ivGradationArt.setOnClickListener {
+            moveToArtBannerFragment()
+        }
+
+        binding.tvArt.setOnClickListener {
+            moveToArtBannerFragment()
         }
     }
 
@@ -115,6 +132,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.clSearchBanner.animate()
             .alpha(1f)
             .setDuration(150)
+    }
+
+    private fun moveToArtBannerFragment(){
+        findNavController().navigate(R.id.action_searchFragment_to_artBannerFragment)
     }
 
 

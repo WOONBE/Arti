@@ -19,7 +19,11 @@
         android:id="@+id/searchFragment"
         android:name="com.hexa.arti.ui.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_artBannerFragment"
+            app:destination="@id/artBannerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/artworkUploadFragment"
         android:name="com.hexa.arti.ui.artwork.ArtworkUploadFragment"
@@ -88,4 +92,8 @@
             android:name="imgId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/artBannerFragment"
+        android:name="com.hexa.arti.ui.search.ArtBannerFragment"
+        android:label="ArtBannerFragment" />
 </navigation>

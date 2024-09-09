@@ -1,6 +1,5 @@
 package com.hexa.arti.ui
 
-import com.hexa.arti.ui.login.LoginFragment
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.fragment.NavHostFragment
@@ -16,12 +15,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
         initView()
     }
 
-    private fun initView(){
+    private fun initView() {
 
     }
 
     override fun setupBinding(binding: ActivityLoginBinding) {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.login_ft) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.login_ft) as NavHostFragment
         val navController = navHostFragment.navController
     }
 }
