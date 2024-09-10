@@ -19,7 +19,9 @@ class GenreAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(genre: Genre) {
-
+            itemView.setOnClickListener {
+                onItemClick()
+            }
         }
     }
 

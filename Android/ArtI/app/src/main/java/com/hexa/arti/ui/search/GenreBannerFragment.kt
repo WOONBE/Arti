@@ -13,7 +13,8 @@ class GenreBannerFragment :
     BaseFragment<FragmentGenreBannerBinding>(R.layout.fragment_genre_banner) {
 
     private val genreAdapter = GenreAdapter {
-        Log.d("확인", "클릭 확인")
+        Log.d("확인", " 이게실행되는거임?")
+        goToGenreDetailFragment()
     }
 
     override fun init() {
@@ -40,5 +41,9 @@ class GenreBannerFragment :
         )
 
         genreAdapter.submitList(mockData)
+    }
+
+    private fun goToGenreDetailFragment() {
+        findNavController().navigate(R.id.action_genreBannerFragment_to_genreDetailFragment)
     }
 }

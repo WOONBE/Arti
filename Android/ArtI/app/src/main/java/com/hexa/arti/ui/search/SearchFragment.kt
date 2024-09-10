@@ -106,6 +106,19 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.tvGenre.setOnClickListener {
             moveToGenreBannerFragment()
         }
+
+
+        binding.ivBannerArtMuseum.setOnClickListener {
+            moveToArtMuseumFragment()
+        }
+
+        binding.ivGradationArtMuseum.setOnClickListener {
+            moveToArtMuseumFragment()
+        }
+
+        binding.tvArtMuseum.setOnClickListener {
+            moveToArtMuseumFragment()
+        }
     }
 
     private fun onSearchFocus() {
@@ -168,6 +181,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private fun moveToGenreBannerFragment() {
         findNavController().navigate(R.id.action_searchFragment_to_genreBannerFragment)
+    }
+
+    private fun moveToArtMuseumFragment(){
+        findNavController().navigate(R.id.action_searchFragment_to_artMuseumBannerFragment)
     }
 
 }
