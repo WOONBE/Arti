@@ -49,7 +49,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         initViews()
     }
 
-    private fun initViews(){
+    private fun initViews() {
         binding.tietSearch.setOnFocusChangeListener { _, hasFocus ->
             viewLifecycleOwner.lifecycleScope.launch {
                 if (hasFocus) {
@@ -93,6 +93,18 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
         binding.tvArtist.setOnClickListener {
             moveToArtistBannerFragment()
+        }
+
+        binding.ivBannerGenre.setOnClickListener {
+            moveToGenreBannerFragment()
+        }
+
+        binding.ivGradationGenre.setOnClickListener {
+            moveToGenreBannerFragment()
+        }
+
+        binding.tvGenre.setOnClickListener {
+            moveToGenreBannerFragment()
         }
     }
 
@@ -146,12 +158,16 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             .setDuration(150)
     }
 
-    private fun moveToArtBannerFragment(){
+    private fun moveToArtBannerFragment() {
         findNavController().navigate(R.id.action_searchFragment_to_artBannerFragment)
     }
 
-    private fun moveToArtistBannerFragment(){
+    private fun moveToArtistBannerFragment() {
         findNavController().navigate(R.id.action_searchFragment_to_artistBannerFragment)
+    }
+
+    private fun moveToGenreBannerFragment() {
+        findNavController().navigate(R.id.action_searchFragment_to_genreBannerFragment)
     }
 
 }
