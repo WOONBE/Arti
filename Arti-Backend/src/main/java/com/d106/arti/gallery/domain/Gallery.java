@@ -52,6 +52,7 @@ public class Gallery {
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private Member owner;
 
+    //(수정!) 서비스 쪽에 추가하기!
     // 지난 7일간의 조회수를 계산하는 메서드
     public Integer calculateWeeklyView() {
         // LocalDate.now(): 현재 날짜를 반환. 'today' 변수에 현재 날짜를 저장
@@ -75,6 +76,8 @@ public class Gallery {
                 // .sum(): 변환된 int 값들을 모두 더하여 합계를 반환
                 .sum();
     }
+
+    // DTO 만
 
     // 이미지가 없으면 기본 이미지 또는 "이미지가 없습니다" 문구를 반환
     public String getImage() {
