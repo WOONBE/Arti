@@ -1,6 +1,7 @@
 package com.hexa.arti.ui.search
 
 import android.util.Log
+import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Artist
@@ -15,7 +16,10 @@ class ArtistBannerFragment :
     }
 
     override fun init() {
+        initViews()
+    }
 
+    private fun initViews(){
         binding.rvArtist.adapter = artistAdapter
 
         val mockData = listOf(
@@ -31,5 +35,9 @@ class ArtistBannerFragment :
         )
 
         artistAdapter.submitList(mockData)
+
+        binding.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

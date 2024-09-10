@@ -26,6 +26,12 @@
         <action
             android:id="@+id/action_searchFragment_to_artistBannerFragment"
             app:destination="@id/artistBannerFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_genreBannerFragment"
+            app:destination="@id/genreBannerFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_artMuseumBannerFragment"
+            app:destination="@id/artMuseumBannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/artworkUploadFragment"
@@ -126,4 +132,20 @@
         android:id="@+id/artistBannerFragment"
         android:name="com.hexa.arti.ui.search.ArtistBannerFragment"
         android:label="ArtistBannerFragment" />
+    <fragment
+        android:id="@+id/genreBannerFragment"
+        android:name="com.hexa.arti.ui.search.GenreBannerFragment"
+        android:label="GenreBannerFragment" >
+        <action
+            android:id="@+id/action_genreBannerFragment_to_genreDetailFragment"
+            app:destination="@id/genreDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artMuseumBannerFragment"
+        android:name="com.hexa.arti.ui.search.ArtMuseumBannerFragment"
+        android:label="ArtMuseumBannerFragment" />
+    <fragment
+        android:id="@+id/genreDetailFragment"
+        android:name="com.hexa.arti.ui.search.GenreDetailFragment"
+        android:label="GenreDetailFragment" />
 </navigation>
