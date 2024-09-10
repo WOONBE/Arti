@@ -18,11 +18,18 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.signCancelBtn.setOnClickListener {
-            popBackStack()
-        }
-        binding.signBtn.setOnClickListener {
-            navigate(R.id.action_signUpFragment_to_loginFragment)
+        with(binding){
+            signCancelBtn.setOnClickListener {
+                popBackStack()
+            }
+            signBtn.setOnClickListener {
+                navigate(R.id.action_signUpFragment_to_loginFragment)
+            }
+            signEmailBtn.setOnClickListener {
+                signCertificationTv.visibility = View.VISIBLE
+                signCertificationEt.visibility = View.VISIBLE
+                signCertificationBtn.visibility = View.VISIBLE
+            }
         }
     }
 }
