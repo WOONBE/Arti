@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="50dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -79,6 +79,12 @@
                 android:src="@drawable/profile_img" />
         </androidx.cardview.widget.CardView>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.06" />
         <TextView
             android:id="@+id/my_page_profile_name_tv"
             android:layout_width="wrap_content"
@@ -86,114 +92,119 @@
             android:text="황병현"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toTopOf="@id/my_page_profile_modify_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/my_page_profile_img_cv" />
 
         <ImageView
-            style="@style/MyPageIcon"
             android:id="@+id/my_page_profile_modify_btn"
+            style="@style/MyPageIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:src="@drawable/ic_manage_accounts_24"
             app:layout_constraintBottom_toTopOf="@+id/my_page_pass_btn"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/my_page_profile_modify_tv"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/my_page_profile_name_tv" />
 
         <TextView
-            style="@style/MyPageMenuText"
             android:id="@+id/my_page_profile_modify_tv"
-            android:layout_width="wrap_content"
+            style="@style/MyPageMenuText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="프로필 편집"
             app:layout_constraintBottom_toBottomOf="@+id/my_page_profile_modify_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/my_page_profile_modify_btn"
             app:layout_constraintTop_toTopOf="@+id/my_page_profile_modify_btn" />
 
         <ImageView
-            style="@style/MyPageIcon"
             android:id="@+id/my_page_pass_btn"
+            style="@style/MyPageIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_pass_24"
-            app:layout_constraintEnd_toStartOf="@id/my_page_pass_tv"
             app:layout_constraintBottom_toTopOf="@+id/my_page_info_btn"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/my_page_pass_tv"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/my_page_profile_modify_btn" />
 
         <TextView
-            style="@style/MyPageMenuText"
             android:id="@+id/my_page_pass_tv"
-            android:layout_width="wrap_content"
+            style="@style/MyPageMenuText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="비밀번호 수정"
             app:layout_constraintBottom_toBottomOf="@+id/my_page_pass_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/my_page_pass_btn"
             app:layout_constraintTop_toTopOf="@+id/my_page_pass_btn" />
 
         <ImageView
-            style="@style/MyPageIcon"
             android:id="@+id/my_page_info_btn"
+            style="@style/MyPageIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_info_outline_24"
-            app:layout_constraintEnd_toStartOf="@id/my_page_info_tv"
             app:layout_constraintBottom_toTopOf="@id/my_page_logout_btn"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/my_page_info_tv"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/my_page_pass_btn" />
 
         <TextView
-            style="@style/MyPageMenuText"
             android:id="@+id/my_page_info_tv"
-            android:layout_width="wrap_content"
+            style="@style/MyPageMenuText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="이용 약관"
             app:layout_constraintBottom_toBottomOf="@+id/my_page_info_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/my_page_info_btn"
             app:layout_constraintTop_toTopOf="@+id/my_page_info_btn" />
 
         <ImageView
-            style="@style/MyPageIcon"
             android:id="@+id/my_page_logout_btn"
+            style="@style/MyPageIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_logout_24"
-            app:layout_constraintEnd_toStartOf="@id/my_page_logout_tv"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/my_page_delete_btn"
+            app:layout_constraintEnd_toStartOf="@id/my_page_logout_tv"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/my_page_info_btn" />
 
         <TextView
-            style="@style/MyPageMenuText"
             android:id="@+id/my_page_logout_tv"
-            android:layout_width="wrap_content"
+            style="@style/MyPageMenuText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="로그아웃"
             app:layout_constraintBottom_toBottomOf="@+id/my_page_logout_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/my_page_logout_btn"
             app:layout_constraintTop_toTopOf="@+id/my_page_logout_btn" />
 
         <ImageView
-            style="@style/MyPageIcon"
             android:id="@+id/my_page_delete_btn"
+            style="@style/MyPageIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:src="@drawable/ic_delete_outline_24"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/my_page_delete_tv"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/my_page_logout_btn" />
 
         <TextView
-            style="@style/MyPageMenuText"
             android:id="@+id/my_page_delete_tv"
-            android:layout_width="wrap_content"
+            style="@style/MyPageMenuText"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="회원탈퇴"
             app:layout_constraintBottom_toBottomOf="@+id/my_page_delete_btn"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/my_page_delete_btn"
             app:layout_constraintTop_toTopOf="@+id/my_page_delete_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>

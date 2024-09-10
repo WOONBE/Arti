@@ -19,6 +19,7 @@
             tools:context=".ui.profile.ProfileDetailFragment">
 
             <TextView
+                android:layout_marginTop="50dp"
                 android:id="@+id/profile_detail_title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -131,6 +132,7 @@
                 android:gravity="center"
                 android:paddingVertical="10dp"
                 android:text="비밀번호 수정"
+                android:layout_marginTop="50dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -255,6 +257,7 @@
                 android:gravity="center"
                 android:paddingVertical="10dp"
                 android:text="이용 약관"
+                android:layout_marginTop="50dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
