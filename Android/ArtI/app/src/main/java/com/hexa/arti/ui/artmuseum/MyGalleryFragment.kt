@@ -35,8 +35,8 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         MyGalleryThemeItem("미술관 테마2", listOf(R.drawable.survey_example, R.drawable.survey_example,R.drawable.survey_example))
     )
 
-    private var initString = ""
-
+    private var initName = ""
+    private var initInfo = ""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.subscribeBtn.setOnClickListener {
@@ -46,54 +46,102 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         binding.myGalleryThemeRv.adapter = adapter
         adapter.submitList(sampleData)
 
-        binding.myGalleryNameModifyBtn.setOnClickListener {
-
-
-            // 제목 버전
-            binding.myGalleryNameModifyBtn.visibility = View.GONE
-            binding.myGalleryNameCheckBtn.visibility = View.VISIBLE
-            binding.myGalleryNameCancelBtn.visibility = View.VISIBLE
-            binding.myGalleryNameTv.apply {
-                initString = this.text.toString()
-                isClickable = true
-                isFocusableInTouchMode = true
-                isEnabled = true
-                requestFocus() // 포커스를 EditText로 이동
-                setSelection(text.length) // 커서를 텍스트 끝으로 이동
+        initEvent()
+    }
+    private fun initEvent(){
+        with(binding){
+            // 미술관 이름 변경
+            myGalleryNameModifyBtn.setOnClickListener {
+                myGalleryNameModifyBtn.visibility = View.GONE
+                myGalleryNameCheckBtn.visibility = View.VISIBLE
+                myGalleryNameCancelBtn.visibility = View.VISIBLE
+                myGalleryNameTv.apply {
+                    initName = this.text.toString()
+                    isClickable = true
+                    isFocusableInTouchMode = true
+                    isEnabled = true
+                    requestFocus() // 포커스를 EditText로 이동
+                    setSelection(text.length) // 커서를 텍스트 끝으로 이동
+                }
             }
-        }
-
-        binding.myGalleryNameCheckBtn.setOnClickListener {
-            binding.myGalleryNameModifyBtn.visibility = View.VISIBLE
-            binding.myGalleryNameCheckBtn.visibility = View.GONE
-            binding.myGalleryNameCancelBtn.visibility = View.GONE
-            binding.myGalleryNameTv.apply {
-                isClickable = false
-                isFocusable = false
-                isEnabled = false
-
+            // 미술관 제목 변경 체크 버튼
+            myGalleryNameCheckBtn.setOnClickListener {
+                myGalleryNameModifyBtn.visibility = View.VISIBLE
+                myGalleryNameCheckBtn.visibility = View.GONE
+                myGalleryNameCancelBtn.visibility = View.GONE
+                myGalleryNameTv.apply {
+                    isClickable = false
+                    isFocusable = false
+                    isEnabled = false
+                }
             }
-        }
-
-        binding.myGalleryNameCancelBtn.setOnClickListener {
-            binding.myGalleryNameModifyBtn.visibility = View.VISIBLE
-            binding.myGalleryNameCheckBtn.visibility = View.GONE
-            binding.myGalleryNameCancelBtn.visibility = View.GONE
-            binding.myGalleryNameTv.apply {
-                isClickable = false
-                isFocusable = false
-                isEnabled = false
-                setText(initString)
+            // 미술관 이름 변경 취소 버튼
+            myGalleryNameCancelBtn.setOnClickListener {
+                myGalleryNameModifyBtn.visibility = View.VISIBLE
+                myGalleryNameCheckBtn.visibility = View.GONE
+                myGalleryNameCancelBtn.visibility = View.GONE
+                myGalleryNameTv.apply {
+                    isClickable = false
+                    isFocusable = false
+                    isEnabled = false
+                    setText(initName)
+                }
             }
-        }
 
-        binding.myGalleryPlayBtn.setOnClickListener {
-            navigate(R.id.action_myGalleryFragment_to_artGalleryDetailFragment)
-        }
-        binding.myGalleryThumbnailIv.setOnClickListener {
-            openImagePicker()
+            // 미술관 소개 버튼
+            myGalleryInfoModifyBtn.setOnClickListener {
+                initInfo = myGalleryInfoEt.text.toString()
+                myGalleryInfoCheckBtn.visibility = View.VISIBLE
+                myGalleryInfoCancelBtn.visibility = View.VISIBLE
+                myGalleryInfoModifyBtn.visibility = View.GONE
+
+                with(myGalleryInfoEt) {
+                    isClickable = true
+                    isFocusableInTouchMode = true
+                    isEnabled = true
+                    requestFocus() // 포커스를 EditText로 이동
+                    setSelection(text.length) // 커서를 텍스트 끝으로 이동
+                }
+            }
+
+            // 소개글 수정 체크 버튼
+            myGalleryInfoCheckBtn.setOnClickListener {
+                myGalleryInfoCheckBtn.visibility = View.GONE
+                myGalleryInfoCancelBtn.visibility = View.GONE
+                myGalleryInfoModifyBtn.visibility = View.VISIBLE
+
+                with(myGalleryInfoEt) {
+                    isClickable = false
+                    isFocusableInTouchMode = false
+                    isEnabled = false
+                }
+            }
+
+            // 소개글 수정 취소 버튼
+            myGalleryInfoCancelBtn.setOnClickListener {
+                myGalleryInfoCheckBtn.visibility = View.GONE
+                myGalleryInfoCancelBtn.visibility = View.GONE
+                myGalleryInfoModifyBtn.visibility = View.VISIBLE
+
+                with(myGalleryInfoEt) {
+                    isClickable = false
+                    isFocusableInTouchMode = false
+                    isEnabled = false
+                    setText(initInfo)
+                }
+            }
+
+            // 미술관 실행 버튼
+            myGalleryPlayBtn.setOnClickListener {
+                navigate(R.id.action_myGalleryFragment_to_artGalleryDetailFragment)
+            }
+            // 썸네일 이미지 클릭
+            myGalleryThumbnailIv.setOnClickListener {
+                openImagePicker()
+            }
         }
     }
+
     private val getImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {

@@ -117,6 +117,7 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
                     gridLayout.layoutParams.height = value
                     gridLayout.requestLayout()
                 }
+
                 animator.duration = 300 // 애니메이션 지속 시간 (ms)
                 animator.start()
             }
