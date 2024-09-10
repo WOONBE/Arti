@@ -107,5 +107,16 @@
         <action
             android:id="@+id/action_myPageFragment_to_portfolioFragment"
             app:destination="@id/portfolioFragment" />
+        <action
+            android:id="@+id/action_myPageFragment_to_profileDetailFragment"
+            app:destination="@id/profileDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileDetailFragment"
+        android:name="com.hexa.arti.ui.profile.ProfileDetailFragment"
+        android:label="ProfileDetailFragment">
+        <argument
+            android:name="detailType"
+            app:argType="integer"/>
     </fragment>
 </navigation>
