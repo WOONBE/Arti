@@ -20,4 +20,8 @@ public interface ArtistRepository extends JpaRepository<Artist, Integer> {
     // 요약으로 부분 검색
     @Query("SELECT a FROM Artist a WHERE a.summary LIKE %:summary%")
     List<Artist> findBySummaryContaining(@Param("summary") String summary);
+
+//    List<Artist> findByEngNameContainingOrKorNameContainingOrSummaryContaining(
+//        String engName, String korName, String summary
+//    );
 }
