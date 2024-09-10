@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_searchFragment_to_artBannerFragment"
             app:destination="@id/artBannerFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_artistBannerFragment"
+            app:destination="@id/artistBannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/artworkUploadFragment"
@@ -119,4 +122,8 @@
             android:name="detailType"
             app:argType="integer"/>
     </fragment>
+      <fragment
+        android:id="@+id/artistBannerFragment"
+        android:name="com.hexa.arti.ui.search.ArtistBannerFragment"
+        android:label="ArtistBannerFragment" />
 </navigation>
