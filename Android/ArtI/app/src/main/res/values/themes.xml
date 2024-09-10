@@ -92,5 +92,19 @@
         <item name="android:layout_margin">20dp</item>
         <item name="android:paddingStart">20dp</item>
     </style>
+
+    <!-- 마이페이지 -->
+    <style name="MyPageIcon">
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
+    <style name="MyPageMenuText" parent="TextAppearance.AppCompat">
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
     <style name="Theme.ArtI" parent="Base.Theme.ArtI" />
 </resources>

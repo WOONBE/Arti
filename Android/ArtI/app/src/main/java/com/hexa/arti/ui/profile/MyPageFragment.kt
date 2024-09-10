@@ -1,0 +1,60 @@
+package com.hexa.arti.ui.profile
+
+import android.content.Context
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.hexa.arti.R
+import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.databinding.FragmentMyPageBinding
+import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.util.navigate
+
+
+class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page){
+    private lateinit var mainActivity : MainActivity
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
+    override fun init() {
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding){
+            portfolioBtn.setOnClickListener {
+                navigate(R.id.action_myPageFragment_to_portfolioFragment)
+            }
+
+            // 프로필 편집
+            myPageProfileModifyTv.setOnClickListener {
+                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(0)
+                navigate(action)
+            }
+            // 비밀번호 수정
+            myPagePassTv.setOnClickListener {
+                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(1)
+                navigate(action)
+            }
+            // 이용약관
+            myPageInfoTv.setOnClickListener {
+                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(2)
+                navigate(action)
+            }
+            // 로그아웃
+            myPageLogoutTv.setOnClickListener { mainActivity.moveLogin() }
+            // 회원 탈퇴
+            myPageDeleteTv.setOnClickListener { mainActivity.moveLogin() }
+
+        }
+
+    }
+}
