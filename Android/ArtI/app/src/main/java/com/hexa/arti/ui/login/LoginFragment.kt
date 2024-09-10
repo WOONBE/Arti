@@ -13,6 +13,7 @@ import com.hexa.arti.databinding.FragmentHomeBinding
 import com.hexa.arti.databinding.FragmentLoginBinding
 import com.hexa.arti.ui.LoginActivity
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.signup.SignUpFragment
 import com.hexa.arti.util.navigate
 
 
@@ -38,7 +39,7 @@ class LoginFragment :
             loginActivity.finish()
         }
         binding.signBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+            loginActivity.moveSignUp()
         }
     }
 }

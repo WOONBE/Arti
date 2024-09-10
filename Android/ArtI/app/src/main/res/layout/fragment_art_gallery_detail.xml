@@ -18,13 +18,17 @@
             android:layout_height="match_parent"
             android:background="@color/black">
 
-            <TextView
+            <com.hexa.arti.util.CustomTextView
                 style="@style/GalleryDetailMenuText"
                 android:id="@+id/gallery_thmem_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                android:text="테마 : 절망"
+                android:paddingEnd="4dp"
+                android:text="테마 : 이것좀보세요"
+                android:elevation="10dp"
+                app:textStrokeWidth="10"
+                app:textStrokeColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -74,7 +78,7 @@
                 android:id="@+id/gallery_bgm_play_ptn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_play"
                 app:layout_constraintEnd_toEndOf="@+id/viewPager"
@@ -84,7 +88,7 @@
                 android:id="@+id/gallery_bgm_stop_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="20dp"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_stop"
                 android:visibility="gone"

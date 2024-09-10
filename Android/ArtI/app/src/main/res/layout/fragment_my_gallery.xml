@@ -129,7 +129,26 @@
                     app:layout_constraintStart_toEndOf="@+id/my_gallery_name_tv"
                     app:layout_constraintTop_toTopOf="@+id/my_gallery_name_tv" />
 
+                <ImageView
+                    android:id="@+id/my_gallery_info_check_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_done_24"
+                    android:visibility="gone"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/my_gallery_info_tv"
+                    app:layout_constraintStart_toEndOf="@+id/my_gallery_info_modify_btn"
+                    app:layout_constraintTop_toTopOf="@+id/my_gallery_info_tv" />
 
+                <ImageView
+                    android:id="@+id/my_gallery_info_cancel_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_clear_24"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/my_gallery_info_tv"
+                    app:layout_constraintStart_toEndOf="@+id/my_gallery_info_check_btn"
+                    app:layout_constraintTop_toTopOf="@+id/my_gallery_info_tv" />
                 <TextView
                     android:id="@+id/my_gallery_thumbnail_tv"
                     style="@style/MyGalleryTitleText"
@@ -156,7 +175,44 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/gallery_example" />
                 </androidx.cardview.widget.CardView>
+                <TextView
+                    android:id="@+id/my_gallery_info_tv"
+                    style="@style/MyGalleryTitleText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="소개"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/my_gallery_thumbnail_cv" />
 
+                <ImageView
+                    android:id="@+id/my_gallery_info_modify_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_edit_24"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/my_gallery_info_tv"
+                    app:layout_constraintStart_toEndOf="@+id/my_gallery_info_tv"
+                    app:layout_constraintTop_toTopOf="@+id/my_gallery_info_tv" />
+
+                <EditText
+                    android:id="@+id/my_gallery_info_et"
+                    style="@style/MyGalleryTitleText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@android:color/transparent"
+                    android:text="병현이의 미술관 입니다."
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="normal"
+                    android:layout_marginEnd="20dp"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:enabled="false"
+                    app:layout_constraintBottom_toTopOf="@id/my_gallery_theme_tv"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/my_gallery_info_tv"
+                    app:layout_constraintTop_toBottomOf="@+id/my_gallery_info_tv" />
                 <TextView
                     android:id="@+id/my_gallery_theme_tv"
                     style="@style/MyGalleryTitleText"
@@ -164,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:text="테마"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/my_gallery_thumbnail_cv" />
+                    app:layout_constraintTop_toBottomOf="@+id/my_gallery_info_et" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/my_gallery_theme_rv"

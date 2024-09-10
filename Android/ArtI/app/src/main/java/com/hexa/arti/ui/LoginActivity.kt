@@ -2,10 +2,13 @@ package com.hexa.arti.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseActivity
 import com.hexa.arti.databinding.ActivityLoginBinding
+import com.hexa.arti.ui.login.LoginFragment
+import com.hexa.arti.ui.signup.SignUpFragment
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,12 +19,26 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
     }
 
     private fun initView() {
-
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.login_ft, LoginFragment())
+            .commit()
     }
 
     override fun setupBinding(binding: ActivityLoginBinding) {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.login_ft) as NavHostFragment
-        val navController = navHostFragment.navController
+
     }
+
+    fun moveSignUp() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.login_ft, SignUpFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+    fun moveLogin(){
+        supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.login_ft, LoginFragment())
+            .commit()
+    }
+
 }

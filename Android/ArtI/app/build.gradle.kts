@@ -78,4 +78,6 @@ dependencies {
     implementation(libs.viewpager2)
     //drawerLayout
     implementation(libs.androidx.drawerlayout)
+    //MediaPlayer
+    implementation(libs.kotlinx.coroutines.android.v164)
 }
