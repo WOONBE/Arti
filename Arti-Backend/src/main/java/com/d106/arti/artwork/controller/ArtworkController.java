@@ -3,6 +3,7 @@ package com.d106.arti.artwork.controller;
 
 
 import com.d106.arti.artwork.domain.NormalArtWork;
+import com.d106.arti.artwork.dto.response.NormalArtworkResponse;
 import com.d106.arti.artwork.service.ArtworkService;
 import com.d106.arti.artwork.service.CSVService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,23 +45,10 @@ public class ArtworkController {
         return "성공적으로 " + filename + " 파일에서 100개의 아티스트 데이터를 가져왔습니다.";
     }
 
-    //title과 description 기준으로 부분 검색
-//    @GetMapping("/search/{keyword}")
-//    @Operation(summary = "미술품 검색", description = "미술품의 title, description으로 검색하는 API")
-//    public ResponseEntity<List<NormalArtWork>> searchArtworks(@PathVariable String keyword) {
-//        List<NormalArtWork> artworks = artworkService.searchArtworks(keyword);
-//
-//        if (artworks.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//        } else {
-//            return ResponseEntity.ok(artworks);
-//        }
-//    }
-
     @GetMapping("/search")
     @Operation(summary = "미술품 검색", description = "미술품의 title, description으로 검색하는 API")
-    public ResponseEntity<List<NormalArtWork>> searchArtworks(@RequestParam String keyword) {
-        List<NormalArtWork> artworks = artworkService.searchArtworks(keyword);
+    public ResponseEntity<List<NormalArtworkResponse>> searchArtworks(@RequestParam String keyword) {
+        List<NormalArtworkResponse> artworks = artworkService.searchArtworks(keyword);
         return ResponseEntity.ok(artworks);
     }
 

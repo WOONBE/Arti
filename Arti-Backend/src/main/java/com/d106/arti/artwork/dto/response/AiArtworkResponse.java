@@ -1,17 +1,13 @@
-package com.d106.arti.artwork.dto;
+package com.d106.arti.artwork.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class AiArtWorkResponseDto {
+public class AiArtworkResponse {
     private Integer id;
     private String aiArtworkTitle;
     private String artworkImage;
