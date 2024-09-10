@@ -45,7 +45,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
                 navigate(action)
             }
             // 이용약관
-            myPageInfoTv.setOnClickListener {  }
+            myPageInfoTv.setOnClickListener {
+                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(2)
+                navigate(action)
+            }
             // 로그아웃
             myPageLogoutTv.setOnClickListener { mainActivity.moveLogin() }
             // 회원 탈퇴
