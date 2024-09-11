@@ -1,6 +1,8 @@
 package com.d106.arti.artwork.domain;
 
+import com.d106.arti.gallery.Theme;
 import com.d106.arti.global.common.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
@@ -10,7 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +40,7 @@ public class Artwork extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+
 //    @Column(name = "ARTWORK_YEAR")
 //    private Integer year;
 //
@@ -47,6 +53,24 @@ public class Artwork extends BaseEntity {
 //    @Column(name = "ARTWORK_DESC")
 //    private String description;
 
+    // ArtworkTheme과 1:N 관계
+    @OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArtworkTheme> artworkThemes = new ArrayList<>();
+
+    // 테마 추가 편의 메서드
+    public void addTheme(Theme theme, String description) {
+        ArtworkTheme artworkTheme = ArtworkTheme.builder()
+            .artwork(this)
+            .theme(theme)
+            .description(description)
+            .build();
+        artworkThemes.add(artworkTheme);
+    }
+
+    // 테마 삭제 편의 메서드
+    public void removeTheme(Theme theme) {
+        artworkThemes.removeIf(artworkTheme -> artworkTheme.getTheme().equals(theme));
+    }
 
 
 

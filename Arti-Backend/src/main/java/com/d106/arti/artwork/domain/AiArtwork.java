@@ -52,20 +52,20 @@ public class AiArtwork extends Artwork {
     @JoinColumn(name = "THEME_ID") // 테마와의 외래 키
     private Theme theme;
 
-    // 테마와 연관관계 메서드
-    public void updateTheme(Theme theme) {
-        this.theme = theme;
-        if (!theme.getArtworks().contains(this)) {
-            theme.addArtwork(this);
-        }
-    }
-
-    public void removeTheme() {
-        if (this.theme != null) {
-            this.theme.removeArtwork(this);
-            this.theme = null;
-        }
-    }
+//    // 테마와 연관관계 메서드
+//    public void updateTheme(Theme theme) {
+//        this.theme = theme;
+//        if (!theme.getArtworks().contains(this)) {
+//            theme.addArtwork(this);
+//        }
+//    }
+//
+//    public void removeTheme() {
+//        if (this.theme != null) {
+//            this.theme.removeArtwork(this);
+//            this.theme = null;
+//        }
+//    }
 
 
 

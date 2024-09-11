@@ -1,6 +1,8 @@
 package com.d106.arti.gallery;
 
 import com.d106.arti.artwork.domain.AiArtwork;
+import com.d106.arti.artwork.domain.Artwork;
+import com.d106.arti.artwork.domain.ArtworkTheme;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,23 +33,41 @@ public class Theme {
     //미술관과 n : 1
 
 
-    //미술품과 1:n
-    // 테마와 AiArtWork는 1:N 관계
+//    //미술품과 1:n
+//    // 테마와 AiArtWork는 1:N 관계
+//    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Builder.Default
+//    private List<AiArtwork> artworks = new ArrayList<>();
+//
+//    // AiArtWork 추가 편의 메서드
+//    public void addArtwork(AiArtwork artwork) {
+//        artworks.add(artwork);
+//        artwork.updateTheme(this);
+//    }
+//
+//    // AiArtWork 삭제 편의 메서드
+//    public void removeArtwork(AiArtwork artwork) {
+//        artworks.remove(artwork);
+//        artwork.updateTheme(null);
+//    }
+    // ArtworkTheme과 1:N 관계
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
-    private List<AiArtwork> artworks = new ArrayList<>();
+    private List<ArtworkTheme> artworkThemes = new ArrayList<>();
 
-    // AiArtWork 추가 편의 메서드
-    public void addArtwork(AiArtwork artwork) {
-        artworks.add(artwork);
-        artwork.updateTheme(this);
-    }
+        // 편의 메서드
+        public void addArtwork(Artwork artwork, String description) {
+            ArtworkTheme artworkTheme = ArtworkTheme.builder()
+                .artwork(artwork)
+                .theme(this)
+                .description(description)
+                .build();
+            artworkThemes.add(artworkTheme);
+        }
 
-    // AiArtWork 삭제 편의 메서드
-    public void removeArtwork(AiArtwork artwork) {
-        artworks.remove(artwork);
-        artwork.updateTheme(null);
-    }
+        public void removeArtwork(Artwork artwork) {
+            artworkThemes.removeIf(artworkTheme -> artworkTheme.getArtwork().equals(artwork));
+        }
 
 
 }
