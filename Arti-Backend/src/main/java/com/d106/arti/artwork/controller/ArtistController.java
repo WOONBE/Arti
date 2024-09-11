@@ -5,21 +5,24 @@ import com.d106.arti.artwork.dto.response.ArtistResponse;
 import com.d106.arti.artwork.service.ArtistService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.concurrent.CompletableFuture;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/artists")
+@RequiredArgsConstructor
 public class ArtistController {
 
-    @Autowired
-    private ArtistService artistService;
+    private final ArtistService artistService;
 
     // 영어 이름으로 검색
     @GetMapping("/search/artist/eng-name")
@@ -36,7 +39,7 @@ public class ArtistController {
     }
 
     // 한글 이름, 영문 이름 포함하여 통합 검색
-    @GetMapping("/search/artist")
+    @GetMapping("/search")
     @Operation(summary = "화가 검색", description = "화가의 한글, 영문 이름을 기반으로 화가를 검색하는 API")
     public ResponseEntity<List<ArtistResponse>> searchArtist(@RequestParam String keyword) {
         List<ArtistResponse> artists = artistService.search(keyword);
