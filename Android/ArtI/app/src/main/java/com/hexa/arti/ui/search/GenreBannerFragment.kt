@@ -17,6 +17,11 @@ class GenreBannerFragment :
         goToGenreDetailFragment()
     }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(true)
+    }
+
     override fun init() {
         initViews()
     }
