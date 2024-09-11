@@ -2,12 +2,15 @@ package com.d106.arti.artwork.service;
 
 import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_ARTWORK;
 
+import com.d106.arti.artwork.domain.Artwork;
 import com.d106.arti.artwork.domain.NormalArtWork;
 import com.d106.arti.artwork.dto.response.NormalArtworkResponse;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 import com.d106.arti.global.exception.BadRequestException;
+import com.d106.arti.global.exception.ExceptionCode;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
