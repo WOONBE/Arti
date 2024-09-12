@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 
 from recommend import urls as rec_url
 from generation import urls as gen_url
+from generation import test
 from config.database import SessionLocal, engine, Base, SQLALCHEMY_DATABASE_URL
 from config.models import Artist, Artwork
 
@@ -20,6 +21,7 @@ app.add_middleware(
 
 app.include_router(rec_url.router)
 app.include_router(gen_url.router)
+app.include_router(test.router)
 
 def get_db():
     db = SessionLocal()

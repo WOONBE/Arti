@@ -64,11 +64,17 @@ def generation_image(content_image_path, style_image_path):
     image_path = os.path.join(save_dir, image_filename)
     image_pil.save(image_path)
 
+    image_path = os.path.join('generated_images', image_filename)
+    if os.path.exists(image_path):
+        return FileResponse(image_path, media_type='image/png')
+    else:
+        raise HTTPException(status_code=404, detail="Image not found")
+    
     # 이미지가 저장된 경로를 반환
-    image_url = f'/artwork/images/{image_filename}'
-    return {
-        'image_url': image_url
-    }
+    # image_url = f'/artwork/images/{image_filename}'
+    # return {
+    #     'image_url': image_url
+    # }
 
 @router.get('/images/{image_filename}')
 def get_image(image_filename: str):
