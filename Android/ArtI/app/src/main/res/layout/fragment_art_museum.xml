@@ -99,11 +99,15 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_preview"
                     android:layout_width="0dp"
-                    android:layout_height="150dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/iv_art_image" />
+                    app:layout_constraintTop_toBottomOf="@id/iv_art_image"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_preview_image" />
 
                 <TextView
                     android:id="@+id/tv_introduce_title"
@@ -111,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="20dp"
-                    android:fontFamily="@font/inter_18pt_bold"
+                    android:fontFamily="@font/inter_28pt_black"
                     android:text="@string/tv_introduce"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="parent"
