@@ -31,7 +31,11 @@
         android:id="@+id/artworkUploadFragment"
         android:name="com.hexa.arti.ui.artwork.ArtworkUploadFragment"
         android:label="fragment_artwork_upload"
-        tools:layout="@layout/fragment_artwork_upload" />
+        tools:layout="@layout/fragment_artwork_upload" >
+        <action
+            android:id="@+id/action_artworkUploadFragment_to_selectArtworkFragment"
+            app:destination="@id/selectArtworkFragment" />
+    </fragment>
     <fragment
         android:id="@+id/subscribeFragment"
         android:name="com.hexa.arti.ui.artmuseum.SubscribeFragment"
@@ -126,4 +130,32 @@
         android:id="@+id/artistBannerFragment"
         android:name="com.hexa.arti.ui.search.ArtistBannerFragment"
         android:label="ArtistBannerFragment" />
+    <fragment
+        android:id="@+id/selectArtworkFragment"
+        android:name="com.hexa.arti.ui.artwork.SelectArtworkFragment"
+        android:label="SelectArtworkFragment" >
+        <action
+            android:id="@+id/action_selectArtworkFragment_to_isSelectCreateImageFragment"
+            app:destination="@id/isSelectCreateImageFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/isSelectCreateImageFragment"
+        android:name="com.hexa.arti.ui.artwork.IsSelectCreateImageFragment"
+        android:label="IsSelectCreateImageFragment" >
+        <action
+            android:id="@+id/action_isSelectCreateImageFragment_to_imageUploadFragment"
+            app:destination="@id/imageUploadFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageUploadFragment"
+        android:name="com.hexa.arti.ui.artwork.ImageUploadFragment"
+        android:label="ImageUploadFragment" >
+        <action
+            android:id="@+id/action_imageUploadFragment_to_artworkResultFragment"
+            app:destination="@id/artworkResultFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/artworkResultFragment"
+        android:name="com.hexa.arti.ui.artwork.ArtworkResultFragment"
+        android:label="ArtworkResultFragment" />
 </navigation>

@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.artwork.ArtworkUploadFragment">
+        tools:context=".ui.artwork.ImageUploadFragment">
 
         <ImageView
             android:id="@+id/artwork_back_btn"
@@ -47,7 +47,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:progress="0"
+            android:progress="60"
             android:layout_marginHorizontal="20dp"
             android:progressTint="@color/point_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,30 +55,53 @@
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <TextView
-            android:id="@+id/artwork_comment_tv"
+            android:id="@+id/artwork_create_image_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전시하고 싶은 미술품을 고를거에요"
+            android:text="합성할 사진을 골라주세요"
             android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <ImageView
+            android:id="@+id/origin_img"
+            android:layout_width="220dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/gallery_sample1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artwork_create_image_tv" />
+
+        <ImageView
+            android:id="@+id/plus_img"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_add_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/origin_img"
+            app:tint="@color/black" />
+
+        <ImageView
+            android:id="@+id/source_img"
+            android:layout_width="220dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/gallery_sample1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/plus_img" />
 
         <androidx.appcompat.widget.AppCompatButton
             style="@style/ButtonRoundShort20"
-            android:id="@+id/artwork_next_btn"
+            android:id="@+id/artwork_create_image_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="0dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="50dp"
-            android:text="다음"
+            android:text="확인"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artwork_comment_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/source_img" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,6 @@
 package com.hexa.arti.repository
 
-import com.hexa.arti.data.UserListModel
+import com.hexa.arti.data.model.login.UserListModel
 
 interface TestRepository {
 

@@ -1,4 +1,4 @@
-package com.hexa.arti.data
+package com.hexa.arti.data.model.artmuseum
 
 data class Subscriber(
     val profileImageResId: Int,

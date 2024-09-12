@@ -1,7 +1,7 @@
 package com.hexa.arti.ui.artmuseum.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.hexa.arti.data.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 
 object MyGalleryThemeDiffCallback : DiffUtil.ItemCallback<MyGalleryThemeItem>() {
     override fun areItemsTheSame(oldItem: MyGalleryThemeItem, newItem: MyGalleryThemeItem): Boolean {

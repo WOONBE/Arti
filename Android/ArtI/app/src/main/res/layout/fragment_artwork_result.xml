@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.artwork.ArtworkUploadFragment">
-
+        tools:context=".ui.artwork.ArtworkResultFragment">
         <ImageView
             android:id="@+id/artwork_back_btn"
             android:layout_width="28dp"
@@ -47,7 +46,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:progress="0"
+            android:progress="80"
             android:layout_marginHorizontal="20dp"
             android:progressTint="@color/point_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -55,30 +54,52 @@
             app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
         <TextView
-            android:id="@+id/artwork_comment_tv"
+            android:id="@+id/artwork_result_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전시하고 싶은 미술품을 고를거에요"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="제목 : "
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toStartOf="@id/artwork_result_et"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            style="@style/ButtonRoundShort20"
-            android:id="@+id/artwork_next_btn"
+        <EditText
+            android:id="@+id/artwork_result_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="0dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="50dp"
-            android:text="다음"
+            android:text=" 병나리자"
+            app:layout_constraintBottom_toBottomOf="@+id/artwork_result_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/artwork_result_tv"
+            app:layout_constraintTop_toTopOf="@+id/artwork_result_tv" />
+
+        <ImageView
+            android:id="@+id/artwork_result_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/gallery_sample2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artwork_comment_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/artwork_result_tv" />
+
+        <TextView
+            android:id="@+id/artwork_result_theme_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="테마 : "
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintEnd_toStartOf="@+id/artwork_result_theme_et"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artwork_result_img" />
+
+        <EditText
+            android:id="@+id/artwork_result_theme_et"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="초상황"
+            app:layout_constraintBottom_toBottomOf="@+id/artwork_result_theme_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/artwork_result_theme_tv"
+            app:layout_constraintTop_toTopOf="@+id/artwork_result_theme_tv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.artwork.ArtworkUploadFragment">
-
+        tools:context=".ui.artwork.SelectArtworkFragment">
         <ImageView
             android:id="@+id/artwork_back_btn"
             android:layout_width="28dp"
@@ -47,7 +46,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:progress="0"
+            android:progress="20"
             android:layout_marginHorizontal="20dp"
             android:progressTint="@color/point_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -58,27 +57,59 @@
             android:id="@+id/artwork_comment_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전시하고 싶은 미술품을 고를거에요"
+            android:layout_marginTop="20dp"
+            android:text="전시하고 싶은 미술품을 골라주세요"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/progressBar"
+            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/artwork_search_tl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="미술품 검색"
+            android:layout_marginHorizontal="20dp"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/black"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artwork_comment_tv"
+            app:startIconDrawable="@drawable/ic_baseline_search_24">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/artwork_search_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:inputType="text"
+                android:maxLines="1"
+                android:minHeight="0dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="32dp"
+                tools:ignore="RtlSymmetry" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_artwork_rv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginHorizontal="20dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintTop_toBottomOf="@+id/artwork_search_tl"
+            app:spanCount="2"
+            tools:listitem="@layout/item_select_artwork"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            style="@style/ButtonRoundShort20"
-            android:id="@+id/artwork_next_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:minHeight="0dp"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="50dp"
-            android:text="다음"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/artwork_comment_tv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

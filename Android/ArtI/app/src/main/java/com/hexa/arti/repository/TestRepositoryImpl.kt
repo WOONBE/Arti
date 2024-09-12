@@ -1,6 +1,6 @@
 package com.hexa.arti.repository
 
-import com.hexa.arti.data.UserListModel
+import com.hexa.arti.data.model.login.UserListModel
 import com.hexa.arti.network.TestApi
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -1,26 +1,20 @@
 package com.hexa.arti.ui.artmuseum
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.view.MenuInflater
 import android.view.View
-import android.widget.GridLayout
-import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.animation.doOnEnd
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryThemeAdapter
 import com.hexa.arti.util.navigate
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
