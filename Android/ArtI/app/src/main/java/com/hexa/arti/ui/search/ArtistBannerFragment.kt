@@ -6,13 +6,20 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentArtistBannerBinding
+import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 
 class ArtistBannerFragment :
     BaseFragment<FragmentArtistBannerBinding>(R.layout.fragment_artist_banner) {
 
+
     private val artistAdapter = ArtistAdapter {
         Log.d("확인", "아이템클릭 확인")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(true)
     }
 
     override fun init() {

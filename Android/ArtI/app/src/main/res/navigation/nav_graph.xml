@@ -143,9 +143,17 @@
     <fragment
         android:id="@+id/artMuseumBannerFragment"
         android:name="com.hexa.arti.ui.search.ArtMuseumBannerFragment"
-        android:label="ArtMuseumBannerFragment" />
+        android:label="ArtMuseumBannerFragment" >
+        <action
+            android:id="@+id/action_artMuseumBannerFragment_to_artMuseumFragment"
+            app:destination="@id/artMuseumFragment" />
+    </fragment>
     <fragment
         android:id="@+id/genreDetailFragment"
         android:name="com.hexa.arti.ui.search.GenreDetailFragment"
         android:label="GenreDetailFragment" />
+    <fragment
+        android:id="@+id/artMuseumFragment"
+        android:name="com.hexa.arti.ui.search.ArtMuseumFragment"
+        android:label="ArtMuseumFragment" />
 </navigation>

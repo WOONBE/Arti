@@ -11,8 +11,14 @@ import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
 class ArtMuseumBannerFragment :
     BaseFragment<FragmentArtMuseumBannerBinding>(R.layout.fragment_art_museum_banner) {
 
+
     private val artMuseumAdapter = ArtMuseumAdapter {
-        Log.d("확인", "아이템 클릭 확인")
+        moveToArtMuseumFragment()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(true)
     }
 
     override fun init() {
@@ -38,6 +44,10 @@ class ArtMuseumBannerFragment :
         )
 
         artMuseumAdapter.submitList(mockData)
+    }
+
+    private fun moveToArtMuseumFragment(){
+        findNavController().navigate(R.id.action_artMuseumBannerFragment_to_artMuseumFragment)
     }
 
 }

@@ -25,7 +25,6 @@ class HomeFragment :
     override fun init() {
         initAdapter()
     }
-    private lateinit var mainActivity: MainActivity
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
