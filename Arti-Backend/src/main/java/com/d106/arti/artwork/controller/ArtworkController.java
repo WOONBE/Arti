@@ -52,5 +52,13 @@ public class ArtworkController {
         return ResponseEntity.ok(artworks);
     }
 
+    // 단건 조회 엔드포인트
+    @GetMapping("/{artworkId}")
+    @Operation(summary = "미술품 단건 조회", description = "미술품 ID로 단건을 조회하는 API")
+    public ResponseEntity<NormalArtworkResponse> getArtworkById(@PathVariable Integer artworkId) {
+        NormalArtworkResponse artworkResponse = artworkService.getArtworkById(artworkId);
+        return ResponseEntity.ok(artworkResponse);
+    }
+
 
 }

@@ -46,6 +46,14 @@ public class ArtistController {
         return ResponseEntity.ok(artists);
     }
 
+    // 단건 조회
+    @GetMapping("/{artistId}")
+    @Operation(summary = "화가 단건 조회", description = "ID를 기반으로 화가 정보를 단건으로 상세 조회하는 API")
+    public ResponseEntity<ArtistResponse> findArtistById(@PathVariable Integer artistId) {
+        ArtistResponse artist = artistService.findArtistById(artistId);
+        return ResponseEntity.ok(artist);
+    }
+
 
 
 
