@@ -1,4 +1,4 @@
-package com.hexa.arti.data
+package com.hexa.arti.data.model.artmuseum
 
 data class MyGalleryThemeItem(
     val title: String,

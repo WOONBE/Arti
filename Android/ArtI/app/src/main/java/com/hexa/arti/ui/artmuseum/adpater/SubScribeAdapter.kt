@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.hexa.arti.data.Subscriber
+import com.hexa.arti.data.model.artmuseum.Subscriber
 import com.hexa.arti.databinding.ItemSubscribeBinding
 
 class SubScribeAdapter : ListAdapter<Subscriber, SubScribeAdapter.SubscriberViewHolder>(SubscriberDiffCallback()) {

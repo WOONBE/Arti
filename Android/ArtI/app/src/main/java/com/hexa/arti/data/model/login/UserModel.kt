@@ -1,4 +1,4 @@
-package com.hexa.arti.data
+package com.hexa.arti.data.model.login
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,26 +1,20 @@
 package com.hexa.arti.ui.artmuseum
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.view.MenuInflater
 import android.view.View
-import android.widget.GridLayout
-import android.widget.PopupMenu
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.animation.doOnEnd
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryThemeAdapter
 import com.hexa.arti.util.navigate
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
@@ -39,9 +33,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private var initInfo = ""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.subscribeBtn.setOnClickListener {
-            navigate(R.id.action_myGalleryFragment_to_subscribeFragment)
-        }
+
         adapter = MyGalleryThemeAdapter()
         binding.myGalleryThemeRv.adapter = adapter
         adapter.submitList(sampleData)
@@ -133,7 +125,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
             // 미술관 실행 버튼
             myGalleryPlayBtn.setOnClickListener {
-                navigate(R.id.action_myGalleryFragment_to_artGalleryDetailFragment)
+                navigate(R.id.action_myGalleryHomeFragment_to_artGalleryDetailFragment)
             }
             // 썸네일 이미지 클릭
             myGalleryThumbnailIv.setOnClickListener {
