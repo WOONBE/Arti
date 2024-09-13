@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArtistResponse {
-    private Integer id;
+    private Integer artist_id;
     private String engName;
     private String korName;
     private String image;
@@ -19,7 +19,7 @@ public class ArtistResponse {
 
     public static ArtistResponse toArtistResponse(Artist artist) {
         return ArtistResponse.builder()
-            .id(artist.getId())
+            .artist_id(artist.getId())
             .engName(artist.getEng_name())
             .korName(artist.getKor_name())
             .image(artist.getImage())

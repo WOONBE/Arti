@@ -16,15 +16,18 @@ public enum ExceptionCode {
 
     NOT_FOUND_ARTWORK(1002, "검색 조건에 일치하는 미술품이 없습니다."),
 
+    NOT_FOUND_MEMBER_ID(1010, "요청한 ID에 해당하는 멤버가 존재하지 않습니다."),
 
-    NOT_FOUND_TRIP_ITEM_ID(1003, "요청한 ID에 해당하는 여행 아이템이 존재하지 않습니다."),
+
+    NOT_FOUND_THEME_ID(1003, "요청한 ID에 해당하는 테마가 존재하지 않습니다."),
+
     NOT_FOUND_EXPENSE_ID(1004, "요청한 ID에 해당하는 금액이 존재하지 않습니다."),
     NOT_FOUND_CITY_ID(1005, "요청한 ID에 해당하는 도시가 존재하지 않습니다."),
     NOT_FOUND_PLACE_ID(1006, "요청한 ID에 해당하는 장소가 존재하지 않습니다."),
     NOT_FOUND_CATEGORY_ID(1007, "요청한 ID에 해당하는 카테고리가 존재하지 않습니다."),
     NOT_FOUNT_IMAGE_URL(1008, "요청한 URL에 해당하는 이미지가 존재하지 않습니다."),
     NOT_FOUND_CURRENCY_DATA(1009, "요청한 날짜에 해당하는 환율 정보가 존재하지 않습니다."),
-    NOT_FOUND_MEMBER_ID(1010, "요청한 ID에 해당하는 멤버가 존재하지 않습니다."),
+
     INVALID_TRIP_WITH_MEMBER(1011, "요청한 멤버와 ID에 해당하는 여행이 존재하지 않습니다."),
     FAIL_TO_GENERATE_RANDOM_NICKNAME(1012, "랜덤한 닉네임을 생성하는데 실패하였습니다."),
     DUPLICATED_MEMBER_NICKNAME(1013, "중복된 닉네임입니다."),
