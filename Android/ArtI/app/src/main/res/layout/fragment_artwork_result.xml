@@ -21,6 +21,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/artwork_menu_title_tv" />
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
         <TextView
             android:id="@+id/artwork_menu_title_tv"
             android:layout_width="wrap_content"
@@ -57,27 +64,32 @@
             android:id="@+id/artwork_result_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="제목 : "
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintEnd_toStartOf="@id/artwork_result_et"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+            android:text="제목  "
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="@+id/guideline" />
 
         <EditText
             android:id="@+id/artwork_result_et"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text=" 병나리자"
+            android:background="@drawable/shape_profile_modify_edit_text"
+            android:layout_marginHorizontal="20dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="5dp"
+            android:text="병나리자"
             app:layout_constraintBottom_toBottomOf="@+id/artwork_result_tv"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/progressBar"
             app:layout_constraintStart_toEndOf="@+id/artwork_result_tv"
             app:layout_constraintTop_toTopOf="@+id/artwork_result_tv" />
 
         <ImageView
             android:id="@+id/artwork_result_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="240dp"
             android:src="@drawable/gallery_sample2"
+            android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/artwork_result_tv" />
@@ -86,19 +98,24 @@
             android:id="@+id/artwork_result_theme_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="테마 : "
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintEnd_toStartOf="@+id/artwork_result_theme_et"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="30dp"
+            android:text="테마  "
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/progressBar"
             app:layout_constraintTop_toBottomOf="@+id/artwork_result_img" />
 
         <EditText
             android:id="@+id/artwork_result_theme_et"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_profile_modify_edit_text"
             android:text="초상화"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:layout_marginHorizontal="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/artwork_result_theme_tv"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/progressBar"
             app:layout_constraintStart_toEndOf="@+id/artwork_result_theme_tv"
             app:layout_constraintTop_toTopOf="@+id/artwork_result_theme_tv" />
 
@@ -107,6 +124,7 @@
             android:id="@+id/artwork_result_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:text="전시하기"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

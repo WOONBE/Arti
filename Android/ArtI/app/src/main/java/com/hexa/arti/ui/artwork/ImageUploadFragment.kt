@@ -1,9 +1,12 @@
 package com.hexa.arti.ui.artwork
 
+import android.net.Uri
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentImageUploadBinding
+import com.hexa.arti.util.handleImage
 import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
 
@@ -16,7 +19,20 @@ class ImageUploadFragment : BaseFragment<FragmentImageUploadBinding>(R.layout.fr
             artworkCreateImageBtn.setOnClickListener {
                 navigate(R.id.action_imageUploadFragment_to_artworkResultFragment)
             }
+            sourceImgCv.setOnClickListener {
+                openImagePicker()
+            }
         }
     }
 
+    private val getImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                handleImage(it,requireContext())
+                binding.sourceImg.setImageURI(it)
+            }
+        }
+    private fun openImagePicker() {
+        getImageLauncher.launch("image/*")
+    }
 }

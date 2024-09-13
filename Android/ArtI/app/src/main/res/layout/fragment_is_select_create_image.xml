@@ -47,7 +47,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:progress="60"
+            android:progress="40"
             android:layout_marginHorizontal="20dp"
             android:progressTint="@color/point_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -61,18 +61,22 @@
             android:text="사진을 등록하면 원하는\n 미술품으로 바꿔줄거에요"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progressBar"
-            app:layout_constraintVertical_bias="0.26" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
         <androidx.appcompat.widget.AppCompatButton
             style="@style/ButtonRoundShort20"
             android:id="@+id/artwork_maintain_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="40dp"
             android:minHeight="0dp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="50dp"
@@ -86,7 +90,7 @@
             style="@style/ButtonRoundShort20"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="35dp"
             android:minHeight="0dp"
             android:paddingHorizontal="50dp"
             android:paddingVertical="10dp"
