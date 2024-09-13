@@ -80,4 +80,6 @@ dependencies {
     implementation(libs.androidx.drawerlayout)
     //MediaPlayer
     implementation(libs.kotlinx.coroutines.android.v164)
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
