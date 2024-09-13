@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NormalArtworkResponse {
+    private Integer artwork_id;
     private String filename;
     private String artist;
     private String genre;
@@ -27,6 +28,7 @@ public class NormalArtworkResponse {
 
     public static NormalArtworkResponse fromEntity(NormalArtWork normalArtWork) {
         return NormalArtworkResponse.builder()
+            .artwork_id(normalArtWork.getId())
             .filename(normalArtWork.getFilename())
             .artist(normalArtWork.getArtist())
             .genre(normalArtWork.getGenre())

@@ -39,5 +39,14 @@ public class ArtworkService {
     }
 
 
+    // 단건 조회 메서드
+    @Transactional(readOnly = true)
+    public NormalArtworkResponse getArtworkById(Integer id) {
+        NormalArtWork artwork = artworkRepository.findById(id)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK));
+        return NormalArtworkResponse.fromEntity(artwork);
+    }
+
+
 
 }

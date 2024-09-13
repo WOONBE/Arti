@@ -90,6 +90,13 @@ public class ArtistService {
 
             return resultList;
         }
+    // ID로 단건 조회
+    @Transactional(readOnly = true)
+    public ArtistResponse findArtistById(Integer artistId) {
+        Artist artist = artistRepository.findById(artistId)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTIST));
+        return ArtistResponse.toArtistResponse(artist);
+    }
 
 
 
