@@ -29,6 +29,8 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
         mainActivity = context as MainActivity
     }
     override fun init() {
+        initView()
+        initEvent()
     }
 
     override fun onResume() {
@@ -36,11 +38,7 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
         mainActivity.hideBottomNav(true)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initView()
-        initEvent()
-    }
+
     private fun initView(){
         with(binding){
             when(ars.detailType){

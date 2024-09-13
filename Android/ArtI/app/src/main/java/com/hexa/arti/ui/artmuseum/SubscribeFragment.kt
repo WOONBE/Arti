@@ -39,8 +39,6 @@ class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(R.layout.fragme
         binding.subscribeRecyclerview.adapter = SubScribeAdapter().apply {
             submitList(example)
         }
-        binding.myGalleryBtn.setOnClickListener{
-            navigate(R.id.action_subscribeFragment_to_myGalleryFragment)
-        }
+
     }
 }

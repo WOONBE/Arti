@@ -18,7 +18,8 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
                 popBackStack()
             }
             artworkResultBtn.setOnClickListener {
-                navigate(R.id.action_artworkResultFragment_to_myGalleryFragment)
+                val action =ArtworkResultFragmentDirections.actionArtworkResultFragmentToMyGalleryHomeFragment2(1)
+                navigate(action)
             }
         }
     }

@@ -41,9 +41,6 @@
         android:name="com.hexa.arti.ui.artmuseum.SubscribeFragment"
         android:label="fragment_subscribe"
         tools:layout="@layout/fragment_subscribe" >
-        <action
-            android:id="@+id/action_subscribeFragment_to_myGalleryFragment"
-            app:destination="@id/myGalleryFragment" />
     </fragment>
     <fragment
         android:id="@+id/portfolioFragment"
@@ -76,12 +73,7 @@
         android:id="@+id/myGalleryFragment"
         android:name="com.hexa.arti.ui.artmuseum.MyGalleryFragment"
         android:label="MyGalleryFragment" >
-        <action
-            android:id="@+id/action_myGalleryFragment_to_subscribeFragment"
-            app:destination="@id/subscribeFragment" />
-        <action
-            android:id="@+id/action_myGalleryFragment_to_artGalleryDetailFragment"
-            app:destination="@id/artGalleryDetailFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/artGalleryDetailFragment"
@@ -152,9 +144,9 @@
         android:name="com.hexa.arti.ui.artwork.ArtworkResultFragment"
         android:label="ArtworkResultFragment" >
         <action
-            android:id="@+id/action_artworkResultFragment_to_myGalleryFragment"
-            app:destination="@id/myGalleryFragment"
-            app:popUpTo="@id/myGalleryFragment"
+            android:id="@+id/action_artworkResultFragment_to_myGalleryHomeFragment2"
+            app:destination="@id/myGalleryHomeFragment"
+            app:popUpTo="@id/myGalleryHomeFragment"
             app:popUpToInclusive="true"/>
     </fragment>
     <fragment
@@ -170,5 +162,13 @@
         android:id="@+id/myGalleryHomeFragment"
         android:name="com.hexa.arti.ui.artmuseum.MyGalleryHomeFragment"
         android:label="fragment_my_gallery_home"
-        tools:layout="@layout/fragment_my_gallery_home" />
+        tools:layout="@layout/fragment_my_gallery_home" >
+        <argument
+            android:name="myGalleryType"
+            app:argType="integer"
+            android:defaultValue="0"/>
+        <action
+            android:id="@+id/action_myGalleryHomeFragment_to_artGalleryDetailFragment"
+            app:destination="@id/artGalleryDetailFragment" />
+    </fragment>
 </navigation>

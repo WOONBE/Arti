@@ -33,9 +33,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private var initInfo = ""
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.subscribeBtn.setOnClickListener {
-            navigate(R.id.action_myGalleryFragment_to_subscribeFragment)
-        }
+
         adapter = MyGalleryThemeAdapter()
         binding.myGalleryThemeRv.adapter = adapter
         adapter.submitList(sampleData)
@@ -127,7 +125,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
             // 미술관 실행 버튼
             myGalleryPlayBtn.setOnClickListener {
-                navigate(R.id.action_myGalleryFragment_to_artGalleryDetailFragment)
+                navigate(R.id.action_myGalleryHomeFragment_to_artGalleryDetailFragment)
             }
             // 썸네일 이미지 클릭
             myGalleryThumbnailIv.setOnClickListener {

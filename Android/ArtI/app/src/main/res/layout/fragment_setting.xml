@@ -33,7 +33,7 @@
                     android:id="@+id/setting_portfolio_tv"
                     style="@style/SelectTextTitle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="포트폴리오" />
 
