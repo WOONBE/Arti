@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.search.ArtBannerFragment">
+        tools:context=".ui.search.GenreBannerFragment">
 
         <ImageView
             android:id="@+id/iv_back"
@@ -18,37 +18,36 @@
             android:layout_height="28dp"
             android:layout_margin="20dp"
             android:src="@drawable/ic_arrow_back_32"
-            app:layout_constraintBottom_toBottomOf="@id/tv_art"
+            app:layout_constraintBottom_toBottomOf="@id/tv_genre"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_art" />
+            app:layout_constraintTop_toTopOf="@id/tv_genre" />
 
         <TextView
-            android:id="@+id/tv_art"
+            android:id="@+id/tv_genre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/inter_18pt_medium"
             android:paddingBottom="4dp"
-            android:text="작품"
+            android:text="@string/genre"
             android:textSize="28sp"
             app:layout_constraintStart_toEndOf="@id/iv_back"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_art"
+            android:id="@+id/rv_genre"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_art"
+            app:layout_constraintTop_toBottomOf="@id/tv_genre"
             app:spanCount="2"
-            tools:listitem="@layout/item_art" />
-
+            tools:listitem="@layout/item_genre" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

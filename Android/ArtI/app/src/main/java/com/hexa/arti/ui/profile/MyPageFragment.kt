@@ -15,7 +15,7 @@ import com.hexa.arti.util.navigate
 
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page){
-    private lateinit var mainActivity : MainActivity
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity

@@ -1,23 +1,42 @@
 package com.hexa.arti.ui.search
 
 import android.content.Context
+import android.util.Log
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.search.Art
+import com.hexa.arti.data.model.search.ArtMuseum
+import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.search.adapter.ArtAdapter
+import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
+import com.hexa.arti.ui.search.adapter.ArtistAdapter
 import kotlinx.coroutines.launch
 
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
-    private lateinit var mainActivity: MainActivity
     private var isSearchDetail = false
+
+    private val artMuseumAdapter = ArtMuseumAdapter {
+        Log.d("확인", "미술관 아이템 클릭")
+    }
+    private val artAdapter = ArtAdapter {
+        Log.d("확인", "작품 아이템 클릭")
+    }
+    private val artistAdapter = ArtistAdapter {
+        Log.d("확인", "작가 아이템 클릭")
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -31,7 +50,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     override fun init() {
-
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -46,13 +64,46 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 }
             })
 
+        initAdapters()
         initViews()
     }
 
-    private fun initViews(){
+    private fun initAdapters() {
+        binding.rvArtMuseumResult.adapter = artMuseumAdapter
+        binding.rvArtResult.adapter = artAdapter
+        binding.rvArtistResult.adapter = artistAdapter
+        val layoutManager =
+            GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
+        binding.rvArtistResult.layoutManager = layoutManager
+
+        val mockArtMuseumData = listOf(
+            ArtMuseum(1, "1", "1"),
+            ArtMuseum(2, "1", "1"),
+            ArtMuseum(3, "1", "1"),
+        )
+
+        val mockArtData = listOf(
+            Art(1, "1"),
+            Art(2, "1"),
+            Art(3, "1"),
+        )
+
+        val mockArtistData = listOf(
+            Artist(1, "1"),
+            Artist(2, "1"),
+            Artist(3, "1"),
+        )
+
+        artMuseumAdapter.submitList(mockArtMuseumData)
+        artAdapter.submitList(mockArtData)
+        artistAdapter.submitList(mockArtistData)
+    }
+
+    private fun initViews() {
         binding.tietSearch.setOnFocusChangeListener { _, hasFocus ->
             viewLifecycleOwner.lifecycleScope.launch {
                 if (hasFocus) {
+                    isSearchDetail = true
                     onSearchFocus()
                 }
             }
@@ -70,6 +121,25 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             if (text.toString().isEmpty()) binding.ivClearText.visibility = View.GONE
             else binding.ivClearText.visibility = View.VISIBLE
         }
+
+        binding.tietSearch.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+
+                val imm =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view?.windowToken, 0)
+
+                binding.clSearchResult.visibility = View.VISIBLE
+                isSearchDetail = true
+                binding.tilSearch.clearFocus()
+
+                mainActivity.hideBottomNav(true)
+
+                return@OnEditorActionListener true
+            }
+
+            false
+        })
 
         binding.ivBannerArt.setOnClickListener {
             moveToArtBannerFragment()
@@ -94,6 +164,31 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.tvArtist.setOnClickListener {
             moveToArtistBannerFragment()
         }
+
+        binding.ivBannerGenre.setOnClickListener {
+            moveToGenreBannerFragment()
+        }
+
+        binding.ivGradationGenre.setOnClickListener {
+            moveToGenreBannerFragment()
+        }
+
+        binding.tvGenre.setOnClickListener {
+            moveToGenreBannerFragment()
+        }
+
+
+        binding.ivBannerArtMuseum.setOnClickListener {
+            moveToArtMuseumFragment()
+        }
+
+        binding.ivGradationArtMuseum.setOnClickListener {
+            moveToArtMuseumFragment()
+        }
+
+        binding.tvArtMuseum.setOnClickListener {
+            moveToArtMuseumFragment()
+        }
     }
 
     private fun onSearchFocus() {
@@ -102,11 +197,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.tietSearch, InputMethodManager.SHOW_IMPLICIT)
 
-        isSearchDetail = true
-
         binding.tvSearchTitle.visibility = View.GONE
         binding.tvCancel.visibility = View.VISIBLE
-        binding.tilSearch.clearFocus()
 
         binding.clSearchBanner.animate()
             .alpha(0f)
@@ -120,6 +212,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.clSearchBottom.animate()
             .alpha(1f)
             .setDuration(150)
+
+        binding.clSearchResult.visibility = View.GONE
     }
 
     private fun offSearchFocus() {
@@ -130,28 +224,38 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
         binding.tvSearchTitle.visibility = View.VISIBLE
         binding.tvCancel.visibility = View.GONE
-        binding.tietSearch.setText("")
 
-        binding.clSearchBottom.animate()
-            .alpha(0f)
-            .setDuration(150)
-            .withEndAction {
-                binding.clSearchBottom.visibility = View.GONE
-            }
+        binding.tietSearch.setText("")
+        binding.tietSearch.clearFocus()
+
+        binding.clSearchBottom.visibility = View.GONE
+        binding.clSearchResult.visibility = View.GONE
 
         binding.clSearchBanner.alpha = 0f
         binding.clSearchBanner.visibility = View.VISIBLE
         binding.clSearchBanner.animate()
             .alpha(1f)
             .setDuration(150)
+
+
+
+        mainActivity.hideBottomNav(false)
     }
 
-    private fun moveToArtBannerFragment(){
+    private fun moveToArtBannerFragment() {
         findNavController().navigate(R.id.action_searchFragment_to_artBannerFragment)
     }
 
-    private fun moveToArtistBannerFragment(){
+    private fun moveToArtistBannerFragment() {
         findNavController().navigate(R.id.action_searchFragment_to_artistBannerFragment)
+    }
+
+    private fun moveToGenreBannerFragment() {
+        findNavController().navigate(R.id.action_searchFragment_to_genreBannerFragment)
+    }
+
+    private fun moveToArtMuseumFragment() {
+        findNavController().navigate(R.id.action_searchFragment_to_artMuseumBannerFragment)
     }
 
 }

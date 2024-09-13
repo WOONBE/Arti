@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 private const val TAG = "ArtGalleryDetailFragmen"
 class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R.layout.fragment_art_gallery_detail) {
 
-    private lateinit var mainActivity : MainActivity
     private lateinit var adapter: GalleryDetailViewPagerAdapter
     private val images = listOf(
         R.drawable.gallery_example,

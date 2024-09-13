@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 
 class SurveyFragment : BaseFragment<FragmentSurveyBinding>(R.layout.fragment_survey){
 
-    private lateinit var mainActivity: MainActivity
     private var status = 0
     override fun init() {
     }

@@ -22,7 +22,8 @@ import java.io.FileOutputStream
 
 
 class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layout.fragment_profile_detail) {
-    private lateinit var mainActivity: MainActivity
+
+
     private val ars : ProfileDetailFragmentArgs by navArgs()
     override fun onAttach(context: Context) {
         super.onAttach(context)

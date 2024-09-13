@@ -5,15 +5,14 @@ import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Art
-import com.hexa.arti.databinding.FragmentArtBannerBinding
-import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.databinding.FragmentGenreDetailBinding
 import com.hexa.arti.ui.search.adapter.ArtAdapter
 
-
-class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragment_art_banner) {
+class GenreDetailFragment :
+    BaseFragment<FragmentGenreDetailBinding>(R.layout.fragment_genre_detail) {
 
     val artAdapter = ArtAdapter {
-        Log.d("확인", "작품 클릭 확인")
+        Log.d("확인", "클릭 확인")
     }
 
     override fun onResume() {
@@ -21,9 +20,11 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
         mainActivity.hideBottomNav(true)
     }
 
-
-
     override fun init() {
+        initViews()
+    }
+
+    private fun initViews(){
         binding.rvArt.adapter = artAdapter
 
         binding.ivBack.setOnClickListener {

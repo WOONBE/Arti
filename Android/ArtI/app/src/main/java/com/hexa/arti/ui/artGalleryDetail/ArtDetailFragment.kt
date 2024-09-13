@@ -19,7 +19,6 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
     override fun init() {
     }
 
-    private lateinit var mainActivity : MainActivity
     private val args: ArtDetailFragmentArgs by navArgs()
     override fun onAttach(context: Context) {
         super.onAttach(context)

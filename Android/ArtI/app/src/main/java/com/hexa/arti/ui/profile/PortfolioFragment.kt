@@ -10,7 +10,7 @@ import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.util.navigate
 
 class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
-    private lateinit var mainActivity : MainActivity
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity

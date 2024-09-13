@@ -1,5 +1,6 @@
 package com.hexa.arti.config
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
-import dagger.hilt.android.AndroidEntryPoint
+import com.hexa.arti.ui.MainActivity
 
 
 abstract class BaseFragment<T : ViewDataBinding>(
@@ -18,6 +18,8 @@ abstract class BaseFragment<T : ViewDataBinding>(
 ) : Fragment() {
     private var _binding: T? = null
     protected val binding get() = _binding!!
+
+    lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +34,11 @@ abstract class BaseFragment<T : ViewDataBinding>(
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         init()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if(context is MainActivity) mainActivity = context as MainActivity
     }
 
     abstract fun init()
