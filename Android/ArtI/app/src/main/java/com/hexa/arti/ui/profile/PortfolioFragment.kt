@@ -24,9 +24,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.mypageBtn.setOnClickListener {
-            navigate(R.id.action_portfolioFragment_to_myPageFragment)
-        }
+
     }
 
 }

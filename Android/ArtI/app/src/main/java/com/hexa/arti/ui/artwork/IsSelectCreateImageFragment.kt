@@ -20,7 +20,7 @@ class IsSelectCreateImageFragment : BaseFragment<FragmentIsSelectCreateImageBind
             }
             // 아니오
             artworkMaintainBtn.setOnClickListener {
-
+                navigate(R.id.action_isSelectCreateImageFragment_to_artworkResultFragment)
             }
         }
 

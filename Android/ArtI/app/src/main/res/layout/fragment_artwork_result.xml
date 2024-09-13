@@ -96,10 +96,20 @@
             android:id="@+id/artwork_result_theme_et"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="초상황"
+            android:text="초상화"
             app:layout_constraintBottom_toBottomOf="@+id/artwork_result_theme_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/artwork_result_theme_tv"
             app:layout_constraintTop_toTopOf="@+id/artwork_result_theme_tv" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/ButtonRoundShort20"
+            android:id="@+id/artwork_result_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="전시하기"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/artwork_result_theme_tv" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -10,6 +10,7 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentMyPageBinding
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.setting.SettingFragmentDirections
 import com.hexa.arti.util.navigate
 
 
@@ -30,23 +31,20 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding){
-            portfolioBtn.setOnClickListener {
-                navigate(R.id.action_myPageFragment_to_portfolioFragment)
-            }
 
             // 프로필 편집
             myPageProfileModifyTv.setOnClickListener {
-                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(0)
+                val action = SettingFragmentDirections.actionSettingFragmentToProfileDetailFragment(0)
                 navigate(action)
             }
             // 비밀번호 수정
             myPagePassTv.setOnClickListener {
-                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(1)
+                val action = SettingFragmentDirections.actionSettingFragmentToProfileDetailFragment(1)
                 navigate(action)
             }
             // 이용약관
             myPageInfoTv.setOnClickListener {
-                val action = MyPageFragmentDirections.actionMyPageFragmentToProfileDetailFragment(2)
+                val action = SettingFragmentDirections.actionSettingFragmentToProfileDetailFragment(2)
                 navigate(action)
             }
             // 로그아웃

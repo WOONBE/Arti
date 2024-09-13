@@ -16,12 +16,12 @@
         android:title="" />
 
     <item
-        android:id="@+id/subscribeFragment"
+        android:id="@+id/myGalleryHomeFragment"
         android:icon="@drawable/ic_unselected_museum"
         android:title="@string/menu_art_museum" />
 
     <item
-        android:id="@+id/portfolioFragment"
+        android:id="@+id/settingFragment"
         android:icon="@drawable/ic_unselected_profile"
         android:title="@string/menu_profile" />
 
