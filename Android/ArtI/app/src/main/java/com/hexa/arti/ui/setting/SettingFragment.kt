@@ -9,7 +9,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.hexa.arti.ui.MainActivity
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
-    lateinit var mainActivity: MainActivity
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity

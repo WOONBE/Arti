@@ -8,7 +8,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
@@ -21,12 +23,16 @@ import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.search.adapter.ArtAdapter
 import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 
+@AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
     private var isSearchDetail = false
+
+    private val viewModel: SearchViewModel by viewModels()
 
     private val artMuseumAdapter = ArtMuseumAdapter {
         Log.d("확인", "미술관 아이템 클릭")
@@ -128,6 +134,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 val imm =
                     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
+
+                viewModel.getArtWork(v.text.toString().toInt())
 
                 binding.clSearchResult.visibility = View.VISIBLE
                 isSearchDetail = true

@@ -1,6 +1,8 @@
 package com.hexa.arti.ui.profile
 
 import android.content.Context
+import android.os.Bundle
+import android.view.View
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -6,6 +8,9 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
 }
+
+val properties = Properties()
+properties.load(rootProject.file("local.properties").inputStream())
 
 android {
     namespace = "com.hexa.arti"
@@ -18,6 +23,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        buildConfigField("String","SERVER_URL",properties["SERVER_URL"] as String)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -39,6 +45,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        buildConfig = true
     }
 }
 

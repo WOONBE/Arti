@@ -2,7 +2,8 @@ package com.hexa.arti.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.hexa.arti.network.TestApi
+import com.hexa.arti.BuildConfig
+import com.hexa.arti.network.ArtWorkApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,16 +30,16 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    @Named("test")
-    fun provideTestRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
-        .baseUrl("https://reqres.in/")  // EC2
+    @Named("arti")
+    fun provideArtIRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.SERVER_URL)  // EC2
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
     @Singleton
     @Provides
-    fun provideTestApiService(@Named("test") retrofit: Retrofit): TestApi =
-        retrofit.create(TestApi::class.java)
+    fun provideArtiApiService(@Named("arti") retrofit: Retrofit): ArtWorkApi =
+        retrofit.create(ArtWorkApi::class.java)
 
 }
