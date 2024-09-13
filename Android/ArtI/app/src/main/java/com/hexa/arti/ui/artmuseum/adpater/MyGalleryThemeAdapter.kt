@@ -6,17 +6,15 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
-import android.widget.TextView
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.hexa.arti.R
-import com.hexa.arti.data.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.ui.artmuseum.util.MyGalleryThemeDiffCallback
 
 class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(

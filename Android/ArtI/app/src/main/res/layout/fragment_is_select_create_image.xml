@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.artwork.ArtworkUploadFragment">
+        tools:context=".ui.artwork.IsSelectCreateImageFragment">
 
         <ImageView
             android:id="@+id/artwork_back_btn"
@@ -41,18 +41,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.08" />
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:progress="0"
+            android:progress="40"
             android:layout_marginHorizontal="20dp"
             android:progressTint="@color/point_color"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,25 +58,45 @@
             android:id="@+id/artwork_comment_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="전시하고 싶은 미술품을 고를거에요"
+            android:text="사진을 등록하면 원하는\n 미술품으로 바꿔줄거에요"
             android:textSize="20sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline4" />
+            app:layout_constraintStart_toStartOf="parent"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            style="@style/ButtonRoundShort20"
-            android:id="@+id/artwork_next_btn"
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/ButtonRoundShort20"
+            android:id="@+id/artwork_maintain_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
             android:minHeight="0dp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="50dp"
-            android:text="다음"
+            android:text="아니요 이대로가 좋아요"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/artwork_comment_tv" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/artwork_create_btn"
+            style="@style/ButtonRoundShort20"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:minHeight="0dp"
+            android:paddingHorizontal="50dp"
+            android:paddingVertical="10dp"
+            android:text="네 등록할께요"
+            app:layout_constraintEnd_toEndOf="@+id/artwork_maintain_btn"
+            app:layout_constraintStart_toStartOf="@+id/artwork_maintain_btn"
+            app:layout_constraintTop_toBottomOf="@+id/artwork_maintain_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
