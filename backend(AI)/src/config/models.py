@@ -6,7 +6,7 @@ from .database import Base
 class Artwork(Base):
     __tablename__ = "wikiart_data"
 
-    artword_id = Column(Integer, primary_key = True, index=True)
+    artwork_id = Column(Integer, primary_key = True, index=True)
     artist = Column(VARCHAR(255))
     filename = Column(VARCHAR(255))
     genre = Column(VARCHAR(255))
