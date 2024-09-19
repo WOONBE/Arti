@@ -258,8 +258,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_search_result"
             android:layout_width="0dp"
-            android:visibility="gone"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -319,15 +319,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/rv_art_result" />
 
+            <TextView
+                android:id="@+id/tv_no_result_artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                android:text="@string/no_result_artist"
+                android:fontFamily="@font/inter_18pt_bold"
+                app:layout_constraintStart_toStartOf="@id/tv_artist_result"
+                app:layout_constraintTop_toBottomOf="@id/tv_artist_result" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_artist_result"
                 android:layout_width="0dp"
-                app:layout_constraintTop_toBottomOf="@id/tv_artist_result"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:listitem="@layout/item_artist"
-                android:layout_height="wrap_content"/>
-
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_artist_result"
+                tools:listitem="@layout/item_artist" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

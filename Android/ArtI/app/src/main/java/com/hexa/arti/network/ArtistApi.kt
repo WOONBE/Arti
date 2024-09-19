@@ -8,4 +8,6 @@ import retrofit2.http.Query
 interface ArtistApi {
     @GET("artists/search")
     suspend fun getArtistByString(@Query("keyword") keyword: String): Response<List<GetArtistByStringResponse>>
+
+
 }

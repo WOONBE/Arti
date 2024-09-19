@@ -10,7 +10,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
@@ -51,7 +50,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     override fun onResume() {
         super.onResume()
-        mainActivity.hideBottomNav(false)
+        if(!isSearchDetail) mainActivity.hideBottomNav(false)
 
     }
 
@@ -72,6 +71,18 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
         initAdapters()
         initViews()
+        initUIState()
+    }
+
+    private fun initUIState() {
+        viewModel.artistResult.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.tvNoResultArtist.visibility = View.VISIBLE
+            } else {
+                binding.tvNoResultArtist.visibility = View.GONE
+            }
+            artistAdapter.submitList(it)
+        }
     }
 
     private fun initAdapters() {
@@ -95,9 +106,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         )
 
         val mockArtistData = listOf(
-            Artist(1, "1"),
-            Artist(2, "1"),
-            Artist(3, "1"),
+            Artist(artistId = 0, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
+            Artist(artistId = 1, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
+            Artist(artistId = 2, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
+            Artist(artistId = 3, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
+            Artist(artistId = 4, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
+            Artist(artistId = 5, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
+            Artist(artistId = 6, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
         )
 
         artMuseumAdapter.submitList(mockArtMuseumData)
@@ -136,15 +151,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
                 val keyword = v.text.toString()
-
                 viewModel.getArtistByString(keyword)
 
                 binding.clSearchResult.visibility = View.VISIBLE
                 isSearchDetail = true
+
                 binding.tilSearch.clearFocus()
-
                 mainActivity.hideBottomNav(true)
-
                 return@OnEditorActionListener true
             }
 
