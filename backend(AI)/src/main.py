@@ -44,6 +44,7 @@ def get_test(artwork_id : int, db : Session = Depends(get_db)):
     try:
         results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
         return {
+            "result" : results,
             "path" :  '/home/ubuntu/artwork/' + results.filename
         }
     except Exception as e:
@@ -53,9 +54,10 @@ def get_test(artwork_id : int, db : Session = Depends(get_db)):
 def get_test(artwork_id : int, db : Session = Depends(get_db)):
     try:
         results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
-        image_path = '/home/ubuntu/artwork/' + results.filename
+        image_path = os.path.join('/home/ubuntu/artwork', results.filename)
+        # image_path = os.path.join('C:/Users/SSAFY/Desktop/wikiart', results.filename)
         if os.path.exists(image_path):
-            return FileResponse(image_path, media_type='image/png')
+            return FileResponse(image_path, media_type='image/jpg')
         else:
             raise HTTPException(status_code=404, detail="Image not found")
     except Exception as e:
