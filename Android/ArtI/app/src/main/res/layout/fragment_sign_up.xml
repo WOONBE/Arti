@@ -13,62 +13,85 @@
         android:background="@drawable/login_background"
         tools:context=".ui.signup.SignUpFragment">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/trans_cover_color">
 
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="회원가입"
+                android:textColor="@color/white"
+                android:textSize="36sp"
+                android:elevation="2dp"
+                android:layout_marginTop="25dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/sign_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                android:elevation="2dp"
+                android:src="@drawable/ic_left_24"
+                app:layout_constraintBottom_toBottomOf="@+id/textView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView"
+                app:tint="@color/white" />
+
 
             <ScrollView
+                android:id="@+id/scrollView2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="40dp">
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/textView"
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="회원가입"
-                        android:textColor="@color/white"
-                        android:textSize="36sp"
-                        android:layout_marginTop="40dp"
-                        app:layout_constraintBottom_toTopOf="@id/signup_profile_img_cv"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.02" />
 
-                    <ImageView
-                        android:id="@+id/sign_back_btn"
+                    <TextView
+                        android:id="@+id/signup_profile_tv"
+                        style="@style/LoginTextTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_left_24"
-                        android:scaleX="1.5"
-                        android:scaleY="1.5"
-                        android:layout_marginStart="25dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/textView"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/textView"
-                        app:tint="@color/white" />
+                        android:text="프로필"
+                        android:layout_marginTop="0dp"
+                        app:layout_constraintBottom_toTopOf="@+id/signup_profile_img_cv"
+                        app:layout_constraintStart_toStartOf="@+id/sign_email_tv"
+                        app:layout_constraintTop_toTopOf="@+id/guideline" />
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/signup_profile_img_cv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="20dp"
                         app:cardCornerRadius="100dp"
                         app:layout_constraintBottom_toTopOf="@id/sign_email_tv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView"
+                        app:layout_constraintTop_toBottomOf="@+id/signup_profile_tv"
                         app:layout_constraintVertical_chainStyle="packed">
 
                         <ImageView
                             android:id="@+id/signup_profile_iv"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="130dp"
+                            android:layout_height="130dp"
                             android:scaleType="centerCrop"
                             android:src="@drawable/profile_img" />
                     </androidx.cardview.widget.CardView>
@@ -88,6 +111,7 @@
                         style="@style/LoginEditInput"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
                         app:layout_constraintBottom_toTopOf="@id/sign_certification_tv"
                         app:layout_constraintEnd_toStartOf="@+id/sign_email_btn"
                         app:layout_constraintStart_toStartOf="parent"
@@ -180,6 +204,7 @@
                         style="@style/LoginEditInput"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:inputType="textPassword"
                         app:layout_constraintBottom_toTopOf="@id/sign_pw_verify_tv"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -200,6 +225,7 @@
                         style="@style/LoginEditInput"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:inputType="textPassword"
                         app:layout_constraintBottom_toTopOf="@id/sign_cancel_btn"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -230,6 +256,6 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </ScrollView>
-        </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
