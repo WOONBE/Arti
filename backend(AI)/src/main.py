@@ -4,7 +4,8 @@ import os
 # src 폴더를 Python 경로에 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
@@ -38,11 +39,28 @@ def get_db():
     finally:
         db.close()
 
-@app.get('/')
-def get_test(img_id : int, db : Session = Depends(get_db)):
-    results = db.query(Artwork).offset(0).limit(100).all()
-    return results
+@app.get('/{artwork_id}')
+def get_test(artwork_id : int, db : Session = Depends(get_db)):
+    try:
+        results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
+        return {
+            "path" :  '/home/ubuntu/artwork/' + results.filename
+        }
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
 
+@app.get('/image/{artwork_id}')
+def get_test(artwork_id : int, db : Session = Depends(get_db)):
+    try:
+        results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
+        image_path = '/home/ubuntu/artwork/' + results.filename
+        if os.path.exists(image_path):
+            return FileResponse(image_path, media_type='image/png')
+        else:
+            raise HTTPException(status_code=404, detail="Image not found")
+    except Exception as e:
+        return HTTPException(status_code=500, detail=str(e))
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", reload=True)
