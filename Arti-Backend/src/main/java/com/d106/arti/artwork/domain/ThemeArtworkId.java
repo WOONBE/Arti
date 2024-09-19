@@ -1,4 +1,4 @@
-package com.d106.arti.gallery.domain;
+package com.d106.arti.artwork.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -12,21 +12,21 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Embeddable
-public class SubscriptionId implements Serializable {
+public class ThemeArtworkId implements Serializable {
 
-    private Integer memberId;
-    private Integer galleryId;
+    private Integer artworkId;
+    private Integer themeId;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SubscriptionId that = (SubscriptionId) o;
-        return Objects.equals(memberId, that.memberId) && Objects.equals(galleryId, that.galleryId);
+        ThemeArtworkId that = (ThemeArtworkId) o;
+        return Objects.equals(artworkId, that.artworkId) && Objects.equals(themeId, that.themeId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(memberId, galleryId);
+        return Objects.hash(artworkId, themeId);
     }
 }

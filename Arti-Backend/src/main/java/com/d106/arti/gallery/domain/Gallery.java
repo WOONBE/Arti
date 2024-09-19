@@ -32,11 +32,18 @@ public class Gallery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "GALLERY_NAME")
+    @Column(name = "GALLERY_TITLE")
     private String name;
 
     @Column(name = "GALLERY_VIEW")
     private Integer view;
+
+
+    // 소유인(Member)과의 1:1 관계 설정(수정)
+    // 갤러리 객체가 누구에 의해 소유되었는지, owner 필드는 Member 객체를 참조하는 것으로, 갤러리의 소유자가 누구인지
+    @OneToOne
+    @JoinColumn(name = "OWNER_ID", nullable = false)
+    private Member owner;
 
     @Column(name = "GALLERY_IMG")
     private String image;
@@ -47,10 +54,10 @@ public class Gallery {
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL)
     private List<GalleryViewRecord> viewRecords;
 
-    // 소유인(Member)과의 ManyToOne 관계 설정
-    @ManyToOne
-    @JoinColumn(name = "OWNER_ID", nullable = false)
-    private Member owner;
+
+    // 구독과 1:n 관계 설정 (대응 관계 추가함!)
+    @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subscription> subscriptions;
 
     //(수정!) 서비스 쪽에 추가하기!
     // 지난 7일간의 조회수를 계산하는 메서드
@@ -82,7 +89,7 @@ public class Gallery {
     // 이미지가 없으면 기본 이미지 또는 "이미지가 없습니다" 문구를 반환
     public String getImage() {
         if (image == null || image.isEmpty()) {
-            return "default-image-url.jpg"; // (Arti 이미지 넣을 예정!) 기본 이미지 URL
+            return "https://www.shutterstock.com/image-photo/art-gallery-room-wall-paintings-260nw-2495452625.jpg"; // (Arti 이미지 넣을 예정!) 기본 이미지 URL
         }
         return image;
     }

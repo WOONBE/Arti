@@ -20,9 +20,9 @@ public class GalleryViewRecord {
     @JoinColumn(name = "GALLERY_ID")
     private Gallery gallery;
 
-    @Column(name = "Gallery_VIEW_INIT_DATE")
+    @Column(name = "GALLERY_VIEW_INIT_DATE")
     private LocalDate viewDate;  // 조회수 발생일
 
-    @Column(name = "Gallery_VIEW_COUNT")
+    @Column(name = "GALLERY_VIEW_COUNT")
     private Integer viewCount;   // 해당 날짜의 조회수
 }

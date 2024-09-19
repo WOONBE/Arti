@@ -1,6 +1,9 @@
 package com.d106.arti.gallery.domain;
 
+import com.d106.arti.artwork.domain.AiArtwork;
+import com.d106.arti.artwork.domain.Artist;
 import com.d106.arti.artwork.domain.Artwork;
+import com.d106.arti.artwork.domain.ThemeArtwork;
 import com.d106.arti.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,13 +40,26 @@ public class Theme {
 
     //미술품과 1:n 부모인 , orphanRemoval을 쓰는 이유?
     //Theme과 Artwork의 연결만 끊고 Artwork 자체는 유지
-    @OneToMany(mappedBy = "theme",  orphanRemoval = false)
-    private List<com.d106.arti.artwork.domain.Artwork> artworks;
+    @OneToMany(mappedBy = "theme",  orphanRemoval = false, fetch = FetchType.LAZY)
+    private List<Artwork> artworks;
 
+    //화가와 n : 1
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ARTIST_ID", nullable = false)
+    private Artist artist;
 
-    @ManyToOne
-    @JoinColumn(name = "artwork_id2", nullable = false)
-    private com.d106.arti.artwork.domain.Artwork host;
+//    //AI 미술품과 1:n 부모인 , orphanRemoval을 쓰는 이유?
+//    //Theme과 AI_Artwork의 연결만 끊고 AI_Artwork 자체는 유지
+//    @OneToMany(mappedBy = "theme",  orphanRemoval = false, fetch = FetchType.LAZY)
+//    private List<AiArtwork> aiArtworks;
 
+    //회원 ID와 n : 1
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID", nullable = false)
+    private Member member;
+
+    // 수정 2트: ThemeArtwork와의 1:n 관계 설정
+    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ThemeArtwork> themeArtworks; // 여러 ThemeArtwork와 연결
 
 }
