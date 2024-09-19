@@ -14,6 +14,7 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentProfileDetailBinding
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.util.handleImage
 import com.hexa.arti.util.popBackStack
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -77,7 +78,7 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
     private val getImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                handleImage(it)
+                handleImage(it,requireContext())
                 binding.myPageProfileIv.setImageURI(it)
             }
         }
@@ -85,44 +86,7 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
         getImageLauncher.launch("image/*")
     }
 
-    private fun uriToFile(context: Context, uri: Uri): File {
-        val contentResolver = context.contentResolver
-        val file =
-            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg")
 
-        contentResolver.openInputStream(uri)?.use { inputStream ->
-            FileOutputStream(file).use { outputStream ->
-                val buffer = ByteArray(1024)
-                var length: Int
-                while (inputStream.read(buffer).also { length = it } > 0) {
-                    outputStream.write(buffer, 0, length)
-                }
-            }
-        }
-        return file
-    }
 
-    private fun compressImage(file: File): File {
-        val bitmap = BitmapFactory.decodeFile(file.path)
-        val compressedFile = File(file.parent, "compressed_${file.name}")
-        FileOutputStream(compressedFile).use { outputStream ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% 압축 품질
-        }
-        return compressedFile
-    }
 
-    private fun handleImage(imageUri: Uri) {
-        var file = uriToFile(requireContext(), imageUri)
-
-        val maxSize = 10 * 1024 * 1024 // 10MB
-        if (file.length() > maxSize) {
-            file = compressImage(file)
-
-            if (file.length() > maxSize) {
-                makeToast("File size still exceeds limit after compression")
-                return
-            }
-        }
-        val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-    }
 }

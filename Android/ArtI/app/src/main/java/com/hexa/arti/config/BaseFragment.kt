@@ -10,6 +10,7 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import com.hexa.arti.ui.LoginActivity
 import com.hexa.arti.ui.MainActivity
 
 
@@ -20,6 +21,7 @@ abstract class BaseFragment<T : ViewDataBinding>(
     protected val binding get() = _binding!!
 
     lateinit var mainActivity: MainActivity
+    lateinit var loginActivity: LoginActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +40,8 @@ abstract class BaseFragment<T : ViewDataBinding>(
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if(context is MainActivity) mainActivity = context as MainActivity
+        if(context is MainActivity) mainActivity = context
+        if(context is LoginActivity) loginActivity = context
     }
 
     abstract fun init()
