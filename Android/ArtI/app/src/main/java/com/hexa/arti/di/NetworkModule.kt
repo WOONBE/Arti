@@ -37,9 +37,4 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
-    @Singleton
-    @Provides
-    fun provideArtiApiService(@Named("arti") retrofit: Retrofit): ArtWorkApi =
-        retrofit.create(ArtWorkApi::class.java)
-
 }
