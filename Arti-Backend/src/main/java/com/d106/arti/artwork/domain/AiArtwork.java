@@ -32,7 +32,7 @@ public class AiArtwork extends Artwork {
 
     //받아온 그림 id
     @ManyToOne
-    @JoinColumn(name = "ARTWORK_ID",insertable=false, updatable=false)
+    @JoinColumn(name = "ORIGINAL_ARTWORK_ID")
     private Artwork originalImage;
 
 
