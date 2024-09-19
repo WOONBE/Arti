@@ -29,7 +29,7 @@ public class Artist extends BaseEntity {
     @Column(name = "ARTIST_KOR_NAME")
     private String kor_name;
 
-    @Column(name = "ARTIST_IMAGE")
+    @Column(name = "ARTIST_IMAGE", columnDefinition = "LONGTEXT")
     private String image;
 
     @Column(name = "ARTIST_SUMMARY",columnDefinition = "LONGTEXT")
