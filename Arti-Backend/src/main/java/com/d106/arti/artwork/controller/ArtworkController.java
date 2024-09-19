@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,49 +75,84 @@ public class ArtworkController {
 //            return new ResponseEntity<>("Error importing artist CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 //        }
 //    }
+//    @GetMapping("/import-csv/{filename}")
+//    public ResponseEntity<String> importCSV(@PathVariable String filename) {
+//        String filePath = "C:/Users/SSAFY/Desktop/특화/S11P21D106/Arti-Backend/src/main/resources/" + filename;
+//
+//        File file = new File(filePath);
+//        if (!file.exists()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                .body("파일이 존재하지 않습니다: " + filePath);
+//        }
+//        int limit = 100; // Limit the number of rows to 100
+//        try {
+//            // Check if the file exists
+//            if (!new File(filePath).exists()) {
+//                return new ResponseEntity<>("File not found: " + filename, HttpStatus.NOT_FOUND);
+//            }
+//
+//            csvService.readCSVAndSaveData(filePath, limit);
+//            return new ResponseEntity<>("Successfully imported 100 records from " + filename, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Error importing CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//
+//    // 새로운 Artist CSV 파일 처리 엔드포인트
+//    @GetMapping("/import-artist-csv/{filename}")
+//    public ResponseEntity<String> importArtistCSV(@PathVariable String filename) {
+//        String filePath = "C:/Users/SSAFY/Desktop/특화/S11P21D106/Arti-Backend/src/main/resources/" + filename;
+//
+//        File file = new File(filePath);
+//
+//        if (!file.exists()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                .body("파일이 존재하지 않습니다: " + filePath);
+//        }
+//        int limit = 100; // 최대 100개의 데이터를 가져옴
+//        try {
+//            // Check if the file exists
+//            if (!new File(filePath).exists()) {
+//                return new ResponseEntity<>("File not found: " + filename, HttpStatus.NOT_FOUND);
+//            }
+//
+//            csvService.readArtistCSVAndSaveData(filePath, limit);
+//            return new ResponseEntity<>("성공적으로 " + filename + " 파일에서 100개의 아티스트 데이터를 가져왔습니다.", HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>("Error importing artist CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
     @GetMapping("/import-csv/{filename}")
     public ResponseEntity<String> importCSV(@PathVariable String filename) {
-        String filePath = "C:/Users/SSAFY/Desktop/특화/S11P21D106/Arti-Backend/src/main/resources/" + filename;
+        Resource resource = new ClassPathResource(filename);
 
-        File file = new File(filePath);
-        if (!file.exists()) {
+        if (!resource.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("파일이 존재하지 않습니다: " + filePath);
+                .body("파일이 존재하지 않습니다: " + filename);
         }
+
         int limit = 100; // Limit the number of rows to 100
         try {
-            // Check if the file exists
-            if (!new File(filePath).exists()) {
-                return new ResponseEntity<>("File not found: " + filename, HttpStatus.NOT_FOUND);
-            }
-
-            csvService.readCSVAndSaveData(filePath, limit);
+            csvService.readCSVAndSaveData(filename, limit);
             return new ResponseEntity<>("Successfully imported 100 records from " + filename, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error importing CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // 새로운 Artist CSV 파일 처리 엔드포인트
     @GetMapping("/import-artist-csv/{filename}")
     public ResponseEntity<String> importArtistCSV(@PathVariable String filename) {
-        String filePath = "C:/Users/SSAFY/Desktop/특화/S11P21D106/Arti-Backend/src/main/resources/" + filename;
+        Resource resource = new ClassPathResource(filename);
 
-        File file = new File(filePath);
-
-        if (!file.exists()) {
+        if (!resource.exists()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("파일이 존재하지 않습니다: " + filePath);
+                .body("파일이 존재하지 않습니다: " + filename);
         }
-        int limit = 100; // 최대 100개의 데이터를 가져옴
-        try {
-            // Check if the file exists
-            if (!new File(filePath).exists()) {
-                return new ResponseEntity<>("File not found: " + filename, HttpStatus.NOT_FOUND);
-            }
 
-            csvService.readArtistCSVAndSaveData(filePath, limit);
-            return new ResponseEntity<>("성공적으로 " + filename + " 파일에서 100개의 아티스트 데이터를 가져왔습니다.", HttpStatus.OK);
+        int limit = 100; // Limit the number of rows to 100
+        try {
+            csvService.readArtistCSVAndSaveData(filename, limit);
+            return new ResponseEntity<>("Successfully imported 100 records from " + filename, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error importing artist CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
