@@ -43,9 +43,11 @@ def get_db():
 def get_test(artwork_id : int, db : Session = Depends(get_db)):
     try:
         results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
+        image_path = os.path.join('/home/ubuntu/artwork', results.filename)
         return {
             "result" : results,
-            "path" :  '/home/ubuntu/artwork/' + results.filename
+            "path" :  '/home/ubuntu/artwork/' + results.filename,
+            'test' : image_path
         }
     except Exception as e:
         return HTTPException(status_code=500, detail=str(e))
@@ -60,7 +62,8 @@ def get_image(artwork_id: int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="Artwork not found in the database")
 
         # 이미지 경로 설정 (EC2 절대 경로)
-        image_path = os.path.join('/home/ubuntu/artwork', results.filename)
+        # image_path = os.path.join('/home/ubuntu/artwork', results.filename)
+        image_path = '/home/ubuntu/artwork/' + results.filename
 
         # 이미지 파일이 존재하는지 확인
         if os.path.exists(image_path):

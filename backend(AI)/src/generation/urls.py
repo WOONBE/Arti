@@ -1,5 +1,8 @@
-from fastapi import APIRouter, HTTPException, Response
+from fastapi import APIRouter, HTTPException, Response, Depends
 from fastapi.responses import FileResponse
+from config.database import SessionLocal
+from config.models import AI_Artwork
+from sqlalchemy.orm import Session
 import functools
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -10,6 +13,13 @@ import os
 import uuid
 
 router = APIRouter(prefix='/artwork')
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 def crop_center(image):
     shape = image.shape
@@ -32,7 +42,8 @@ def load_image(image_path, image_size = (256,256), preserve_aspect_ratio=True):
     return img
 
 @router.post('/ai')
-def generation_image(content_image_path, style_image_path):
+def generation_image(content_image_path, style_image_path, db : Session = Depends(get_db)):
+    
     content_image_size = (256,256)
     content = load_image(content_image_path, content_image_size)
 
