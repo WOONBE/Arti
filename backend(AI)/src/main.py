@@ -51,17 +51,25 @@ def get_test(artwork_id : int, db : Session = Depends(get_db)):
         return HTTPException(status_code=500, detail=str(e))
 
 @app.get('/image/{artwork_id}')
-def get_test(artwork_id : int, db : Session = Depends(get_db)):
+def get_image(artwork_id: int, db: Session = Depends(get_db)):
     try:
+        # DB에서 artwork_id에 해당하는 레코드 조회
         results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
+
+        if not results:
+            raise HTTPException(status_code=404, detail="Artwork not found in the database")
+
+        # 이미지 경로 설정 (EC2 절대 경로)
         image_path = os.path.join('/home/ubuntu/artwork', results.filename)
-        # image_path = os.path.join('C:/Users/SSAFY/Desktop/wikiart', results.filename)
+
+        # 이미지 파일이 존재하는지 확인
         if os.path.exists(image_path):
             return FileResponse(image_path, media_type='image/jpg')
         else:
             raise HTTPException(status_code=404, detail="Image not found")
+
     except Exception as e:
-        return HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
     
 if __name__ == "__main__":
     import uvicorn
