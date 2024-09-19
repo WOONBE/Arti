@@ -11,7 +11,6 @@ import com.hexa.arti.ui.artmuseum.adpater.MyGalleryAdapter
 
 class MyGalleryHomeFragment : BaseFragment<FragmentMyGalleryHomeBinding>(R.layout.fragment_my_gallery_home){
 
-    private lateinit var mainActivity: MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity

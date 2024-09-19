@@ -15,7 +15,6 @@ import com.hexa.arti.util.popBackStack
 
 class ArtworkUploadFragment : BaseFragment<FragmentArtworkUploadBinding>(R.layout.fragment_artwork_upload) {
 
-    private lateinit var mainActivity : MainActivity
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
