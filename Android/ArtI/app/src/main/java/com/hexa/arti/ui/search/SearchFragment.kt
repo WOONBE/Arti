@@ -135,7 +135,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
-                viewModel.getArtWork(v.text.toString().toInt())
+                val keyword = v.text.toString()
+
+                viewModel.getArtistByString(keyword)
 
                 binding.clSearchResult.visibility = View.VISIBLE
                 isSearchDetail = true

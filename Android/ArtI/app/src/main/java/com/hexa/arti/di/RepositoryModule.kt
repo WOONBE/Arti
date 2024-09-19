@@ -1,7 +1,9 @@
 package com.hexa.arti.di
 
 import com.hexa.arti.repository.ArtWorkRepository
-import com.hexa.arti.repository.ArtWorkRepositoryIml
+import com.hexa.arti.repository.ArtWorkRepositoryImpl
+import com.hexa.arti.repository.ArtistRepository
+import com.hexa.arti.repository.ArtistRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +17,12 @@ interface RepositoryModule {
     @Singleton
     @Binds
     fun bindArtWorkRepository(
-        artWorkRepositoryIml: ArtWorkRepositoryIml
+        artWorkRepositoryImpl: ArtWorkRepositoryImpl
     ): ArtWorkRepository
+
+    @Singleton
+    @Binds
+    fun bindArtistRepository(
+        artistRepositoryImpl: ArtistRepositoryImpl
+    ): ArtistRepository
 }
