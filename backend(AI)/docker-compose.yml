@@ -5,4 +5,4 @@ services:
     ports:
       - "9000:8080"
     volumes:
-      - ./images:/var/images
+      - /home/ubuntu/artwork:/artwork/images

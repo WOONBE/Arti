@@ -14,7 +14,11 @@ db = secrets["DB"]
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{db.get('user')}@stg-yswa-kr-practice-db-master:{db.get('password')}@{db.get('host')}:{db.get('port')}/{db.get('database')}?charset=utf8"
 
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
+engine = create_engine(
+    SQLALCHEMY_DATABASE_URL,
+    pool_recycle=28000,  # 28000초마다 연결을 재활용
+    pool_pre_ping=True   # MySQL 연결 확인
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
