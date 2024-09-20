@@ -24,7 +24,8 @@ glide = "4.16.0"
 timber = "5.0.1"
 viewpager2 = "1.1.0"
 gridlayout = "1.0.0"
-
+#datastore
+datastore = "1.1.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -65,7 +66,8 @@ viewpager2 = {group = "androidx.viewpager2", name = "viewpager2", version.ref = 
 #DrawerLayout
 androidx-drawerlayout = { module = "androidx.drawerlayout:drawerlayout", version.ref = "drawerlayout" }
 androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" }
-
+#datastore
+datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 [bundles]
 network = ["retrofit2", "okhttp3", "okhttp3-logging", "gson"]
 
