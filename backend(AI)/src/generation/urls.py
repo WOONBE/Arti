@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Response, Depends
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from config.database import SessionLocal
 from config.models import AI_Artwork, Artwork
@@ -44,13 +44,25 @@ def load_image(image_path, image_size = (256,256), preserve_aspect_ratio=True):
     return img
 
 @router.post('/ai')
-def generation_image(image: trasform_image, db : Session = Depends(get_db)):
+def generation_image(content_image: UploadFile = File(), style_image : int = Form(), db : Session = Depends(get_db)):
     
-    style_image_path = db.query(Artwork).filter(Artwork.artwork_id == image.style_image_id).first().filename
-    style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart/", style_image_path)
+    style_image_path = db.query(Artwork).filter(Artwork.artwork_id == style_image).first().filename
+    # style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", style_image_path)
+    style_image_path = os.path.join("/home/ubuntu/artwork", style_image_path)
+
+    temp_dir = 'content_image'
+    if not os.path.exists(temp_dir):
+        os.makedirs(temp_dir)  # 디렉토리 생성
+
+    content_image_filename = f"{uuid.uuid4()}_{content_image.filename}"
+    content_image_path = os.path.join(temp_dir, content_image_filename)
+    
+    # 업로드된 content 이미지를 temp 디렉토리에 저장
+    with open(content_image_path, "wb") as f:
+        f.write(content_image.file.read())
 
     content_image_size = (256,256)
-    content = load_image(image.content_image_path, content_image_size)
+    content = load_image(content_image_path, content_image_size)
 
     style_image_size = (256,256)
     style = load_image(style_image_path, style_image_size)
@@ -62,9 +74,6 @@ def generation_image(image: trasform_image, db : Session = Depends(get_db)):
     outputs = hub_module(tf.constant(content), tf.constant(style))
     stylized_image = outputs[0]
 
-    # return {
-    #     'generation_image' : stylized_image.numpy().tolist()
-    # }
     # 텐서를 이미지로 변환
     stylized_image_np = stylized_image.numpy()
     stylized_image_np = np.squeeze(stylized_image_np, axis=0)
@@ -99,8 +108,3 @@ def generation_image(image: trasform_image, db : Session = Depends(get_db)):
 def get_image(image: post_ai_image, db: Session = Depends(get_db)):
 
     return insert_post(image, db)
-    # image_path = os.path.join('generated_images', image_filename)
-    # if os.path.exists(image_path):
-    #     return FileResponse(image_path, media_type='image/png')
-    # else:
-    #     raise HTTPException(status_code=404, detail="Image not found")

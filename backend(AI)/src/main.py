@@ -63,7 +63,7 @@ def get_image(artwork_id: int, db: Session = Depends(get_db)):
 
         # 이미지 경로 설정 (EC2 절대 경로)
         # image_path = os.path.join('/home/ubuntu/artwork', results.filename)
-        image_path = os.path.join('/home/ubuntu/artwork/', results.filename)
+        image_path = os.path.join('/home/ubuntu/artwork', results.filename)
 
         # 이미지 파일이 존재하는지 확인
         if os.path.exists(image_path):
