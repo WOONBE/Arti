@@ -16,12 +16,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -118,6 +121,24 @@ public class ArtworkController {
     public ResponseEntity<NormalArtworkResponse> getArtworkById(@PathVariable Integer artworkId) {
         NormalArtworkResponse artworkResponse = artworkService.getArtworkById(artworkId);
         return ResponseEntity.ok(artworkResponse);
+    }
+
+    // 이미지 제공 엔드포인트
+    @GetMapping(value = "/images/{filename}", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseBody
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+        try {
+            File file = new File("/artwork/images/" + filename); // EC2에서 이미지 파일 경로
+            Resource resource = new UrlResource(file.toURI());
+
+            if (resource.exists() || resource.isReadable()) {
+                return ResponseEntity.ok(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
 
