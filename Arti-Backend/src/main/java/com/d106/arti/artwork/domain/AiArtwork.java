@@ -1,6 +1,7 @@
 package com.d106.arti.artwork.domain;
 
-import com.d106.arti.gallery.Theme;
+
+import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;

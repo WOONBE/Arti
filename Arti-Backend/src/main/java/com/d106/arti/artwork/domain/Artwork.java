@@ -1,6 +1,8 @@
 package com.d106.arti.artwork.domain;
 
-import com.d106.arti.gallery.Theme;
+
+
+import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.global.common.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
