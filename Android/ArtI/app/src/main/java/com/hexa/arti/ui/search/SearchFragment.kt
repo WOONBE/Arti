@@ -39,8 +39,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     private val artAdapter = ArtAdapter {
         Log.d("확인", "작품 아이템 클릭")
     }
-    private val artistAdapter = ArtistAdapter {
-        Log.d("확인", "작가 아이템 클릭")
+    private val artistAdapter = ArtistAdapter { artist ->
+        moveToArtistDetailFragment(artist)
     }
 
     override fun onAttach(context: Context) {
@@ -105,19 +105,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             Art(3, "1"),
         )
 
-        val mockArtistData = listOf(
-            Artist(artistId = 0, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-            Artist(artistId = 1, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-            Artist(artistId = 2, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-            Artist(artistId = 3, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-            Artist(artistId = 4, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-            Artist(artistId = 5, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-            Artist(artistId = 6, korName = "잠만보1", engName = "aa", imageUrl = "sad"),
-        )
-
         artMuseumAdapter.submitList(mockArtMuseumData)
         artAdapter.submitList(mockArtData)
-        artistAdapter.submitList(mockArtistData)
     }
 
     private fun initViews() {
@@ -279,6 +268,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private fun moveToArtMuseumFragment() {
         findNavController().navigate(R.id.action_searchFragment_to_artMuseumBannerFragment)
+    }
+
+    private fun moveToArtistDetailFragment(artist: Artist){
+        findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToArtistDetailFragment(artist))
     }
 
 }
