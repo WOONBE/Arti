@@ -16,11 +16,6 @@ class ArtMuseumBannerFragment :
         moveToArtMuseumFragment()
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(true)
-    }
-
     override fun init() {
         initVies()
     }

@@ -10,14 +10,7 @@ import com.hexa.arti.ui.MainActivity
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(false)
-    }
+
     override fun init() {
 
         with(binding){

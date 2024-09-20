@@ -48,11 +48,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         mainActivity = context as MainActivity
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(!isSearchDetail) mainActivity.hideBottomNav(false)
-
-    }
 
     override fun init() {
         requireActivity().onBackPressedDispatcher.addCallback(

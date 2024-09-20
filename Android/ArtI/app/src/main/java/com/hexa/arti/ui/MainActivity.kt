@@ -3,12 +3,14 @@ package com.hexa.arti.ui
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -19,15 +21,13 @@ import com.hexa.arti.config.BaseActivity
 import com.hexa.arti.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+private const val TAG = "MainActivity"
+
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private val isFirst = true
-
-    override fun onResume() {
-        super.onResume()
-
-    }
+    lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+        setBottomNavHide()
     }
 
 
@@ -44,7 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_container) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
 
         binding.bnMenu.setupWithNavController(navController)
 
@@ -70,7 +71,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     // 가로 모드
     fun changeLandScope() {
-
         // 가로모드로 고정
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         window.decorView.systemUiVisibility = (
@@ -96,4 +96,31 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         finish()
     }
 
+    /** 바텀 네비게이션 숨기는 기능 */
+    private fun setBottomNavHide() {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when(destination.id){
+                R.id.homeFragment -> {
+                    hideBottomNav(false)
+                    Log.d(TAG, "setBottomNavHide: home")
+                }
+                R.id.searchFragment -> {
+                    hideBottomNav(false)
+                    Log.d(TAG, "setBottomNavHide: search")
+                }
+                R.id.myGalleryHomeFragment ->{
+                    hideBottomNav(false)
+                    Log.d(TAG, "setBottomNavHide: myGallery")
+                }
+                R.id.settingFragment ->{
+                    hideBottomNav(false)
+                    Log.d(TAG, "setBottomNavHide: setting")
+                }
+                else ->{
+                    hideBottomNav(true)
+                    Log.d(TAG, "setBottomNavHide: etc")
+                }
+            }
+        }
+    }
 }

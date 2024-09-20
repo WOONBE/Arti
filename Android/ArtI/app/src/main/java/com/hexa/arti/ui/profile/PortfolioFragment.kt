@@ -14,15 +14,10 @@ import com.hexa.arti.ui.MainActivity
 
 class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
 
     override fun init() {
         initChart()
     }
-
     private fun initChart(){
         val dataList = ArrayList<PieEntry>()
 
@@ -50,11 +45,6 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
         binding.pcChart.animateY(500)
         binding.pcChart.invalidate()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(false)
     }
 
 

@@ -44,9 +44,4 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(true)
-    }
-
 }

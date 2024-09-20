@@ -16,9 +16,10 @@ import com.hexa.arti.ui.LoginActivity
 import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.signup.SignUpFragment
 import com.hexa.arti.util.navigate
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.log
 
-
+@AndroidEntryPoint
 class LoginFragment :
     BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
 
@@ -28,9 +29,12 @@ class LoginFragment :
         initObserve()
         with(binding) {
             loginBtn.setOnClickListener {
-                loginViewModel.updateEmail(loginIdEt.text.toString())
-                loginViewModel.updatePass(loginPwEt.text.toString())
-                loginViewModel.login()
+                if(!loginIdEt.text.isNullOrBlank() && !loginPwEt.text.isNullOrBlank() ){
+                    loginViewModel.updateEmail(loginIdEt.text.toString())
+                    loginViewModel.updatePass(loginPwEt.text.toString())
+                    loginViewModel.login()
+                }
+
             }
             signBtn.setOnClickListener {
                 loginActivity.moveSignUp()
@@ -48,6 +52,9 @@ class LoginFragment :
 
                 2 -> {
                     makeToast("로그인 실패")
+                }
+                else -> {
+
                 }
             }
         }
