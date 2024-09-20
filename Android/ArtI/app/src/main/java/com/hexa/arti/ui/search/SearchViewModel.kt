@@ -22,6 +22,8 @@ class SearchViewModel @Inject constructor(
     private val _artistResult = MutableLiveData<List<Artist>>()
     val artistResult: LiveData<List<Artist>> = _artistResult
 
+    var state = SearchFragment.BASE_STATE
+
     fun getArtWorkById(id: Int) {
         viewModelScope.launch {
             artWorkRepository.getArtWork(id).onSuccess { response ->
