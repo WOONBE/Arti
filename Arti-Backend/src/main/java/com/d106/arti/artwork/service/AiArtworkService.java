@@ -11,8 +11,10 @@ import com.d106.arti.artwork.dto.response.AiArtworkResponse;
 
 import com.d106.arti.artwork.repository.AiArtworkRepository;
 import com.d106.arti.artwork.repository.ArtworkRepository;
-import com.d106.arti.gallery.Theme;
+
 import com.d106.arti.gallery.ThemeRepository;
+
+import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.global.exception.ExceptionCode;
 import com.d106.arti.member.domain.Member;
@@ -39,6 +41,10 @@ public class AiArtworkService {
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK));
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
+
+//        Theme theme = themeRepository.findById(request.getThemeId())
+//                .orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
+
         Theme theme = themeRepository.findById(request.getThemeId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
 
