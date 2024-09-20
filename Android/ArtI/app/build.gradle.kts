@@ -36,6 +36,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -71,7 +72,7 @@ dependencies {
     //navigation
     implementation(libs.navigation.ktx)
     implementation(libs.navigation.ui)
-    //implementation(libs.navigation.safe.args)
+//    implementation(libs.navigation.safe.args)
     //coroutine
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)

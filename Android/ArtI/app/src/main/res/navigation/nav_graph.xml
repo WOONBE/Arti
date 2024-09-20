@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_searchFragment_to_artMuseumBannerFragment"
             app:destination="@id/artMuseumBannerFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/artworkUploadFragment"
@@ -201,4 +204,16 @@
         android:id="@+id/artMuseumFragment"
         android:name="com.hexa.arti.ui.search.ArtMuseumFragment"
         android:label="ArtMuseumFragment" />
+    <fragment
+        android:id="@+id/artistDetailFragment"
+        android:name="com.hexa.arti.ui.search.ArtistDetailFragment"
+        android:label="fragment_artist_detail"
+        tools:layout="@layout/fragment_artist_detail" >
+
+        <argument
+            android:name="artist"
+            app:argType="com.hexa.arti.data.model.search.Artist"
+            app:nullable="false" />
+
+    </fragment>
 </navigation>

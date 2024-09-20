@@ -12,7 +12,7 @@ import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.ItemArtistBinding
 
 class ArtistAdapter(
-    private val onItemClick: () -> Unit
+    private val onItemClick: (Artist) -> Unit
 ) : ListAdapter<Artist, ArtistAdapter.ArtistViewHolder>(ArtistDiffUtil()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtistViewHolder {
@@ -29,7 +29,7 @@ class ArtistAdapter(
 
     class ArtistViewHolder(
         private val binding: ItemArtistBinding,
-        private val onItemClick: () -> Unit
+        private val onItemClick: (Artist) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(artist: Artist) {
@@ -43,7 +43,7 @@ class ArtistAdapter(
             binding.tvArtistDescription.text = artist.description
 
             itemView.setOnClickListener {
-                onItemClick()
+                onItemClick(artist)
             }
         }
     }
