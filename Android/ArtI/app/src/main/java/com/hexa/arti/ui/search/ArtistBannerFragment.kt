@@ -17,11 +17,6 @@ class ArtistBannerFragment :
         Log.d("확인", "아이템클릭 확인")
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(true)
-    }
-
     override fun init() {
         initViews()
     }

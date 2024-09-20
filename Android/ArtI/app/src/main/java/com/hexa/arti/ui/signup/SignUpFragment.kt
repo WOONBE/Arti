@@ -11,7 +11,9 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentSignUpBinding
 import com.hexa.arti.util.handleImage
 import com.hexa.arti.util.isPasswordValid
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sign_up) {
 
     private var isCheckCode = false

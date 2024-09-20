@@ -20,10 +20,7 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
     }
 
     private val args: ArtDetailFragmentArgs by navArgs()
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -65,11 +62,9 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
             }
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.changeLandScope()
-        mainActivity.hideBottomNav(true)
-    }
+//    override fun onResume() {
+//        super.onResume()
+//        mainActivity.changeLandScope()
+//    }
 
 }

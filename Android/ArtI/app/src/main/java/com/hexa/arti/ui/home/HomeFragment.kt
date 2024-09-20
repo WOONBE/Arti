@@ -26,17 +26,6 @@ class HomeFragment :
         initAdapter()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(false)
-        mainActivity.changePortrait()
-    }
-
     private fun initAdapter(){
         binding.viewpager2.adapter = ViewpageAdapter(
             onPlayClick = { itemNumber ->

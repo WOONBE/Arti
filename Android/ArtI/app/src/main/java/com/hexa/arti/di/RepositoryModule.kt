@@ -4,6 +4,10 @@ import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtWorkRepositoryImpl
 import com.hexa.arti.repository.ArtistRepository
 import com.hexa.arti.repository.ArtistRepositoryImpl
+import com.hexa.arti.repository.LoginRepository
+import com.hexa.arti.repository.LoginRepositoryImpl
+import com.hexa.arti.repository.SignUpRepository
+import com.hexa.arti.repository.SignUpRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +29,16 @@ interface RepositoryModule {
     fun bindArtistRepository(
         artistRepositoryImpl: ArtistRepositoryImpl
     ): ArtistRepository
+
+    @Singleton
+    @Binds
+    fun bindLoginRepository(
+        loginRepositoryImpl: LoginRepositoryImpl
+    ) : LoginRepository
+
+    @Singleton
+    @Binds
+    fun bindSignUpRepository(
+        signUpRepositoryImpl: SignUpRepositoryImpl
+    ) : SignUpRepository
 }

@@ -16,12 +16,6 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
         Log.d("확인", "작품 클릭 확인")
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(true)
-    }
-
-
 
     override fun init() {
         binding.rvArt.adapter = artAdapter

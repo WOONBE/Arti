@@ -15,11 +15,6 @@ import com.hexa.arti.util.popBackStack
 
 class ArtworkUploadFragment : BaseFragment<FragmentArtworkUploadBinding>(R.layout.fragment_artwork_upload) {
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
-
     override fun init() {
         with(binding){
             artworkBackBtn.setOnClickListener {
@@ -29,11 +24,6 @@ class ArtworkUploadFragment : BaseFragment<FragmentArtworkUploadBinding>(R.layou
                 navigate(R.id.action_artworkUploadFragment_to_selectArtworkFragment)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(true)
     }
 
 }

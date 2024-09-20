@@ -26,20 +26,11 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
 
 
     private val ars : ProfileDetailFragmentArgs by navArgs()
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
+
     override fun init() {
         initView()
         initEvent()
     }
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(true)
-    }
-
 
     private fun initView(){
         with(binding){

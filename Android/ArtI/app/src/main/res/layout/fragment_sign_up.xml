@@ -123,6 +123,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="전송"
+                        android:background="@drawable/background_point_trans_button_round8"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/sign_email_et" />
 
@@ -155,6 +156,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="인증"
+                        android:background="@drawable/background_point_trans_button_round8"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/sign_certification_et" />
@@ -237,6 +239,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_margin="20dp"
+                        android:background="@drawable/background_point_trans_button_round8"
                         android:text="취소"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@id/sign_btn"
@@ -250,6 +253,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="20dp"
                         android:text="가입"
+                        android:background="@drawable/background_point_trans_button_round8"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/sign_cancel_btn"
                         app:layout_constraintTop_toTopOf="@+id/sign_cancel_btn" />

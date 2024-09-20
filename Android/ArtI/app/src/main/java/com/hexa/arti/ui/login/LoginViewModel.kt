@@ -1,13 +1,21 @@
 package com.hexa.arti.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hexa.arti.repository.LoginRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor() : ViewModel() {
+private const val TAG = "LoginViewModel"
+
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val loginRepository: LoginRepository
+) : ViewModel() {
 
     private val _email = MutableLiveData<String>("")
     val email: LiveData<String> = _email
@@ -20,7 +28,16 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     fun login() {
         viewModelScope.launch {
-            _loginStatus.value = 1
+            loginRepository.postLogin(_email.value.toString(), _pass.value.toString()).onSuccess {
+                response ->
+                Log.d(TAG, "login: ${response}")
+                _loginStatus.value = 1
+            }.onFailure {
+                error ->
+                Log.d(TAG, "login: ${error}")
+                _loginStatus.value = 2
+            }
+
         }
     }
 

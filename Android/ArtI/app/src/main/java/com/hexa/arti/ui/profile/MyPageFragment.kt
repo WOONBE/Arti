@@ -19,10 +19,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun init() {
     }
 
-    override fun onResume() {
-        super.onResume()
-        mainActivity.hideBottomNav(false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

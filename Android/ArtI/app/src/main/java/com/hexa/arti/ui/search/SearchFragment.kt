@@ -41,11 +41,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         moveToArtistDetailFragment(artist)
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
-
     override fun onResume() {
         super.onResume()
         if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)

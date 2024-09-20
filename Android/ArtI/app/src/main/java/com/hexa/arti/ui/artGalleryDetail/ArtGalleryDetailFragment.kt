@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -34,13 +35,13 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
 
     private lateinit var mediaPlayer: MediaPlayer
     private var isPlaying = false
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
+    
     override fun init() {
-
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            isEnabled = false
+            requireActivity().onBackPressed()
+            mainActivity.changePortrait()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,6 +121,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
                 binding.drawerLayout.openDrawer(GravityCompat.END)
             }
             galleryExitBtn.setOnClickListener {
+                mainActivity.changePortrait()
                 popBackStack()
             }
         }
@@ -164,11 +166,9 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         }
     }
 
-
     override fun onResume() {
         super.onResume()
         mainActivity.changeLandScope()
-        mainActivity.hideBottomNav(true)
     }
     // 뷰가 파괴될 때 MediaPlayer 해제
     override fun onDestroyView() {

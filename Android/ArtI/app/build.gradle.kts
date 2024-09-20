@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.drawerlayout)
     //MediaPlayer
     implementation(libs.kotlinx.coroutines.android.v164)
-
+    //datastore
+    implementation(libs.datastore)
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
