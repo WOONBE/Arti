@@ -54,6 +54,9 @@ public class Gallery {
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL)
     private List<GalleryViewRecord> viewRecords;
 
+    // Gallery.java (여기 theme 추가)
+    @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Theme> themes; // 미술관은 여러 테마를 가질 수 있음
 
     // 구독과 1:n 관계 설정 (대응 관계 추가함!)
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)

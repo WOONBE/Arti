@@ -64,4 +64,7 @@ public class Theme {
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ThemeArtwork> themeArtworks; // 여러 ThemeArtwork와 연결
 
+    // Theme 엔티티 수정
+    @Column(name = "THEME_NAME", nullable = false)  // 필드 추가
+    private String name;
 }
