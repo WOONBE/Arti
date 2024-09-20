@@ -2,12 +2,15 @@ package com.d106.arti.artwork.dto.request;
 
 import com.d106.arti.artwork.domain.AiArtwork;
 import com.d106.arti.artwork.domain.Artwork;
-import com.d106.arti.gallery.Theme;
+
+
+import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.member.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 @Data
 @Builder
