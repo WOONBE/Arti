@@ -26,10 +26,29 @@ public class NormalArtworkResponse {
     private String year;
 
 
-    public static NormalArtworkResponse fromEntity(NormalArtWork normalArtWork) {
+//    public static NormalArtworkResponse fromEntity(NormalArtWork normalArtWork) {
+//        return NormalArtworkResponse.builder()
+//            .artwork_id(normalArtWork.getId())
+//            .filename(normalArtWork.getFilename())
+//            .artist(normalArtWork.getArtist())
+//            .genre(normalArtWork.getGenre())
+//            .description(normalArtWork.getDescription())
+//            .phash(normalArtWork.getPhash())
+//            .width(normalArtWork.getWidth())
+//            .height(normalArtWork.getHeight())
+//            .genreCount(normalArtWork.getGenreCount())
+//            .subset(normalArtWork.getSubset())
+//            .artistKo(normalArtWork.getArtistKo())
+//            .title(normalArtWork.getTitle())
+//            .year(normalArtWork.getYear())
+//            .build();
+//    }
+    public static NormalArtworkResponse fromEntity(NormalArtWork normalArtWork, String baseUrl) {
+        String imageUrl = baseUrl + normalArtWork.getFilename();
+
         return NormalArtworkResponse.builder()
             .artwork_id(normalArtWork.getId())
-            .filename(normalArtWork.getFilename())
+            .filename(imageUrl) // EC2 이미지 경로 적용
             .artist(normalArtWork.getArtist())
             .genre(normalArtWork.getGenre())
             .description(normalArtWork.getDescription())
