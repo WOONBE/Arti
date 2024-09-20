@@ -6,7 +6,7 @@ from .database import Base
 class Artwork(Base):
     __tablename__ = "wikiart_data"
 
-    artwork_id = Column(Integer, primary_key = True, index=True)
+    artwork_id = Column(Integer, primary_key = True, index=True, autoincrement=True)
     artist = Column(VARCHAR(255))
     filename = Column(VARCHAR(255))
     genre = Column(VARCHAR(255))
@@ -25,7 +25,7 @@ class Artwork(Base):
 class Artist(Base):
     __tablename__ = "artist"
 
-    artist_id = Column(Integer, primary_key=True, index=True)
+    artist_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     artist = Column(VARCHAR(255))
     artist_ko = Column(VARCHAR(255))
     summary = Column(Text)
@@ -34,7 +34,7 @@ class Artist(Base):
 class Member(Base):
     __tablename__ = 'member'
 
-    member_id = Column(Integer, primary_key=True, index=True)
+    member_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     email = Column(VARCHAR(255))
     nickname = Column(VARCHAR(255))
     password = Column(VARCHAR(255))
@@ -43,8 +43,8 @@ class Member(Base):
 class AI_Artwork(Base):
     __tablename__ = 'ai_artwork'
 
-    ai_artwork = Column(Integer, primary_key=True, index=True)
-    member_id = Column(Integer, ForeignKey("Member.member_id"))
-    ai_artwork_title = Column(VARCHAR(255))
-    ai_img_url = Column(VARCHAR(255))
-    is_delete = Column(Integer)
+    ai_artwork_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    member_id = Column(Integer, ForeignKey("member.member_id"), nullable=False)
+    ai_artwork_title = Column(VARCHAR(255), nullable=False)
+    ai_img_url = Column(VARCHAR(255), nullable=False)
+    is_deleted = Column(Integer, default=0)

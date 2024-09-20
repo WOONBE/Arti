@@ -46,11 +46,11 @@ def load_image(image_path, image_size = (256,256), preserve_aspect_ratio=True):
 @router.post('/ai')
 def generation_image(image: trasform_image, db : Session = Depends(get_db)):
     
-    style_image_path = db.query(Artwork).filter(Artwork.artwork_id == trasform_image.style_image_id).first().filename
+    style_image_path = db.query(Artwork).filter(Artwork.artwork_id == image.style_image_id).first().filename
     style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart/", style_image_path)
 
     content_image_size = (256,256)
-    content = load_image(trasform_image.content_image_path, content_image_size)
+    content = load_image(image.content_image_path, content_image_size)
 
     style_image_size = (256,256)
     style = load_image(style_image_path, style_image_size)
@@ -81,16 +81,19 @@ def generation_image(image: trasform_image, db : Session = Depends(get_db)):
     image_pil.save(image_path)
 
     image_path = os.path.join('generated_images', image_filename)
-    if os.path.exists(image_path):
-        return FileResponse(image_path, media_type='image/png')
-    else:
-        raise HTTPException(status_code=404, detail="Image not found")
+    # if os.path.exists(image_path):
+    #     return FileResponse(image_path, media_type='image/png')
+    # else:
+    #     raise HTTPException(status_code=404, detail="Image not found")
     
     # 이미지가 저장된 경로를 반환
     # image_url = f'/artwork/images/{image_filename}'
-    # return {
-    #     'image_url': image_url
-    # }
+    if os.path.exists(image_path):
+        return {
+            'image_url': image_path
+        }
+    else:
+        raise HTTPException(status_code=400, detail="Image not found")
 
 @router.post('/ai/post')
 def get_image(image: post_ai_image, db: Session = Depends(get_db)):
