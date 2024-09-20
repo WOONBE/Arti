@@ -1,0 +1,8 @@
+services:
+  arti:
+    image: alsgml1532/arti:latest
+    container_name: arti
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./images:/var/images

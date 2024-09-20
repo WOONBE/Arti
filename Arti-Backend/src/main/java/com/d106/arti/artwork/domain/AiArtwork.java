@@ -1,36 +1,74 @@
 package com.d106.arti.artwork.domain;
 
-import com.d106.arti.gallery.domain.Theme;
-import com.d106.arti.global.common.BaseEntity;
+import com.d106.arti.gallery.Theme;
 import com.d106.arti.member.domain.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
-public class AiArtwork extends BaseEntity {
-    @Id
-    @Column(name = "AI_ARTWORK_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+@DiscriminatorValue("AI")
+public class AiArtwork extends Artwork {
 
     @Column(name = "AI_ARTWORK_TITLE")
-    private String title;
+     private String aiArtworkTitle;
 
-    @Column(name = "AI_ARTWORK_IMAGE_URL")
-    private String imageUrl;
 
-    @Column(name="IS_DELETED", nullable = false, columnDefinition = "tinyint default 0")
-    private Boolean isDeleted;
+    //생성한 그림 저장한 경로
+    @Column(name = "AI_ARTWORK_IMG")
+    private String artworkImage;
 
-//    // 이건 수정 필요! => OneToMany임!
-//    // AI Artwork와 Theme 간의 관계 설정
-//    // AI 작품이 Theme
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "THEME_ID", nullable = false)
-//    private Theme theme;
+
+    //받아온 그림 id
+    @ManyToOne
+    @JoinColumn(name = "ORIGINAL_ARTWORK_ID")
+    private Artwork originalImage;
+
+
+    //장르(아직 db 없음)
+    @Column(name = "AI_GENRE")
+    private String genre;
+
+
+    //사용자와 연결,사용자 id(양방향 필요성 아직은 x)
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID") // 사용자와의 외래 키
+    private Member member;
+
+
+    //테마와 연결, 테마 id(테마와 양방향 매핑)
+    @ManyToOne
+    @JoinColumn(name = "THEME_ID") // 테마와의 외래 키
+    private Theme theme;
+
+//    // 테마와 연관관계 메서드
+//    public void updateTheme(Theme theme) {
+//        this.theme = theme;
+//        if (!theme.getArtworks().contains(this)) {
+//            theme.addArtwork(this);
+//        }
+//    }
 //
-//    //이건 OneToOne으로 해야할듯함!
-//    // AI Artwork와 Member 간의 관계 설정 (대응 관계 추가함!)
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "MEMBER_ID", nullable = false)
-//    private Member member;
+//    public void removeTheme() {
+//        if (this.theme != null) {
+//            this.theme.removeArtwork(this);
+//            this.theme = null;
+//        }
+//    }
+
+
+
+
+
 }

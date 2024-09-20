@@ -23,18 +23,17 @@ public class Artist extends BaseEntity {
     @Column(name = "ARTIST_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
     @Column(name = "ARTIST_ENG_NAME")
     private String eng_name;
 
     @Column(name = "ARTIST_KOR_NAME")
     private String kor_name;
 
-    @Column(name = "ARTIST_IMAGE")
+    @Column(name = "ARTIST_IMAGE", columnDefinition = "LONGTEXT")
     private String image;
 
-    @Column(name = "ARTIST_DESC")
-    private String description;
+    @Column(name = "ARTIST_SUMMARY",columnDefinition = "LONGTEXT")
+    private String summary;
 
 
 
