@@ -43,10 +43,10 @@ def get_db():
 def get_test(artwork_id : int, db : Session = Depends(get_db)):
     try:
         results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
-        image_path = os.path.join('/home/ubuntu/artwork', results.filename)
+        image_path = os.path.join('/artwork/images', results.filename)
         return {
             "result" : results,
-            "path" :  '/home/ubuntu/artwork/' + results.filename,
+            "path" :  '/artwork/images/' + results.filename,
             'test' : image_path
         }
     except Exception as e:

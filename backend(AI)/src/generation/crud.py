@@ -6,7 +6,7 @@ def insert_post(post_ai : post_ai_image, db: Session):
     post = AI_Artwork(
         member_id = post_ai.member_id,
         ai_artwork_title = post_ai.ai_artwork_title,
-        ai_img_url = post_ai.ai_img_url,
+        ai_img_url = post_ai.ai_img_url.split('/')[4],
         is_deleted = post_ai.is_deleted
     )
 

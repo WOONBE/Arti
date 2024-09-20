@@ -48,9 +48,9 @@ def generation_image(content_image: UploadFile = File(), style_image : int = For
     
     style_image_path = db.query(Artwork).filter(Artwork.artwork_id == style_image).first().filename
     # style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", style_image_path)
-    style_image_path = os.path.join("/home/ubuntu/artwork", style_image_path)
+    style_image_path = os.path.join("/artwork/images", style_image_path)
 
-    temp_dir = 'content_image'
+    temp_dir = '/artwork/images/content_image'
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # 디렉토리 생성
 
@@ -80,12 +80,11 @@ def generation_image(content_image: UploadFile = File(), style_image : int = For
     stylized_image_np = (stylized_image_np * 255).astype(np.uint8)
     image_pil = Image.fromarray(stylized_image_np)
 
-    # 이미지를 서버의 로컬 경로에 저장
-    save_dir = 'generated_images'
+    save_dir = '/artwork/images/generated_images'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
-    image_filename = f'{uuid.uuid4()}.png'
+    image_filename = f'{uuid.uuid4()}.jpg'
     image_path = os.path.join(save_dir, image_filename)
     image_pil.save(image_path)
 
@@ -104,7 +103,7 @@ def generation_image(content_image: UploadFile = File(), style_image : int = For
     else:
         raise HTTPException(status_code=400, detail="Image not found")
 
-@router.post('/ai/post')
+@router.post('/ai/save')
 def get_image(image: post_ai_image, db: Session = Depends(get_db)):
 
     return insert_post(image, db)
