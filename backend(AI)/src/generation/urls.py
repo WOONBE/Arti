@@ -88,7 +88,7 @@ def generation_image(content_image: UploadFile = File(), style_image : int = For
     image_path = os.path.join(save_dir, image_filename)
     image_pil.save(image_path)
 
-    image_path = os.path.join('generated_images', image_filename)
+    image_path = os.path.join('/artwork/images/generated_images', image_filename)
     # if os.path.exists(image_path):
     #     return FileResponse(image_path, media_type='image/png')
     # else:
