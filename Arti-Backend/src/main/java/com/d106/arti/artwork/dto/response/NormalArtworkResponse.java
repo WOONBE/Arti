@@ -44,7 +44,8 @@ public class NormalArtworkResponse {
 //            .build();
 //    }
     public static NormalArtworkResponse fromEntity(NormalArtWork normalArtWork, String baseUrl) {
-        String imageUrl = baseUrl + normalArtWork.getFilename();
+        String imagePath = normalArtWork.getFilename();
+        String imageUrl = baseUrl + imagePath;
 
         return NormalArtworkResponse.builder()
             .artwork_id(normalArtWork.getId())
