@@ -29,8 +29,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
-    private var isSearchDetail = false
-
     private val viewModel: SearchViewModel by viewModels()
 
     private val artMuseumAdapter = ArtMuseumAdapter {
@@ -50,7 +48,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     override fun onResume() {
         super.onResume()
-        if(!isSearchDetail) mainActivity.hideBottomNav(false)
+        if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
 
     }
 
@@ -59,19 +57,29 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (isSearchDetail) {
+                    if (viewModel.state != BASE_STATE) {
                         offSearchFocus()
-                        isSearchDetail = false
+                        viewModel.state = BASE_STATE
                     } else {
                         isEnabled = false
                         requireActivity().onBackPressed()
                     }
                 }
             })
-
+        initUIState()
         initAdapters()
         initViews()
-        initUIState()
+
+        checkState()
+    }
+
+    private fun checkState(){
+        if(viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
+        if(viewModel.state == RESULT_STATE){
+            binding.clSearchResult.visibility = View.VISIBLE
+            binding.clSearchBanner.visibility = View.GONE
+            mainActivity.hideBottomNav(true)
+        }
     }
 
     private fun initUIState() {
@@ -113,7 +121,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.tietSearch.setOnFocusChangeListener { _, hasFocus ->
             viewLifecycleOwner.lifecycleScope.launch {
                 if (hasFocus) {
-                    isSearchDetail = true
+                    viewModel.state = SEARCH_STATE
                     onSearchFocus()
                 }
             }
@@ -142,11 +150,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 val keyword = v.text.toString()
                 viewModel.getArtistByString(keyword)
 
+                viewModel.state = RESULT_STATE
+
                 binding.clSearchResult.visibility = View.VISIBLE
-                isSearchDetail = true
+                mainActivity.hideBottomNav(true)
 
                 binding.tilSearch.clearFocus()
-                mainActivity.hideBottomNav(true)
                 return@OnEditorActionListener true
             }
 
@@ -270,8 +279,18 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         findNavController().navigate(R.id.action_searchFragment_to_artMuseumBannerFragment)
     }
 
-    private fun moveToArtistDetailFragment(artist: Artist){
-        findNavController().navigate(SearchFragmentDirections.actionSearchFragmentToArtistDetailFragment(artist))
+    private fun moveToArtistDetailFragment(artist: Artist) {
+        findNavController().navigate(
+            SearchFragmentDirections.actionSearchFragmentToArtistDetailFragment(
+                artist
+            )
+        )
     }
 
+
+    companion object {
+        const val BASE_STATE = 1
+        const val SEARCH_STATE = 2
+        const val RESULT_STATE = 3
+    }
 }
