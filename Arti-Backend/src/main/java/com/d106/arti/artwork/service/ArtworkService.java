@@ -11,6 +11,7 @@ import com.d106.arti.global.exception.ExceptionCode;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,32 @@ public class ArtworkService {
 
     private final ArtworkRepository artworkRepository;
 
+    @Value("${server.image.base-url}")
+    private String imageBaseUrl;
+
+
+//    // 검색 메서드
+//    @Transactional(readOnly = true)
+//    public List<NormalArtworkResponse> searchArtworks(String keyword) {
+//        List<NormalArtWork> artworks = artworkRepository.search(keyword);
+//
+//        if (artworks.isEmpty()) {
+//            throw new BadRequestException(NOT_FOUND_ARTWORK);
+//        }
+//
+//        return artworks.stream()
+//            .map(NormalArtworkResponse::fromEntity)
+//            .collect(Collectors.toList());
+//    }
+//
+//
+//    // 단건 조회 메서드
+//    @Transactional(readOnly = true)
+//    public NormalArtworkResponse getArtworkById(Integer id) {
+//        NormalArtWork artwork = artworkRepository.findById(id)
+//            .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK));
+//        return NormalArtworkResponse.fromEntity(artwork);
+//    }
 
     // 검색 메서드
     @Transactional(readOnly = true)
@@ -34,17 +61,17 @@ public class ArtworkService {
         }
 
         return artworks.stream()
-            .map(NormalArtworkResponse::fromEntity)
+            .map(artwork -> NormalArtworkResponse.fromEntity(artwork, imageBaseUrl))
             .collect(Collectors.toList());
     }
-
 
     // 단건 조회 메서드
     @Transactional(readOnly = true)
     public NormalArtworkResponse getArtworkById(Integer id) {
         NormalArtWork artwork = artworkRepository.findById(id)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK));
-        return NormalArtworkResponse.fromEntity(artwork);
+
+        return NormalArtworkResponse.fromEntity(artwork, imageBaseUrl);
     }
 
 
