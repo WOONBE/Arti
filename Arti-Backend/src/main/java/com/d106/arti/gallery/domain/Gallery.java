@@ -45,6 +45,9 @@ public class Gallery {
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private Member owner;
 
+    @Column(name = "GALLERY_TITLE")
+    private String galleryTitle;
+
     @Column(name = "GALLERY_IMG")
     private String image;
 
@@ -54,13 +57,16 @@ public class Gallery {
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL)
     private List<GalleryViewRecord> viewRecords;
 
-    // Gallery.java (여기 theme 추가)
+    // theme과 1:n 관계 설정 = 질문!
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Theme> themes; // 미술관은 여러 테마를 가질 수 있음
 
     // 구독과 1:n 관계 설정 (대응 관계 추가함!)
     @OneToMany(mappedBy = "gallery", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Subscription> subscriptions;
+
+    // 질문! => 조회수 기록 테이블 따로 만들었다면 여기에 따로 총 초회수랑 최근 조회수를 만들어야하지 않나?
+    // 그러므로 조회수와 최근 조회수는 일단 킵..
 
     //(수정!) 서비스 쪽에 추가하기!
     // 지난 7일간의 조회수를 계산하는 메서드
@@ -95,5 +101,8 @@ public class Gallery {
             return "https://www.shutterstock.com/image-photo/art-gallery-room-wall-paintings-260nw-2495452625.jpg"; // (Arti 이미지 넣을 예정!) 기본 이미지 URL
         }
         return image;
+    }
+
+    public void setGalleryTitle(String newTitle) {
     }
 }

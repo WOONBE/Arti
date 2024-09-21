@@ -34,37 +34,27 @@ public class Theme {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //미술관과 n : 1
+    // 갤러리와 n : 1 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "GALLERY_ID", nullable = false)
     private Gallery gallery;
 
-    //미술품과 1:n 부모인 , orphanRemoval을 쓰는 이유?
-    //Theme과 Artwork의 연결만 끊고 Artwork 자체는 유지
+    // 미술품과 1:n 관계 설정
     @OneToMany(mappedBy = "theme",  orphanRemoval = false, fetch = FetchType.LAZY)
     private List<ArtworkTheme> artworks;
 
-
-    //화가와 n : 1
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ARTIST_ID", nullable = false)
-    private Artist artist;
-
-//    //AI 미술품과 1:n 부모인 , orphanRemoval을 쓰는 이유?
-//    //Theme과 AI_Artwork의 연결만 끊고 AI_Artwork 자체는 유지
-//    @OneToMany(mappedBy = "theme",  orphanRemoval = false, fetch = FetchType.LAZY)
-//    private List<AiArtwork> aiArtworks;
-
-    //회원 ID와 n : 1
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = false)
-    private Member member;
-
-    // 수정 2트: ThemeArtwork와의 1:n 관계 설정
+    // ThemeArtwork와의 1:n 관계 설정 + 단일 상속 전략으로 AI미술품의 ID가 이미 Artwork의 ID이기 때문에 AI테이블과 이 이상 연결될 필요가 없음.
     @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ThemeArtwork> themeArtworks; // 여러 ThemeArtwork와 연결
 
-    // Theme 엔티티 수정
-    @Column(name = "THEME_NAME", nullable = false)  // 필드 추가
-    private String name;
+    @Column(name = "THEME_TITLE", nullable = false)  // 필드 추가
+    private String themeTitle;
+
+    // (추가 주석) 테마의 주인은 theme의 gallery를 통해 gallery의 ownerId로 확인 가능 => extends하면 성능 저하 우려 있다고 함.
+    public Member getOwner() {
+        return gallery.getOwner();
+    }
+
+    public void setThemeTitle(String newTitle) {
+    }
 }
