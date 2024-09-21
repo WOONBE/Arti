@@ -12,7 +12,7 @@ import com.d106.arti.artwork.dto.response.AiArtworkResponse;
 import com.d106.arti.artwork.repository.AiArtworkRepository;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 
-import com.d106.arti.gallery.ThemeRepository;
+import com.d106.arti.gallery.repository.ThemeRepository;
 
 import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.global.exception.BadRequestException;

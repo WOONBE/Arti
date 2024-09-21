@@ -11,7 +11,7 @@ import java.util.List;
 public interface GalleryRepository extends JpaRepository<Gallery, Integer> {
 
     // 특정 회원이 소유한 미술관 목록을 조회하는 메서드
-    List<Gallery> findByMember(Member member);
+    List<Gallery> findByOwner(Member owner);
 //
 //    // 미술관 이름으로 검색하는 메서드 (부분 일치)
 //    @Query("SELECT g FROM Gallery g WHERE g.name LIKE %:name%")

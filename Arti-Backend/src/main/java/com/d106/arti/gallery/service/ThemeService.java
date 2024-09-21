@@ -28,10 +28,10 @@ public class ThemeService {
         Gallery gallery = galleryRepository.findById(galleryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 갤러리를 찾을 수 없습니다."));
 
+        // 변경된 부분: themeRepository.findByGallery(gallery).stream()을 사용하여 List<Theme> 대신 Optional<Theme> 처리
         return themeRepository.findByGallery(gallery)
-                .stream()
-                .map(ThemeResponse::fromEntity)
-                .collect(Collectors.toList());
+                .map(theme -> List.of(ThemeResponse.fromEntity(theme)))
+                .orElseThrow(() -> new IllegalArgumentException("해당 갤러리의 테마를 찾을 수 없습니다."));
     }
 
     // 테마 생성
@@ -75,17 +75,16 @@ public class ThemeService {
         themeRepository.delete(theme);
     }
 
-
-
-
-
-    // 테마 수정 (요청에 따라 테마 제목을 수정하는 메서드)
+    // 테마 수정
     @Transactional
     public ThemeResponse updateTheme(Integer themeId, ThemeRequest request) {
         Theme theme = themeRepository.findById(themeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 테마를 찾을 수 없습니다."));
 
+        // 테마 제목을 요청에 따라 업데이트
         theme.setThemeTitle(request.getThemeTitle());
+
+        // 변경된 테마 저장
         Theme updatedTheme = themeRepository.save(theme);
         return ThemeResponse.fromEntity(updatedTheme);
     }

@@ -32,11 +32,13 @@ public class Gallery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "GALLERY_TITLE")
-    private String name;
+
 
     @Column(name = "GALLERY_VIEW")
     private Integer view;
+
+    @Column(name = "GALLERY_TITLE")
+    private String galleryTitle;
 
 
     // 소유인(Member)과의 1:1 관계 설정(수정)
@@ -45,8 +47,7 @@ public class Gallery {
     @JoinColumn(name = "OWNER_ID", nullable = false)
     private Member owner;
 
-    @Column(name = "GALLERY_TITLE")
-    private String galleryTitle;
+
 
     @Column(name = "GALLERY_IMG")
     private String image;
