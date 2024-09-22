@@ -47,5 +47,12 @@ public class Gallery {
     public void setGalleryTitle(String newTitle) {
         this.galleryTitle = newTitle;
     }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
 }

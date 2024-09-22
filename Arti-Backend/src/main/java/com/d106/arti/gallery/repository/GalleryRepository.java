@@ -22,7 +22,8 @@ public interface GalleryRepository extends JpaRepository<Gallery, Integer> {
     @Query("SELECT g FROM Gallery g WHERE g.galleryTitle LIKE %:name%")
     List<Gallery> findByNameContaining(@Param("name") String name);
 
-    // 수정된 부분: Theme과의 관계를 이용하여 조인 후 검색 (수정됨)
+    // 테마 이름을 통한 미술관 검색
     @Query("SELECT g FROM Gallery g JOIN g.themes t WHERE t.themeTitle LIKE %:theme%")
     List<Gallery> findByThemeContaining(@Param("theme") String theme);
 }
+
