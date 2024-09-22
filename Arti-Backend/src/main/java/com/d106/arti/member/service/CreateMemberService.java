@@ -51,5 +51,11 @@ public class CreateMemberService {
 
         themeRepository.save(defaultTheme);
     }
-// (필요!)회원 삭제하면 갤러리와 테마까지 전부 삭제하는 메소드 필요함.
+
+    // 회원 탈퇴 시 갤러리와 테마까지 전부 삭제하는 메소드
+    @Transactional
+    public void deleteMember(Member member) {
+        galleryRepository.deleteByOwner(member); // 회원 소유의 모든 갤러리 삭제
+        memberRepository.delete(member); // 회원 삭제
+    }
 }

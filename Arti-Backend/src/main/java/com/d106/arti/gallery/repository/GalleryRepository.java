@@ -12,7 +12,10 @@ public interface GalleryRepository extends JpaRepository<Gallery, Integer> {
 
     // 특정 회원이 소유한 미술관 목록을 조회하는 메서드
     List<Gallery> findByOwner(Member owner);
-//
+
+    // 특정 회원이 소유한 미술관을 삭제하는 메서드
+    void deleteByOwner(Member owner);
+    //
 //    // 미술관 이름으로 검색하는 메서드 (부분 일치)
 //    @Query("SELECT g FROM Gallery g WHERE g.name LIKE %:name%")
 //    List<Gallery> findByNameContaining(@Param("name") String name);
