@@ -29,8 +29,8 @@ def get_image(image: post_ai_image, db: Session = Depends(get_db)):
     return insert_post(image, db)
 
 @router.get('/ai/show')
-def image_show(image_path : str = Form()):
-    
+def image_show(image_path : str):
+
     # 이미지 파일이 존재하는지 확인
     if os.path.exists(image_path):
         return FileResponse(image_path, media_type='image/jpg')
