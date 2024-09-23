@@ -5,8 +5,8 @@ services:
     volumes:
       - ./images:/var/images
     networks:
-      - colorpl
+      - arti
 
 networks:
-  colorpl:
+  arti:
     external: true
