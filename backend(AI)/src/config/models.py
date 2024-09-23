@@ -48,3 +48,12 @@ class AI_Artwork(Base):
     ai_artwork_title = Column(VARCHAR(255), nullable=False)
     ai_img_url = Column(VARCHAR(255), nullable=False)
     is_deleted = Column(Integer, default=0)
+
+class Gallery(Base):
+    __tablename__ = 'gallery'
+
+    gallery_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    gallery_desc = Column(VARCHAR(255))
+    gallery_img = Column(VARCHAR(255))
+    gallery_name = Column(VARCHAR(255))
+    gallery_view = Column(Integer)

@@ -9,7 +9,7 @@ class post_ai_image(BaseModel):
     is_deleted : Optional[int] = 0
 
     class Config:
-        orm_mode = True
+        from_attributes = True
     
 class trasform_image(BaseModel):
     content_image_path : str
