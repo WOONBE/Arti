@@ -2,7 +2,11 @@ services:
   arti:
     image: alsgml1532/arti:latest
     container_name: arti
-    ports:
-      - "5000:5000"
     volumes:
-      - /home/ubuntu/artwork:/artwork/images
+      - ./images:/var/images
+    networks:
+      - colorpl
+
+networks:
+  colorpl:
+    external: true
