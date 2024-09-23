@@ -27,3 +27,12 @@ def generation_image(content_image: UploadFile = File(), style_image : int = For
 def get_image(image: post_ai_image, db: Session = Depends(get_db)):
 
     return insert_post(image, db)
+
+@router.get('/ai/show')
+def image_show(image_path : str = Form()):
+    
+    # 이미지 파일이 존재하는지 확인
+    if os.path.exists(image_path):
+        return FileResponse(image_path, media_type='image/jpg')
+    else:
+        raise HTTPException(status_code=404, detail="Image not found")
