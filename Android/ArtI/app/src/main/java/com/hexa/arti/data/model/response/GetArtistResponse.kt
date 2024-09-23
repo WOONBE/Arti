@@ -2,7 +2,7 @@ package com.hexa.arti.data.model.response
 
 import com.google.gson.annotations.SerializedName
 
-data class GetArtistByStringResponse(
+data class GetArtistResponse(
     @SerializedName("artist_id")
     val artistId: Int,
     val engName: String,
