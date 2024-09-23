@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.search
 
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -58,7 +59,27 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
             themeAdapter.submitList(artThemeList)
         }
 
-        
+        binding.ivRight.setOnClickListener {
+            val nextFocusedIndex = previewAdapter.currentList.indexOfFirst { it.isFocus } + 1
+
+            if(nextFocusedIndex >= previewAdapter.currentList.size)return@setOnClickListener
+
+            changeFocusItem(previewAdapter.currentList[nextFocusedIndex])
+
+            binding.rvPreview.layoutManager?.smoothScrollToPosition(binding.rvPreview, RecyclerView.State(), nextFocusedIndex)
+        }
+
+        binding.ivLeft.setOnClickListener {
+
+            val prevFocusedIndex = previewAdapter.currentList.indexOfFirst { it.isFocus } - 1
+
+            if(prevFocusedIndex < 0)return@setOnClickListener
+
+            changeFocusItem(previewAdapter.currentList[prevFocusedIndex])
+
+            binding.rvPreview.layoutManager?.smoothScrollToPosition(binding.rvPreview, RecyclerView.State(), prevFocusedIndex)
+        }
+
     }
 
     private fun changeFocusItem(clickedImage: PreviewImage) {
@@ -73,5 +94,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
 
         previewAdapter.submitList(updateList)
     }
+
+
 
 }

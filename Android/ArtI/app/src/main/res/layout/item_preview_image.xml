@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_preview_image"
         android:layout_width="wrap_content"
-        android:padding="8dp"
+        android:padding="6dp"
         android:layout_marginEnd="8dp"
         android:layout_height="wrap_content">
 
