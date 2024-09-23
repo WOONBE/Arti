@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
@@ -20,6 +22,7 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseActivity
 import com.hexa.arti.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 private const val TAG = "MainActivity"
 
@@ -28,6 +31,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private val isFirst = true
     lateinit var navController : NavController
+    private val mainActivityViewModel : MainActivityViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +43,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             insets
         }
         setBottomNavHide()
+        // Coroutine 내에서 값을 수집
+        lifecycleScope.launch {
+            mainActivityViewModel.getJwtToken().collect { token ->
+                Log.d(TAG, "onCreate: $token")
+            }
+        }
     }
 
 
