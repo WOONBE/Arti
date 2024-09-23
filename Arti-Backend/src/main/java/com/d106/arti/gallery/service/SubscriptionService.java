@@ -25,7 +25,6 @@ public class SubscriptionService {
     public List<SubscriptionResponse> getSubscribedGalleries(Member member) {
         List<Subscription> subscriptions = subscriptionRepository.findByMemberIdAndIsActiveTrue(member.getId());
 
-        // SubscriptionResponse 생성자에서 Subscription 객체를 받아서 처리
         return subscriptions.stream()
                 .map(SubscriptionResponse::fromEntity)
                 .collect(Collectors.toList());
@@ -47,7 +46,7 @@ public class SubscriptionService {
         Subscription subscription = subscriptionRepository.findByMemberIdAndGalleryId(member.getId(), galleryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 구독을 찾을 수 없습니다."));
 
-        // 서비스에서 구독 취소 처리
+        // `deactivate` 메서드에서 `unsubscribedAt` 처리를 제거 (수정됨)
         subscription.deactivate();
         subscriptionRepository.save(subscription);
     }

@@ -34,12 +34,12 @@ public class Subscription implements Serializable {
     @Column(name = "subscribed_at", nullable = false)
     private LocalDateTime subscribedAt;
 
-    @Column(name = "unsubscribed_at")
-    private LocalDateTime unsubscribedAt;
+    // `unsubscribedAt` 필드를 삭제 (수정됨)
+    // @Column(name = "unsubscribed_at")
+    // private LocalDateTime unsubscribedAt;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
-
 
     public Subscription(Member member, Gallery gallery) {
         this.id = new SubscriptionId(member.getId(), gallery.getId());
@@ -51,12 +51,13 @@ public class Subscription implements Serializable {
 
     public void deactivate() {
         this.isActive = false;
-        this.unsubscribedAt = LocalDateTime.now();
+        // `unsubscribedAt` 필드 관련 처리 제거 (수정됨)
+        // this.unsubscribedAt = LocalDateTime.now();
     }
 
     public void activate() {
         this.isActive = true;
         this.subscribedAt = LocalDateTime.now();
-        this.unsubscribedAt = null;
+        // this.unsubscribedAt = null; (수정됨)
     }
 }
