@@ -3,7 +3,7 @@ services:
     image: alsgml1532/arti:latest
     container_name: arti
     volumes:
-      - ./images:/var/images
+      - /home/ubuntu/artwork:/var/images
     networks:
       - arti
 
