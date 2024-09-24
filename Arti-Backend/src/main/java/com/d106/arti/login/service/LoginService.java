@@ -5,22 +5,33 @@ import com.d106.arti.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
-    public Member register(String email, String password, String nickname) {
-        Member member = Member.builder().email(email).password(passwordEncoder.encode(password))
-            .nickname(nickname).build();
-        return memberRepository.save(member);
+    public Integer register(String email, String password, String nickname) {
+        Member member = Member.builder()
+            .email(email)
+            .password(password)
+            .nickname(nickname)
+            .build();
+        return memberRepository.save(member).getId();
+    }
+
+    public Integer register(String email, String password, String nickname, String image) {
+        Member member = Member.builder()
+            .email(email)
+            .password(password)
+            .nickname(nickname)
+            .image(image)
+            .build();
+        return memberRepository.save(member).getId();
     }
 
     public LoginResponse login(String email, String password) {
