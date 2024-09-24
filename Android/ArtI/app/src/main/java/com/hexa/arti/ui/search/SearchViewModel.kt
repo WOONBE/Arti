@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.repository.ArtWorkRepository
@@ -22,15 +23,30 @@ class SearchViewModel @Inject constructor(
     private val _artistResult = MutableLiveData<List<Artist>>()
     val artistResult: LiveData<List<Artist>> = _artistResult
 
+    private val _artworkResult = MutableLiveData<List<Artwork>>()
+    val artworkResult: LiveData<List<Artwork>> = _artworkResult
+
     var state = SearchFragment.BASE_STATE
 
     fun getArtWorkById(id: Int) {
         viewModelScope.launch {
-            artWorkRepository.getArtWork(id).onSuccess { response ->
+            artWorkRepository.getArtWorkById(id).onSuccess { response ->
                 Log.d("확인", "성공 ${response}")
             }.onFailure { error ->
                 if (error is ApiException) {
                     Log.d("확인", "실패 ${error.code} ${error.message}")
+                }
+            }
+        }
+    }
+
+    fun getArtworkByString(keyword: String) {
+        viewModelScope.launch {
+            artWorkRepository.getArtWorkByString(keyword).onSuccess { response ->
+                _artworkResult.value = response
+            }.onFailure { error ->
+                if (error is ApiException) {
+                    _artworkResult.value = emptyList()
                 }
             }
         }

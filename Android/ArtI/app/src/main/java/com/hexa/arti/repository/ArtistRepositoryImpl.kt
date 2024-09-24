@@ -16,14 +16,13 @@ class ArtistRepositoryImpl @Inject constructor(
         val result = artistApi.getArtistByString(keyword)
         if (result.isSuccessful) {
             result.body()?.let {
-                return Result.success(it.map { it.asArtist() })
+                return Result.success(it.map { artistResponse -> artistResponse.asArtist() })
             }
 
             return Result.failure(Exception())
         } else {
             val errorResponse =
                 Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            Log.d("확인", "${result.errorBody()} ${result.code()}")
             return Result.failure(
                 ApiException(
                     code = errorResponse.code,

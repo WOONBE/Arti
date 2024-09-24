@@ -1,5 +1,9 @@
 package com.hexa.arti.data.model.artwork
 
-data class Artwork(val id: Int, val imageResId: Int){
+data class Artwork(
+    val artworkId: Int,
+    val title: String,
+    val imageUrl: String
+) {
 
 }

@@ -7,6 +7,6 @@ data class GetArtistResponse(
     val artistId: Int,
     val engName: String,
     val korName: String,
-    val image: String,
+    val image: String? = null,
     val summary: String,
 )
