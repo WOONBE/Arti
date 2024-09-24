@@ -13,7 +13,6 @@ public enum ExceptionCode {
     NOT_FOUND_ARTIST(1001, "검색 조건에 일치하는 화가가 없습니다."),
 
 
-
     NOT_FOUND_ARTWORK(1002, "검색 조건에 일치하는 미술품이 없습니다."),
 
     NOT_FOUND_MEMBER_ID(1010, "요청한 ID에 해당하는 멤버가 존재하지 않습니다."),
@@ -64,18 +63,26 @@ public enum ExceptionCode {
     INVALID_SHARE_CODE(7002, "공유가 허용되지 않은 코드입니다."),
     FAIL_SHARE_CODE_HASH(7101, "공유 코드를 해싱하는 데 실패했습니다."),
 
-    INVALID_USER_NAME(8001, "존재하지 않는 사용자입니다."),
-    INVALID_PASSWORD(8002, "비밀번호가 일치하지 않습니다."),
-    NULL_ADMIN_AUTHORITY(8101, "잘못된 관리자 권한입니다."),
-    DUPLICATED_ADMIN_USERNAME(8102, "중복된 사용자 이름입니다."),
-    NOT_FOUND_ADMIN_ID(8103, "요청한 ID에 해당하는 관리자를 찾을 수 없습니다."),
-    INVALID_CURRENT_PASSWORD(8104, "현재 사용중인 비밀번호가 일치하지 않습니다."),
-    INVALID_ADMIN_AUTHORITY(8201, "해당 관리자 기능에 대한 접근 권한이 없습니다."),
-    DUPLICATED_CITY_NAME(8301, "중복된 나라, 도시 이름입니다."),
-    NOT_FOUND_CITY(8302, "요청한 ID에 해당하는 도시를 찾을 수 없습니다."),
-    DUPLICATED_CATEGORY_ID(8311, "중복된 카테고리 아이디입니다."),
-    DUPLICATED_CATEGORY_ENG_NAME(8312, "중복된 카테고리 영어 이름입니다."),
-    NOT_FOUND_CATEGORY(8314, "요청한 ID에 해당하는 카테고리를 찾을 수 없습니다."),
+    //    INVALID_USER_NAME(8001, "존재하지 않는 사용자입니다."),
+//    INVALID_PASSWORD(8002, "비밀번호가 일치하지 않습니다."),
+//    NULL_ADMIN_AUTHORITY(8101, "잘못된 관리자 권한입니다."),
+//    DUPLICATED_ADMIN_USERNAME(8102, "중복된 사용자 이름입니다."),
+//    NOT_FOUND_ADMIN_ID(8103, "요청한 ID에 해당하는 관리자를 찾을 수 없습니다."),
+//    INVALID_CURRENT_PASSWORD(8104, "현재 사용중인 비밀번호가 일치하지 않습니다."),
+//    INVALID_ADMIN_AUTHORITY(8201, "해당 관리자 기능에 대한 접근 권한이 없습니다."),
+//    DUPLICATED_CITY_NAME(8301, "중복된 나라, 도시 이름입니다."),
+//    NOT_FOUND_CITY(8302, "요청한 ID에 해당하는 도시를 찾을 수 없습니다."),
+//    DUPLICATED_CATEGORY_ID(8311, "중복된 카테고리 아이디입니다."),
+//    DUPLICATED_CATEGORY_ENG_NAME(8312, "중복된 카테고리 영어 이름입니다."),
+//    NOT_FOUND_CATEGORY(8314, "요청한 ID에 해당하는 카테고리를 찾을 수 없습니다."),
+    EMPTY_FILE_EXCEPTION(8001, "존재하지 않는 파일입니다."),
+    IO_EXCEPTION_ON_IMAGE_UPLOAD(8002, "S3에 이미지 업로드 중 입출력 오류가 발생했습니다."),
+    NO_FILE_EXTENTION(8003, "파일 확장자가 없습니다."),
+    INVALID_FILE_EXTENTION(8004, "유효하지 않은 파일 확장자입니다."),
+    PUT_OBJECT_EXCEPTION(8005, "S3 put object 기능에서 오류가 발생했습니다."),
+    IO_EXCEPTION_ON_IMAGE_DELETE(8006, "S3에서 이미지 삭제 중 입출력 오류가 발생했습니다."),
+
+
 
     INVALID_AUTHORIZATION_CODE(9001, "유효하지 않은 인증 코드입니다."),
     NOT_SUPPORTED_OAUTH_SERVICE(9002, "해당 OAuth 서비스는 제공하지 않습니다."),
