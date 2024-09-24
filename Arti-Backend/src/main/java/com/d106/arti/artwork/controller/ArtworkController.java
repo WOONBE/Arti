@@ -9,14 +9,18 @@ import com.d106.arti.artwork.service.CSVService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -123,21 +127,50 @@ public class ArtworkController {
         return ResponseEntity.ok(artworkResponse);
     }
 
-    // 이미지 제공 엔드포인트
-    @GetMapping(value = "/images/{filename}", produces = MediaType.IMAGE_JPEG_VALUE)
-    @ResponseBody
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
-        try {
-            File file = new File("/artwork/images/" + filename); // EC2에서 이미지 파일 경로
-            Resource resource = new UrlResource(file.toURI());
+//    // 이미지 제공 엔드포인트
+//    @GetMapping(value = "/images/{filename}", produces = MediaType.IMAGE_JPEG_VALUE)
+//    @ResponseBody
+//    public ResponseEntity<Resource> getImage(@PathVariable String filename) {
+//        try {
+//            File file = new File("/artwork/images/" + filename); // EC2에서 이미지 파일 경로
+//            Resource resource = new UrlResource(file.toURI());
+//
+//            if (resource.exists() || resource.isReadable()) {
+//                return ResponseEntity.ok(resource);
+//            } else {
+//                return ResponseEntity.notFound().build();
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.internalServerError().build();
+//        }
+//    }
+    @GetMapping("/image/{artworkId}")
+    public ResponseEntity<Resource> getImage(@PathVariable Integer artworkId)
+        throws MalformedURLException {
+        // DB에서 artworkId로 해당 Artwork 조회
+        NormalArtworkResponse artworkResponse = artworkService.getArtworkById(artworkId);
 
-            if (resource.exists() || resource.isReadable()) {
-                return ResponseEntity.ok(resource);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+        // Artwork가 존재하지 않는 경우
+        if (artworkResponse == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        // 전체 URL로 이미지 파일 경로 설정
+        String imageUrl = artworkResponse.getFilename();
+
+        // 이미지를 반환하는 Resource 객체 생성
+        Resource resource = new UrlResource(imageUrl);
+
+        // 이미지 파일이 존재하는지 확인
+        if (resource.exists() || resource.isReadable()) {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"");
+            return ResponseEntity.ok()
+                .headers(headers)
+                .contentType(MediaType.IMAGE_JPEG) // 이미지 형식에 맞게 수정
+                .body(resource);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
