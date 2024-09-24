@@ -1,8 +1,7 @@
 package com.hexa.arti.ui.profile
 
-import android.content.Context
-import android.os.Bundle
-import android.view.View
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -10,15 +9,28 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentPortfolioBinding
-import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.MainActivityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
 
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     override fun init() {
-        initChart()
+        initViews()
     }
-    private fun initChart(){
+
+    private fun initViews() {
+        mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
+            if (state == MainActivityViewModel.PORTFOLIO_FRAGMENT) {
+                initChart()
+            }
+        }
+    }
+
+    private fun initChart() {
         val dataList = ArrayList<PieEntry>()
 
         dataList.add(PieEntry(3f, "팝아트"))
@@ -46,12 +58,5 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         binding.pcChart.animateY(500)
         binding.pcChart.invalidate()
     }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
 
 }

@@ -125,6 +125,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 }
                 R.id.settingFragment ->{
                     hideBottomNav(false)
+                    mainActivityViewModel.setFragmentState(MainActivityViewModel.PORTFOLIO_FRAGMENT)
                     Log.d(TAG, "setBottomNavHide: setting")
                 }
                 else ->{

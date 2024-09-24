@@ -42,7 +42,7 @@ class ArtworkAdapter(
                 .error(R.drawable.gallery_example)
                 .into(binding.ivArt)
 
-            binding.tvArtTitle.text = "작품"
+            binding.tvArtTitle.text = artwork.title
 
             itemView.setOnClickListener {
                 onItemClick(artwork)
