@@ -29,8 +29,11 @@ public class NormalArtWork extends Artwork {
     @Column(name = "filename")
     private String filename;
 
-    @Column(name = "artist")
-    private String artist;
+//    @Column(name = "artist")
+//    private String artist;
+
+    @Column(name = "artist_name")
+    private String artistName; // artist를 String으로 저장하는 필드
 
     @Column(name = "genre")
     private String genre;

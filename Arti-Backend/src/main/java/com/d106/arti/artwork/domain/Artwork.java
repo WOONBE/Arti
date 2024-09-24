@@ -14,6 +14,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
@@ -55,6 +57,10 @@ public class Artwork extends BaseEntity {
 //    @Column(name = "ARTWORK_DESC")
 //    private String description;
 
+    @ManyToOne
+    @JoinColumn(name = "ARTIST_ID")
+    private Artist artist;
+
     // ArtworkTheme과 1:N 관계
     @OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ArtworkTheme> artworkThemes = new ArrayList<>();
@@ -72,6 +78,11 @@ public class Artwork extends BaseEntity {
     // 테마 삭제 편의 메서드
     public void removeTheme(Theme theme) {
         artworkThemes.removeIf(artworkTheme -> artworkTheme.getTheme().equals(theme));
+    }
+
+    // Artist 설정 메서드
+    public void updateArtist(Artist artist) {
+        this.artist = artist;
     }
 
 

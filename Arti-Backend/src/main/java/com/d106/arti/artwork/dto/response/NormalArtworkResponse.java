@@ -50,7 +50,7 @@ public class NormalArtworkResponse {
         return NormalArtworkResponse.builder()
             .artwork_id(normalArtWork.getId())
             .filename(imageUrl) // EC2 이미지 경로 적용
-            .artist(normalArtWork.getArtist())
+            .artist(normalArtWork.getArtistKo())
             .genre(normalArtWork.getGenre())
             .description(normalArtWork.getDescription())
             .phash(normalArtWork.getPhash())

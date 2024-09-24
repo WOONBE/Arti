@@ -20,8 +20,8 @@ public class ArtistResponse {
     public static ArtistResponse toArtistResponse(Artist artist) {
         return ArtistResponse.builder()
             .artist_id(artist.getId())
-            .engName(artist.getEng_name())
-            .korName(artist.getKor_name())
+            .engName(artist.getEngName())
+            .korName(artist.getKorName())
             .image(artist.getImage())
             .summary(artist.getSummary())
             .build();
