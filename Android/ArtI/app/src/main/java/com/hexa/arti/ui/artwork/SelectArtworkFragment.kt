@@ -22,8 +22,8 @@ class SelectArtworkFragment : BaseFragment<FragmentSelectArtworkBinding>(R.layou
 
     override fun init() {
         adapter = SelectArtworkAdapter(onClick = { id ->
-                navigate(R.id.action_selectArtworkFragment_to_isSelectCreateImageFragment)
-
+            val action = SelectArtworkFragmentDirections.actionSelectArtworkFragmentToIsSelectCreateImageFragment(id)
+                navigate(action)
             }
         )
             with(binding){

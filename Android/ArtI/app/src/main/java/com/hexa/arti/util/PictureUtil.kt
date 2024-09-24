@@ -5,11 +5,14 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.util.Log
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 
+private const val TAG = "PictureUtil"
 
 private fun uriToFile(context: Context, uri: Uri): File {
     val contentResolver = context.contentResolver
@@ -37,7 +40,7 @@ private fun compressImage(file: File): File {
     return compressedFile
 }
 
-fun handleImage(imageUri: Uri, context: Context) {
+fun handleImage(imageUri: Uri, context: Context, name :String) : MultipartBody.Part {
     var file = uriToFile(context, imageUri)
 
     val maxSize = 10 * 1024 * 1024 // 10MB
@@ -46,8 +49,28 @@ fun handleImage(imageUri: Uri, context: Context) {
 
         if (file.length() > maxSize) {
 
-            return
+
+            return  MultipartBody.Part.createFormData(
+                name,
+                ""
+            )
         }
     }
-    val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+
+    if(isJpgFile(file)) {
+        Log.d(TAG, "handleImage: ${file.name}")
+        Log.d(TAG, "handleImage: ${name}")
+    }
+    val requestFile = file.asRequestBody("image/jpg".toMediaTypeOrNull())
+    return MultipartBody.Part.createFormData(
+        name,
+        file.name,
+        requestFile
+    )
+    
+}
+
+private fun isJpgFile(file: File): Boolean {
+    val fileName = file.name.lowercase()
+    return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")
 }

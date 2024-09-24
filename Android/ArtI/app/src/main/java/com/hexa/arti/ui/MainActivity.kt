@@ -21,6 +21,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseActivity
 import com.hexa.arti.databinding.ActivityMainBinding
+import com.hexa.arti.util.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val isFirst = true
     lateinit var navController : NavController
     private val mainActivityViewModel : MainActivityViewModel by viewModels()
-
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,5 +134,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 }
             }
         }
+    }
+
+
+    fun showLoadingDialog() {
+        loadingDialog = LoadingDialog()
+        loadingDialog.isCancelable = false
+        loadingDialog.show(supportFragmentManager, "loading")
+    }
+
+    fun hideLoadingDialog() {
+        loadingDialog.dismiss()
     }
 }

@@ -29,11 +29,16 @@ class LoginFragment :
         initObserve()
         with(binding) {
             loginBtn.setOnClickListener {
-                if(!loginIdEt.text.isNullOrBlank() && !loginPwEt.text.isNullOrBlank() ){
-                    loginViewModel.updateEmail(loginIdEt.text.toString())
-                    loginViewModel.updatePass(loginPwEt.text.toString())
-                    loginViewModel.login()
-                }
+                startActivity(Intent(requireContext(), MainActivity::class.java))
+//                if(!loginIdEt.text.isNullOrBlank() && !loginPwEt.text.isNullOrBlank() ){
+//                    loginActivity.showLoadingDialog()
+//                    loginViewModel.updateEmail(loginIdEt.text.toString())
+//                    loginViewModel.updatePass(loginPwEt.text.toString())
+//                    loginViewModel.login()
+//                }
+//                else{
+//                    makeToast("ID와 PW를 입력해주세요")
+//                }
 
             }
             signBtn.setOnClickListener {
@@ -46,11 +51,13 @@ class LoginFragment :
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { status ->
             when (status) {
                 1 -> {
+                    loginActivity.hideLoadingDialog()
                     startActivity(Intent(requireContext(), MainActivity::class.java))
                     loginActivity.finish()
                 }
 
                 2 -> {
+                    loginActivity.hideLoadingDialog()
                     makeToast("로그인 실패")
                 }
                 else -> {

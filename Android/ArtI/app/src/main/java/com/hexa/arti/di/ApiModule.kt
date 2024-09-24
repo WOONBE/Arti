@@ -1,6 +1,7 @@
 package com.hexa.arti.di
 
 import com.hexa.arti.network.ArtWorkApi
+import com.hexa.arti.network.ArtWorkUpload
 import com.hexa.arti.network.ArtistApi
 import com.hexa.arti.network.LoginApi
 import com.hexa.arti.network.SignUpApi
@@ -34,4 +35,9 @@ object ApiModule {
     @Provides
     fun provideSignApiService(@Named("arti") retrofit: Retrofit): SignUpApi =
         retrofit.create(SignUpApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideArtWorkUploadService(@Named("arti_fast") retrofit: Retrofit): ArtWorkUpload =
+        retrofit.create(ArtWorkUpload::class.java)
 }

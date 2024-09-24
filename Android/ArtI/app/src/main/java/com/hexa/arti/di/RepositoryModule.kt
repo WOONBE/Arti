@@ -2,6 +2,8 @@ package com.hexa.arti.di
 
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtWorkRepositoryImpl
+import com.hexa.arti.repository.ArtWorkUploadRepository
+import com.hexa.arti.repository.ArtWorkUploadRepositoryImpl
 import com.hexa.arti.repository.ArtistRepository
 import com.hexa.arti.repository.ArtistRepositoryImpl
 import com.hexa.arti.repository.LoginRepository
@@ -41,4 +43,10 @@ interface RepositoryModule {
     fun bindSignUpRepository(
         signUpRepositoryImpl: SignUpRepositoryImpl
     ) : SignUpRepository
+
+    @Singleton
+    @Binds
+    fun bindArtWorkUploadRepository(
+        artWorkUploadRepositoryImpl: ArtWorkUploadRepositoryImpl
+    ) : ArtWorkUploadRepository
 }

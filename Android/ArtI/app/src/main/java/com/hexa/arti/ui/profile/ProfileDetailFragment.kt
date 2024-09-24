@@ -69,7 +69,7 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
     private val getImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                handleImage(it,requireContext())
+                handleImage(it,requireContext(),"profileImage")
                 binding.myPageProfileIv.setImageURI(it)
             }
         }

@@ -9,10 +9,12 @@ import com.hexa.arti.config.BaseActivity
 import com.hexa.arti.databinding.ActivityLoginBinding
 import com.hexa.arti.ui.login.LoginFragment
 import com.hexa.arti.ui.signup.SignUpFragment
+import com.hexa.arti.util.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
+    private lateinit var loadingDialog: LoadingDialog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -43,4 +45,13 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
             .commit()
     }
 
+    fun showLoadingDialog() {
+        loadingDialog = LoadingDialog()
+        loadingDialog.isCancelable = false
+        loadingDialog.show(supportFragmentManager, "loading")
+    }
+
+    fun hideLoadingDialog() {
+        loadingDialog.dismiss()
+    }
 }

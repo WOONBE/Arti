@@ -5,6 +5,8 @@ import android.transition.TransitionManager
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -63,6 +65,19 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
 
     override fun init() {
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.scrollView2) { view, insets ->
+            val systemWindowInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            // 하단 패딩 추가 (네비게이션 바 높이만큼)
+            view.setPadding(
+                view.paddingLeft,
+                view.paddingTop,
+                view.paddingRight,
+                systemWindowInsets.bottom // 네비게이션 바 높이만큼 패딩 추가
+            )
+
+            insets
+        }
         initObserve()
         with(binding) {
             /* 프로필 이미지 */
@@ -133,7 +148,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
     private val getImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                handleImage(it, requireContext())
+                handleImage(it, requireContext(),"signUpImage")
                 binding.signupProfileIv.setImageURI(it)
             }
         }

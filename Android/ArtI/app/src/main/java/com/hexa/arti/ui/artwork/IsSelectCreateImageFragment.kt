@@ -1,5 +1,7 @@
 package com.hexa.arti.ui.artwork
 
+import androidx.navigation.NavArgs
+import androidx.navigation.fragment.navArgs
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentIsSelectCreateImageBinding
@@ -7,6 +9,9 @@ import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
 
 class IsSelectCreateImageFragment : BaseFragment<FragmentIsSelectCreateImageBinding>(R.layout.fragment_is_select_create_image) {
+
+    private val args : IsSelectCreateImageFragmentArgs by navArgs()
+
     override fun init(){
         with(binding){
             //뒤로가기
@@ -16,11 +21,13 @@ class IsSelectCreateImageFragment : BaseFragment<FragmentIsSelectCreateImageBind
 
             //네
             artworkCreateBtn.setOnClickListener {
-                navigate(R.id.action_isSelectCreateImageFragment_to_imageUploadFragment)
+                val action = IsSelectCreateImageFragmentDirections.actionIsSelectCreateImageFragmentToImageUploadFragment(args.artId)
+                navigate(action)
             }
             // 아니오
             artworkMaintainBtn.setOnClickListener {
-                navigate(R.id.action_isSelectCreateImageFragment_to_artworkResultFragment)
+                val action = IsSelectCreateImageFragmentDirections.actionIsSelectCreateImageFragmentToArtworkResultFragment(args.artId.toString(),0)
+                navigate(action)
             }
         }
 
