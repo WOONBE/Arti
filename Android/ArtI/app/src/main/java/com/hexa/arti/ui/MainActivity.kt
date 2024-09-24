@@ -31,6 +31,7 @@ private const val TAG = "MainActivity"
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private val isFirst = true
+    private var isShowDialog = false
     lateinit var navController : NavController
     private val mainActivityViewModel : MainActivityViewModel by viewModels()
     private lateinit var loadingDialog: LoadingDialog
@@ -139,12 +140,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
 
     fun showLoadingDialog() {
-        loadingDialog = LoadingDialog()
-        loadingDialog.isCancelable = false
-        loadingDialog.show(supportFragmentManager, "loading")
+        if(!isShowDialog){
+            isShowDialog = true
+            loadingDialog = LoadingDialog()
+            loadingDialog.isCancelable = false
+            loadingDialog.show(supportFragmentManager, "loading")
+        }
     }
 
     fun hideLoadingDialog() {
-        loadingDialog.dismiss()
+        if(isShowDialog){
+            isShowDialog = false
+            loadingDialog.dismiss()
+        }
     }
 }

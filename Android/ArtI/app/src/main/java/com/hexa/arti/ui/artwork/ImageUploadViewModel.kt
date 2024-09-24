@@ -6,7 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.hexa.arti.data.model.artwork.Artwork
+import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.network.ArtWorkUpload
+import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtWorkUploadRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,12 +25,16 @@ private const val TAG = "ImageUploadViewModel"
 
 @HiltViewModel
 class ImageUploadViewModel @Inject constructor(
-    private val artWorkUploadRepository: ArtWorkUploadRepository
+    private val artWorkUploadRepository: ArtWorkUploadRepository,
+    private val artWorkRepository: ArtWorkRepository
 ) : ViewModel() {
 
 
     private val _imageResponse = MutableLiveData<String>("")
     val imageResponse: LiveData<String> = _imageResponse
+
+    private val _artworkResult = MutableLiveData<Artwork>()
+    val artworkResult: LiveData<Artwork> = _artworkResult
 
     fun makeImage(contentImage : MultipartBody.Part, styleImage : Int)
     {
@@ -50,6 +57,20 @@ class ImageUploadViewModel @Inject constructor(
 
     private fun makeStyleImageIdPart(styleImageId: Int): RequestBody {
         return styleImageId.toString().toRequestBody("text/plain".toMediaTypeOrNull())
+    }
+
+    fun getArtWork(id : Int){
+        viewModelScope.launch {
+            artWorkRepository.getArtWorkById(id).onSuccess { response ->
+                Log.d("확인", "성공 ${response}")
+                _artworkResult.value = response
+            }.onFailure { error ->
+                if (error is ApiException) {
+                    Log.d("확인", "실패 ${error.code} ${error.message}")
+                    _artworkResult.value = Artwork(0,"","")
+                }
+            }
+        }
     }
 
 }

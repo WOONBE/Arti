@@ -42,6 +42,13 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
                 artworkResultViewModel.getImageUri(args.artId)
                 artworkResultEt.setText("")
             }
+            else if(args.artType == 0){
+                artworkResultViewModel.getArtWork(args.artId.toInt())
+            }
+
+            artworkResultViewModel.artworkResult.observe(viewLifecycleOwner){
+                artworkResultEt.setText(it.title)
+            }
 
             //spinner
             artworkResultThemeSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemList.map { it.name }).apply {
