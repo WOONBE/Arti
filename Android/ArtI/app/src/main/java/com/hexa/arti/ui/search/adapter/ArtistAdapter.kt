@@ -34,7 +34,7 @@ class ArtistAdapter(
 
         fun bind(artist: Artist) {
             Glide.with(binding.ivArtist.context)
-                .load(if (artist.imageUrl.isBlank()) R.drawable.basic_artist_profile else artist.imageUrl)
+                .load(if (artist.imageUrl.isNullOrBlank()) R.drawable.basic_artist_profile else artist.imageUrl)
                 .error(R.drawable.basic_artist_profile)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.ivArtist)

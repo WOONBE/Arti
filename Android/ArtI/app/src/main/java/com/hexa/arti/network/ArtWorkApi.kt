@@ -1,6 +1,5 @@
 package com.hexa.arti.network
 
-import com.hexa.arti.data.model.login.UserListModel
 import com.hexa.arti.data.model.response.GetArtWorkResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -9,5 +8,8 @@ import retrofit2.http.Query
 
 interface ArtWorkApi {
     @GET("artworks/{artworkId}")
-    suspend fun getArtWork(@Path("artworkId") artworkId: Int): Response<GetArtWorkResponse>
+    suspend fun getArtWorkById(@Path("artworkId") artworkId: Int): Response<GetArtWorkResponse>
+
+    @GET("artworks/search")
+    suspend fun getArtWorksByString(@Query("keyword") keyword: String) : Response<List<GetArtWorkResponse>>
 }

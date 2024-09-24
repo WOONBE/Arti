@@ -6,12 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.hexa.arti.data.model.search.Art
+import com.bumptech.glide.Glide
+import com.hexa.arti.R
+import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.databinding.ItemArtBinding
 
-class ArtAdapter(
-    private val onItemClick: (Art) -> Unit
-) : ListAdapter<Art, ArtAdapter.ArtViewHolder>(ArtDiffUtil()) {
+class ArtworkAdapter(
+    private val onItemClick: (Artwork) -> Unit
+) : ListAdapter<Artwork, ArtworkAdapter.ArtViewHolder>(ArtDiffUtil()) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtViewHolder {
@@ -29,25 +31,33 @@ class ArtAdapter(
 
     class ArtViewHolder(
         private val binding: ItemArtBinding,
-        private val onItemClick: (Art) -> Unit
+        private val onItemClick: (Artwork) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(art: Art) {
+        fun bind(artwork: Artwork) {
 //            binding.tvArtTitle.text = art.title
+
+            Glide.with(binding.root.context)
+                .load(artwork.imageUrl)
+                .error(R.drawable.gallery_example)
+                .into(binding.ivArt)
+
+            binding.tvArtTitle.text = artwork.title
+
             itemView.setOnClickListener {
-                onItemClick(art)
+                onItemClick(artwork)
             }
         }
     }
 }
 
-class ArtDiffUtil : DiffUtil.ItemCallback<Art>() {
-    override fun areItemsTheSame(oldItem: Art, newItem: Art): Boolean {
-        return oldItem.id == newItem.id
+class ArtDiffUtil : DiffUtil.ItemCallback<Artwork>() {
+    override fun areItemsTheSame(oldItem: Artwork, newItem: Artwork): Boolean {
+        return oldItem.artworkId == newItem.artworkId
     }
 
     @SuppressLint("DiffUtilEquals")
-    override fun areContentsTheSame(oldItem: Art, newItem: Art): Boolean {
+    override fun areContentsTheSame(oldItem: Artwork, newItem: Artwork): Boolean {
         return oldItem == newItem
     }
 }

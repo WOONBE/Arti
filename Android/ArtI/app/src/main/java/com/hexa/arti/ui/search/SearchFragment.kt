@@ -7,6 +7,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,14 +15,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.search.Art
+import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.search.ArtMuseum
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentSearchBinding
-import com.hexa.arti.ui.MainActivity
-import com.hexa.arti.ui.search.adapter.ArtAdapter
 import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
+import com.hexa.arti.ui.search.adapter.ArtworkAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,7 +34,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     private val artMuseumAdapter = ArtMuseumAdapter {
         Log.d("확인", "미술관 아이템 클릭")
     }
-    private val artAdapter = ArtAdapter {
+    private val artAdapter = ArtworkAdapter {
         Log.d("확인", "작품 아이템 클릭")
     }
     private val artistAdapter = ArtistAdapter { artist ->
@@ -68,9 +68,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         checkState()
     }
 
-    private fun checkState(){
-        if(viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
-        if(viewModel.state == RESULT_STATE){
+    private fun checkState() {
+        if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
+        if (viewModel.state == RESULT_STATE) {
             binding.clSearchResult.visibility = View.VISIBLE
             binding.clSearchBanner.visibility = View.GONE
             mainActivity.hideBottomNav(true)
@@ -78,14 +78,39 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun initUIState() {
+
+        viewModel.artworkResult.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.tvNoResultArtwork.visibility = View.VISIBLE
+            } else {
+                binding.tvNoResultArtwork.visibility = View.GONE
+            }
+            artAdapter.submitList(it)
+        }
+
         viewModel.artistResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.tvNoResultArtist.visibility = View.VISIBLE
+                updateConstraintArtist()
             } else {
                 binding.tvNoResultArtist.visibility = View.GONE
             }
             artistAdapter.submitList(it)
         }
+    }
+
+    private fun updateConstraintArtist(){
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.clSearchResult)
+
+        constraintSet.connect(
+            R.id.tv_artist_result,
+            ConstraintSet.TOP,
+            R.id.tv_no_result_artwork,
+            ConstraintSet.BOTTOM
+        )
+
+        constraintSet.applyTo(binding.clSearchResult)
     }
 
     private fun initAdapters() {
@@ -103,9 +128,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         )
 
         val mockArtData = listOf(
-            Art(1, "1"),
-            Art(2, "1"),
-            Art(3, "1"),
+            Artwork(1, "1",""),
+            Artwork(2, "1",""),
+            Artwork(3, "1",""),
         )
 
         artMuseumAdapter.submitList(mockArtMuseumData)
@@ -143,6 +168,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
                 val keyword = v.text.toString()
+
+                viewModel.getArtworkByString(keyword)
                 viewModel.getArtistByString(keyword)
 
                 viewModel.state = RESULT_STATE

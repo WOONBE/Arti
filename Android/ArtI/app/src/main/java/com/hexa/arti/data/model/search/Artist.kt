@@ -8,6 +8,6 @@ data class Artist(
     val artistId: Int,
     val korName: String,
     val engName: String,
-    val imageUrl: String,
+    val imageUrl: String? = null,
     val description: String? = null,
 ) : Parcelable
