@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="4dp"
             android:fontFamily="@font/inter_28pt_black"
             android:text="황병현님의 포트폴리오"
             android:textSize="24sp"

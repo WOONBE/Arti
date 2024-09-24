@@ -37,20 +37,20 @@ class LoginViewModel @Inject constructor(
     val loginStatus: LiveData<Int> = _loginStatus
 
     fun login() {
-        viewModelScope.launch {
-            loginRepository.postLogin(_email.value.toString(), _pass.value.toString()).onSuccess {
-                response ->
-                Log.d(TAG, "login: ${response}")
-                Log.d(TAG, "login: ${response.token}")
-                saveJwtToken(response.token)
-                _loginStatus.value = 1
-            }.onFailure {
-                error ->
-                Log.d(TAG, "login: ${error}")
-                _loginStatus.value = 2
-            }
-
-        }
+//        viewModelScope.launch {
+//            loginRepository.postLogin(_email.value.toString(), _pass.value.toString()).onSuccess {
+//                response ->
+//                Log.d(TAG, "login: ${response}")
+//                Log.d(TAG, "login: ${response.token}")
+//                saveJwtToken(response.token)
+//                _loginStatus.value = 1
+//            }.onFailure {
+//                error ->
+//                Log.d(TAG, "login: ${error}")
+//                _loginStatus.value = 2
+//            }
+//        }
+        _loginStatus.value = 1
     }
 
     // JWT 토큰 저장

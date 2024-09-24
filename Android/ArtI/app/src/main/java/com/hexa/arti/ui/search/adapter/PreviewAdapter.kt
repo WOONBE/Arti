@@ -5,21 +5,32 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.hexa.arti.R
 import com.hexa.arti.data.model.search.PreviewImage
 import com.hexa.arti.databinding.ItemPreviewImageBinding
 
 class PreviewAdapter(
-    private val onImageClick: () -> Unit,
+    private val onImageClick: (PreviewImage) -> Unit,
 ) : ListAdapter<PreviewImage, PreviewAdapter.PreviewViewHolder>(PreviewDiffUtil()) {
 
 
     class PreviewViewHolder(
         private val binding: ItemPreviewImageBinding,
-        private val onImageClick: () -> Unit,
+        private val onImageClick: (PreviewImage) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(previewImage: PreviewImage) {
+            if (previewImage.isFocus) {
+                binding.clPreviewImage.setBackgroundResource(R.drawable.background_preview_focus)
+            } else {
+                binding.clPreviewImage.setBackgroundResource(0)
+            }
+            Glide.with(binding.root.context)
+                .load(previewImage.url)
+                .error(R.drawable.gallery_sample2)
+                .into(binding.ivPreviewImage)
             itemView.setOnClickListener {
-                onImageClick()
+                onImageClick(previewImage)
             }
         }
     }
@@ -27,7 +38,7 @@ class PreviewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PreviewViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return PreviewViewHolder(
-            ItemPreviewImageBinding.inflate(inflater,parent,false),
+            ItemPreviewImageBinding.inflate(inflater, parent, false),
             onImageClick
         )
     }

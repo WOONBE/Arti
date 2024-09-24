@@ -288,7 +288,7 @@
                 tools:listitem="@layout/item_art_museum" />
 
             <TextView
-                android:id="@+id/tv_art_result"
+                android:id="@+id/tv_artwork_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -306,8 +306,19 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_art_result"
+                app:layout_constraintTop_toBottomOf="@id/tv_artwork_result"
                 tools:listitem="@layout/item_art" />
+
+            <TextView
+                android:id="@+id/tv_no_result_artwork"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:visibility="gone"
+                android:text="@string/no_result_artist"
+                android:fontFamily="@font/inter_18pt_bold"
+                app:layout_constraintStart_toStartOf="@id/tv_artwork_result"
+                app:layout_constraintTop_toBottomOf="@id/rv_art_result" />
 
             <TextView
                 android:id="@+id/tv_artist_result"
@@ -317,7 +328,7 @@
                 android:fontFamily="@font/inter_18pt_bold"
                 android:text="@string/artist"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_art_result" />
+                app:layout_constraintTop_toBottomOf="@id/tv_no_result_artwork" />
 
             <TextView
                 android:id="@+id/tv_no_result_artist"
