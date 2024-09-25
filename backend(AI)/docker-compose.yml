@@ -2,7 +2,11 @@ services:
   arti:
     image: hwangbyounghyeon/fastapi:latest
     container_name: fastapi
-    ports:
-      - "9000:8080"
     volumes:
       - /home/ubuntu/artwork:/artwork/images
+    networks:
+      - arti
+
+networks:
+  arti:
+    external: true

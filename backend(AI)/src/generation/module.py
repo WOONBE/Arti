@@ -1,6 +1,5 @@
 from fastapi import UploadFile, File, Form, Depends
 from sqlalchemy.orm import Session
-from config.models import AI_Artwork
 from config.module import get_db
 from .schema import post_ai_image
 from config.models import AI_Artwork, Artwork
@@ -14,7 +13,7 @@ import os
 import uuid
 
 def insert_post(post_ai : post_ai_image, db: Session):
-    post = AI_Artwork(
+    post = Artwork(
         member_id = post_ai.member_id,
         ai_artwork_title = post_ai.ai_artwork_title,
         ai_img_url = post_ai.ai_img_url.split('/')[4],
@@ -53,6 +52,7 @@ def transfer_image(content_image:UploadFile = File(), style_image : int = Form()
     # style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", style_image_path)
     style_image_path = os.path.join("/artwork/images", style_image_path)
 
+    # temp_dir = 'backend(AI)/content_image'
     temp_dir = '/artwork/images/content_image'
     if not os.path.exists(temp_dir):
         os.makedirs(temp_dir)  # 디렉토리 생성
@@ -83,6 +83,7 @@ def transfer_image(content_image:UploadFile = File(), style_image : int = Form()
     stylized_image_np = (stylized_image_np * 255).astype(np.uint8)
     image_pil = Image.fromarray(stylized_image_np)
 
+    # save_dir = 'backend(AI)/generated_images'
     save_dir = '/artwork/images/generated_images'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -91,6 +92,6 @@ def transfer_image(content_image:UploadFile = File(), style_image : int = Form()
     image_path = os.path.join(save_dir, image_filename)
     image_pil.save(image_path)
 
-    image_path = os.path.join('/artwork/images/generated_images', image_filename)
+    image_path = os.path.join(save_dir, image_filename)
 
     return image_path

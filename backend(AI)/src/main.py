@@ -11,7 +11,6 @@ from sqlalchemy.orm import Session
 
 from recommend import urls as rec_url
 from generation import urls as gen_url
-from generation import test
 from ar import urls as ar_url
 from config.database import SessionLocal, engine, Base, SQLALCHEMY_DATABASE_URL
 from config.models import Artist, Artwork
@@ -29,7 +28,6 @@ app.add_middleware(
 
 app.include_router(rec_url.router)
 app.include_router(gen_url.router)
-app.include_router(test.router)
 app.include_router(ar_url.router)
 
 def get_db():
@@ -39,20 +37,23 @@ def get_db():
     finally:
         db.close()
 
-@app.get('/{artwork_id}')
+@app.get('/fastapi/artist/{artist_id}')
+def get_artist(artist_id : int, db : Session = Depends(get_db)):
+    result = db.query(Artist).filter(Artist.artist_id == artist_id).first()
+    return result
+
+@app.get('/fastapi/{artwork_id}')
 def get_test(artwork_id : int, db : Session = Depends(get_db)):
     try:
         results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
-        image_path = os.path.join('/artwork/images', results.filename)
         return {
             "result" : results,
-            "path" :  '/artwork/images/' + results.filename,
-            'test' : image_path
+            "path" :  '/artwork/images/' + results.filename
         }
     except Exception as e:
         return HTTPException(status_code=500, detail=str(e))
 
-@app.get('/image/{artwork_id}')
+@app.get('/fastapi/image/{artwork_id}')
 def get_image(artwork_id: int, db: Session = Depends(get_db)):
     try:
         # DB에서 artwork_id에 해당하는 레코드 조회

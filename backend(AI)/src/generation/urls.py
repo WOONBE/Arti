@@ -8,7 +8,7 @@ from .schema import post_ai_image, trasform_image
 from .module import insert_post, transfer_image
 import os
 
-router = APIRouter(prefix='/artwork')
+router = APIRouter(prefix='/fastapi/artwork')
 
 
 @router.post('/ai')

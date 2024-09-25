@@ -1,13 +1,6 @@
 from pydantic import BaseModel
 from uuid import UUID
-
-class Gallery(BaseModel):
-    id: UUID
-    gallery_title: str
-    gallery_view: int
-    gallery_owner: str
-    gallery_image: str
-    gallery_description: str
+from typing import List, Optional
 
 class Artwork(BaseModel):
     id: UUID
@@ -21,3 +14,32 @@ class Artwork(BaseModel):
     artwork_width: int
     artwork_height: int
     
+class GalleryBase(BaseModel):
+    id: Optional[int] = None
+    gallery_id: int
+    gallery_title: str
+    gallery_desc: str
+    gallery_img: str
+    gallery_view: int
+
+class Owner(BaseModel):
+    id: Optional[int] = None
+    member_id : int
+    email: str
+    nickname: str
+
+class ArtworksBase(BaseModel):
+    id: Optional[int] = None
+    artwork_id : int
+    image_url : str
+    
+class ThemeBase(BaseModel):
+    id: Optional[int] = None
+    theme_id : int
+    theme_name : str
+    artworks : List[ArtworksBase]
+    
+
+
+
+
