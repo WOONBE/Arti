@@ -5,6 +5,7 @@ import com.d106.arti.artwork.domain.Artist;
 import com.d106.arti.artwork.domain.Artwork;
 import com.d106.arti.artwork.domain.ThemeArtwork;
 import com.d106.arti.artwork.domain.*;
+import com.d106.arti.global.common.BaseEntity;
 import com.d106.arti.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,12 +28,15 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class Theme {
+public class Theme extends BaseEntity {
 
     @Id
     @Column(name = "THEME_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "THEME_NAME", nullable = false)
+    private String name;
 
     //미술관과 n : 1
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,24 +48,31 @@ public class Theme {
     @OneToMany(mappedBy = "theme",  orphanRemoval = false, fetch = FetchType.LAZY)
     private List<ArtworkTheme> artworks;
 
+    // 연관관계 메서드: Artwork 추가
+    public void addArtwork(Artwork artwork, String description) {
+        ArtworkTheme artworkTheme = ArtworkTheme.builder()
+            .artwork(artwork)
+            .theme(this)
+            .description(description)
+            .build();
 
-    //화가와 n : 1
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ARTIST_ID", nullable = false)
-    private Artist artist;
+        this.artworks.add(artworkTheme);
+        artwork.getArtworkThemes().add(artworkTheme);  // Artwork에도 추가
+    }
 
-//    //AI 미술품과 1:n 부모인 , orphanRemoval을 쓰는 이유?
-//    //Theme과 AI_Artwork의 연결만 끊고 AI_Artwork 자체는 유지
-//    @OneToMany(mappedBy = "theme",  orphanRemoval = false, fetch = FetchType.LAZY)
-//    private List<AiArtwork> aiArtworks;
+    // 연관관계 메서드: Artwork 삭제
+    public void removeArtwork(Artwork artwork) {
+        this.artworks.removeIf(artworkTheme -> artworkTheme.getArtwork().equals(artwork));
+        artwork.getArtworkThemes().removeIf(artworkTheme -> artworkTheme.getTheme().equals(this));  // Artwork에서도 삭제
+    }
 
-    //회원 ID와 n : 1
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID", nullable = false)
-    private Member member;
+    // Gallery 설정 메서드
+    public void updateGallery(Gallery gallery) {
+        this.gallery = gallery;
+    }
 
-    // 수정 2트: ThemeArtwork와의 1:n 관계 설정
-    @OneToMany(mappedBy = "theme", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ThemeArtwork> themeArtworks; // 여러 ThemeArtwork와 연결
 
+    public void updateName(String name) {
+        this.name = name;
+    }
 }

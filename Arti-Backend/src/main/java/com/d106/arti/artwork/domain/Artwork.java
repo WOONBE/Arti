@@ -73,11 +73,14 @@ public class Artwork extends BaseEntity {
             .description(description)
             .build();
         artworkThemes.add(artworkTheme);
+        theme.getArtworks().add(artworkTheme);
     }
 
     // 테마 삭제 편의 메서드
     public void removeTheme(Theme theme) {
         artworkThemes.removeIf(artworkTheme -> artworkTheme.getTheme().equals(theme));
+        theme.getArtworks().removeIf(artworkTheme -> artworkTheme.getArtwork().equals(this));
+
     }
 
     // Artist 설정 메서드
