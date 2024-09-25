@@ -12,11 +12,10 @@ import com.d106.arti.artwork.dto.response.AiArtworkResponse;
 import com.d106.arti.artwork.repository.AiArtworkRepository;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 
-import com.d106.arti.gallery.ThemeRepository;
+import com.d106.arti.gallery.repository.ThemeRepository;
 
 import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.global.exception.BadRequestException;
-import com.d106.arti.global.exception.ExceptionCode;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import java.util.List;
