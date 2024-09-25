@@ -1,8 +1,6 @@
 package com.hexa.arti.ui.profile
 
-import android.graphics.Color
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -59,6 +57,11 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         binding.pcChart.animateY(500)
         binding.pcChart.invalidate()
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initChart()
     }
 
 }
