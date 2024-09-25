@@ -38,9 +38,11 @@ public class ArtworkTheme {
     @Column(name = "description")
     private String description;
 
-    // 편의 메서드
+    // 편의 메서드: Artwork와 Theme 설정
     public void updateArtworkAndTheme(Artwork artwork, Theme theme) {
         this.artwork = artwork;
         this.theme = theme;
+        artwork.getArtworkThemes().add(this);  // Artwork에 추가
+        theme.getArtworks().add(this);         // Theme에 추가
     }
 }
