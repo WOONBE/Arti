@@ -5,11 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
+import androidx.paging.liveData
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtistRepository
+import com.hexa.arti.ui.search.paging.ArtworkPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +33,14 @@ class SearchViewModel @Inject constructor(
 
     var state = SearchFragment.BASE_STATE
 
+    val artworkPagingData = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { ArtworkPagingSource(artWorkRepository, "query") }
+    ).liveData.cachedIn(viewModelScope)
+
     fun getArtWorkById(id: Int) {
         viewModelScope.launch {
             artWorkRepository.getArtWorkById(id).onSuccess { response ->
@@ -42,7 +55,7 @@ class SearchViewModel @Inject constructor(
 
     fun getArtworkByString(keyword: String) {
         viewModelScope.launch {
-            artWorkRepository.getArtWorkByString(keyword).onSuccess { response ->
+            artWorkRepository.getArtWorksByString(keyword).onSuccess { response ->
                 _artworkResult.value = response
             }.onFailure { error ->
                 if (error is ApiException) {

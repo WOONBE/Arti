@@ -30,7 +30,7 @@ class ArtWorkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getArtWorkByString(keyword: String): Result<List<Artwork>> {
+    override suspend fun getArtWorksByString(keyword: String): Result<List<Artwork>> {
         val result = artWorkApi.getArtWorksByString(keyword)
         if (result.isSuccessful) {
             result.body()?.let {

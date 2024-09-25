@@ -90,5 +90,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android.v164)
     //datastore
     implementation(libs.datastore)
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    //PieChart
+    implementation(libs.piechart)
+    //paging3
+    implementation(libs.paging3)
 }
