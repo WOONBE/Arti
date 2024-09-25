@@ -13,4 +13,5 @@ public class ArtworkResponse {
     private Integer id;          // 미술품 ID
     private String title;        // 미술품 제목
     private String description;  // 미술품 설명
+    private String imageUrl;
 }

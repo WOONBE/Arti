@@ -1,5 +1,6 @@
 package com.d106.arti.gallery.controller;
 
+import com.d106.arti.artwork.dto.response.ArtworkResponse;
 import com.d106.arti.gallery.domain.Gallery;
 import com.d106.arti.gallery.dto.request.GalleryRequest;
 import com.d106.arti.gallery.dto.request.ThemeRequest;
@@ -96,4 +97,14 @@ public class GalleryController {
         GalleryResponse updatedGallery = galleryService.updateGallery(galleryId, galleryRequest);
         return ResponseEntity.ok(updatedGallery);
     }
+
+    // 특정 테마에 속한 모든 미술품 조회
+    @GetMapping("/{themeId}/artworks")
+    @Operation(summary = "테마의 미술품 조회", description = "특정 테마에 속한 모든 미술품을 조회하는 API")
+    public ResponseEntity<List<ArtworkResponse>> getArtworksByTheme(@PathVariable Integer themeId) {
+        List<ArtworkResponse> artworks = galleryService.getArtworksByThemeId(themeId);
+        return ResponseEntity.ok(artworks);
+    }
+
+
 }

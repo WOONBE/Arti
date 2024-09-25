@@ -1,6 +1,10 @@
 package com.d106.arti.gallery.service;
 
+import com.d106.arti.artwork.domain.AiArtwork;
 import com.d106.arti.artwork.domain.Artwork;
+import com.d106.arti.artwork.domain.ArtworkTheme;
+import com.d106.arti.artwork.domain.NormalArtWork;
+import com.d106.arti.artwork.dto.response.ArtworkResponse;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 import com.d106.arti.artwork.repository.ArtworkThemeRepository;
 import com.d106.arti.gallery.domain.Gallery;
@@ -16,6 +20,7 @@ import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,10 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GalleryService {
+
+
+    @Value("${server.image.base-url}")
+    private String imageBaseUrl;
 
     private final ThemeRepository themeRepository;
     private final ArtworkRepository artworkRepository;
@@ -173,5 +182,43 @@ public class GalleryService {
         }
 
         themeRepository.deleteById(themeId);
+    }
+
+    // 테마에 담긴 모든 미술품 조회, 길이 너비 추가해야 할듯?
+    @Transactional(readOnly = true)
+    public List<ArtworkResponse> getArtworksByThemeId(Integer themeId) {
+        // Theme 조회
+        Theme theme = themeRepository.findById(themeId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid theme ID"));
+
+        // 해당 테마에 속한 모든 Artwork 조회 (AiArtwork와 NormalArtWork 모두 포함)
+        List<Artwork> artworks = theme.getArtworks().stream()
+            .map(ArtworkTheme::getArtwork)
+            .collect(Collectors.toList());
+
+        // Artwork 엔티티들을 ArtworkResponse DTO로 변환
+        return artworks.stream()
+            .map(artwork -> {
+                if (artwork instanceof AiArtwork) {
+                    AiArtwork aiArtwork = (AiArtwork) artwork;
+                    return ArtworkResponse.builder()
+                        .id(aiArtwork.getId())
+                        .title(aiArtwork.getAiArtworkTitle()) // AI 작품의 제목 사용
+                        .description(aiArtwork.getArtworkImage()) // 이미지를 설명으로 예시
+                        .imageUrl(aiArtwork.getArtworkImage())
+                        .build();
+                } else if (artwork instanceof NormalArtWork) {
+                    NormalArtWork normalArtwork = (NormalArtWork) artwork;
+                    return ArtworkResponse.builder()
+                        .id(normalArtwork.getId())
+                        .title(normalArtwork.getTitle()) // 일반 작품의 제목 사용
+                        .description(normalArtwork.getDescription()) // 일반 작품의 설명
+                        .imageUrl(imageBaseUrl+normalArtwork.getFilename())
+                        .build();
+                } else {
+                    throw new IllegalArgumentException("Unknown artwork type");
+                }
+            })
+            .collect(Collectors.toList());
     }
 }
