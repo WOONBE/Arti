@@ -80,10 +80,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
         }
         initObserve()
         with(binding) {
-            /* 프로필 이미지 */
-            signupProfileImgCv.setOnClickListener {
-                openImagePicker()
-            }
+
             /* 이메일 인증 */
             signEmailBtn.setOnClickListener {
                 isCheckCode = false
@@ -145,15 +142,4 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
 
     }
 
-    private val getImageLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                handleImage(it, requireContext(),"signUpImage")
-                binding.signupProfileIv.setImageURI(it)
-            }
-        }
-
-    private fun openImagePicker() {
-        getImageLauncher.launch("image/*")
-    }
 }
