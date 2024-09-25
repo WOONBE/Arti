@@ -67,7 +67,7 @@ class ImageUploadViewModel @Inject constructor(
             }.onFailure { error ->
                 if (error is ApiException) {
                     Log.d("확인", "실패 ${error.code} ${error.message}")
-                    _artworkResult.value = Artwork(0,"","")
+                    _artworkResult.value = Artwork(0,"","","","")
                 }
             }
         }

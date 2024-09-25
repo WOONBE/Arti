@@ -26,7 +26,7 @@ class SelectArtworkFragment :
     private val selectArtworkViewModel: SelectArtworkViewModel by viewModels()
     private lateinit var adapter: SelectArtworkAdapter
     private var isClicked = false
-    private var tempList = listOf(Artwork(0, "", ""))
+    private var tempList = listOf(Artwork(0, "", "","",""))
 
     override fun init() {
 

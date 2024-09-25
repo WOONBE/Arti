@@ -24,15 +24,15 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
         }
 
         val mockData = listOf(
-            Artwork(artworkId = 0, title = "0번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "1번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "2번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "3번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "4번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "5번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "6번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "7번", imageUrl = ""),
-            Artwork(artworkId = 0, title = "8번", imageUrl = ""),
+            Artwork(artworkId = 0, title = "0번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "1번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "2번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "3번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "4번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "5번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "6번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "7번", imageUrl = "","",""),
+            Artwork(artworkId = 0, title = "8번", imageUrl = "","",""),
         )
 
         artAdapter.submitList(mockData)
