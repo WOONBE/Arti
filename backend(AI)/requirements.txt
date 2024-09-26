@@ -68,7 +68,6 @@ starlette==0.38.5
 sympy==1.13.2
 tensorboard==2.17.1
 tensorboard-data-server==0.7.2
-tensorflow==2.17.0
 tensorflow-hub==0.16.1
 tensorflow-intel==2.17.0
 tensorflow-io-gcs-filesystem==0.31.0
