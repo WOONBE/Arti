@@ -6,12 +6,16 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
+import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
+import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryThemeAdapter
 import com.hexa.arti.util.navigate
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -19,27 +23,47 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
 
+private const val TAG = "MyGalleryFragment"
 
 class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragment_my_gallery){
+
+    private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
+
     override fun init() {
+
+        with(binding){
+
+            adapter = MyGalleryThemeAdapter(requireContext())
+            myGalleryThemeRv.adapter = adapter
+
+            with(myGalleryActivityViewModel){
+                // 나의 미술관 이름. 썸네일, 소개
+                myGallery.observe(viewLifecycleOwner){
+                    myGalleryNameTv.setText(it.name)
+                    Glide.with(requireContext())
+                        .load(it.image)
+                        .into(myGalleryThumbnailIv)
+                    myGalleryInfoEt.setText(it.description)
+                }
+                // 테마
+                myGalleryTheme.observe(viewLifecycleOwner){
+                    adapter.submitList(it)
+                }
+            }
+
+        }
+
+        initEvent()
     }
     private lateinit var adapter: MyGalleryThemeAdapter
     private  val sampleData = listOf(
-        MyGalleryThemeItem("병현이의 절망", listOf(R.drawable.survey_example, R.drawable.survey_example, R.drawable.survey_example, R.drawable.survey_example)),
-        MyGalleryThemeItem("미술관 테마2", listOf(R.drawable.survey_example, R.drawable.survey_example,R.drawable.survey_example))
+        MyGalleryThemeItem(1,"병현이의 절망", listOf("")),
+        MyGalleryThemeItem(2,"미술관 테마2", listOf(""))
     )
 
     private var initName = ""
     private var initInfo = ""
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
-        adapter = MyGalleryThemeAdapter()
-        binding.myGalleryThemeRv.adapter = adapter
-        adapter.submitList(sampleData)
-
-        initEvent()
-    }
     private fun initEvent(){
         with(binding){
             // 미술관 이름 변경

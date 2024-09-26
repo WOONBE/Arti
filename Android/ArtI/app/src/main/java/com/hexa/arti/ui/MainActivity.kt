@@ -34,6 +34,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private var isShowDialog = false
     lateinit var navController : NavController
     private val mainActivityViewModel : MainActivityViewModel by viewModels()
+    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by viewModels()
     private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +52,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 Log.d(TAG, "onCreate: $token")
             }
         }
+        with(myGalleryActivityViewModel){
+            getMyGallery(1)
+            getMyGalleryTheme(1)
+        }
+
+
     }
 
 

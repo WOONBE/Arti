@@ -13,11 +13,12 @@ import android.widget.PopupMenu
 import androidx.core.animation.doOnEnd
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.ui.artmuseum.util.MyGalleryThemeDiffCallback
 
-class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
+class MyGalleryThemeAdapter(val context: Context) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
     MyGalleryThemeDiffCallback
 ) {
 
@@ -31,13 +32,27 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
         private var initString = ""
 
         // 각 아이템에 데이터 바인딩
-        fun bind(item: MyGalleryThemeItem) {
+        fun bind(item: MyGalleryThemeItem, context: Context) {
             themeTitleTv.setText(item.title)
             // 이미지 리스트를 GridLayout에 동적으로 추가 (이미지 로드)
             gridLayout.removeAllViews() // 이전 이미지 제거
             item.images.forEachIndexed { index, imageResId ->
                 val imageView = LayoutInflater.from(gridLayout.context).inflate(R.layout.gallery_theme_img, gridLayout, false) as ImageView
-                imageView.setImageResource(imageResId)
+                // 크기를 픽셀로 고정
+                val params = GridLayout.LayoutParams().apply {
+                    width = 280 // px 값으로 고정
+                    height = 520
+                    columnSpec = GridLayout.spec(index % gridLayout.columnCount)
+                    rowSpec = GridLayout.spec(index / gridLayout.columnCount)
+                    setMargins(10, 10, 10, 10)
+                }
+
+                imageView.layoutParams = params
+
+                Glide.with(context)
+                    .load(imageResId)
+                    .into(imageView)
+
                 gridLayout.addView(imageView)
 
                 // 이미지에 long click listener 추가
@@ -185,6 +200,6 @@ class MyGalleryThemeAdapter : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdap
     // onBindViewHolder: 데이터와 뷰 바인딩
     override fun onBindViewHolder(holder: MyGalleryThemeViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, context = context)
     }
 }

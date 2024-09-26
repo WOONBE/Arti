@@ -1,5 +1,7 @@
 package com.hexa.arti.di
 
+import com.hexa.arti.repository.ArtGalleryRepository
+import com.hexa.arti.repository.ArtGalleryRepositoryImpl
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtWorkRepositoryImpl
 import com.hexa.arti.repository.ArtWorkUploadRepository
@@ -49,4 +51,10 @@ interface RepositoryModule {
     fun bindArtWorkUploadRepository(
         artWorkUploadRepositoryImpl: ArtWorkUploadRepositoryImpl
     ) : ArtWorkUploadRepository
+
+    @Singleton
+    @Binds
+    fun bindArtGalleryRepository(
+        artGalleryRepositoryImpl: ArtGalleryRepositoryImpl
+    ) : ArtGalleryRepository
 }
