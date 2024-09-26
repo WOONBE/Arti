@@ -119,6 +119,7 @@ public class GalleryController {
     }
 
     @GetMapping("/subscriptions/{memberId}")
+    @Operation(summary = "사용자가 구독한 미술관 목록 조회", description = "사용자가 구독한 미술관 정보를 모두 조회하는 API")
     public ResponseEntity<List<SubscribedGalleryResponse>> getSubscribedGalleries(@PathVariable Integer memberId) {
 
         // 서비스에서 구독한 갤러리 목록을 조회

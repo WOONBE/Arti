@@ -42,42 +42,6 @@ public class ArtworkController {
 
     private static final Logger logger = LoggerFactory.getLogger(CSVService.class);
 
-
-//    @GetMapping("/import-csv/{filename}")
-//    public ResponseEntity<String> importCSV(@PathVariable String filename) {
-//        Resource resource = new ClassPathResource(filename);
-//
-//        if (!resource.exists()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                .body("파일이 존재하지 않습니다: " + filename);
-//        }
-//
-//        int limit = 100; // Limit the number of rows to 100
-//        try {
-//            csvService.readCSVAndSaveData(filename, limit);
-//            return new ResponseEntity<>("Successfully imported 100 records from " + filename, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Error importing CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
-//
-//    @GetMapping("/import-artist-csv/{filename}")
-//    public ResponseEntity<String> importArtistCSV(@PathVariable String filename) {
-//        Resource resource = new ClassPathResource(filename);
-//
-//        if (!resource.exists()) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                .body("파일이 존재하지 않습니다: " + filename);
-//        }
-//
-//        int limit = 100; // Limit the number of rows to 100
-//        try {
-//            csvService.readArtistCSVAndSaveData(filename, limit);
-//            return new ResponseEntity<>("Successfully imported 100 records from " + filename, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>("Error importing artist CSV: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
     @GetMapping("/import-csv/{filename}")
     public ResponseEntity<String> importCSV(@PathVariable String filename) {
         Resource resource = new ClassPathResource(filename);

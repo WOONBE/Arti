@@ -36,10 +36,11 @@ public enum ExceptionCode {
 
     NOT_FOUND_THEME_WITH_GALLERY(1014, "요청한 갤러리에 해당 테마가 존재하지 않습니다."),
 
-    NOT_FOUND_RECOMMEND_TRIP_STRATEGY(1015, "요청에 해당하는 여행 추천 전략이 존재하지 않습니다."),
+    NOT_SUBSCRIBED_GALLERY(1015, "구독한 미술관이 아닙니다"),
 
     ALREADY_DELETED_TRIP_ITEM(2001, "이미 삭제된 여행 아이템입니다."),
     ALREADY_DELETED_DATE(2002, "이미 삭제된 날짜입니다."),
+    ALREADY_SUBSCRIBED_GALLERY(2002, "이미 구독된 미술관입니다."),
 
     INVALID_ARTWORK_TYPE(3001, "유효하지 않은 미술품 형식입니다"),
     INVALID_GENRE(3002, "유효하지 않은 장르입니다."),
