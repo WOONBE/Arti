@@ -1,10 +1,9 @@
 from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, Form
 from fastapi.responses import FileResponse
 from config.database import SessionLocal
-from config.models import AI_Artwork, Artwork
 from config.module import get_db
 from sqlalchemy.orm import Session
-from .schema import post_ai_image, trasform_image
+from .schema import post_ai_image
 from .module import insert_post, transfer_image
 import os
 

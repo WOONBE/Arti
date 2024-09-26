@@ -2,7 +2,7 @@ from fastapi import UploadFile, File, Form, Depends
 from sqlalchemy.orm import Session
 from config.module import get_db
 from .schema import post_ai_image
-from config.models import AI_Artwork, Artwork
+from config.models import Artwork
 
 import functools
 import tensorflow as tf

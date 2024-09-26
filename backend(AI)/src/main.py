@@ -1,19 +1,23 @@
 import sys
 import os
+import logging
+import time
 
 # src 폴더를 Python 경로에 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from recommend import urls as rec_url
 from generation import urls as gen_url
+from music import urls as music_url
 from ar import urls as ar_url
 from config.database import SessionLocal, engine, Base, SQLALCHEMY_DATABASE_URL
 from config.models import Artist, Artwork
+from config.module import get_db
 
 app = FastAPI()
 
@@ -29,13 +33,18 @@ app.add_middleware(
 app.include_router(rec_url.router)
 app.include_router(gen_url.router)
 app.include_router(ar_url.router)
+app.include_router(music_url.router)
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+@app.middleware("http")
+async def log_process_time(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    logger.info(f"Request URL: {request.url}, Process time: {process_time}")
+    return response
 
 @app.get('/fastapi/artist/{artist_id}')
 def get_artist(artist_id : int, db : Session = Depends(get_db)):

@@ -64,19 +64,12 @@ class Member(Base):
     galleries = relationship("Gallery", back_populates="member")
     themes = relationship("Theme", back_populates="member")
 
-class AI_Artwork(Base):
-    __tablename__ = 'ai_artwork'
-
-    ai_artwork_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    member_id = Column(Integer, ForeignKey("member.member_id"), nullable=False)
-    ai_artwork_title = Column(VARCHAR(255), nullable=False)
-    ai_img_url = Column(VARCHAR(255), nullable=False)
-    is_deleted = Column(Integer, default=0)
-
 class Gallery(Base):
     __tablename__ = 'gallery'
 
     gallery_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    create_date = Column(DateTime)
+    update_date = Column(DateTime(timezone=True))
     gallery_desc = Column(VARCHAR(255))
     gallery_img = Column(VARCHAR(255))
     gallery_title = Column(VARCHAR(255))
@@ -85,6 +78,7 @@ class Gallery(Base):
     owner_id = Column(Integer, ForeignKey("member.member_id"))
 
     member = relationship("Member", back_populates="galleries")
+    audio = relationship("Audio", back_populates='gallery')
 
 class Theme(Base):
     __tablename__ = 'theme'
@@ -92,6 +86,8 @@ class Theme(Base):
     theme_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     gallery_id = Column(Integer, ForeignKey("gallery.gallery_id"))
     member_id = Column(Integer, ForeignKey("member.member_id"))
+    create_date = Column(DateTime)
+    update_date = Column(DateTime(timezone=True))
     theme_name = Column(VARCHAR(50))
 
     artworks = relationship("Artwork", back_populates="theme")
@@ -103,7 +99,17 @@ class Artwork_Theme(Base):
 
     artwork_theme_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     artwork_id = Column(Integer, ForeignKey("artwork.artwork_id"))
+    description = Column(VARCHAR(255))
     theme_id = Column(Integer, ForeignKey("theme.theme_id"))
 
     artwork = relationship("Artwork", back_populates="artwork_theme")
     theme = relationship("Theme", back_populates="artwork_theme")
+
+class Audio(Base):
+    __tablename__ = 'audio'
+
+    audio_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    audio_path = Column(VARCHAR(255))
+    gallery_id = Column(Integer, ForeignKey("gallery.gallery_id"))
+
+    gallery = relationship("Gallery", back_populates="audio")
