@@ -20,24 +20,29 @@ public enum ExceptionCode {
 
     NOT_FOUND_THEME_ID(1003, "요청한 ID에 해당하는 테마가 존재하지 않습니다."),
 
-    NOT_FOUND_EXPENSE_ID(1004, "요청한 ID에 해당하는 금액이 존재하지 않습니다."),
-    NOT_FOUND_CITY_ID(1005, "요청한 ID에 해당하는 도시가 존재하지 않습니다."),
-    NOT_FOUND_PLACE_ID(1006, "요청한 ID에 해당하는 장소가 존재하지 않습니다."),
+    NOT_FOUND_OWNER_ID(1004, "요청한 ID에 해당하는 미술관장이 존재하지 않습니다."),
+    NOT_FOUND_GALLERY_ID(1005, "요청한 ID에 해당하는 미술관이 존재하지 않습니다."),
+    NOT_FOUND_ARTWORK_ID(1006, "요청한 ID에 해당하는 미술품이 존재하지 않습니다."),
+
     NOT_FOUND_CATEGORY_ID(1007, "요청한 ID에 해당하는 카테고리가 존재하지 않습니다."),
     NOT_FOUNT_IMAGE_URL(1008, "요청한 URL에 해당하는 이미지가 존재하지 않습니다."),
     NOT_FOUND_CURRENCY_DATA(1009, "요청한 날짜에 해당하는 환율 정보가 존재하지 않습니다."),
 
     INVALID_TRIP_WITH_MEMBER(1011, "요청한 멤버와 ID에 해당하는 여행이 존재하지 않습니다."),
+
     FAIL_TO_GENERATE_RANDOM_NICKNAME(1012, "랜덤한 닉네임을 생성하는데 실패하였습니다."),
+
     DUPLICATED_MEMBER_NICKNAME(1013, "중복된 닉네임입니다."),
-    NOT_FOUND_PUBLISHED_TRIP_WITH_TRIP(1014, "요청한 여행에 해당하는 공개 여행이 존재하지 않습니다."),
+
+    NOT_FOUND_THEME_WITH_GALLERY(1014, "요청한 갤러리에 해당 테마가 존재하지 않습니다."),
+
     NOT_FOUND_RECOMMEND_TRIP_STRATEGY(1015, "요청에 해당하는 여행 추천 전략이 존재하지 않습니다."),
 
     ALREADY_DELETED_TRIP_ITEM(2001, "이미 삭제된 여행 아이템입니다."),
     ALREADY_DELETED_DATE(2002, "이미 삭제된 날짜입니다."),
 
-    INVALID_RATING(3001, "별점은 N.0점이거나 N.5점 형태이어야 합니다."),
-    INVALID_CURRENCY(3002, "제공하지 않는 통화입니다."),
+    INVALID_ARTWORK_TYPE(3001, "유효하지 않은 미술품 형식입니다"),
+    INVALID_GENRE(3002, "유효하지 않은 장르입니다."),
     INVALID_NULL_PLACE(3003, "아이템의 장소 정보가 필요합니다."),
     INVALID_NOT_NULL_PLACE(3004, "아이템의 장소 정보가 불필요합니다."),
     INVALID_IS_PLACE_UPDATED_WHEN_NON_SPOT(3005, "아이템이 기타일 때, 장소를 업데이트할 수 없습니다."),
