@@ -5,6 +5,7 @@ import com.d106.arti.gallery.domain.Gallery;
 import com.d106.arti.gallery.dto.request.GalleryRequest;
 import com.d106.arti.gallery.dto.request.ThemeRequest;
 import com.d106.arti.gallery.dto.response.GalleryResponse;
+import com.d106.arti.gallery.dto.response.SubscribedGalleryResponse;
 import com.d106.arti.gallery.dto.response.ThemeResponse;
 import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.gallery.service.GalleryService;
@@ -24,6 +25,7 @@ import java.util.List;
 public class GalleryController {
 
     private final GalleryService galleryService;
+    private final MemberRepository memberRepository;
 
     // 1. 특정 미술관의 테마 전체 조회
     @GetMapping("/{galleryId}/themes")
@@ -115,6 +117,17 @@ public class GalleryController {
         // 조회된 미술품 목록을 반환
         return ResponseEntity.ok(randomArtworks);
     }
+
+    @GetMapping("/subscriptions/{memberId}")
+    public ResponseEntity<List<SubscribedGalleryResponse>> getSubscribedGalleries(@PathVariable Integer memberId) {
+
+        // 서비스에서 구독한 갤러리 목록을 조회
+        List<SubscribedGalleryResponse> subscribedGalleries = galleryService.getSubscribedGalleriesByMemberId(memberId);
+        // 조회 결과를 반환
+        return ResponseEntity.ok(subscribedGalleries);
+    }
+
+
 
 
 }

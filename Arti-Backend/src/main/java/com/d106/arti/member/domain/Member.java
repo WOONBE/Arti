@@ -44,15 +44,18 @@ public class Member extends BaseEntity implements UserDetails {
     @Column(name = "image")
     private String image;
 
-    // 구독과 1:n 관계 설정 (대응 관계 추가함!)
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Subscription> subscriptions;
+//    // 구독과 1:n 관계 설정 (대응 관계 추가함!)
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<Subscription> subscriptions;
 
-    // 여기 수정됨: 생성자를 통한 Subscription 추가를 위한 메서드
-    public void addSubscription(Subscription subscription) {
-        subscriptions.add(subscription);
-        subscription.setMember(this); // 양방향 관계 설정을 위함
-    }
+    @ElementCollection
+    private List<Integer> subscribedGalleryIds;
+
+//    // 여기 수정됨: 생성자를 통한 Subscription 추가를 위한 메서드
+//    public void addSubscription(Subscription subscription) {
+//        subscriptions.add(subscription);
+//        subscription.setMember(this); // 양방향 관계 설정을 위함
+//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
