@@ -1,6 +1,7 @@
 package com.d106.arti.gallery.service;
 
 import static com.d106.arti.global.exception.ExceptionCode.INVALID_ARTWORK_TYPE;
+import static com.d106.arti.global.exception.ExceptionCode.INVALID_GENRE;
 import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_ARTWORK_ID;
 import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_GALLERY_ID;
 import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_OWNER_ID;
@@ -28,6 +29,7 @@ import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -229,52 +231,47 @@ public class GalleryService {
             .collect(Collectors.toList());
     }
 
-//    // 장르에 해당하는 미술품 50개 랜덤으로 가져오기
-//    @Transactional(readOnly = true)
-//    public List<ArtworkResponse> getRandomArtworksByGenre(String genreLabel) {
-//        // 1. ArtGenre enum에서 label을 찾아 해당 장르에 대한 확인
-//        Genre genre = Genre.valueOf(genreLabel.toUpperCase());
-//
-//        if (genre == null) {
-//            throw new BadRequestException("Invalid genre: " + genreLabel);
-//        }
-//
-//        // 2. 작품 중에서 해당 장르가 포함된 미술품 조회
-//        List<NormalArtWork> artworks = artworkRepository.findAllByGenreContaining(genre.getLabel());
-//
-//        // 3. 작품이 50개 이상일 경우 랜덤하게 50개 선택
-//        if (artworks.size() > 50) {
-//            Random random = new Random();
-//            artworks = random.ints(0, artworks.size())
-//                .distinct()
-//                .limit(50)
-//                .mapToObj(artworks::get)
-//                .collect(Collectors.toList());
-//        }
-//
-//        // 4. Artwork 엔티티들을 ArtworkResponse DTO로 변환하여 반환
-//        return artworks.stream()
-//            .map(artwork -> {
-//                if (artwork instanceof AiArtwork) {
-//                    AiArtwork aiArtwork = (AiArtwork) artwork;
-//                    return ArtworkResponse.builder()
-//                        .id(aiArtwork.getId())
-//                        .title(aiArtwork.getAiArtworkTitle())
-//                        .description(aiArtwork.getArtworkImage())
-//                        .imageUrl(aiArtwork.getArtworkImage())
-//                        .build();
-//                } else if (artwork instanceof NormalArtWork) {
-//                    NormalArtWork normalArtwork = (NormalArtWork) artwork;
-//                    return ArtworkResponse.builder()
-//                        .id(normalArtwork.getId())
-//                        .title(normalArtwork.getTitle())
-//                        .description(normalArtwork.getDescription())
-//                        .imageUrl(imageBaseUrl + normalArtwork.getFilename())
-//                        .build();
-//                } else {
-//                    throw new BadRequestException("Invalid artwork type");
-//                }
-//            })
-//            .collect(Collectors.toList());
-//    }
+    // 장르에 해당하는 미술품 50개 랜덤으로 가져오기
+    @Transactional(readOnly = true)
+    public List<ArtworkResponse> getRandomArtworksByGenre(String genreLabel) {
+        // 1. 입력받은 genreLabel을 대문자로 변환하여 Enum에서 확인
+        String formattedGenreLabel = genreLabel.trim().toUpperCase();  // 입력값을 대문자로 변환
+
+        // 2. ArtGenre enum에서 변환된 label을 사용해 해당 장르 Enum 확인
+        Genre genre;
+        try {
+            genre = Genre.valueOf(formattedGenreLabel);  // Enum 값이 존재하는지 확인
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(INVALID_GENRE); // 유효하지 않은 장르일 경우 예외 처리
+        }
+
+        // 3. Enum이 존재하면, 언더바를 공백으로 변환하여 검색에 사용할 label 생성
+        String genreLabelForSearch = formattedGenreLabel.replace("_", " ");
+        // 2. 작품 중에서 해당 장르가 포함된 미술품 조회
+        List<NormalArtWork> artworks = artworkRepository.findAllByGenreContaining(genreLabelForSearch);
+
+        // 3. 작품이 50개 이상일 경우 랜덤하게 50개 선택
+        if (artworks.size() > 50) {
+            Random random = new Random();
+            artworks = random.ints(0, artworks.size())
+                .distinct()
+                .limit(50)
+                .mapToObj(artworks::get)
+                .collect(Collectors.toList());
+        }
+
+        // 4. Artwork 엔티티들을 ArtworkResponse DTO로 변환하여 반환
+        return artworks.stream()
+            .filter(artwork -> artwork instanceof NormalArtWork)  // NormalArtWork만 필터링
+            .map(artwork -> {
+                NormalArtWork normalArtwork = (NormalArtWork) artwork;
+                return ArtworkResponse.builder()
+                    .id(normalArtwork.getId())
+                    .title(normalArtwork.getTitle())  // 일반 작품의 제목 사용
+                    .description(normalArtwork.getDescription())  // 일반 작품의 설명
+                    .imageUrl(imageBaseUrl + normalArtwork.getFilename())  // 이미지 URL 생성
+                    .build();
+            })
+            .collect(Collectors.toList());
+    }
 }
