@@ -32,6 +32,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -233,6 +234,7 @@ public class GalleryService {
 
     // 장르에 해당하는 미술품 50개 랜덤으로 가져오기
     @Transactional(readOnly = true)
+    @Cacheable(value = "artworksByGenre", key = "#genreLabel")
     public List<ArtworkResponse> getRandomArtworksByGenre(String genreLabel) {
         // 1. 입력받은 genreLabel을 대문자로 변환하여 Enum에서 확인
         String formattedGenreLabel = genreLabel.trim().toUpperCase();  // 입력값을 대문자로 변환
