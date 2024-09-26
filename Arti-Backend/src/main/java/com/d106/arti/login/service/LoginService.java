@@ -5,6 +5,7 @@ import com.d106.arti.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,9 +26,11 @@ public class LoginService {
     }
 
     public Integer register(String email, String password, String nickname, String image) {
+        BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = bcryptPasswordEncoder.encode(password);
         Member member = Member.builder()
             .email(email)
-            .password(password)
+            .password(encodedPassword)
             .nickname(nickname)
             .image(image)
             .build();
