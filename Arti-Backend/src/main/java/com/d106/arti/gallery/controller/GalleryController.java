@@ -106,5 +106,15 @@ public class GalleryController {
         return ResponseEntity.ok(artworks);
     }
 
+    // 특정 장르에 대한 랜덤 미술품 50개 조회
+    @GetMapping("/artworks/random")
+    @Operation(summary = "특정 장르의 미술품 랜덤 조회", description = "특정 장르에 속한 미술품을 랜덤하게 50개 조회하는 API, 검색시 _중간에 넣고 검색")
+    public ResponseEntity<List<ArtworkResponse>> getRandomArtworksByGenre(@RequestParam String genreLabel) {
+        // 장르 레이블로 미술품 조회 서비스 호출
+        List<ArtworkResponse> randomArtworks = galleryService.getRandomArtworksByGenre(genreLabel);
+        // 조회된 미술품 목록을 반환
+        return ResponseEntity.ok(randomArtworks);
+    }
+
 
 }
