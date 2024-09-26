@@ -22,6 +22,7 @@ import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.gallery.dto.request.GalleryRequest;
 import com.d106.arti.gallery.dto.request.ThemeRequest;
 import com.d106.arti.gallery.dto.response.GalleryResponse;
+import com.d106.arti.gallery.dto.response.SubscribedGalleryResponse;
 import com.d106.arti.gallery.dto.response.ThemeResponse;
 import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.gallery.repository.ThemeRepository;
@@ -276,4 +277,27 @@ public class GalleryService {
             })
             .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<SubscribedGalleryResponse> getSubscribedGalleriesByMemberId(Integer memberId) {
+        // memberId로 Member 조회
+        Member member = memberRepository.findById(memberId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid memberId: " + memberId));
+
+        // Member의 구독된 갤러리 ID 리스트 조회
+        List<Integer> subscribedGalleryIds = member.getSubscribedGalleryIds();
+
+        // 갤러리 ID 목록으로 갤러리들 조회
+        List<Gallery> galleries = galleryRepository.findAllByIdIn(subscribedGalleryIds);
+
+        // 조회된 갤러리들을 SubscribedGalleryResponse로 변환하여 반환
+        return galleries.stream()
+            .map(SubscribedGalleryResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+
+
+
+
 }

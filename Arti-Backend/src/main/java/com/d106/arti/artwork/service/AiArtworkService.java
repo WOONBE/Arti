@@ -38,11 +38,9 @@ public class AiArtworkService {
     public AiArtworkResponse createAiArtwork(AiArtworkRequest request) {
         Artwork originalImage = normalArtworkRepository.findById(request.getOriginalImageId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK));
+
         Member member = memberRepository.findById(request.getMemberId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
-
-//        Theme theme = themeRepository.findById(request.getThemeId())
-//                .orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
 
         Theme theme = themeRepository.findById(request.getThemeId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
