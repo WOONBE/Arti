@@ -49,8 +49,8 @@ class MyGalleryThemeAdapter(val context: Context) : ListAdapter<MyGalleryThemeIt
 
                 imageView.layoutParams = params
 
-                Glide.with(context)
-                    .load(imageResId)
+                Glide.with(gridLayout.context)
+                    .load(imageResId.imageUrl)
                     .into(imageView)
 
                 gridLayout.addView(imageView)

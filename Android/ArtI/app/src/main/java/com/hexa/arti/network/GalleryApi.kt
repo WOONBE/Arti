@@ -4,8 +4,10 @@ import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponse
+import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import okhttp3.ResponseBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -26,7 +28,7 @@ interface GalleryApi  {
     suspend fun postGalleryTheme(@Path("galleryId") galleryId: Int) : Response<ResponseBody>
 
     @PUT("galleries/{galleryId}")
-    suspend fun updateMyGallery(@Path("galleryId") galleryId: Int) : Response<ResponseBody>
+    suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Body updateGalleryDto : UpdateGalleryDto) : Response<ResponseBody>
 
     @PUT("galleries/themes/{themeId")
     suspend fun updateMyGalleryTheme(@Path("themeId") themeId: Int): Response<ResponseBody>

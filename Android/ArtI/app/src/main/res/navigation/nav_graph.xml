@@ -88,6 +88,12 @@
         android:id="@+id/artGalleryDetailFragment"
         android:name="com.hexa.arti.ui.artGalleryDetail.ArtGalleryDetailFragment"
         android:label="ArtGalleryDetailFragment" >
+        <argument
+            android:name="galleryId"
+            app:argType="integer"
+            android:defaultValue="1">
+
+        </argument>
         <action
             android:id="@+id/action_artGalleryDetailFragment_to_artDetailFragment"
             app:destination="@id/artDetailFragment"/>
@@ -99,6 +105,18 @@
         <argument
             android:name="imgId"
             app:argType="integer" />
+        <argument
+            android:name="imgUrl"
+            app:argType="string" />
+        <argument
+            android:name="imgYear"
+            app:argType="string" />
+        <argument
+            android:name="imgArtist"
+            app:argType="string" />
+        <argument
+            android:name="imgTitle"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/artBannerFragment"

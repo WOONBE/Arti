@@ -3,10 +3,13 @@ package com.hexa.arti.repository
 import com.google.gson.Gson
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponseItem
+import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse
 import com.hexa.arti.network.GalleryApi
 import com.hexa.arti.util.asArtist
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class ArtGalleryRepositoryImpl @Inject constructor(
@@ -44,7 +47,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
                     val artworkResult = galleryAPI.getGalleryThemeArtwork(themeItem.id)
                     if (artworkResult.isSuccessful) {
                         val artworkList = artworkResult.body() ?: emptyList()
-                        val imageUrls = artworkList.map { it.imageUrl } // 이미지 URL만 추출
+                        val imageUrls = artworkList.map { it } // 이미지 URL만 추출
 
                         // MyGalleryThemeItem 생성
                         MyGalleryThemeItem(
@@ -63,6 +66,27 @@ class ArtGalleryRepositoryImpl @Inject constructor(
                 }
                 return Result.success(myGalleryThemeItems)
             }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
+    override suspend fun updateArtGallery(galleryId: Int,updateGalleryDto: UpdateGalleryDto): Result<ResponseBody> {
+        val result = galleryAPI.updateMyGallery(galleryId,updateGalleryDto)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+
             return Result.failure(Exception())
         } else {
             val errorResponse =

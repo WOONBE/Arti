@@ -10,14 +10,17 @@ import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
 import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryThemeAdapter
 import com.hexa.arti.util.navigate
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -25,14 +28,14 @@ import java.io.FileOutputStream
 
 private const val TAG = "MyGalleryFragment"
 
+@AndroidEntryPoint
 class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragment_my_gallery){
 
     private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
-
+    private val myGalleryViewModel : MyGalleryViewModel by viewModels()
     override fun init() {
 
         with(binding){
-
             adapter = MyGalleryThemeAdapter(requireContext())
             myGalleryThemeRv.adapter = adapter
 
@@ -44,6 +47,10 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                         .load(it.image)
                         .into(myGalleryThumbnailIv)
                     myGalleryInfoEt.setText(it.description)
+
+                    myGalleryViewModel.getGalleryDto(updateGalleryDto = UpdateGalleryDto(it.description,it.image, it.name,it.ownerId))
+
+
                 }
                 // 테마
                 myGalleryTheme.observe(viewLifecycleOwner){
@@ -56,10 +63,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         initEvent()
     }
     private lateinit var adapter: MyGalleryThemeAdapter
-    private  val sampleData = listOf(
-        MyGalleryThemeItem(1,"병현이의 절망", listOf("")),
-        MyGalleryThemeItem(2,"미술관 테마2", listOf(""))
-    )
+
 
     private var initName = ""
     private var initInfo = ""
@@ -90,6 +94,8 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     isFocusable = false
                     isEnabled = false
                 }
+                myGalleryViewModel.updateGalleryName(myGalleryNameTv.text.toString(),1)
+
             }
             // 미술관 이름 변경 취소 버튼
             myGalleryNameCancelBtn.setOnClickListener {
@@ -131,6 +137,9 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     isFocusableInTouchMode = false
                     isEnabled = false
                 }
+
+                myGalleryViewModel.updateGalleryDescription(myGalleryInfoEt.text.toString(),1)
+
             }
 
             // 소개글 수정 취소 버튼
@@ -149,7 +158,8 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
             // 미술관 실행 버튼
             myGalleryPlayBtn.setOnClickListener {
-                navigate(R.id.action_myGalleryHomeFragment_to_artGalleryDetailFragment)
+                val action = MyGalleryHomeFragmentDirections.actionMyGalleryHomeFragmentToArtGalleryDetailFragment(1)
+                navigate(action)
             }
             // 썸네일 이미지 클릭
             myGalleryThumbnailIv.setOnClickListener {
