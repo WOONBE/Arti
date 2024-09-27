@@ -4,8 +4,11 @@ services:
     container_name: fastapi
     volumes:
       - /home/ubuntu/artwork:/artwork/images
+      - /home/ubuntu/music:/music/audio
     networks:
       - arti
+    ports:
+      - 9000:8080
 
 networks:
   arti:

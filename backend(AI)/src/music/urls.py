@@ -19,3 +19,7 @@ def listen_music(gallery_id : int, db : Session = Depends(get_db)):
 def delete_music(gallert_id : int, db : Session = Depends(get_db)):
     result = delete_music_db(gallert_id, db)
     return result
+
+@router.get('{music_path}')
+def show_music(music_path : str):
+    return 

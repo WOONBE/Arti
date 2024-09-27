@@ -41,7 +41,7 @@ def generation_music(gallery_id, db:Session):
             audio_data = audio_data[:-int(samples_to_trim)]  # Trim the last 5 seconds
 
 
-        audio_save_directory = 'audio'
+        audio_save_directory = '/music/audio'
         os.makedirs(audio_save_directory, exist_ok=True)
         wav_file_name = f"generated_audio_{gallery_id}.wav"
         wav_file_path = os.path.join(audio_save_directory, wav_file_name).replace('\\', '/')
@@ -53,7 +53,7 @@ def generation_music(gallery_id, db:Session):
         db.add(new_audio)
         db.commit()
 
-        result = os.path.join('https://j11d106.p.ssafy.io/static/', wav_file_path)
+        result = os.path.join('http://j11d106.p.ssafy.io:9000/music/', wav_file_path)
 
         return result
 
@@ -77,6 +77,10 @@ def delete_music_db(gallery_id, db:Session):
 
 def get_music(gallery_id, db : Session):
     data = db.query(Audio).filter(Audio.gallery_id == gallery_id).first()
-    wav_file_path = os.path.join('https://j11d106.p.ssafy.io/static/', data.audio_path)
+    wav_file_path = os.path.join('http://j11d106.p.ssafy.io:9000/music/', data.audio_path)
 
     return wav_file_path
+
+
+def show_music_base(music_path):
+    return
