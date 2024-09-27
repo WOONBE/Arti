@@ -91,9 +91,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         }
 
         //with paging
-        viewModel.artworkPagingData.observe(viewLifecycleOwner) { pagingData ->
-            artworkPagingAdapter.submitData(lifecycle, pagingData)
-        }
+//        viewModel.artworkPagingData.observe(viewLifecycleOwner) { pagingData ->
+//            artworkPagingAdapter.submitData(lifecycle, pagingData)
+//        }
 
         viewModel.artistResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {

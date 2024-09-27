@@ -15,7 +15,6 @@ import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtistRepository
-import com.hexa.arti.ui.search.paging.ArtworkPagingSource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,16 +34,16 @@ class SearchViewModel @Inject constructor(
 
     private val _searchQuery = MutableLiveData<String>()
 
-    val artworkPagingData = _searchQuery.switchMap { queryString ->
-        Pager(
-            config = PagingConfig(
-                pageSize = 5,
-                enablePlaceholders = false,
-                maxSize = 15
-            ),
-            pagingSourceFactory = { ArtworkPagingSource(artWorkRepository, queryString) }
-        ).liveData.cachedIn(viewModelScope)
-    }
+//    val artworkPagingData = _searchQuery.switchMap { queryString ->
+//        Pager(
+//            config = PagingConfig(
+//                pageSize = 5,
+//                enablePlaceholders = false,
+//                maxSize = 15
+//            ),
+//            pagingSourceFactory = { ArtworkPagingSource(artWorkRepository, queryString) }
+//        ).liveData.cachedIn(viewModelScope)
+//    }
 
     fun getArtWorkById(id: Int) {
         viewModelScope.launch {
