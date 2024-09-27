@@ -1,5 +1,6 @@
 package com.hexa.arti.repository
 
+import androidx.paging.PagingSource
 import com.google.gson.Gson
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
@@ -30,7 +31,7 @@ class ArtWorkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getArtWorkByString(keyword: String): Result<List<Artwork>> {
+    override suspend fun getArtWorksByString(keyword: String): Result<List<Artwork>> {
         val result = artWorkApi.getArtWorksByString(keyword)
         if (result.isSuccessful) {
             result.body()?.let {
@@ -47,5 +48,9 @@ class ArtWorkRepositoryImpl @Inject constructor(
                 )
             )
         }
+    }
+
+    override suspend fun getArtWorksByStringWithPaging(keyword: String): PagingSource<Int, Artwork> {
+        TODO("Not yet implemented")
     }
 }

@@ -6,4 +6,7 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class ApplicationClass : Application() {
 
+    companion object{
+        val REPRESENT_ARTWORKS = listOf("")
+    }
 }

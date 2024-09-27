@@ -8,6 +8,7 @@ import okhttp3.Response
 //        val request = chain.request()
 //        val response = chain.proceed(request)
 //        if (response.isSuccessful.not() && response.code == 404) {
+//           throw APiExcpetion()
 //            return
 //        }
 //        return response

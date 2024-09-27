@@ -22,6 +22,7 @@ import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
+import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -34,17 +35,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     private val artMuseumAdapter = ArtMuseumAdapter {
         Log.d("확인", "미술관 아이템 클릭")
     }
+
     private val artAdapter = ArtworkAdapter {
         Log.d("확인", "작품 아이템 클릭")
     }
-    private val artistAdapter = ArtistAdapter { artist ->
-        moveToArtistDetailFragment(artist)
+
+    private val artworkPagingAdapter = ArtworkPagingAdapter {
+        Log.d("확인", "페이징 아이템 클릭")
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
-
+    private val artistAdapter = ArtistAdapter { artist ->
+        moveToArtistDetailFragment(artist)
     }
 
     override fun init() {
@@ -79,6 +80,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private fun initUIState() {
 
+        //without paging
         viewModel.artworkResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.tvNoResultArtwork.visibility = View.VISIBLE
@@ -87,6 +89,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             }
             artAdapter.submitList(it)
         }
+
+        //with paging
+//        viewModel.artworkPagingData.observe(viewLifecycleOwner) { pagingData ->
+//            artworkPagingAdapter.submitData(lifecycle, pagingData)
+//        }
 
         viewModel.artistResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
@@ -97,9 +104,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             }
             artistAdapter.submitList(it)
         }
+
     }
 
-    private fun updateConstraintArtist(){
+    private fun updateConstraintArtist() {
         val constraintSet = ConstraintSet()
         constraintSet.clone(binding.clSearchResult)
 
@@ -115,7 +123,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private fun initAdapters() {
         binding.rvArtMuseumResult.adapter = artMuseumAdapter
-        binding.rvArtResult.adapter = artAdapter
+        binding.rvArtResult.adapter = artworkPagingAdapter
         binding.rvArtistResult.adapter = artistAdapter
         val layoutManager =
             GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
@@ -134,7 +142,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         )
 
         artMuseumAdapter.submitList(mockArtMuseumData)
-        artAdapter.submitList(mockArtData)
+//        artAdapter.submitList(mockArtData)
     }
 
     private fun initViews() {
@@ -169,7 +177,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
                 val keyword = v.text.toString()
 
-                viewModel.getArtworkByString(keyword)
+//                viewModel.getArtworkByString(keyword)
+
+                viewModel.updateQuery(keyword)
                 viewModel.getArtistByString(keyword)
 
                 viewModel.state = RESULT_STATE
@@ -280,8 +290,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             .alpha(1f)
             .setDuration(150)
 
-
-
         mainActivity.hideBottomNav(false)
     }
 
@@ -307,6 +315,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 artist
             )
         )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
+
     }
 
 
