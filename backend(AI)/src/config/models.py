@@ -62,7 +62,7 @@ class Member(Base):
 
     artworks = relationship("Artwork", back_populates="member")
     galleries = relationship("Gallery", back_populates="member")
-    themes = relationship("Theme", back_populates="member")
+    # themes = relationship("Theme", back_populates="member")
 
 class Gallery(Base):
     __tablename__ = 'gallery'
@@ -85,19 +85,18 @@ class Theme(Base):
 
     theme_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     gallery_id = Column(Integer, ForeignKey("gallery.gallery_id"))
-    member_id = Column(Integer, ForeignKey("member.member_id"))
     create_date = Column(DateTime)
     update_date = Column(DateTime(timezone=True))
     theme_name = Column(VARCHAR(50))
 
     artworks = relationship("Artwork", back_populates="theme")
-    member = relationship("Member", back_populates="themes")
+    # member = relationship("Member", back_populates="themes")
     artwork_theme = relationship("Artwork_Theme", back_populates="theme")
 
 class Artwork_Theme(Base):
     __tablename__ = 'artwork_theme'
 
-    artwork_theme_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     artwork_id = Column(Integer, ForeignKey("artwork.artwork_id"))
     description = Column(VARCHAR(255))
     theme_id = Column(Integer, ForeignKey("theme.theme_id"))

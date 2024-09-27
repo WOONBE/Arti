@@ -16,8 +16,8 @@ def generation_music(gallery_id, db:Session):
 
         #image2text
         captioner = pipeline("image-to-text", model = "Salesforce/blip-image-captioning-base")
-        result = captioner(os.path.join("C:/Users/SSAFY/Desktop/wikiart", image_path.gallery_img))
-        # result = captioner(os.path.join('https://j11d106.p.ssafy.io/static/', image_path.gallery_img))
+        # result = captioner(os.path.join("C:/Users/SSAFY/Desktop/wikiart", image_path.gallery_img))
+        result = captioner(os.path.join('https://j11d106.p.ssafy.io/static/', image_path.gallery_img))
 
         # text2music
         processor = AutoProcessor.from_pretrained("facebook/musicgen-small")

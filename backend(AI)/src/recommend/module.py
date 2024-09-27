@@ -464,7 +464,8 @@ def compute_gallery_vector_batch(artworks: List[str], model, device):
 
     imgs = []
     for artwork in artworks:
-        artwork_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", artwork)
+        # artwork_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", artwork)
+        artwork_path = os.path.join("/artwork/images", artwork)
         if not os.path.exists(artwork_path):
             continue
         img = Image.open(artwork_path).convert('RGB')
@@ -592,8 +593,12 @@ def recommend(user_id, db: Session):
     # 사용자 미술관 정보 추출
     user_gallery = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
     user_gallery_path = user_gallery.gallery_img
+
     user_gallery_vector = compute_gallery_vector_batch([user_gallery_path], model, device)
 
+    if user_gallery_vector is None:
+        raise ValueError("User gallery vector could not be computed.")
+    
     all_gallery_vector = compute_gallery_vector_batch(art_gallery_data, model, device)
 
     if all_gallery_vector is None:

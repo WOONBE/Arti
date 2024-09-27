@@ -92,6 +92,6 @@ def transfer_image(content_image:UploadFile = File(), style_image : int = Form()
     image_path = os.path.join(save_dir, image_filename)
     image_pil.save(image_path)
 
-    image_path = os.path.join(save_dir, image_filename)
+    image_path = os.path.join('https://j11d106.p.ssafy.io/static/generated_images', image_filename)
 
     return image_path
