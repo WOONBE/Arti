@@ -30,7 +30,8 @@ class HomeFragment :
         binding.viewpager2.adapter = ViewpageAdapter(
             onPlayClick = { itemNumber ->
                 Log.d("확인", "클릭 확인요 ${itemNumber}")
-                navigate(R.id.action_homeFragment_to_artGalleryDetailFragment)
+                val action = HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(1)
+                navigate(action)
             },
             onSliding = {
                 binding.viewpager2.isUserInputEnabled = false

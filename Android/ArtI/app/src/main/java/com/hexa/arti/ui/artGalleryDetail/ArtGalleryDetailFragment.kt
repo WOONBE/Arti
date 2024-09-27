@@ -9,34 +9,43 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentArtGalleryDetailBinding
 import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.artGalleryDetail.adapter.GalleryDetailViewPagerAdapter
 import com.hexa.arti.ui.artGalleryDetail.adapter.GalleryThemeMenuAdapter
 import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private const val TAG = "ArtGalleryDetailFragmen"
+
+@AndroidEntryPoint
 class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R.layout.fragment_art_gallery_detail) {
 
+    private val args : ArtGalleryDetailFragmentArgs by navArgs()
+
+    private val artGalleryViewModel : ArtGalleryDetailViewModel by viewModels()
     private lateinit var adapter: GalleryDetailViewPagerAdapter
-    private val images = listOf(
-        R.drawable.gallery_example,
-        R.drawable.gallery_sample1,
-        R.drawable.gallery_sample2
-    )
-    private val themeNames = listOf("절망", "사랑", "내 얼굴","절망", "사랑", "내 얼굴")
+
+
+    private var imageSize = 0
 
     private lateinit var mediaPlayer: MediaPlayer
     private var isPlaying = false
     
     override fun init() {
+
+
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             isEnabled = false
             requireActivity().onBackPressed()
@@ -46,23 +55,18 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.galleryThemeRv.adapter = GalleryThemeMenuAdapter(themeNames,
-            onMenuClick = { position ->
-                Log.d(TAG, "onViewCreated: $position")
-                binding.galleryThmemTv.text = "테마 : ${themeNames[position]}"
-                binding.viewPager.setCurrentItem(position%3, false)
-                binding.drawerLayout.closeDrawers()
-            })
+        // galleryId를 이용해 테마 데이터 요청
+        val galleryId = args.galleryId
+        artGalleryViewModel.getGallery(galleryId)
 
-        adapter = GalleryDetailViewPagerAdapter(images,
-            onImgClick = { imgId ->
-                val action = ArtGalleryDetailFragmentDirections.actionArtGalleryDetailFragmentToArtDetailFragment(
-                    imgId
-                )
-                navigate(action)
-
-            })
-        binding.viewPager.adapter = adapter
+        // 테마 데이터를 관찰하고 업데이트
+        artGalleryViewModel.galleryDetail.observe(viewLifecycleOwner) { themes ->
+            if (themes != null) {
+                // 테마와 이미지를 처리하여 ViewPager와 메뉴를 설정
+                setupViewPager(themes)
+                setupMenu(themes)
+            }
+        }
         // 기본 아이템 설정
         binding.viewPager.setCurrentItem(0, false) // 첫 번째 실제 아이템으로 이동
 
@@ -92,7 +96,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
             }
 
             galleryDetailRightIb.setOnClickListener {
-                if (binding.viewPager.currentItem < images.size-1 ) {
+                if (binding.viewPager.currentItem < imageSize-1 ) {
                     binding.viewPager.currentItem += 1
 
                 }
@@ -155,9 +159,11 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         when(position){
             0 -> {
                 binding.galleryDetailLeftIb.visibility = View.GONE
+                if( imageSize > 1 ) binding.galleryDetailRightIb.visibility = View.VISIBLE
             }
-            images.size-1 -> {
+            imageSize-1 -> {
                 binding.galleryDetailRightIb.visibility = View.GONE
+                if( imageSize > 1 ) binding.galleryDetailLeftIb.visibility = View.VISIBLE
             }
             else->{
                 binding.galleryDetailRightIb.visibility = View.VISIBLE
@@ -165,6 +171,46 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
             }
         }
     }
+
+    private fun setupViewPager(themes: List<MyGalleryThemeItem>) {
+        val combinedImageList = themes.flatMap { it.images } // 모든 테마의 이미지를 합침
+        // 각 테마의 첫 번째 이미지 인덱스를 저장해둠
+        val themeStartIndices = mutableListOf<Int>()
+        var currentIndex = 0
+        themes.forEach { theme ->
+            themeStartIndices.add(if(currentIndex != 0) currentIndex-1 else 0)
+            currentIndex += theme.images.size
+        }
+        imageSize = currentIndex
+        val adapter = GalleryDetailViewPagerAdapter(combinedImageList) { dto ->
+            val action = ArtGalleryDetailFragmentDirections.actionArtGalleryDetailFragmentToArtDetailFragment(imgId = dto.id, imgTitle = dto.title,imgUrl = dto.imageUrl, imgYear = dto.year, imgArtist = dto.artist)
+            navigate(action)
+        }
+        binding.viewPager.adapter = adapter
+
+        // ViewPager 페이지 변경 시 테마 제목 업데이트
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                // 현재 선택된 페이지가 속한 테마를 찾아 테마 제목을 갱신
+                val currentThemeIndex = themeStartIndices.indexOfLast { it <= position }
+                binding.galleryThmemTv.text = "테마 : ${themes[currentThemeIndex].title}"
+                handlePageSelected(position)
+            }
+        })
+    }
+
+    private fun setupMenu(themes: List<MyGalleryThemeItem>) {
+        val themeTitles = themes.map { it.title }
+        binding.galleryThemeRv.adapter = GalleryThemeMenuAdapter(themeTitles) { position ->
+            val firstImageIndex = themes.subList(0, position).sumOf { it.images.size } // 선택된 테마의 첫 번째 이미지 인덱스 계산
+            binding.viewPager.setCurrentItem(if(firstImageIndex!=0) firstImageIndex-1 else 0, false)
+            binding.galleryThmemTv.text = "테마 : ${themeTitles[position]}"
+            binding.drawerLayout.closeDrawers()
+        }
+    }
+
 
     override fun onResume() {
         super.onResume()

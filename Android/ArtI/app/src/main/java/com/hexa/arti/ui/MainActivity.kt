@@ -21,6 +21,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseActivity
 import com.hexa.arti.databinding.ActivityMainBinding
+import com.hexa.arti.util.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -30,9 +31,11 @@ private const val TAG = "MainActivity"
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private val isFirst = true
+    private var isShowDialog = false
     lateinit var navController : NavController
     private val mainActivityViewModel : MainActivityViewModel by viewModels()
-
+    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by viewModels()
+    private lateinit var loadingDialog: LoadingDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 Log.d(TAG, "onCreate: $token")
             }
         }
+        with(myGalleryActivityViewModel){
+            getMyGallery(1)
+            getMyGalleryTheme(1)
+        }
+
+
     }
 
 
@@ -133,6 +142,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     Log.d(TAG, "setBottomNavHide: etc")
                 }
             }
+        }
+    }
+
+
+    fun showLoadingDialog() {
+        if(!isShowDialog){
+            isShowDialog = true
+            loadingDialog = LoadingDialog()
+            loadingDialog.isCancelable = false
+            loadingDialog.show(supportFragmentManager, "loading")
+        }
+    }
+
+    fun hideLoadingDialog() {
+        if(isShowDialog){
+            isShowDialog = false
+            loadingDialog.dismiss()
         }
     }
 }

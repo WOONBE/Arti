@@ -24,6 +24,7 @@ android {
         versionName = "1.0"
 
         buildConfigField("String","SERVER_URL",properties["SERVER_URL"] as String)
+        buildConfigField("String","FAST_SERVER_URL",properties["FAST_SERVER_URL"] as String)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

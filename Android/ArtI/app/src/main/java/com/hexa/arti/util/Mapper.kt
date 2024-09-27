@@ -16,5 +16,7 @@ fun GetArtistResponse.asArtist() = Artist(
 fun GetArtWorkResponse.asArtwork() = Artwork(
     artworkId = this.artworkId,
     imageUrl = this.filename,
-    title = this.title
+    title = this.title,
+    description = this.description,
+    year = this.year
 )

@@ -152,70 +152,8 @@
                 app:layout_constraintBottom_toTopOf="@id/art_detail_submit_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/art_detail_theme_tv"
-                app:rowCount="2">
+                app:layout_constraintTop_toBottomOf="@+id/art_detail_theme_tv" />
 
-                <RadioButton
-                    android:id="@+id/radioButton1"
-                    style="@style/ArtGalleryRadioBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:checked="true"
-                    android:text="Option 1"
-                    app:layout_column="0"
-                    app:layout_columnWeight="1"
-                    app:layout_row="0" />
-
-                <RadioButton
-                    android:id="@+id/radioButton2"
-                    style="@style/ArtGalleryRadioBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Option 2"
-                    app:layout_column="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="0" />
-
-                <RadioButton
-                    android:id="@+id/radioButton3"
-                    style="@style/ArtGalleryRadioBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Option 3"
-                    app:layout_column="2"
-                    app:layout_columnWeight="1"
-                    app:layout_row="0" />
-
-                <RadioButton
-                    android:id="@+id/radioButton4"
-                    style="@style/ArtGalleryRadioBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Option 4"
-                    app:layout_column="0"
-                    app:layout_columnWeight="1"
-                    app:layout_row="1" />
-
-                <RadioButton
-                    android:id="@+id/radioButton5"
-                    style="@style/ArtGalleryRadioBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Option 5"
-                    app:layout_column="1"
-                    app:layout_columnWeight="1"
-                    app:layout_row="1" />
-
-                <RadioButton
-                    android:id="@+id/radioButton6"
-                    style="@style/ArtGalleryRadioBtn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="Option 6"
-                    app:layout_column="2"
-                    app:layout_columnWeight="1"
-                    app:layout_row="1" />
-            </androidx.gridlayout.widget.GridLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/art_detail_submit_btn"

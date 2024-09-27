@@ -105,5 +105,9 @@
         <item name="android:paddingVertical">10dp</item>
     </style>
 
+    <!-- 전체 화면 다이얼로그 스타일 -->
+    <style name="FullScreenDialog" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
     <style name="Theme.ArtI" parent="Base.Theme.ArtI" />
 </resources>

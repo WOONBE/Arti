@@ -28,15 +28,15 @@ class GenreDetailFragment :
         }
 
         val mockData = listOf(
-            Artwork(artworkId = 0, title = "0번",""),
-            Artwork(artworkId = 1, title = "1번",""),
-            Artwork(artworkId = 2, title = "2번",""),
-            Artwork(artworkId = 3, title = "3번",""),
-            Artwork(artworkId = 4, title = "4번",""),
-            Artwork(artworkId = 5, title = "5번",""),
-            Artwork(artworkId = 6, title = "6번",""),
-            Artwork(artworkId = 7, title = "7번",""),
-            Artwork(artworkId = 8, title = "8번",""),
+            Artwork(artworkId = 0, title = "0번","","",""),
+            Artwork(artworkId = 1, title = "1번","","",""),
+            Artwork(artworkId = 2, title = "2번","","",""),
+            Artwork(artworkId = 3, title = "3번","","",""),
+            Artwork(artworkId = 4, title = "4번","","",""),
+            Artwork(artworkId = 5, title = "5번","","",""),
+            Artwork(artworkId = 6, title = "6번","","",""),
+            Artwork(artworkId = 7, title = "7번","","",""),
+            Artwork(artworkId = 8, title = "8번","","",""),
 
         )
 

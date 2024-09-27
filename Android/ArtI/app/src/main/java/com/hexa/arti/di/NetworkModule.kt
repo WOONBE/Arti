@@ -38,4 +38,14 @@ object NetworkModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    @Singleton
+    @Provides
+    @Named("arti_fast")
+    fun provideArtIFastRetrofit(okHttpClient: OkHttpClient, gson: Gson): Retrofit = Retrofit.Builder()
+        .baseUrl(BuildConfig.FAST_SERVER_URL)  // fastAPI
+        .client(okHttpClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+
+
 }

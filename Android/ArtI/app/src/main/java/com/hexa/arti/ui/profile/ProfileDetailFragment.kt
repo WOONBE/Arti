@@ -24,7 +24,6 @@ import java.io.FileOutputStream
 
 class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layout.fragment_profile_detail) {
 
-
     private val ars : ProfileDetailFragmentArgs by navArgs()
 
     override fun init() {
@@ -49,7 +48,6 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
     }
     private fun initEvent(){
         with(binding){
-            profileDetailBackBtn.setOnClickListener { popBackStack() }
             profilePassBackBtn.setOnClickListener { popBackStack() }
             profileDetailCancelBtn.setOnClickListener { popBackStack() }
             profilePassCancelBtn.setOnClickListener { popBackStack() }
@@ -59,25 +57,7 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
             // 비밀번호 수정
             profilePassModifyBtn.setOnClickListener { popBackStack() }
 
-            myPageProfileIv.setOnClickListener {
-                openImagePicker()
-            }
         }
     }
-
-
-    private val getImageLauncher =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-            uri?.let {
-                handleImage(it,requireContext())
-                binding.myPageProfileIv.setImageURI(it)
-            }
-        }
-    private fun openImagePicker() {
-        getImageLauncher.launch("image/*")
-    }
-
-
-
 
 }

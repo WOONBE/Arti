@@ -1,20 +1,29 @@
 package com.hexa.arti.ui.artmuseum
 
 import android.content.Context
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentMyGalleryHomeBinding
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-class MyGalleryHomeFragment : BaseFragment<FragmentMyGalleryHomeBinding>(R.layout.fragment_my_gallery_home) {
+private const val TAG = "MyGalleryHomeFragment"
+
+@AndroidEntryPoint
+class MyGalleryHomeFragment :
+    BaseFragment<FragmentMyGalleryHomeBinding>(R.layout.fragment_my_gallery_home) {
 
     private val args: MyGalleryHomeFragmentArgs by navArgs()
-
     override fun init() {
         with(binding) {
+
             // ViewPager의 어댑터 설정
             myGalleryViewPager.adapter = MyGalleryAdapter(requireActivity())
 
@@ -26,21 +35,35 @@ class MyGalleryHomeFragment : BaseFragment<FragmentMyGalleryHomeBinding>(R.layou
             myGalleryViewPager.currentItem = initialItem
 
             // 페이지 변경 콜백 등록
-            myGalleryViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            myGalleryViewPager.registerOnPageChangeCallback(object :
+                ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
 
                     if (isAdded) { // 프래그먼트가 액티비티에 연결되어 있는지 체크
                         when (position) {
                             0 -> {
-                                subscribeTv.setTextAppearance(requireContext(), R.style.SelectTextTitle)
-                                myGalleryTv.setTextAppearance(requireContext(), R.style.UnSelectTextTitle)
+                                subscribeTv.setTextAppearance(
+                                    requireContext(),
+                                    R.style.SelectTextTitle
+                                )
+                                myGalleryTv.setTextAppearance(
+                                    requireContext(),
+                                    R.style.UnSelectTextTitle
+                                )
                                 subscribeV.setBackgroundColor(resources.getColor(R.color.black))
                                 myGalleryV.setBackgroundColor(resources.getColor(R.color.disable_color))
                             }
+
                             1 -> {
-                                subscribeTv.setTextAppearance(requireContext(), R.style.UnSelectTextTitle)
-                                myGalleryTv.setTextAppearance(requireContext(), R.style.SelectTextTitle)
+                                subscribeTv.setTextAppearance(
+                                    requireContext(),
+                                    R.style.UnSelectTextTitle
+                                )
+                                myGalleryTv.setTextAppearance(
+                                    requireContext(),
+                                    R.style.SelectTextTitle
+                                )
                                 subscribeV.setBackgroundColor(resources.getColor(R.color.disable_color))
                                 myGalleryV.setBackgroundColor(resources.getColor(R.color.black))
                             }

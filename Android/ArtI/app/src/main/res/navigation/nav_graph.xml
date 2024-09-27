@@ -88,6 +88,12 @@
         android:id="@+id/artGalleryDetailFragment"
         android:name="com.hexa.arti.ui.artGalleryDetail.ArtGalleryDetailFragment"
         android:label="ArtGalleryDetailFragment" >
+        <argument
+            android:name="galleryId"
+            app:argType="integer"
+            android:defaultValue="1">
+
+        </argument>
         <action
             android:id="@+id/action_artGalleryDetailFragment_to_artDetailFragment"
             app:destination="@id/artDetailFragment"/>
@@ -99,6 +105,18 @@
         <argument
             android:name="imgId"
             app:argType="integer" />
+        <argument
+            android:name="imgUrl"
+            app:argType="string" />
+        <argument
+            android:name="imgYear"
+            app:argType="string" />
+        <argument
+            android:name="imgArtist"
+            app:argType="string" />
+        <argument
+            android:name="imgTitle"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/artBannerFragment"
@@ -133,6 +151,12 @@
         android:id="@+id/isSelectCreateImageFragment"
         android:name="com.hexa.arti.ui.artwork.IsSelectCreateImageFragment"
         android:label="IsSelectCreateImageFragment" >
+        <argument
+            android:name="artId"
+            app:argType="integer"
+            android:defaultValue="1">
+
+        </argument>
         <action
             android:id="@+id/action_isSelectCreateImageFragment_to_imageUploadFragment"
             app:destination="@id/imageUploadFragment" />
@@ -144,6 +168,12 @@
         android:id="@+id/imageUploadFragment"
         android:name="com.hexa.arti.ui.artwork.ImageUploadFragment"
         android:label="ImageUploadFragment" >
+        <argument
+            android:name="artId"
+            app:argType="integer"
+            android:defaultValue="1">
+
+        </argument>
         <action
             android:id="@+id/action_imageUploadFragment_to_artworkResultFragment"
             app:destination="@id/artworkResultFragment" />
@@ -152,6 +182,18 @@
         android:id="@+id/artworkResultFragment"
         android:name="com.hexa.arti.ui.artwork.ArtworkResultFragment"
         android:label="ArtworkResultFragment" >
+        <argument
+            android:name="artId"
+            app:argType="string"
+            android:defaultValue="1">
+
+        </argument>
+        <argument
+            android:name="artType"
+            app:argType="integer"
+            android:defaultValue="0">
+
+        </argument>
         <action
             android:id="@+id/action_artworkResultFragment_to_myGalleryHomeFragment2"
             app:destination="@id/myGalleryHomeFragment"

@@ -136,9 +136,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         )
 
         val mockArtData = listOf(
-            Artwork(1, "1", ""),
-            Artwork(2, "1", ""),
-            Artwork(3, "1", ""),
+            Artwork(1, "1","","",""),
+            Artwork(2, "1","","",""),
+            Artwork(3, "1","","",""),
         )
 
         artMuseumAdapter.submitList(mockArtMuseumData)
