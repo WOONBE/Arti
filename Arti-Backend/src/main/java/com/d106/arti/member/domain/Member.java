@@ -1,10 +1,8 @@
 package com.d106.arti.member.domain;
 
 import com.d106.arti.global.common.BaseEntity;
-import com.d106.arti.gallery.domain.Subscription; // 대응 관계 추가함!
 import jakarta.persistence.*;
 
-import com.d106.arti.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
