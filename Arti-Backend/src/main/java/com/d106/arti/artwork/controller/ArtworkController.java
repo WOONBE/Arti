@@ -20,6 +20,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -76,10 +77,20 @@ public class ArtworkController {
         }
     }
 
+//    @GetMapping("/search")
+//    @Operation(summary = "미술품 검색", description = "미술품의 title, description으로 검색하는 API")
+//    public ResponseEntity<List<NormalArtworkResponse>> searchArtworks(@RequestParam String keyword) {
+//        List<NormalArtworkResponse> artworks = artworkService.searchArtworks(keyword);
+//        return ResponseEntity.ok(artworks);
+//    }
+
     @GetMapping("/search")
-    @Operation(summary = "미술품 검색", description = "미술품의 title, description으로 검색하는 API")
-    public ResponseEntity<List<NormalArtworkResponse>> searchArtworks(@RequestParam String keyword) {
-        List<NormalArtworkResponse> artworks = artworkService.searchArtworks(keyword);
+    @Operation(summary = "미술품 검색", description = "키워드를 통해 미술품을 검색하며, 결과를 페이징 처리하여 30개씩 반환하는 API")
+    public ResponseEntity<Page<NormalArtworkResponse>> searchArtworks(
+        @RequestParam String keyword, // 검색 키워드
+        @RequestParam(defaultValue = "1") int page  // 기본적으로 1 페이지부터 시작
+    ) {
+        Page<NormalArtworkResponse> artworks = artworkService.searchArtworks(keyword, page);
         return ResponseEntity.ok(artworks);
     }
 
