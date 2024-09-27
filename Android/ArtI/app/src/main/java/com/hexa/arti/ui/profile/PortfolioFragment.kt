@@ -1,7 +1,6 @@
 package com.hexa.arti.ui.profile
 
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -33,16 +32,16 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private fun initChart() {
         val dataList = ArrayList<PieEntry>()
 
-        dataList.add(PieEntry(3f, "팝아트"))
+        dataList.add(PieEntry(1f, "팝아트"))
         dataList.add(PieEntry(2f, "인상주의"))
         dataList.add(PieEntry(1f, "르네상스"))
-        dataList.add(PieEntry(1f, "입체파"))
+        dataList.add(PieEntry(3f, "입체파"))
         dataList.add(PieEntry(1f, "그 외"))
 
         val dataSet = PieDataSet(dataList, "")
         with(dataSet) {
             sliceSpace = 3f
-            setColors(*ColorTemplate.COLORFUL_COLORS)
+            setColors(*ColorTemplate.JOYFUL_COLORS)
         }
         dataSet.setDrawValues(false)
 
@@ -57,6 +56,12 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
         binding.pcChart.animateY(500)
         binding.pcChart.invalidate()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initChart()
     }
 
 }

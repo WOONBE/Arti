@@ -27,6 +27,7 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
         .build()
+    
 
     @Singleton
     @Provides

@@ -26,6 +26,11 @@ viewpager2 = "1.1.0"
 gridlayout = "1.0.0"
 #datastore
 datastore = "1.1.1"
+#paging3
+paging3 = "3.1.1"
+#piechart
+piechart = "v3.1.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -68,6 +73,11 @@ androidx-drawerlayout = { module = "androidx.drawerlayout:drawerlayout", version
 androidx-gridlayout = { group = "androidx.gridlayout", name = "gridlayout", version.ref = "gridlayout" }
 #datastore
 datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+#paging3
+paging3 = {group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "paging3"}
+#piechart
+piechart = {group = "com.github.PhilJay", name = "MPAndroidChart",version.ref = "piechart"}
+
 [bundles]
 network = ["retrofit2", "okhttp3", "okhttp3-logging", "gson"]
 
