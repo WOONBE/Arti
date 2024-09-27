@@ -217,12 +217,16 @@ public class GalleryService {
                         .title(aiArtwork.getAiArtworkTitle()) // AI 작품의 제목 사용
                         .description(aiArtwork.getArtworkImage()) // 이미지를 설명으로 예시
                         .imageUrl(aiArtwork.getArtworkImage())
+                        .year(aiArtwork.getCreateDate().toString())
+                        .artist(aiArtwork.getMember().getNickname())
                         .build();
                 } else if (artwork instanceof NormalArtWork) {
                     NormalArtWork normalArtwork = (NormalArtWork) artwork;
                     return ArtworkResponse.builder()
                         .id(normalArtwork.getId())
                         .title(normalArtwork.getTitle()) // 일반 작품의 제목 사용
+                        .artist(normalArtwork.getArtist().getEngName())
+                        .year(normalArtwork.getYear())
                         .description(normalArtwork.getDescription()) // 일반 작품의 설명
                         .imageUrl(imageBaseUrl+normalArtwork.getFilename())
                         .build();
@@ -271,6 +275,8 @@ public class GalleryService {
                 return ArtworkResponse.builder()
                     .id(normalArtwork.getId())
                     .title(normalArtwork.getTitle())  // 일반 작품의 제목 사용
+                    .artist(normalArtwork.getArtist().getEngName())
+                    .year(normalArtwork.getYear())
                     .description(normalArtwork.getDescription())  // 일반 작품의 설명
                     .imageUrl(imageBaseUrl + normalArtwork.getFilename())  // 이미지 URL 생성
                     .build();
