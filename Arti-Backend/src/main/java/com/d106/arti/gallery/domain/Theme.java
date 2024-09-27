@@ -60,6 +60,7 @@ public class Theme extends BaseEntity {
         artwork.getArtworkThemes().add(artworkTheme);  // Artwork에도 추가
     }
 
+
     // 연관관계 메서드: Artwork 삭제
     public void removeArtwork(Artwork artwork) {
         this.artworks.removeIf(artworkTheme -> artworkTheme.getArtwork().equals(artwork));
