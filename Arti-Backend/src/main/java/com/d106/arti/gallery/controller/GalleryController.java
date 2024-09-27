@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/galleries")
@@ -76,13 +77,30 @@ public class GalleryController {
         return ResponseEntity.ok().build();
     }
 
-    // 7. 미술관 생성
-    @PostMapping
-    @Operation(summary = "미술관 생성", description = "새로운 미술관을 생성하는 API")
-    public ResponseEntity<GalleryResponse> createGallery(@RequestBody GalleryRequest galleryRequest) {
-        GalleryResponse galleryResponse = galleryService.createGallery(galleryRequest);
-        return ResponseEntity.ok(galleryResponse);
-    }
+
+
+
+//    // 7. 미술관 생성
+//    @PostMapping
+//    @Operation(summary = "미술관 생성", description = "새로운 미술관을 생성하는 API")
+//    public ResponseEntity<GalleryResponse> createGallery(@RequestBody GalleryRequest galleryRequest) {
+//        GalleryResponse galleryResponse = galleryService.createGallery(galleryRequest);
+//        return ResponseEntity.ok(galleryResponse);
+//    }
+//// 7. 미술관 생성 (MultipartFile로 이미지 업로드)
+//    @PostMapping
+//    @Operation(summary = "미술관 생성", description = "새로운 미술관을 생성하는 API")
+//    public ResponseEntity<GalleryResponse> createGallery(
+//        @RequestPart("galleryRequest") GalleryRequest galleryRequest,
+//        @RequestPart("image") MultipartFile image) {
+//
+//        // 이미지 파일을 GalleryRequest에 설정
+//        galleryRequest.updateImage(image);
+//
+//        // 서비스 호출하여 갤러리 생성
+//        GalleryResponse galleryResponse = galleryService.createGallery(galleryRequest);
+//        return ResponseEntity.ok(galleryResponse);
+//    }
 
     // 8. 미술관 상세 조회
     @GetMapping("/{galleryId}")
@@ -92,13 +110,55 @@ public class GalleryController {
         return ResponseEntity.ok(galleryResponse);
     }
 
-    // 9. 미술관 정보 수정
+
+
+//    // 9. 미술관 정보 수정
+//    @PutMapping("/{galleryId}")
+//    @Operation(summary = "미술관 정보 수정", description = "특정 미술관의 정보를 수정하는 API")
+//    public ResponseEntity<GalleryResponse> updateGallery(@PathVariable Integer galleryId, @RequestBody GalleryRequest galleryRequest) {
+//        GalleryResponse updatedGallery = galleryService.updateGallery(galleryId, galleryRequest);
+//        return ResponseEntity.ok(updatedGallery);
+//    }
+//    // 9. 미술관 정보 수정 (MultipartFile로 이미지 업로드)
+//    @PutMapping("/{galleryId}")
+//    @Operation(summary = "미술관 정보 수정", description = "특정 미술관의 정보를 수정하는 API")
+//    public ResponseEntity<GalleryResponse> updateGallery(
+//        @PathVariable Integer galleryId,
+//        @RequestPart("galleryRequest") GalleryRequest galleryRequest,
+//        @RequestPart(value = "image", required = false) MultipartFile image) {
+//
+//        // 이미지 파일이 있으면 설정
+//        if (image != null) {
+//            galleryRequest.updateImage(image);
+//        }
+//
+//        // 서비스 호출하여 갤러리 정보 수정
+//        GalleryResponse updatedGallery = galleryService.updateGallery(galleryId, galleryRequest);
+//        return ResponseEntity.ok(updatedGallery);
+//    }
+
+
+    // 1. 미술관 생성 (MultipartFile 사용)
+    @PostMapping
+    @Operation(summary = "미술관 생성", description = "새로운 미술관을 생성하는 API")
+    public ResponseEntity<GalleryResponse> createGallery(
+        @RequestPart("galleryRequest") GalleryRequest galleryRequest,
+        @RequestPart("image") MultipartFile image) {
+        GalleryResponse galleryResponse = galleryService.createGallery(galleryRequest, image);
+        return ResponseEntity.ok(galleryResponse);
+    }
+
+    // 2. 미술관 정보 수정 (MultipartFile 사용)
     @PutMapping("/{galleryId}")
     @Operation(summary = "미술관 정보 수정", description = "특정 미술관의 정보를 수정하는 API")
-    public ResponseEntity<GalleryResponse> updateGallery(@PathVariable Integer galleryId, @RequestBody GalleryRequest galleryRequest) {
-        GalleryResponse updatedGallery = galleryService.updateGallery(galleryId, galleryRequest);
+    public ResponseEntity<GalleryResponse> updateGallery(
+        @PathVariable Integer galleryId,
+        @RequestPart("galleryRequest") GalleryRequest galleryRequest,
+        @RequestPart(value = "image", required = false) MultipartFile image) {
+        GalleryResponse updatedGallery = galleryService.updateGallery(galleryId, galleryRequest, image);
         return ResponseEntity.ok(updatedGallery);
     }
+
 
     // 특정 테마에 속한 모든 미술품 조회
     @GetMapping("/{themeId}/artworks")

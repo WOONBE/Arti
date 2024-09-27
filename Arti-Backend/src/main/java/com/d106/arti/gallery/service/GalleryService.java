@@ -13,6 +13,7 @@ import com.d106.arti.artwork.domain.Artwork;
 import com.d106.arti.artwork.domain.ArtworkTheme;
 import com.d106.arti.artwork.domain.NormalArtWork;
 import com.d106.arti.artwork.dto.response.ArtworkResponse;
+import com.d106.arti.artwork.repository.AiArtworkRepository;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 import com.d106.arti.artwork.repository.ArtworkThemeRepository;
 import com.d106.arti.gallery.domain.Gallery;
@@ -29,6 +30,7 @@ import com.d106.arti.gallery.repository.ThemeRepository;
 import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
+import com.d106.arti.storage.StorageService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -53,21 +56,97 @@ public class GalleryService {
     private final ArtworkThemeRepository artworkThemeRepository;
     private final GalleryRepository galleryRepository;
     private final MemberRepository memberRepository;
+    private final StorageService storageService;
+    private final AiArtworkRepository aiArtworkRepository;
 
+//    @Transactional
+//    public GalleryResponse createGallery(GalleryRequest requestDto) {
+//        // 소유자(Member) 조회(로그인 한 멤버와 일치하는지 확인)
+//        Member owner = memberRepository.findById(requestDto.getOwnerId())
+//            .orElseThrow(() -> new BadRequestException(NOT_FOUND_OWNER_ID));
+//
+//        String imageUrl = storageService.storeFile(requestDto.getImage()).getStoreFilename();
+//
+//        // Gallery 엔티티 생성 및 저장
+//        Gallery gallery = Gallery.builder()
+//            .name(requestDto.getName())
+//            .description(requestDto.getDescription())
+////            .image(requestDto.getImage())
+//            .image(imageUrl)
+//            .owner(owner)
+//            .view(0)  // 초기 조회 수는 0
+//            .build();
+//
+//        galleryRepository.save(gallery);
+//        return GalleryResponse.fromEntity(gallery);
+//    }
+//    // 3. 미술관 정보 수정
+//    @Transactional
+//    public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto) {
+//        Gallery gallery = galleryRepository.findById(galleryId)
+//            .orElseThrow(() -> new BadRequestException(NOT_FOUND_GALLERY_ID));
+//
+//        String imageUrl = gallery.getImage();
+//        if (requestDto.getImage() != null && !requestDto.getImage().isEmpty()) {
+//            imageUrl = storageService.storeFile(requestDto.getImage()).getStoreFilename();
+//        }
+//
+//        gallery = Gallery.builder()
+//            .id(gallery.getId())
+//            .name(requestDto.getName())
+//            .description(requestDto.getDescription())
+//            .image(imageUrl)
+//            .view(gallery.getView())  // 기존 조회수 유지
+//            .owner(gallery.getOwner())
+//            .themes(gallery.getThemes())  // 기존 테마 유지
+//            .build();
+//
+//        galleryRepository.save(gallery);
+//        return GalleryResponse.fromEntity(gallery);
+//    }
 
     @Transactional
-    public GalleryResponse createGallery(GalleryRequest requestDto) {
-        // 소유자(Member) 조회(로그인 한 멤버와 일치하는지 확인)
+    public GalleryResponse createGallery(GalleryRequest requestDto, MultipartFile image) {
+        // 소유자(Member) 조회
         Member owner = memberRepository.findById(requestDto.getOwnerId())
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_OWNER_ID));
+
+        // 이미지 저장
+        String imageUrl = storageService.storeFile(image).getStoreFilename();
 
         // Gallery 엔티티 생성 및 저장
         Gallery gallery = Gallery.builder()
             .name(requestDto.getName())
             .description(requestDto.getDescription())
-            .image(requestDto.getImage())
+            .image(imageUrl)  // 저장한 이미지 URL 설정
             .owner(owner)
             .view(0)  // 초기 조회 수는 0
+            .build();
+
+        galleryRepository.save(gallery);
+        return GalleryResponse.fromEntity(gallery);
+    }
+
+    @Transactional
+    public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto, MultipartFile image) {
+        Gallery gallery = galleryRepository.findById(galleryId)
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_GALLERY_ID));
+
+        // 기존 이미지를 유지하거나 새로운 이미지를 저장
+        String imageUrl = gallery.getImage();
+        if (image != null && !image.isEmpty()) {
+            imageUrl = storageService.storeFile(image).getStoreFilename();
+        }
+
+        // Gallery 엔티티 수정 및 저장
+        gallery = Gallery.builder()
+            .id(gallery.getId())
+            .name(requestDto.getName())
+            .description(requestDto.getDescription())
+            .image(imageUrl)
+            .view(gallery.getView())  // 기존 조회 수 유지
+            .owner(gallery.getOwner())
+            .themes(gallery.getThemes())  // 기존 테마 유지
             .build();
 
         galleryRepository.save(gallery);
@@ -82,25 +161,7 @@ public class GalleryService {
         return GalleryResponse.fromEntity(gallery);
     }
 
-    // 3. 미술관 정보 수정
-    @Transactional
-    public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto) {
-        Gallery gallery = galleryRepository.findById(galleryId)
-            .orElseThrow(() -> new BadRequestException(NOT_FOUND_GALLERY_ID));
 
-        gallery = Gallery.builder()
-            .id(gallery.getId())
-            .name(requestDto.getName())
-            .description(requestDto.getDescription())
-            .image(requestDto.getImage())
-            .view(gallery.getView())  // 기존 조회수 유지
-            .owner(gallery.getOwner())
-            .themes(gallery.getThemes())  // 기존 테마 유지
-            .build();
-
-        galleryRepository.save(gallery);
-        return GalleryResponse.fromEntity(gallery);
-    }
 
 
     // 1. 특정 미술관 id를 받아서 테마 전체 조회되게 변경
@@ -143,6 +204,7 @@ public class GalleryService {
         theme.addArtwork(artwork, description);
         themeRepository.save(theme);
     }
+
 
     // 4. 테마에서 미술품 삭제
     @Transactional
