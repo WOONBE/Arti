@@ -24,15 +24,15 @@ class SelectArtworkViewModel @Inject constructor(
     fun getSearchArtWork(search: String){
         Log.d(TAG, "getSearchArtWork: $search")
         viewModelScope.launch {
-            artWorkRepository.getArtWorkByString(search).onSuccess { response ->
-                _artworkResult.value = response
-                Log.d(TAG, "response: $response")
-            }.onFailure { error ->
-                if (error is ApiException) {
-                    Log.d(TAG, "response: ${error.code}")
-                    _artworkResult.value = emptyList()
-                }
-            }
+//            artWorkRepository.getArtWorkByString(search).onSuccess { response ->
+//                _artworkResult.value = response
+//                Log.d(TAG, "response: $response")
+//            }.onFailure { error ->
+//                if (error is ApiException) {
+//                    Log.d(TAG, "response: ${error.code}")
+//                    _artworkResult.value = emptyList()
+//                }
+//            }
         }
     }
 
