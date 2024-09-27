@@ -15,12 +15,13 @@ class ArtworkPagingSource(
         try {
             val page = params.key ?: 1
             artWorkRepository.getArtWorksByString(query).onSuccess { responseArtworks ->
-                Log.d("확인", "검색성공 ${responseArtworks.size}")
                 return LoadResult.Page(
-                    data = responseArtworks,
+                    data = ,
                     prevKey = if (page == 1) null else page - 1,
                     nextKey = if (responseArtworks.isEmpty()) null else page + 1
                 )
+            }.onFailure {  message->
+                Log.d("확인", "실패 ${message}")
             }
             return LoadResult.Page(
                 data = emptyList(),
