@@ -6,9 +6,3 @@ services:
       - /home/ubuntu/artwork:/var/images
     ports:
       - 5000:5000
-    networks:
-      - arti
-
-networks:
-  arti:
-    external: true
