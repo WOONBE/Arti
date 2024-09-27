@@ -36,7 +36,12 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     override fun init() {
 
         with(binding){
-            adapter = MyGalleryThemeAdapter(requireContext())
+            adapter = MyGalleryThemeAdapter(requireContext(), onArtWorkDelete = { themeId, artWorkId ->
+
+                Log.d(TAG, "init: ${themeId} $artWorkId")
+                // 테마 내부 이미지 삭제
+                myGalleryViewModel.deleteThemeDelete(themeId,artWorkId)
+            })
             myGalleryThemeRv.adapter = adapter
 
             with(myGalleryActivityViewModel){

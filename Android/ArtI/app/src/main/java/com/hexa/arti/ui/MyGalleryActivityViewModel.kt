@@ -46,7 +46,6 @@ class MyGalleryActivityViewModel @Inject constructor(
             }.onFailure { error ->
                 if (error is ApiException) {
                     Log.d("확인", "실패 ${error.code} ${error.message}")
-                    _myGallery.value = ArtGalleryResponse("", 0, "", "", 0, 0)
                 }
 
             }

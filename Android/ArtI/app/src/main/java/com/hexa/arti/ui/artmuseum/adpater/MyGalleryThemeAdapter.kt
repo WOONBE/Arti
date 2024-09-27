@@ -2,6 +2,7 @@ package com.hexa.arti.ui.artmuseum.adpater
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -18,10 +19,20 @@ import com.hexa.arti.R
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.ui.artmuseum.util.MyGalleryThemeDiffCallback
 
-class MyGalleryThemeAdapter(val context: Context) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
+private const val TAG = "MyGalleryThemeAdapter"
+
+class MyGalleryThemeAdapter(val context: Context,
+    val onArtWorkDelete: (Int, Int) -> Unit) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
     MyGalleryThemeDiffCallback
 ) {
 
+    override fun getItem(position: Int): MyGalleryThemeItem {
+        return currentList[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return getItem(position).id.toLong()
+    }
     // ViewHolder 정의
     inner class MyGalleryThemeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val themeTitleTv: EditText = view.findViewById(R.id.theme_title_tv)
@@ -36,6 +47,7 @@ class MyGalleryThemeAdapter(val context: Context) : ListAdapter<MyGalleryThemeIt
             themeTitleTv.setText(item.title)
             // 이미지 리스트를 GridLayout에 동적으로 추가 (이미지 로드)
             gridLayout.removeAllViews() // 이전 이미지 제거
+            Log.d(TAG, "bind: ${item.images.size}")
             item.images.forEachIndexed { index, imageResId ->
                 val imageView = LayoutInflater.from(gridLayout.context).inflate(R.layout.gallery_theme_img, gridLayout, false) as ImageView
                 // 크기를 픽셀로 고정
@@ -49,7 +61,7 @@ class MyGalleryThemeAdapter(val context: Context) : ListAdapter<MyGalleryThemeIt
 
                 imageView.layoutParams = params
 
-                Glide.with(gridLayout.context)
+                Glide.with(context)
                     .load(imageResId.imageUrl)
                     .into(imageView)
 
@@ -58,6 +70,8 @@ class MyGalleryThemeAdapter(val context: Context) : ListAdapter<MyGalleryThemeIt
                 // 이미지에 long click listener 추가
                 imageView.setOnLongClickListener {
                     showDeleteConfirmationDialog(imageView.context) {
+                        Log.d(TAG, "bind: ${item.id} ${item.images[index]}")
+                        onArtWorkDelete(item.id,item.images[index].id)
                         removeImage(item, index) // 삭제 확인 후 이미지 삭제
                     }
                     true

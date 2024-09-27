@@ -8,6 +8,7 @@ import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -32,4 +33,8 @@ interface GalleryApi  {
 
     @PUT("galleries/themes/{themeId")
     suspend fun updateMyGalleryTheme(@Path("themeId") themeId: Int): Response<ResponseBody>
+
+
+    @DELETE("/galleries/themes/{themeId}/artworks/{artworkId}")
+    suspend fun deleteThemeArtwork(@Path("themeId") themeId: Int, @Path("artworkId") artworkId : Int) : Response<ResponseBody>
  }

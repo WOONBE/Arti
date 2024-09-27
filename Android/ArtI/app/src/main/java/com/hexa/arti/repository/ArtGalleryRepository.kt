@@ -18,4 +18,10 @@ interface ArtGalleryRepository {
         galleryId : Int,
         updateGalleryDto: UpdateGalleryDto
     ) : Result<ResponseBody>
+
+    suspend fun deleteThemeArtWork(
+        themeId : Int,
+        artworkId : Int
+    ) : Result<ResponseBody>
+
 }

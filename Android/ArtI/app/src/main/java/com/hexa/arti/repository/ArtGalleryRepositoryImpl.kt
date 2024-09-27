@@ -100,4 +100,24 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteThemeArtWork(themeId: Int, artworkId: Int): Result<ResponseBody> {
+        val result = galleryAPI.deleteThemeArtwork(themeId,artworkId)
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
 }

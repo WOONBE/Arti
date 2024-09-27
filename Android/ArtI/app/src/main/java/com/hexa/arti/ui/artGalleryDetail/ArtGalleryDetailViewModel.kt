@@ -18,6 +18,8 @@ class ArtGalleryDetailViewModel @Inject constructor(
     private val galleryRepository: ArtGalleryRepository
 ): ViewModel() {
 
+    private var _currentPage = 0
+
     private val _galleryDetail = MutableLiveData<List<MyGalleryThemeItem>>()
     val galleryDetail : LiveData<List<MyGalleryThemeItem>> = _galleryDetail
 
@@ -34,4 +36,10 @@ class ArtGalleryDetailViewModel @Inject constructor(
         }
     }
 
+    fun getPageNum() : Int{
+        return _currentPage
+    }
+    fun updatePageNum(page : Int){
+        _currentPage = page
+    }
 }

@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artmuseum
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,6 +25,19 @@ class MyGalleryViewModel @Inject constructor(
         }
 
     }
+
+    fun deleteThemeDelete(themeId: Int, artworkId: Int){
+        viewModelScope.launch {
+            galleryRepository.deleteThemeArtWork(themeId,artworkId).onSuccess {
+                response ->
+                Log.d("Init", "$response deleteThemeDelete: success")
+            }.onFailure {
+                error ->
+                Log.d("Init", "$error deleteThemeDelete: fail")
+            }
+        }
+    }
+
 
     fun getGalleryDto(updateGalleryDto: UpdateGalleryDto){
         _updateGalleryDto.value = updateGalleryDto

@@ -65,25 +65,20 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
                 // 테마와 이미지를 처리하여 ViewPager와 메뉴를 설정
                 setupViewPager(themes)
                 setupMenu(themes)
+                // 페이지 복원은 ViewPager가 설정된 후에 한 번만 수행
+                val pageNum = artGalleryViewModel.getPageNum()
+                Log.d(TAG, "Restoring page in onViewCreated: $pageNum")
+                binding.viewPager.setCurrentItem(pageNum, false)
             }
         }
-        // 기본 아이템 설정
-        binding.viewPager.setCurrentItem(0, false) // 첫 번째 실제 아이템으로 이동
+
+        Log.d(TAG, "onViewCreated: ${artGalleryViewModel.getPageNum()}")
+
 
         // 미디어 플레이어 설정 (음악 파일 경로 또는 리소스)
         mediaPlayer = MediaPlayer.create(requireContext(), R.raw.gallery_bgm)
 
         initEvent()
-
-        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                // 페이지가 완전히 선택된 후의 위치를 처리
-                handlePageSelected(position)
-            }
-
-        })
 
     }
 
@@ -159,11 +154,11 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         when(position){
             0 -> {
                 binding.galleryDetailLeftIb.visibility = View.GONE
-                if( imageSize > 1 ) binding.galleryDetailRightIb.visibility = View.VISIBLE
+                binding.galleryDetailRightIb.visibility = View.VISIBLE
             }
             imageSize-1 -> {
                 binding.galleryDetailRightIb.visibility = View.GONE
-                if( imageSize > 1 ) binding.galleryDetailLeftIb.visibility = View.VISIBLE
+                binding.galleryDetailLeftIb.visibility = View.VISIBLE
             }
             else->{
                 binding.galleryDetailRightIb.visibility = View.VISIBLE
@@ -178,7 +173,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         val themeStartIndices = mutableListOf<Int>()
         var currentIndex = 0
         themes.forEach { theme ->
-            themeStartIndices.add(if(currentIndex != 0) currentIndex-1 else 0)
+            themeStartIndices.add(currentIndex)
             currentIndex += theme.images.size
         }
         imageSize = currentIndex
@@ -187,12 +182,14 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
             navigate(action)
         }
         binding.viewPager.adapter = adapter
+        // ViewPager 어댑터가 설정된 후에 페이지 복원
 
         // ViewPager 페이지 변경 시 테마 제목 업데이트
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-
+                Log.d(TAG, "onPageSelected: ${position}")
+                artGalleryViewModel.updatePageNum(position)
                 // 현재 선택된 페이지가 속한 테마를 찾아 테마 제목을 갱신
                 val currentThemeIndex = themeStartIndices.indexOfLast { it <= position }
                 binding.galleryThmemTv.text = "테마 : ${themes[currentThemeIndex].title}"
@@ -204,8 +201,16 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
     private fun setupMenu(themes: List<MyGalleryThemeItem>) {
         val themeTitles = themes.map { it.title }
         binding.galleryThemeRv.adapter = GalleryThemeMenuAdapter(themeTitles) { position ->
+
+            if (themes[position].images.isEmpty()) {
+                // 이미지가 없으면 테마 변경을 막음
+                makeToast("선택된 테마는 작품이 없습니다.")
+                return@GalleryThemeMenuAdapter
+            }
+
             val firstImageIndex = themes.subList(0, position).sumOf { it.images.size } // 선택된 테마의 첫 번째 이미지 인덱스 계산
-            binding.viewPager.setCurrentItem(if(firstImageIndex!=0) firstImageIndex-1 else 0, false)
+
+            binding.viewPager.setCurrentItem(firstImageIndex, false)
             binding.galleryThmemTv.text = "테마 : ${themeTitles[position]}"
             binding.drawerLayout.closeDrawers()
         }
