@@ -14,4 +14,6 @@ public class ArtworkResponse {
     private String title;        // 미술품 제목
     private String description;  // 미술품 설명
     private String imageUrl;
+    private String artist;
+    private String year;
 }
