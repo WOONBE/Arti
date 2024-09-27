@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.search.paging
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.hexa.arti.data.model.artwork.Artwork
@@ -14,6 +15,7 @@ class ArtworkPagingSource(
         try {
             val page = params.key ?: 1
             artWorkRepository.getArtWorksByString(query).onSuccess { responseArtworks ->
+                Log.d("확인", "검색성공 ${responseArtworks.size}")
                 return LoadResult.Page(
                     data = responseArtworks,
                     prevKey = if (page == 1) null else page - 1,

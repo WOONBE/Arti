@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -24,6 +25,7 @@ class SearchViewModel @Inject constructor(
     private val artWorkRepository: ArtWorkRepository,
     private val artistRepository: ArtistRepository,
 ) : ViewModel() {
+    var state = SearchFragment.BASE_STATE
 
     private val _artistResult = MutableLiveData<List<Artist>>()
     val artistResult: LiveData<List<Artist>> = _artistResult
@@ -31,15 +33,18 @@ class SearchViewModel @Inject constructor(
     private val _artworkResult = MutableLiveData<List<Artwork>>()
     val artworkResult: LiveData<List<Artwork>> = _artworkResult
 
-    var state = SearchFragment.BASE_STATE
+    private val _searchQuery = MutableLiveData<String>()
 
-    val artworkPagingData = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { ArtworkPagingSource(artWorkRepository, "query") }
-    ).liveData.cachedIn(viewModelScope)
+    val artworkPagingData = _searchQuery.switchMap { queryString ->
+        Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                enablePlaceholders = false,
+                maxSize = 15
+            ),
+            pagingSourceFactory = { ArtworkPagingSource(artWorkRepository, queryString) }
+        ).liveData.cachedIn(viewModelScope)
+    }
 
     fun getArtWorkById(id: Int) {
         viewModelScope.launch {
@@ -75,6 +80,10 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateQuery(keyword: String){
+        _searchQuery.value = keyword
     }
 
 }
