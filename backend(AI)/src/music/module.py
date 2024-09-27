@@ -53,7 +53,9 @@ def generation_music(gallery_id, db:Session):
         db.add(new_audio)
         db.commit()
 
-        return wav_file_path, wav_file_name
+        result = os.path.join('https://j11d106.p.ssafy.io/static/', wav_file_path)
+
+        return result
 
     except Exception as e:
         db.rollback()
@@ -71,3 +73,10 @@ def delete_music_db(gallery_id, db:Session):
         return 'Susses'
     else:
         return "Not Exist"
+    
+
+def get_music(gallery_id, db : Session):
+    data = db.query(Audio).filter(Audio.gallery_id == gallery_id).first()
+    wav_file_path = os.path.join('https://j11d106.p.ssafy.io/static/', data.audio_path)
+
+    return wav_file_path

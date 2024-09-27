@@ -578,7 +578,7 @@ def custom_base(top_view_galleries, similar_galleries, db: Session):
 
 def recommend(user_id, db: Session):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    model = load_model(r'./src/recommend/best_model(EfficientNetV2).pth', device)
+    model = load_model(r'/src/recommend/best_model(EfficientNetV2).pth', device)
 
     # 일주일간 최다 조회수 미술관 추출(3개)
     top_view_galleries = db.query(Gallery).order_by(Gallery.gallery_view.desc()).limit(3).all()
