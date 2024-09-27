@@ -8,6 +8,7 @@ import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.liveData
 import com.hexa.arti.data.model.artwork.Artwork
@@ -16,6 +17,9 @@ import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,21 +33,9 @@ class SearchViewModel @Inject constructor(
     private val _artistResult = MutableLiveData<List<Artist>>()
     val artistResult: LiveData<List<Artist>> = _artistResult
 
-    private val _artworkResult = MutableLiveData<List<Artwork>>()
-    val artworkResult: LiveData<List<Artwork>> = _artworkResult
+    private val _artworkResult = MutableStateFlow<PagingData<Artwork>>(PagingData.empty())
+    val artWorkResult: StateFlow<PagingData<Artwork>> = _artworkResult.asStateFlow()
 
-    private val _searchQuery = MutableLiveData<String>()
-
-//    val artworkPagingData = _searchQuery.switchMap { queryString ->
-//        Pager(
-//            config = PagingConfig(
-//                pageSize = 5,
-//                enablePlaceholders = false,
-//                maxSize = 15
-//            ),
-//            pagingSourceFactory = { ArtworkPagingSource(artWorkRepository, queryString) }
-//        ).liveData.cachedIn(viewModelScope)
-//    }
 
     fun getArtWorkById(id: Int) {
         viewModelScope.launch {
@@ -57,15 +49,13 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun getArtworkByString(keyword: String) {
+    fun getArtworkByString(keyword: String){
         viewModelScope.launch {
-            artWorkRepository.getArtWorksByString(keyword).onSuccess { response ->
-                _artworkResult.value = response
-            }.onFailure { error ->
-                if (error is ApiException) {
-                    _artworkResult.value = emptyList()
+            artWorkRepository.getArtWorksByStringWithPaging(keyword)
+                .cachedIn(viewModelScope)
+                .collect{
+                    _artworkResult.value = it
                 }
-            }
         }
     }
 
@@ -81,8 +71,6 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun updateQuery(keyword: String){
-        _searchQuery.value = keyword
-    }
+
 
 }

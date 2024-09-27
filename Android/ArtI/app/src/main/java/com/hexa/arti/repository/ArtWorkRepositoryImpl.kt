@@ -1,12 +1,16 @@
 package com.hexa.arti.repository
 
-import androidx.paging.PagingSource
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.google.gson.Gson
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse
 import com.hexa.arti.network.ArtWorkApi
+import com.hexa.arti.ui.search.paging.ArtworkPagingSource
 import com.hexa.arti.util.asArtwork
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ArtWorkRepositoryImpl @Inject constructor(
@@ -35,7 +39,7 @@ class ArtWorkRepositoryImpl @Inject constructor(
         val result = artWorkApi.getArtWorksByString(keyword)
         if (result.isSuccessful) {
             result.body()?.let {
-                return Result.success(it.map { artworkResponse ->  artworkResponse.asArtwork() })
+                return Result.success(it.map { artworkResponse -> artworkResponse.asArtwork() })
             }
             return Result.failure(Exception())
         } else {
@@ -50,7 +54,15 @@ class ArtWorkRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getArtWorksByStringWithPaging(keyword: String): PagingSource<Int, Artwork> {
-        TODO("Not yet implemented")
+    override suspend fun getArtWorksByStringWithPaging(keyword: String): Flow<PagingData<Artwork>> {
+        val pagingSourceFactory = { ArtworkPagingSource(artWorkApi, keyword) }
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 30,
+                enablePlaceholders = false,
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
     }
 }

@@ -2,6 +2,15 @@ package com.hexa.arti.data.model.response
 
 import com.google.gson.annotations.SerializedName
 
+
+data class GetArtWorkPagingResponse(
+    @SerializedName("content")
+    val artWorks: List<GetArtWorkResponse>,
+
+    @SerializedName("totalPages")
+    val totalPages: Int,
+)
+
 data class GetArtWorkResponse(
     val artist: String,
     val artistKo: String,
@@ -18,3 +27,4 @@ data class GetArtWorkResponse(
     val width: Int,
     val year: String
 )
+

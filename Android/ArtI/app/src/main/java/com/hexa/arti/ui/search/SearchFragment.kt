@@ -10,7 +10,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
@@ -80,20 +82,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private fun initUIState() {
 
-        //without paging
-        viewModel.artworkResult.observe(viewLifecycleOwner) {
-            if (it.isEmpty()) {
-                binding.tvNoResultArtwork.visibility = View.VISIBLE
-            } else {
-                binding.tvNoResultArtwork.visibility = View.GONE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.artWorkResult.collect { pagingData ->
+                    artworkPagingAdapter.submitData(pagingData)
+                }
             }
-            artAdapter.submitList(it)
         }
-
-        //with paging
-//        viewModel.artworkPagingData.observe(viewLifecycleOwner) { pagingData ->
-//            artworkPagingAdapter.submitData(lifecycle, pagingData)
-//        }
 
         viewModel.artistResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
@@ -179,7 +174,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
 //                viewModel.getArtworkByString(keyword)
 
-                viewModel.updateQuery(keyword)
+                viewModel.getArtworkByString(keyword)
                 viewModel.getArtistByString(keyword)
 
                 viewModel.state = RESULT_STATE
