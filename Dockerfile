@@ -7,8 +7,5 @@ FROM openjdk:17-jdk-slim
 # Copy the JAR file from the host machine to the container
 COPY build/libs/Arti-Backend-0.0.1-SNAPSHOT.jar Arti-Backend-0.0.1-SNAPSHOT.jar
 
-# Expose the port that your application will run on (optional)
-EXPOSE 5000
-
 # Command to run the JAR file
 ENTRYPOINT ["java", "-jar", "Arti-Backend-0.0.1-SNAPSHOT.jar"]
