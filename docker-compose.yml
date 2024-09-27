@@ -5,4 +5,10 @@ services:
     volumes:
       - /home/ubuntu/artwork:/var/images
     ports:
-      - 5000:5000
+      - 8080:8080
+    networks:
+      - arti
+
+networks:
+  arti:
+    external: true
