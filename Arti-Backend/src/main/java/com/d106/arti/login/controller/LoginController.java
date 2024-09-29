@@ -4,6 +4,7 @@ import com.d106.arti.login.dto.request.VerificationRequest;
 import com.d106.arti.login.service.*;
 import com.d106.arti.storage.StorageService;
 import com.d106.arti.storage.UploadFile;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ public class LoginController {
 
     // 1. 회원가입 요청 (이메일 인증번호 전송)
     @PostMapping("/request-auth-number")
+    @Operation(summary = "이메일 인증번호 전송", description = "이메일 인증번호 전송을 위한 API")
     public ResponseEntity<?> requestSignUp(@RequestBody RegisterRequest registerRequest) {
         String email = registerRequest.getEmail();
         String code = mailService.sendMail(email);
@@ -35,6 +37,7 @@ public class LoginController {
 
     // 2. 이메일 인증 (인증번호 확인)
     @PostMapping("/verify-code")
+    @Operation(summary = "이메일 인증번호 확인", description = "이메일 인증번호 확인을 위한 API")
     public ResponseEntity<?> verifyCode(@RequestBody VerificationRequest verificationRequest) {
         boolean isValid = verificationService.verifyCode(verificationRequest.getEmail(), verificationRequest.getCode());
 
@@ -47,6 +50,7 @@ public class LoginController {
 
     // 3. 회원가입 완료 (파일 첨부 포함)
     @PostMapping("/register")
+    @Operation(summary = "회원가입", description = "회원가입을 위한 API")
     public ResponseEntity<Integer> register(
         @RequestPart RegisterRequest request,
         @RequestPart(required = false) MultipartFile file
@@ -72,6 +76,7 @@ public class LoginController {
 
     // 4. 로그인
     @PostMapping("/login")
+    @Operation(summary = "로그인", description = "로그인을 위한 API")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(loginService.login(request.getEmail(), request.getPassword()));
     }
