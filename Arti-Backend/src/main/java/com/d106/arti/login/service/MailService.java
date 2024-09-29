@@ -26,18 +26,12 @@ public class MailService {
         this.senderEmail = senderEmail;
     }
 
-    public static void createNumber(){
+    public static void createNumber() {
         Random random = new Random();
         StringBuilder key = new StringBuilder();
 
-        for (int i = 0; i < 8; i++) { // 총 8자리 인증 번호 생성
-            int idx = random.nextInt(3);
-
-            switch (idx) {
-                case 0 -> key.append((char) (random.nextInt(26) + 97)); // a-z 랜덤 생성
-                case 1 -> key.append((char) (random.nextInt(26) + 65)); // A-Z 랜덤 생성
-                case 2 -> key.append(random.nextInt(10)); // 0-9 랜덤 생성
-            }
+        for (int i = 0; i < 6; i++) { // 6자리 숫자 생성
+            key.append(random.nextInt(10)); // 0-9 숫자 랜덤 생성
         }
         number = key.toString();
     }
@@ -74,5 +68,4 @@ public class MailService {
         log.info("[Mail 전송 완료]");
         return number;
     }
-
 }
