@@ -1,6 +1,7 @@
 package com.d106.arti.login.service;
 
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 @Slf4j
@@ -42,9 +44,11 @@ public class MailService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);
-            messageHelper.setFrom(senderEmail);
+
+            // InternetAddress를 사용하여 이메일과 발신자 이름 설정
+            messageHelper.setFrom(new InternetAddress(senderEmail, "Arti"));
             messageHelper.setTo(email);
-            messageHelper.setSubject("[Arti] 이메일 인증 번호 발송");
+            messageHelper.setSubject("Arti 회원가입 인증용 메일입니다.");
 
             String body = "<html><body style='background-color: #000000 !important; margin: 0 auto; max-width: 600px; word-break: break-all; padding-top: 50px; color: #ffffff;'>";
             body += "<h1 style='padding-top: 50px; font-size: 30px;'>이메일 주소 인증</h1>";
@@ -55,7 +59,7 @@ public class MailService {
             body += "<div class='code-box' style='margin-top: 50px; padding-top: 20px; color: #000000; padding-bottom: 20px; font-size: 25px; text-align: center; background-color: #f4f4f4; border-radius: 10px;'>" + number + "</div>";
             body += "</body></html>";
             messageHelper.setText(body, true);
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             e.printStackTrace();
         }
         return mimeMessage;
