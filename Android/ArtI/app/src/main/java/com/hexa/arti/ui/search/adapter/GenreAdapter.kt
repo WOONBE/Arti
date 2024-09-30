@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.hexa.arti.BuildConfig
+import com.hexa.arti.R
 import com.hexa.arti.data.model.search.Genre
 import com.hexa.arti.databinding.ItemGenreBinding
 
@@ -19,6 +22,13 @@ class GenreAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(genre: Genre) {
+            Glide.with(binding.root.context)
+                .load("${BuildConfig.SERVER_URL}static/genre/${genre.title}.jpg")
+                .error(R.drawable.gallery_example)
+                .into(binding.ivGenre)
+
+            binding.tvArtTitle.text = genre.titleKor
+
             itemView.setOnClickListener {
                 onItemClick()
             }

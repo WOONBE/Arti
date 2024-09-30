@@ -3,6 +3,8 @@ package com.hexa.arti.ui.search
 import android.util.Log
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
+import com.hexa.arti.config.ApplicationClass.Companion.REPRESENT_ARTWORKS
+import com.hexa.arti.config.ApplicationClass.Companion.REPRESENT_ARTWORKS_KOR
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Genre
 import com.hexa.arti.databinding.FragmentGenreBannerBinding
@@ -29,18 +31,21 @@ class GenreBannerFragment :
             findNavController().popBackStack()
         }
 
-        val mockData = listOf(
-            Genre(id = 0, title = "제목1"),
-            Genre(id = 1, title = "제목1"),
-            Genre(id = 2, title = "제목1"),
-            Genre(id = 3, title = "제목1"),
-            Genre(id = 4, title = "제목1"),
-            Genre(id = 5, title = "제목1"),
-            Genre(id = 6, title = "제목1"),
-            Genre(id = 7, title = "제목1"),
-        )
+        val representGenres = mutableListOf<Genre>()
 
-        genreAdapter.submitList(mockData)
+        Log.d("확인", "장르 사이즈 확인 ${REPRESENT_ARTWORKS.size} ${REPRESENT_ARTWORKS_KOR.size}")
+
+        for (index in 0..<REPRESENT_ARTWORKS.size) {
+            representGenres.add(
+                Genre(
+                    id = index,
+                    title = REPRESENT_ARTWORKS[index],
+                    titleKor = REPRESENT_ARTWORKS_KOR[index]
+                )
+            )
+        }
+
+        genreAdapter.submitList(representGenres)
     }
 
     private fun goToGenreDetailFragment() {
