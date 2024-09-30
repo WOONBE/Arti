@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,27 @@ public class ArtistService {
         return ArtistResponse.toArtistResponse(artist);
     }
 
+    // 캐시를 적용하여 50명의 화가를 랜덤하게 가져오는 메서드
+    @Transactional(readOnly = true)
+    @Cacheable(value = "randomArtistsCache", key = "'artists-50'")
+    public List<ArtistResponse> getRandomArtists() {
+        // 모든 화가를 가져온 후 랜덤하게 섞는다
+        List<Artist> allArtists = artistRepository.findAll();
 
+        // 화가가 50명 미만일 경우 처리
+        if (allArtists.size() < 50) {
+            throw new BadRequestException(NOT_FOUND_ARTIST);
+        }
+
+        // 리스트를 섞는다
+        Collections.shuffle(allArtists);
+
+        // 50명의 화가를 선택하고 ArtistResponse로 변환
+        return allArtists.stream()
+            .limit(50)
+            .map(ArtistResponse::toArtistResponse)
+            .collect(Collectors.toList());
+    }
 
 
 

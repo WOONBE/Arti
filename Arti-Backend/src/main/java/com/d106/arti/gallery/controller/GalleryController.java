@@ -37,10 +37,9 @@ public class GalleryController {
     }
 
     // 2. 특정 미술관에 테마 생성
-    @PostMapping("/{galleryId}/themes")
+    @PostMapping("/themes")
     @Operation(summary = "테마 생성", description = "특정 미술관에 테마를 생성하는 API")
-    public ResponseEntity<ThemeResponse> createTheme(@PathVariable Integer galleryId, @RequestBody ThemeRequest themeRequest) {
-        themeRequest.setGalleryId(galleryId); // galleryId를 ThemeRequestDto에 설정
+    public ResponseEntity<ThemeResponse> createTheme(@RequestBody ThemeRequest themeRequest) {
         ThemeResponse themeResponse = galleryService.createTheme(themeRequest);
         return ResponseEntity.ok(themeResponse);
     }

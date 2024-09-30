@@ -54,6 +54,16 @@ public class ArtistController {
         return ResponseEntity.ok(artist);
     }
 
+    // 랜덤한 50명의 화가 조회
+    @GetMapping("/random")
+    @Operation(summary = "화가 랜덤 조회", description = "화가를 최대 50명까지 랜덤하게 조회하는 API")
+    public ResponseEntity<List<ArtistResponse>> getRandomArtists() {
+        List<ArtistResponse> randomArtists = artistService.getRandomArtists();
+        return ResponseEntity.ok(randomArtists);  
+    }
+
+
+
 
 
 

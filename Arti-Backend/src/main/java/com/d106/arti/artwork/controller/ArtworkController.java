@@ -3,6 +3,7 @@ package com.d106.arti.artwork.controller;
 
 
 import com.d106.arti.artwork.domain.NormalArtWork;
+import com.d106.arti.artwork.dto.response.ArtworkResponse;
 import com.d106.arti.artwork.dto.response.NormalArtworkResponse;
 import com.d106.arti.artwork.service.ArtworkService;
 import com.d106.arti.artwork.service.CSVService;
@@ -100,5 +101,13 @@ public class ArtworkController {
     public ResponseEntity<NormalArtworkResponse> getArtworkById(@PathVariable Integer artworkId) {
         NormalArtworkResponse artworkResponse = artworkService.getArtworkById(artworkId);
         return ResponseEntity.ok(artworkResponse);
+    }
+
+    // 랜덤한 50개의 미술품 조회
+    @GetMapping("/random")
+    @Operation(summary = "미술품 랜덤 조회", description = "랜덤한 50개의 미술품 조회하는 API")
+    public ResponseEntity<List<ArtworkResponse>> getRandomArtworks() {
+        List<ArtworkResponse> randomArtworks = artworkService.getRandomArtworks();
+        return ResponseEntity.ok(randomArtworks);
     }
 }
