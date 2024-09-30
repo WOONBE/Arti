@@ -52,15 +52,17 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
             with(myGalleryActivityViewModel){
 
-                // 본인 갤러리 표시 필요
+                // state가 바뀌면 미술관 get 호출로 update
                 with(myGalleryViewModel){
                     updateThemeDto.observe(viewLifecycleOwner){
-                        getMyGallery(1)
+                        Log.d(TAG, "init: aaaaa $it")
+                        myGalleryActivityViewModel.getMyGalleryTheme(1)
                     }
                 }
 
                 // 나의 미술관 이름. 썸네일, 소개
                 myGallery.observe(viewLifecycleOwner){
+                    Log.d(TAG, "init 11: $it")
                     myGalleryNameTv.setText(it.name)
                     Glide.with(requireContext())
                         .load(it.image)
@@ -73,6 +75,8 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 }
                 // 테마
                 myGalleryTheme.observe(viewLifecycleOwner){
+
+                    Log.d(TAG, "init 22: $it")
                     adapter.submitList(it)
                 }
             }

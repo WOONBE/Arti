@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artGalleryDetail
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -70,8 +71,9 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
             val radioButton = RadioButton(requireContext()).apply {
                 id = theme.first  // theme id를 RadioButton id로 설정
                 text = theme.second  // theme title을 RadioButton의 텍스트로 설정
+                setTextColor(resources.getColor(R.color.white)) // 텍스트 색상을 하얀색으로 고정
                 layoutParams = GridLayout.LayoutParams().apply {
-                    width = ViewGroup.LayoutParams.MATCH_PARENT / 3  // GridLayout에서 비율로 배분
+                    width = ViewGroup.LayoutParams.MATCH_PARENT  // GridLayout에서 비율로 배분
                     height = ViewGroup.LayoutParams.WRAP_CONTENT
                     columnSpec = GridLayout.spec(index % 3, 1f)  // 3열 배치
                     rowSpec = GridLayout.spec(index / 3)

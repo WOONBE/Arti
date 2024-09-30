@@ -25,10 +25,10 @@ class MyGalleryViewModel @Inject constructor(
     private val _updateThemeDto = MutableLiveData<ThemeResponseItem>()
     val updateThemeDto : LiveData<ThemeResponseItem> = _updateThemeDto
 
-    fun createTheme(galleryId: Int,themeDto: CreateThemeDto){
-        Log.d(TAG, "Init: ${galleryId} ${themeDto} ")
+    fun createTheme(themeDto: CreateThemeDto){
+        Log.d(TAG, "Init:  ${themeDto} ")
         viewModelScope.launch {
-            galleryRepository.getPostTheme(galleryId,themeDto).onSuccess {
+            galleryRepository.postTheme(themeDto).onSuccess {
                     response ->
                 _updateThemeDto.value = response
                 Log.d("Init", "$response deleteThemeDelete: success")

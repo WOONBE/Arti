@@ -30,7 +30,6 @@ fun showAddThemeDialog(context: Context, galleryId: Int, viewModel: MyGalleryVie
 
     binding.btnAdd.setOnClickListener {
         viewModel.createTheme(
-            galleryId,
             CreateThemeDto(galleryId, binding.editTextTheme.text.toString())
         )
         dialog.dismiss()

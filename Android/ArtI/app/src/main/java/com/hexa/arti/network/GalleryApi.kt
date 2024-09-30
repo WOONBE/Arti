@@ -27,8 +27,8 @@ interface GalleryApi  {
     @GET("galleries/{themeId}/artworks")
     suspend fun getGalleryThemeArtwork(@Path("themeId") themeId: Int) : Response<ThemeArtworksResponse>
 
-    @POST("galleries/{galleryId}/themes")
-    suspend fun postGalleryTheme(@Path("galleryId") galleryId: Int,@Body themeDto: CreateThemeDto) : Response<ThemeResponseItem>
+    @POST("galleries/themes")
+    suspend fun postGalleryTheme(@Body themeDto: CreateThemeDto) : Response<ThemeResponseItem>
 
     @PUT("galleries/{galleryId}")
     suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Body updateGalleryDto : UpdateGalleryDto) : Response<ResponseBody>

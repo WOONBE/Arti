@@ -16,8 +16,7 @@ interface ArtGalleryRepository {
         galleryId : Int
     )  : Result<List<MyGalleryThemeItem>>
 
-    suspend fun getPostTheme(
-        galleryId : Int,
+    suspend fun postTheme(
         themeDto : CreateThemeDto
     ) : Result<ThemeResponseItem>
 

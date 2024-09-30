@@ -81,8 +81,8 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getPostTheme(galleryId: Int, themeDto: CreateThemeDto): Result<ThemeResponseItem> {
-        val result = galleryAPI.postGalleryTheme(galleryId,themeDto)
+    override suspend fun postTheme(themeDto: CreateThemeDto): Result<ThemeResponseItem> {
+        val result = galleryAPI.postGalleryTheme(themeDto)
 
         if (result.isSuccessful) {
             result.body()?.let {
