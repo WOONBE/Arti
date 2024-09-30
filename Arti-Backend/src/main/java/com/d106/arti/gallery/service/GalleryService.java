@@ -340,10 +340,20 @@ public class GalleryService {
             .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<GalleryResponse> searchGalleryByName(String keyword) {
+        // GalleryRepository에서 부분 검색 수행
+        List<Gallery> galleries = galleryRepository.findByNameContaining(keyword);
 
+        if (galleries.isEmpty()) {
+            throw new BadRequestException(NOT_FOUND_GALLERY_ID);
+        }
 
-
-
+        // 검색된 갤러리를 GalleryResponse로 변환하여 반환
+        return galleries.stream()
+            .map(GalleryResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
 
 
 }
