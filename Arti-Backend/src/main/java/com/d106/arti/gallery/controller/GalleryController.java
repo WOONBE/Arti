@@ -143,6 +143,15 @@ public class GalleryController {
         return ResponseEntity.ok(subscribedGalleries);
     }
 
+    @GetMapping("/search")
+    @Operation(summary = "미술관 검색", description = "미술관 이름을 기준으로 검색하는 API")
+    public ResponseEntity<List<GalleryResponse>> searchGalleryByName(@RequestParam String keyword) {
+        List<GalleryResponse> galleries = galleryService.searchGalleryByName(keyword);
+        return ResponseEntity.ok(galleries);
+    }
+
+
+
 
 
 
