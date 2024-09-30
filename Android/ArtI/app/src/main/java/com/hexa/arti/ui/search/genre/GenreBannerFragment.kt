@@ -1,6 +1,5 @@
-package com.hexa.arti.ui.search
+package com.hexa.arti.ui.search.genre
 
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.ApplicationClass.Companion.REPRESENT_ARTWORKS
@@ -14,8 +13,8 @@ import com.hexa.arti.ui.search.adapter.GenreAdapter
 class GenreBannerFragment :
     BaseFragment<FragmentGenreBannerBinding>(R.layout.fragment_genre_banner) {
 
-    private val genreAdapter = GenreAdapter {
-        goToGenreDetailFragment()
+    private val genreAdapter = GenreAdapter { genreName ->
+        goToGenreDetailFragment(genreName)
     }
 
 
@@ -33,8 +32,6 @@ class GenreBannerFragment :
 
         val representGenres = mutableListOf<Genre>()
 
-        Log.d("확인", "장르 사이즈 확인 ${REPRESENT_ARTWORKS.size} ${REPRESENT_ARTWORKS_KOR.size}")
-
         for (index in 0..<REPRESENT_ARTWORKS.size) {
             representGenres.add(
                 Genre(
@@ -48,7 +45,11 @@ class GenreBannerFragment :
         genreAdapter.submitList(representGenres)
     }
 
-    private fun goToGenreDetailFragment() {
-        findNavController().navigate(R.id.action_genreBannerFragment_to_genreDetailFragment)
+    private fun goToGenreDetailFragment(genreName: String) {
+        findNavController().navigate(
+            GenreBannerFragmentDirections.actionGenreBannerFragmentToGenreDetailFragment(
+                genreName
+            )
+        )
     }
 }

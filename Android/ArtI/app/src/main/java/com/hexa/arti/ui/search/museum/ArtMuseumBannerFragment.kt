@@ -1,6 +1,5 @@
-package com.hexa.arti.ui.search
+package com.hexa.arti.ui.search.museum
 
-import android.util.Log
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment

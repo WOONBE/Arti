@@ -35,8 +35,6 @@ class ArtworkAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(artwork: Artwork) {
-//            binding.tvArtTitle.text = art.title
-
             Glide.with(binding.root.context)
                 .load(artwork.imageUrl)
                 .error(R.drawable.gallery_example)

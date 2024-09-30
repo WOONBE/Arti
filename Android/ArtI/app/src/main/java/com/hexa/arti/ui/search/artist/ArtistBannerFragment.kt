@@ -1,4 +1,4 @@
-package com.hexa.arti.ui.search
+package com.hexa.arti.ui.search.artist
 
 import android.util.Log
 import androidx.navigation.fragment.findNavController
@@ -6,7 +6,6 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentArtistBannerBinding
-import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 
 class ArtistBannerFragment :

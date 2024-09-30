@@ -10,8 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="40dp"
-        tools:context=".ui.search.GenreBannerFragment">
+        android:paddingBottom="50dp"
+        tools:context=".ui.search.genre.GenreBannerFragment">
 
         <ImageView
             android:id="@+id/iv_back"

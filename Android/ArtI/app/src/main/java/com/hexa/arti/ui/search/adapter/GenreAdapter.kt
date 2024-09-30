@@ -12,13 +12,13 @@ import com.hexa.arti.data.model.search.Genre
 import com.hexa.arti.databinding.ItemGenreBinding
 
 class GenreAdapter(
-    private val onItemClick: () -> Unit
+    private val onItemClick: (String) -> Unit
 ) : ListAdapter<Genre, GenreAdapter.GenreViewHolder>(GenreDiffUtil()) {
 
 
     class GenreViewHolder(
         private val binding: ItemGenreBinding,
-        private val onItemClick: () -> Unit,
+        private val onItemClick: (String) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(genre: Genre) {
@@ -30,7 +30,7 @@ class GenreAdapter(
             binding.tvArtTitle.text = genre.titleKor
 
             itemView.setOnClickListener {
-                onItemClick()
+                onItemClick(genre.title)
             }
         }
     }
