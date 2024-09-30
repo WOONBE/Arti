@@ -32,6 +32,7 @@ import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import com.d106.arti.storage.StorageService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,52 +59,6 @@ public class GalleryService {
     private final MemberRepository memberRepository;
     private final StorageService storageService;
     private final AiArtworkRepository aiArtworkRepository;
-
-//    @Transactional
-//    public GalleryResponse createGallery(GalleryRequest requestDto) {
-//        // 소유자(Member) 조회(로그인 한 멤버와 일치하는지 확인)
-//        Member owner = memberRepository.findById(requestDto.getOwnerId())
-//            .orElseThrow(() -> new BadRequestException(NOT_FOUND_OWNER_ID));
-//
-//        String imageUrl = storageService.storeFile(requestDto.getImage()).getStoreFilename();
-//
-//        // Gallery 엔티티 생성 및 저장
-//        Gallery gallery = Gallery.builder()
-//            .name(requestDto.getName())
-//            .description(requestDto.getDescription())
-////            .image(requestDto.getImage())
-//            .image(imageUrl)
-//            .owner(owner)
-//            .view(0)  // 초기 조회 수는 0
-//            .build();
-//
-//        galleryRepository.save(gallery);
-//        return GalleryResponse.fromEntity(gallery);
-//    }
-//    // 3. 미술관 정보 수정
-//    @Transactional
-//    public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto) {
-//        Gallery gallery = galleryRepository.findById(galleryId)
-//            .orElseThrow(() -> new BadRequestException(NOT_FOUND_GALLERY_ID));
-//
-//        String imageUrl = gallery.getImage();
-//        if (requestDto.getImage() != null && !requestDto.getImage().isEmpty()) {
-//            imageUrl = storageService.storeFile(requestDto.getImage()).getStoreFilename();
-//        }
-//
-//        gallery = Gallery.builder()
-//            .id(gallery.getId())
-//            .name(requestDto.getName())
-//            .description(requestDto.getDescription())
-//            .image(imageUrl)
-//            .view(gallery.getView())  // 기존 조회수 유지
-//            .owner(gallery.getOwner())
-//            .themes(gallery.getThemes())  // 기존 테마 유지
-//            .build();
-//
-//        galleryRepository.save(gallery);
-//        return GalleryResponse.fromEntity(gallery);
-//    }
 
     @Transactional
     public GalleryResponse createGallery(GalleryRequest requestDto, MultipartFile image) {
@@ -363,6 +318,29 @@ public class GalleryService {
             .map(SubscribedGalleryResponse::fromEntity)
             .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    @Cacheable(value = "randomGalleriesCache", key = "'galleries-50'")
+    public List<GalleryResponse> getRandomGalleries() {
+        // 모든 미술관을 조회
+        List<Gallery> galleries = galleryRepository.findAll();
+
+//        // 미술관이 50개 미만일 경우 처리
+//        if (galleries.size() < 50) {
+//            throw new BadRequestException(NOT_FOUND_GALLERY_ID);
+//        }
+
+        // 리스트를 무작위로 섞는다
+        Collections.shuffle(galleries);
+
+        // 50개의 미술관을 선택하고 GalleryResponse로 변환
+        return galleries.stream()
+            .limit(50)
+            .map(GalleryResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+
 
 
 

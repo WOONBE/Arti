@@ -1,17 +1,23 @@
 package com.d106.arti.artwork.service;
 
+import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_ARTIST;
 import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_ARTWORK;
 
+import com.d106.arti.artwork.domain.Artist;
 import com.d106.arti.artwork.domain.Artwork;
 import com.d106.arti.artwork.domain.NormalArtWork;
+import com.d106.arti.artwork.dto.response.ArtistResponse;
+import com.d106.arti.artwork.dto.response.ArtworkResponse;
 import com.d106.arti.artwork.dto.response.NormalArtworkResponse;
 import com.d106.arti.artwork.repository.ArtworkRepository;
 import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.global.exception.ExceptionCode;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +75,36 @@ public class ArtworkService {
 
         return NormalArtworkResponse.fromEntity(artwork, imageBaseUrl);
     }
+
+    // 캐시를 적용하여 50개의 미술품을 랜덤하게 가져오는 메서드
+    @Transactional(readOnly = true)
+    @Cacheable(value = "randomArtworksCache", key = "'artworks-50'")
+    public List<ArtworkResponse> getRandomArtworks() {
+        // 모든 미술품을 가져온 후 랜덤하게 섞는다
+        List<NormalArtWork> artworks = artworkRepository.findAll();
+
+        // 미술품이 50개 미만일 경우 처리
+        if (artworks.size() < 50) {
+            throw new BadRequestException(NOT_FOUND_ARTWORK);
+        }
+
+        // 리스트를 섞는다
+        Collections.shuffle(artworks);
+
+        // 50개의 미술품을 선택하고 ArtworkResponse로 변환
+        return artworks.stream()
+            .limit(50)
+            .map(artwork -> ArtworkResponse.builder()
+                .id(artwork.getId())
+                .title(artwork.getTitle())
+                .description(artwork.getDescription())
+                .imageUrl(imageBaseUrl+artwork.getFilename())
+                .artist(artwork.getArtist().getEngName())  // 화가 정보 가져오기
+                .year(artwork.getYear())
+                .build())
+            .collect(Collectors.toList());
+    }
+
 
 
 
