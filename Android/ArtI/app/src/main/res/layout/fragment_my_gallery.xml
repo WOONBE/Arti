@@ -150,6 +150,18 @@
                     app:layout_constraintStart_toEndOf="@+id/my_gallery_info_tv"
                     app:layout_constraintTop_toTopOf="@+id/my_gallery_info_tv" />
 
+                <ImageView
+                    android:id="@+id/my_gallery_theme_add_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleX="1.2"
+                    android:scaleY="1.2"
+                    android:layout_marginStart="10dp"
+                    android:src="@drawable/ic_add_24"
+                    app:layout_constraintBottom_toBottomOf="@+id/my_gallery_theme_tv"
+                    app:layout_constraintStart_toEndOf="@+id/my_gallery_theme_tv"
+                    app:layout_constraintTop_toTopOf="@+id/my_gallery_theme_tv"
+                    app:tint="@color/black" />
                 <EditText
                     android:id="@+id/my_gallery_info_et"
                     style="@style/MyGalleryTitleText"

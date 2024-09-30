@@ -1,9 +1,11 @@
 package com.hexa.arti.network
 
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
+import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponse
+import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -26,7 +28,7 @@ interface GalleryApi  {
     suspend fun getGalleryThemeArtwork(@Path("themeId") themeId: Int) : Response<ThemeArtworksResponse>
 
     @POST("galleries/{galleryId}/themes")
-    suspend fun postGalleryTheme(@Path("galleryId") galleryId: Int) : Response<ResponseBody>
+    suspend fun postGalleryTheme(@Path("galleryId") galleryId: Int,@Body themeDto: CreateThemeDto) : Response<ThemeResponseItem>
 
     @PUT("galleries/{galleryId}")
     suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Body updateGalleryDto : UpdateGalleryDto) : Response<ResponseBody>
@@ -34,6 +36,9 @@ interface GalleryApi  {
     @PUT("galleries/themes/{themeId")
     suspend fun updateMyGalleryTheme(@Path("themeId") themeId: Int): Response<ResponseBody>
 
+
+    @DELETE("galleries/{galleryId}/themes/{themeId}")
+    suspend fun deleteTheme(@Path("galleryId") galleryId: Int, @Path("themeId") themeId: Int) : Response<ResponseBody>
 
     @DELETE("/galleries/themes/{themeId}/artworks/{artworkId}")
     suspend fun deleteThemeArtwork(@Path("themeId") themeId: Int, @Path("artworkId") artworkId : Int) : Response<ResponseBody>

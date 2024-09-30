@@ -14,11 +14,11 @@ import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
 import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryThemeAdapter
+import com.hexa.arti.ui.artmuseum.util.showAddThemeDialog
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -41,10 +41,24 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 Log.d(TAG, "init: ${themeId} $artWorkId")
                 // 테마 내부 이미지 삭제
                 myGalleryViewModel.deleteThemeDelete(themeId,artWorkId)
+            }, onThemeDelete = { themeId ->
+                Log.d(TAG, "init: ${themeId}")
+                // 갤러리 아이디 받아오기 필요
+                myGalleryViewModel.deleteTheme(1, themeId)
+
             })
             myGalleryThemeRv.adapter = adapter
 
+
             with(myGalleryActivityViewModel){
+
+                // 본인 갤러리 표시 필요
+                with(myGalleryViewModel){
+                    updateThemeDto.observe(viewLifecycleOwner){
+                        getMyGallery(1)
+                    }
+                }
+
                 // 나의 미술관 이름. 썸네일, 소개
                 myGallery.observe(viewLifecycleOwner){
                     myGalleryNameTv.setText(it.name)
@@ -63,6 +77,9 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 }
             }
 
+            myGalleryThemeAddBtn.setOnClickListener {
+                showAddThemeDialog(requireContext(),1,myGalleryViewModel)
+            }
         }
 
         initEvent()

@@ -22,7 +22,8 @@ import com.hexa.arti.ui.artmuseum.util.MyGalleryThemeDiffCallback
 private const val TAG = "MyGalleryThemeAdapter"
 
 class MyGalleryThemeAdapter(val context: Context,
-    val onArtWorkDelete: (Int, Int) -> Unit) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
+    val onArtWorkDelete: (Int, Int) -> Unit,
+    val onThemeDelete : (Int) -> Unit) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
     MyGalleryThemeDiffCallback
 ) {
 
@@ -87,7 +88,7 @@ class MyGalleryThemeAdapter(val context: Context,
             }
 
             themeKebabMenuIv.setOnClickListener { view ->
-                showPopupMenu(view)
+                showPopupMenu(view,item)
             }
             themeModifyIv.setOnClickListener {
                 themeModifyIv.visibility = View.GONE
@@ -149,7 +150,7 @@ class MyGalleryThemeAdapter(val context: Context,
                 animator.start()
             }
         }
-        private fun showPopupMenu(view: View) {
+        private fun showPopupMenu(view: View, myGalleryThemeItem: MyGalleryThemeItem) {
             val popupMenu = PopupMenu(view.context, view)
             val inflater: MenuInflater = popupMenu.menuInflater
             inflater.inflate(R.menu.gallery_modify_menu, popupMenu.menu)
@@ -168,7 +169,11 @@ class MyGalleryThemeAdapter(val context: Context,
                         true
                     }
                     R.id.my_gallery_delete -> {
-                        // "삭제" 메뉴 클릭 처리
+                        // 테마 삭제 처리
+                        showDeleteConfirmationDialog(view.context) {
+                            onThemeDelete(myGalleryThemeItem.id)
+                            removeTheme(myGalleryThemeItem)  // 테마 삭제 후 어댑터 갱신
+                        }
                         true
                     }
                     else -> false
@@ -177,7 +182,13 @@ class MyGalleryThemeAdapter(val context: Context,
             popupMenu.show()
         }
 
-
+        private fun removeTheme(theme: MyGalleryThemeItem) {
+            // 테마 삭제 후 새로운 리스트로 갱신
+            val updatedThemes = currentList.toMutableList().apply {
+                remove(theme)
+            }
+            submitList(updatedThemes)  // 어댑터 갱신
+        }
 
         private fun showDeleteConfirmationDialog(context: Context, onConfirm: () -> Unit) {
             val builder = android.app.AlertDialog.Builder(context)
