@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="point_color">#386Bf6</color>
+    <color name="trans_point_color">#99386Bf6</color>
+    <color name="background_color">#F7F7F7</color>
+    <color name="font_color">#000000</color>
+    <color name="text_disabled">#DADADA</color>
+
+    <color name="unselected_color">#9DB2CE</color>
+    <color name="selected_color">#386Bf6</color>
+
+
+
+</resources>
