@@ -10,16 +10,31 @@ from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from contextlib import asynccontextmanager
 
+from generation.module import load_hub_module
+from recommend.module import startup_recommend
+from music.module import load_music_model
 from recommend import urls as rec_url
 from generation import urls as gen_url
 from music import urls as music_url
-from ar import urls as ar_url
+from portfolio import urls as portfolio_url
 from config.database import SessionLocal, engine, Base, SQLALCHEMY_DATABASE_URL
 from config.models import Artist, Artwork
 from config.module import get_db
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # When service starts.
+    load_hub_module()
+    startup_recommend()
+    load_music_model()
+
+    yield
+    
+    # When service is stopped.
+
+app = FastAPI(lifespan=lifespan)
 
 # Dependency
 app.add_middleware(
@@ -32,7 +47,7 @@ app.add_middleware(
 
 app.include_router(rec_url.router)
 app.include_router(gen_url.router)
-app.include_router(ar_url.router)
+app.include_router(portfolio_url.router)
 app.include_router(music_url.router)
 
 logging.basicConfig(level=logging.INFO)
@@ -86,4 +101,7 @@ def get_image(artwork_id: int, db: Session = Depends(get_db)):
     
 if __name__ == "__main__":
     import uvicorn
+    import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"Using {device} device")
     uvicorn.run("main:app", reload=True)

@@ -1,4 +1,4 @@
-from fastapi import UploadFile, File, Form, Depends
+from fastapi import UploadFile, File, Form, Depends, FastAPI
 from sqlalchemy.orm import Session
 from config.module import get_db
 from .schema import post_ai_image
@@ -47,15 +47,26 @@ def load_image(image_path, image_size = (256,256), preserve_aspect_ratio=True):
     img = tf.image.resize(img, image_size, preserve_aspect_ratio=True)
     return img
 
-def transfer_image(content_image:UploadFile = File(), style_image : int = Form(), db: Session  = Depends(get_db)):
-    style_image_path = db.query(Artwork).filter(Artwork.artwork_id == style_image).first().filename
-    # style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", style_image_path)
-    style_image_path = os.path.join("/artwork/images", style_image_path)
+hub_module = None
 
-    # temp_dir = 'backend(AI)/content_image'
-    temp_dir = '/artwork/images/content_image'
+# 애플리케이션 시작 시 모듈을 한 번만 로드
+def load_hub_module():
+    global hub_module
+    hub_handle = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'
+    hub_module = hub.load(hub_handle)
+
+# 이미지 스타일 전송 함수
+def transfer_image(content_image: UploadFile = File(), style_image: int = Form(), db: Session = Depends(get_db)):
+    global hub_module
+    if hub_module is None:
+        raise RuntimeError("The model has not been loaded.")
+
+    style_image_path = db.query(Artwork).filter(Artwork.artwork_id == style_image).first().filename
+    style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", style_image_path)
+
+    temp_dir = 'backend(AI)/content_image'
     if not os.path.exists(temp_dir):
-        os.makedirs(temp_dir)  # 디렉토리 생성
+        os.makedirs(temp_dir)
 
     content_image_filename = f"{uuid.uuid4()}_{content_image.filename}"
     content_image_path = os.path.join(temp_dir, content_image_filename)
@@ -64,16 +75,14 @@ def transfer_image(content_image:UploadFile = File(), style_image : int = Form()
     with open(content_image_path, "wb") as f:
         f.write(content_image.file.read())
 
-    content_image_size = (256,256)
+    content_image_size = (256, 256)
     content = load_image(content_image_path, content_image_size)
 
-    style_image_size = (256,256)
+    style_image_size = (256, 256)
     style = load_image(style_image_path, style_image_size)
-    style = tf.nn.avg_pool(style, ksize=[3,3], strides=[1,1], padding='SAME')
+    style = tf.nn.avg_pool(style, ksize=[3, 3], strides=[1, 1], padding='SAME')
 
-    hub_handle = 'https://tfhub.dev/google/magenta/arbitrary-image-stylization-v1-256/2'
-    hub_module = hub.load(hub_handle)
-
+    # 스타일 변환 수행
     outputs = hub_module(tf.constant(content), tf.constant(style))
     stylized_image = outputs[0]
 
@@ -83,15 +92,12 @@ def transfer_image(content_image:UploadFile = File(), style_image : int = Form()
     stylized_image_np = (stylized_image_np * 255).astype(np.uint8)
     image_pil = Image.fromarray(stylized_image_np)
 
-    # save_dir = 'backend(AI)/generated_images'
-    save_dir = '/artwork/images/generated_images'
+    save_dir = 'backend(AI)/generated_images'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
     image_filename = f'{uuid.uuid4()}.jpg'
     image_path = os.path.join(save_dir, image_filename)
     image_pil.save(image_path)
-
-    image_path = os.path.join('https://j11d106.p.ssafy.io/static/generated_images', image_filename)
 
     return image_path
