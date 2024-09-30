@@ -172,8 +172,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
                 val keyword = v.text.toString()
 
-//                viewModel.getArtworkByString(keyword)
-
                 viewModel.getArtworkByString(keyword)
                 viewModel.getArtistByString(keyword)
 
