@@ -1,8 +1,10 @@
 package com.hexa.arti.util
 
+import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.GetArtWorkResponse
 import com.hexa.arti.data.model.response.GetArtistResponse
+import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
 import com.hexa.arti.data.model.response.GetRandomGenreArtWorkResponse
 import com.hexa.arti.data.model.search.Artist
 
@@ -28,4 +30,11 @@ fun GetRandomGenreArtWorkResponse.asArtwork() = Artwork(
     title = this.title,
     description = this.description,
     year = this.year
+)
+
+fun GetRandomGalleriesResponse.asGalleryBanner() = GalleryBanner(
+    galleryId = this.id,
+    imageUrl = this.image,
+    ownerId = this.ownerId,
+    name = this.name
 )

@@ -1,12 +1,16 @@
 package com.hexa.arti.repository
 
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
+import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.data.model.artwork.Artwork
+import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
 import okhttp3.ResponseBody
 
 interface ArtGalleryRepository {
+
+    suspend fun getRandomGalleries(): Result<List<GalleryBanner>>
 
     suspend fun getRandomGenreArtworks(
         genreLabel: String,

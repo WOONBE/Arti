@@ -1,46 +1,50 @@
 package com.hexa.arti.ui.search.museum
 
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.search.ArtMuseum
 import com.hexa.arti.databinding.FragmentArtMuseumBannerBinding
 import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ArtMuseumBannerFragment :
     BaseFragment<FragmentArtMuseumBannerBinding>(R.layout.fragment_art_museum_banner) {
 
+    private val viewModel: ArtMuseumBannerViewModel by viewModels()
 
     private val artMuseumAdapter = ArtMuseumAdapter {
         moveToArtMuseumFragment()
     }
 
     override fun init() {
-        initVies()
+        initObserve()
+        initViews()
     }
 
-    private fun initVies() {
+    private fun initObserve() {
+        viewModel.resultMuseums.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                artMuseumAdapter.submitList(emptyList())
+            } else {
+                artMuseumAdapter.submitList(it)
+            }
+        }
+
+    }
+
+    private fun initViews() {
         binding.rvArtMuseum.adapter = artMuseumAdapter
 
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        val mockData = listOf(
-            ArtMuseum(id = 1, title = "하하", artist = "히히"),
-            ArtMuseum(id = 2, title = "하하", artist = "히히"),
-            ArtMuseum(id = 3, title = "하하", artist = "히히"),
-            ArtMuseum(id = 4, title = "하하", artist = "히히"),
-            ArtMuseum(id = 5, title = "하하", artist = "히히"),
-            ArtMuseum(id = 6, title = "하하", artist = "히히"),
-            ArtMuseum(id = 7, title = "하하", artist = "히히"),
-            ArtMuseum(id = 8, title = "하하", artist = "히히"),
-        )
-
-        artMuseumAdapter.submitList(mockData)
+        viewModel.getRandomMuseums()
     }
 
-    private fun moveToArtMuseumFragment(){
+    private fun moveToArtMuseumFragment() {
         findNavController().navigate(R.id.action_artMuseumBannerFragment_to_artMuseumFragment)
     }
 

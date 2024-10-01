@@ -4,6 +4,7 @@ import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponse
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
+import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
 import com.hexa.arti.data.model.response.GetRandomGenreArtWorkResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -16,6 +17,10 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GalleryApi {
+
+    @GET("galleries/random")
+    suspend fun getRandomGalleries(): Response<List<GetRandomGalleriesResponse>>
+
     @GET("galleries/artworks/random")
     suspend fun getRandomGenreArtworks(@Query("genreLabel") genreLabel: String): Response<List<GetRandomGenreArtWorkResponse>>
 
