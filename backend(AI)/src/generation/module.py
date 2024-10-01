@@ -2,6 +2,7 @@ from fastapi import UploadFile, File, Form, Depends, FastAPI
 from sqlalchemy.orm import Session
 from config.module import get_db
 from .schema import post_ai_image
+from config.s3 import upload_to_s3
 from config.models import Artwork
 
 import functools
@@ -11,12 +12,15 @@ import numpy as np
 from PIL import Image
 import os
 import uuid
+import requests
+from io import BytesIO
 
 def insert_post(post_ai : post_ai_image, db: Session):
     post = Artwork(
+        artwork_type = post_ai.artwork_type,
         member_id = post_ai.member_id,
         ai_artwork_title = post_ai.ai_artwork_title,
-        ai_img_url = post_ai.ai_img_url.split('/')[4],
+        ai_img_url = post_ai.ai_img_url,
         is_deleted = post_ai.is_deleted
     )
 
@@ -47,6 +51,16 @@ def load_image(image_path, image_size = (256,256), preserve_aspect_ratio=True):
     img = tf.image.resize(img, image_size, preserve_aspect_ratio=True)
     return img
 
+@functools.lru_cache(maxsize=None)
+def load_image_from_url(image_url, image_size=(256, 256), preserve_aspect_ratio=True):
+    response = requests.get(image_url)
+    image = Image.open(BytesIO(response.content))
+    image = image.convert("RGB")
+    image = image.resize(image_size)
+    image_np = np.array(image) / 255.0
+    image_np = np.expand_dims(image_np, axis=0)
+    return tf.convert_to_tensor(image_np, dtype=tf.float32)
+
 hub_module = None
 
 # 애플리케이션 시작 시 모듈을 한 번만 로드
@@ -62,7 +76,7 @@ def transfer_image(content_image: UploadFile = File(), style_image: int = Form()
         raise RuntimeError("The model has not been loaded.")
 
     style_image_path = db.query(Artwork).filter(Artwork.artwork_id == style_image).first().filename
-    style_image_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", style_image_path)
+    style_image_url = os.path.join("https://j11d106.p.ssafy.io/static", style_image_path).replace('\\', '/')
 
     temp_dir = 'backend(AI)/content_image'
     if not os.path.exists(temp_dir):
@@ -79,7 +93,7 @@ def transfer_image(content_image: UploadFile = File(), style_image: int = Form()
     content = load_image(content_image_path, content_image_size)
 
     style_image_size = (256, 256)
-    style = load_image(style_image_path, style_image_size)
+    style = load_image_from_url(style_image_url, style_image_size)
     style = tf.nn.avg_pool(style, ksize=[3, 3], strides=[1, 1], padding='SAME')
 
     # 스타일 변환 수행
@@ -92,12 +106,25 @@ def transfer_image(content_image: UploadFile = File(), style_image: int = Form()
     stylized_image_np = (stylized_image_np * 255).astype(np.uint8)
     image_pil = Image.fromarray(stylized_image_np)
 
-    save_dir = 'backend(AI)/generated_images'
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
+    # save_dir = 'backend(AI)/generated_images'
+    # if not os.path.exists(save_dir):
+    #     os.makedirs(save_dir)
 
-    image_filename = f'{uuid.uuid4()}.jpg'
-    image_path = os.path.join(save_dir, image_filename)
-    image_pil.save(image_path)
+    # image_filename = f'{uuid.uuid4()}.jpg'
+    # image_path = os.path.join(save_dir, image_filename)
+    # image_pil.save(image_path)
 
-    return image_path
+    # return image_path
+
+    img_byte_arr = BytesIO()
+    image_pil.save(img_byte_arr, format='JPEG')
+    img_byte_arr.seek(0)
+
+    s3_filename = f"{uuid.uuid4()}.jpg"
+    bucket_name = 'ssafy-arti.s3.ap-northeast-2'
+    upload_to_s3(img_byte_arr, bucket_name, s3_filename)
+
+    s3_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_filename}"
+
+    return {"image_url": s3_url}
+

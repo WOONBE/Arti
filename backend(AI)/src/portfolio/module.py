@@ -105,7 +105,6 @@ def get_portfoilo(member_id, db:Session):
     for artwork in artworks:
         genre_str = artwork.genre
         genres_cleaned = genre_str.strip("[]").replace("'", "").split(", ")
-        # Iterate over the genres and update the dictionary count for each genre
         for genre in genres_cleaned:
             if genre in art_styles_mapping:
                 art_styles_dict[art_styles_mapping[genre]] += 1

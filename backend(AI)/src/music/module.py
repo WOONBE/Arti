@@ -7,6 +7,9 @@ from transformers import pipeline
 from transformers import AutoProcessor, MusicgenForConditionalGeneration
 import os
 import scipy
+import requests
+from io import BytesIO
+from PIL import Image
 
 
 
@@ -30,11 +33,19 @@ def load_music_model():
 
 def generation_music(gallery_id: int, db: Session):
     try:
+
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         # 갤러리 이미지 경로 불러오기
         image_path = db.query(Gallery).filter(Gallery.gallery_id == gallery_id).first()
 
+        response = requests.get(image_path.gallery_img)
+        if response.status_code != 200:
+            raise ValueError(f"Failed to fetch image from {image_path.gallery_img}")
+        
+        image = Image.open(BytesIO(response.content))
+
         # image2text: 이미지 설명 생성
-        result = captioner_model(os.path.join("C:/Users/SSAFY/Desktop/wikiart", image_path.gallery_img))
+        result = captioner_model(image)
 
         inputs = musicgen_processor(
             text=[result[0]['generated_text'], 'piano and cello'],
@@ -51,7 +62,7 @@ def generation_music(gallery_id: int, db: Session):
         # 샘플링 레이트 가져오기
         sampling_rate = musicgen_model.config.audio_encoder.sampling_rate
 
-        # 6초 분량의 데이터를 잘라내기 (필요에 따라 조정 가능)
+        # 6초 분량의 데이터를 잘라내기
         samples_to_trim = 6 * sampling_rate
         if audio_data.shape[0] > samples_to_trim:
             audio_data = audio_data[:-int(samples_to_trim)]
@@ -92,20 +103,19 @@ def delete_music_db(gallery_id, db:Session):
 
 def get_music(gallery_id, db : Session):
     data = db.query(Audio).filter(Audio.gallery_id == gallery_id).first()
-    wav_file_path = os.path.join('http://j11d106.p.ssafy.io:9000/music/', data.audio_path)
+    wav_file_path = os.path.join(r'C:\Users\SSAFY\Desktop\S11P21D106\backend(AI)', data.audio_path)
 
     return wav_file_path
 
 
-def show_music_base(gallery_id, db:Session):
-    audio_file = db.query(Audio).filter(Audio.gallery_id == gallery_id).first()
+def show_music_base(audio_path):
+    wav_file_path = os.path.join(r'C:\Users\SSAFY\Desktop\S11P21D106\backend(AI)', audio_path)
 
-    if not audio_file:
+    if not wav_file_path:
         return {"error": "Audio file not found"}
 
-    file_path = audio_file.audio_path
     # 파일이 존재하는지 확인
-    if not os.path.exists(file_path):
+    if not os.path.exists(wav_file_path):
         return {"error": "File does not exist"}
     
-    return file_path 
+    return wav_file_path 

@@ -1,129 +1,25 @@
 import requests
+import os
 from io import BytesIO
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms
 from PIL import Image
 import faiss
 import numpy as np
-import os
-from concurrent.futures import ThreadPoolExecutor
+
+import logging
+
+from fastapi import HTTPException
 from typing import List
 from sqlalchemy.orm import Session
 from config.models import Gallery, Member, Theme, Artwork_Theme, Artwork
 from .schema import GalleryBase, Owner, ThemeBase, ArtworksBase
-
-os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
-
-
-class SEBlock(nn.Module):
-    def __init__(self, in_channels, reduce_ratio=4):
-        super(SEBlock, self).__init__()
-        reduced_channels = in_channels // reduce_ratio
-        self.fc1 = nn.Conv2d(in_channels, reduced_channels, kernel_size=1)
-        self.fc2 = nn.Conv2d(reduced_channels, in_channels, kernel_size=1)
-
-    def forward(self, x):
-        se = F.adaptive_avg_pool2d(x, 1)
-        se = torch.relu(self.fc1(se))
-        se = torch.sigmoid(self.fc2(se))
-        return x * se
-
-
-class MBConv(nn.Module):
-    def __init__(self, in_channels, out_channels, expansion, stride, se_ratio=0.25):
-        super(MBConv, self).__init__()
-        self.use_residual = stride == 1 and in_channels == out_channels
-        mid_channels = in_channels * expansion
-
-        self.expand_conv = nn.Conv2d(in_channels, mid_channels, kernel_size=1, bias=False)
-        self.bn1 = nn.BatchNorm2d(mid_channels)
-        self.deptwise_conv = nn.Conv2d(mid_channels, mid_channels, kernel_size=3, stride=stride, padding=1, groups=mid_channels, bias=False)
-        self.bn2 = nn.BatchNorm2d(mid_channels)
-        self.se = SEBlock(mid_channels, reduce_ratio=int(1 / se_ratio))
-        self.project_conv = nn.Conv2d(mid_channels, out_channels, kernel_size=1, bias=False)
-        self.bn3 = nn.BatchNorm2d(out_channels)
-        self.act = nn.SiLU()
-
-    def forward(self, x):
-        residual = x
-        x = self.act(self.bn1(self.expand_conv(x)))
-        x = self.act(self.bn2(self.deptwise_conv(x)))
-        x = self.se(x)
-        x = self.bn3(self.project_conv(x))
-        if self.use_residual:
-            x += residual
-        return x
-
-
-class FusedMBConv(nn.Module):
-    def __init__(self, in_channels, out_channels, expansion, stride):
-        super(FusedMBConv, self).__init__()
-        self.use_residual = stride == 1 and in_channels == out_channels
-        mid_channels = in_channels * expansion
-
-        self.expand_conv = nn.Conv2d(in_channels, mid_channels, kernel_size=3, stride=stride, padding=1, bias=False) if expansion != 1 else None
-        self.bn1 = nn.BatchNorm2d(mid_channels if expansion != 1 else in_channels)
-        self.project_conv = nn.Conv2d(mid_channels if expansion != 1 else in_channels, out_channels, kernel_size=1 if expansion != 1 else 3, stride=1, padding=1 if expansion == 1 else 0, bias=False)
-        self.bn2 = nn.BatchNorm2d(out_channels)
-        self.act = nn.SiLU()
-
-    def forward(self, x):
-        residual = x
-        if self.expand_conv:
-            x = self.act(self.bn1(self.expand_conv(x)))
-        else:
-            x = self.act(self.bn1(x))
-        x = self.bn2(self.project_conv(x))
-        if self.use_residual:
-            x += residual
-        return x
-
-
-class EfficientNetV2(nn.Module):
-    def __init__(self, num_classes=27):
-        super(EfficientNetV2, self).__init__()
-
-        self.stem = nn.Sequential(
-            nn.Conv2d(3, 24, kernel_size=3, stride=2, padding=1, bias=False),
-            nn.BatchNorm2d(24),
-            nn.SiLU()
-        )
-        self.block_config = [
-            (FusedMBConv, 2, 24, 24, 1, 1),
-            (FusedMBConv, 4, 24, 48, 4, 2),
-            (FusedMBConv, 4, 48, 64, 4, 2),
-            (MBConv, 6, 64, 128, 4, 2),
-            (MBConv, 9, 128, 160, 6, 1),
-            (MBConv, 15, 160, 256, 6, 2)
-        ]
-
-        layers = []
-        for block, repeats, in_channels, out_channels, expansion, stride in self.block_config:
-            for i in range(repeats):
-                if i == 0:
-                    layers.append(block(in_channels, out_channels, expansion, stride))
-                else:
-                    layers.append(block(out_channels, out_channels, expansion, 1))
-        self.blocks = nn.Sequential(*layers)
-
-        self.head = nn.Sequential(
-            nn.Conv2d(256, 1280, kernel_size=1, bias=False),
-            nn.BatchNorm2d(1280),
-            nn.SiLU(),
-            nn.AdaptiveAvgPool2d(1),
-            nn.Flatten(),
-            nn.Linear(1280, num_classes)
-        )
-
-    def forward(self, x):
-        x = self.stem(x)
-        x = self.blocks(x)
-        x = self.head(x)
-        return x
+from .deepLearning import EfficientNetV2
 
 model = None
+
+all_artwork_vector = None
 
 def load_model(path='path', device='gpu'):
     model = EfficientNetV2(num_classes=27)
@@ -133,9 +29,11 @@ def load_model(path='path', device='gpu'):
     return model
 
 def startup_recommend():
-    global model
+    global model, all_artwork_vector
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = load_model(r'src/recommend/best_model(EfficientNetV2).pth', device)
+    npy_file_path = 'src/recommend/save_np.npy'
+    all_artwork_vector = np.load(npy_file_path)
 
 def compute_gallery_vector_batch(artworks: List[str], model, device):
     vectors = []
@@ -147,17 +45,9 @@ def compute_gallery_vector_batch(artworks: List[str], model, device):
 
     imgs = []
     for artwork in artworks:
-        # artwork_path = os.path.join("C:/Users/SSAFY/Desktop/wikiart", artwork)
-        # # # artwork_path = os.path.join("/artwork/images", artwork)
-        # if not os.path.exists(artwork_path):
-        #     continue
-        # img = Image.open(artwork).convert('RGB')
-        # imgs.append(transform(img).unsqueeze(0).to(device))
         try:
-            # Fetch the image from the URL
             response = requests.get(artwork)
             if response.status_code == 200:
-                # Open the image from the response content
                 img = Image.open(BytesIO(response.content)).convert('RGB')
                 imgs.append(transform(img).unsqueeze(0).to(device))
             else:
@@ -185,7 +75,14 @@ def recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery
     d = user_gallery_vector.shape[1]
     index = faiss.IndexFlatL2(d)
     index.add(all_gallery_vector)
-    _, indices = index.search(user_gallery_vector, top_k)
+    
+    try:
+        distances, indices = index.search(user_gallery_vector, top_k)
+        print(f"Search result - distances: {distances}, indices: {indices}")
+    except Exception as e:
+        print(f"Error in faiss search: {e}")
+        raise
+
     return [gallery_idx[i] for i in indices[0]]
 
 def custom_base(top_view_galleries, similar_galleries, db: Session):
@@ -302,7 +199,7 @@ def recommend_gallery(user_id, db: Session):
     all_gallery_vector = compute_gallery_vector_batch(art_gallery_data, model, device)
 
     if all_gallery_vector is None:
-        all_gallery_vector = np.array([np.zeros_like(user_gallery_vector)])
+        raise ValueError("Other gallery vector could not be computed.")
 
     # 미술관 추천(3개)
     similar_gallery_ids = recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery_idx)
@@ -313,18 +210,90 @@ def recommend_gallery(user_id, db: Session):
 
     return result
 
+#------------------------------------미술품----------------------------------
+def compute_artwork_vector_batch(artworks: List[str], model, device):
+    vectors = []
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+    ])
+
+    imgs = []
+    for artwork in artworks:
+        try:
+
+            artwork_path = os.path.join("https://j11d106.p.ssafy.io/static", artwork).replace('\\', '/')
+            response = requests.get(artwork_path)
+            if response.status_code == 200:
+
+                img = Image.open(BytesIO(response.content)).convert('RGB')
+                imgs.append(transform(img).unsqueeze(0).to(device))
+            else:
+                print(f"Failed to fetch image from {artwork_path}")
+        except Exception as e:
+            print(f"Error processing {artwork_path}: {e}")
+            continue
+
+    if len(imgs) > 0:
+        img_batch = torch.cat(imgs, dim=0)
+        with torch.no_grad():
+            embedding_vectors = model(img_batch).cpu().numpy()
+        vectors = [embedding.flatten() for embedding in embedding_vectors]
+
+    if vectors:
+        mean_vector = np.mean(vectors, axis=0)
+        return np.array(mean_vector)
+    else:
+        return None
+    
+def recommend_similar_artworks(user_artworks_vector, all_artworks_vector, artwork_idx, top_k=50):
+    if user_artworks_vector.ndim == 1:
+        user_artworks_vector = np.expand_dims(user_artworks_vector, axis=0)
+        
+    d = user_artworks_vector.shape[1]
+    index = faiss.IndexFlatL2(d)
+    index.add(all_artworks_vector)
+    _, indices = index.search(user_artworks_vector, top_k)
+    return [artwork_idx[i] for i in indices[0]]
+
 def recommend_artwork(user_id, db : Session):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    user_artworks = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
+    user_gallery = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
 
-    user_artworks_path = user_artworks.gallery_img
+    if not user_gallery:
+        raise HTTPException(status_code=404, detail="User gallery not found")
 
-    user_artworks_vector = compute_gallery_vector_batch([user_artworks_path], model, device)
 
-    art_galleries = db.query(Artwork).filter(Artwork.filename not in user_artworks_path).all()
-    art_gallery_data = [gallery.gallery_img for gallery in art_galleries if gallery.gallery_id not in top_gallery_ids]
-    gallery_idx = [gallery.gallery_id for gallery in art_galleries if gallery.gallery_id not in top_gallery_ids]
-    similar_gallery_ids = recommend_similar_galleries(userz_gallery_vector, all_gallery_vector, gallery_idx)
+    user_theme = db.query(Theme).filter(Theme.gallery_id.in_([user_gallery.gallery_id])).all()
+    user_theme_idx = [theme.theme_id for theme in user_theme]
 
-    return
+    user_artworks_path = db.query(Artwork_Theme).filter(Artwork_Theme.theme_id.in_(user_theme_idx)).all()
+    user_artwork_idx = [artwork.artwork_id for artwork in user_artworks_path]
+
+    if len(user_artwork_idx) < 5:
+        raise HTTPException(status_code=500, detail="Not enough artworks")
+
+    user_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(user_artwork_idx)).limit(5)
+    user_artworks_path = [artwork.filename for artwork in user_artworks]
+
+    user_artworks_vector = compute_artwork_vector_batch(user_artworks_path, model, device)
+
+    if user_artworks_vector is None:
+        raise HTTPException(status_code=500, detail="Failed to compute gallery vector")
+
+    filtered_artwork_vector = np.delete(all_artwork_vector, user_artwork_idx, axis=0)
+
+    recommended_artworks = recommend_similar_artworks(user_artworks_vector, filtered_artwork_vector, list(range(len(all_artwork_vector))), top_k=50)
+    
+    result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
+    result = []
+
+    for artwork in result_artworks:
+        base = ArtworksBase(
+            artwork_id=artwork.artwork_id,
+            image_url='https://j11d106.p.ssafy.io/static/' + artwork.filename
+        )
+        result.append(base)
+    return result

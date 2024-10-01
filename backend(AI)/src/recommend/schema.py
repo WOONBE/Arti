@@ -17,8 +17,8 @@ class Artwork(BaseModel):
 class GalleryBase(BaseModel):
     id: Optional[int] = None
     gallery_id: int
-    gallery_title: str
-    gallery_desc: str
+    gallery_title: Optional[str] = None
+    gallery_desc: Optional[str] = None
     gallery_img: str
     gallery_view: int
 

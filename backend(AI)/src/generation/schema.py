@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 
 class post_ai_image(BaseModel):
     member_id : int
+    artwork_type : str
     ai_artwork_title : str
     ai_img_url : str
     is_deleted : Optional[int] = 0
