@@ -2,11 +2,9 @@ package com.hexa.arti.repository
 
 import com.google.gson.Gson
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
+import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
-import com.hexa.arti.data.model.artmuseum.CreateThemeDto
-import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
-import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponseItem
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.data.model.artwork.Artwork
@@ -125,13 +123,12 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateArtGallery(
+
+    override suspend fun getPostTheme(
         galleryId: Int,
-        updateGalleryDto: UpdateGalleryDto
-    ): Result<ResponseBody> {
-        val result = galleryAPI.updateMyGallery(galleryId, updateGalleryDto)
-    override suspend fun getPostTheme(galleryId: Int, themeDto: CreateThemeDto): Result<ThemeResponseItem> {
-        val result = galleryAPI.postGalleryTheme(galleryId,themeDto)
+        themeDto: CreateThemeDto
+    ): Result<ThemeResponseItem> {
+        val result = galleryAPI.postGalleryTheme(galleryId, themeDto)
 
         if (result.isSuccessful) {
             result.body()?.let {
@@ -151,8 +148,11 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateArtGallery(galleryId: Int,updateGalleryDto: UpdateGalleryDto): Result<ResponseBody> {
-        val result = galleryAPI.updateMyGallery(galleryId,updateGalleryDto)
+    override suspend fun updateArtGallery(
+        galleryId: Int,
+        updateGalleryDto: UpdateGalleryDto
+    ): Result<ResponseBody> {
+        val result = galleryAPI.updateMyGallery(galleryId, updateGalleryDto)
 
         if (result.isSuccessful) {
             result.body()?.let {
@@ -173,7 +173,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteTheme(galleryId: Int, themeId: Int): Result<ResponseBody> {
-        val result = galleryAPI.deleteTheme(galleryId,themeId)
+        val result = galleryAPI.deleteTheme(galleryId, themeId)
         if (result.isSuccessful) {
             result.body()?.let {
                 return Result.success(it)
@@ -192,7 +192,10 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteThemeArtWork(themeId: Int, artworkId: Int): Result<ResponseBody> {
+    override suspend fun deleteThemeArtWork(
+        themeId: Int,
+        artworkId: Int
+    ): Result<ResponseBody> {
         val result = galleryAPI.deleteThemeArtwork(themeId, artworkId)
         if (result.isSuccessful) {
             result.body()?.let {
