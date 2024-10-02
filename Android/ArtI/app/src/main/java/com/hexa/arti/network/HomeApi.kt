@@ -7,6 +7,6 @@ import retrofit2.http.Path
 
 interface HomeApi {
 
-    @GET("fastapi/home/{user_id}")
+    @GET("home/{user_id}")
     suspend fun getRecommendMuseum(@Path("user_id") userId:Int): Response<List<GetRecommendGalleriesResponse>>
 }

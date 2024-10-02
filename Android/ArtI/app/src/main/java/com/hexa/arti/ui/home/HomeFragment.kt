@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class HomeFragment :
     BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
-
     private val viewModel: HomeViewModel by viewModels()
     private val viewpageAdapter = ViewpageAdapter(
         onPlayClick = { itemNumber ->
@@ -30,19 +29,24 @@ class HomeFragment :
     )
 
     override fun init() {
-        initObserve()
         initAdapter()
+        initObserve()
+        initViews()
     }
 
     private fun initObserve() {
         viewModel.resultGalleries.observe(viewLifecycleOwner) {
-
+            viewpageAdapter.submitList(it)
         }
     }
 
     private fun initAdapter() {
         binding.viewpager2.adapter = viewpageAdapter
 
+    }
+
+    private fun initViews(){
+        viewModel.getRecommendGalleries(1)
     }
 
 

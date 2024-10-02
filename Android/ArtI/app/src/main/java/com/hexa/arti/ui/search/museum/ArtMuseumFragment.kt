@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.home.ArtTheme
+import com.hexa.arti.data.model.home.HomeTheme
 import com.hexa.arti.data.model.search.PreviewImage
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
@@ -51,9 +51,9 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         binding.rvTheme.apply {
             adapter = themeAdapter
             val artThemeList = listOf(
-                ArtTheme("절망"),
-                ArtTheme("희망"),
-                ArtTheme("병현")
+                HomeTheme(1,1,"하하", emptyList()),
+                HomeTheme(2,2,"헤헤", emptyList()),
+                HomeTheme(3,3,"히히", emptyList()),
             )
 
             themeAdapter.submitList(artThemeList)
