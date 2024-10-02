@@ -1,17 +1,11 @@
 package com.hexa.arti.ui.home
 
-import android.os.SystemClock
 import android.util.Log
-import android.view.MotionEvent
-import android.content.Context
-import android.os.Bundle
-import android.view.View
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentHomeBinding
 import com.hexa.arti.ui.home.adapter.ViewpageAdapter
-import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,36 +15,33 @@ class HomeFragment :
 
 
     private val viewModel: HomeViewModel by viewModels()
+    private val viewpageAdapter = ViewpageAdapter(
+        onPlayClick = { itemNumber ->
+            Log.d("확인", "클릭 확인요 ${itemNumber}")
+            val action = HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(1)
+            navigate(action)
+        },
+        onSliding = {
+            binding.viewpager2.isUserInputEnabled = false
+        },
+        onNormal = {
+            binding.viewpager2.isUserInputEnabled = true
+        },
+    )
 
     override fun init() {
+        initObserve()
         initAdapter()
     }
 
-    private fun initAdapter(){
-        binding.viewpager2.adapter = ViewpageAdapter(
-            onPlayClick = { itemNumber ->
-                Log.d("확인", "클릭 확인요 ${itemNumber}")
-                val action = HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(1)
-                navigate(action)
-            },
-            onSliding = {
-                binding.viewpager2.isUserInputEnabled = false
-            },
-            onNormal = {
-                binding.viewpager2.isUserInputEnabled = true
-            },
-            blockTouch = {
-//                val cancelEvent = MotionEvent.obtain(
-//                    SystemClock.uptimeMillis(), SystemClock.uptimeMillis(),
-//                    MotionEvent.ACTION_CANCEL, 0f, 0f, 0
-//                )
-//                view?.dispatchTouchEvent(cancelEvent)
-//                cancelEvent.recycle()
-            },
-            unBlockTouch = {
+    private fun initObserve() {
+        viewModel.resultGalleries.observe(viewLifecycleOwner) {
 
-            }
-        )
+        }
+    }
+
+    private fun initAdapter() {
+        binding.viewpager2.adapter = viewpageAdapter
 
     }
 
