@@ -1,5 +1,6 @@
 package com.hexa.arti.network
 
+import com.github.mikephil.charting.components.Description
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
@@ -29,6 +30,9 @@ interface GalleryApi  {
 
     @POST("galleries/themes")
     suspend fun postGalleryTheme(@Body themeDto: CreateThemeDto) : Response<ThemeResponseItem>
+
+    @POST("galleries/themes/{themeId}/artworks/{artworkId}")
+    suspend fun postArtworkTheme(@Path("themeId") themeId: Int, @Path("artworkId") artworkId: Int, @Query("description") description: String) : Response<ResponseBody>
 
     @PUT("galleries/{galleryId}")
     suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Body updateGalleryDto : UpdateGalleryDto) : Response<ResponseBody>

@@ -102,6 +102,32 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun postArtworkTheme(
+        themeId: Int,
+        artworkId: Int,
+        description: String
+    ): Result<ResponseBody> {
+        val result = galleryAPI.postArtworkTheme(themeId,artworkId,description)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
+
     override suspend fun updateArtGallery(galleryId: Int,updateGalleryDto: UpdateGalleryDto): Result<ResponseBody> {
         val result = galleryAPI.updateMyGallery(galleryId,updateGalleryDto)
 
