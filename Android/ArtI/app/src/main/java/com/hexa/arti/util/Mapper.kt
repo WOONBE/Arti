@@ -6,6 +6,7 @@ import com.hexa.arti.data.model.response.GetArtWorkResponse
 import com.hexa.arti.data.model.response.GetArtistResponse
 import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
 import com.hexa.arti.data.model.response.GetRandomGenreArtWorkResponse
+import com.hexa.arti.data.model.response.GetRecommendArtworkResponse
 import com.hexa.arti.data.model.search.Artist
 
 fun GetArtistResponse.asArtist() = Artist(
@@ -30,6 +31,14 @@ fun GetRandomGenreArtWorkResponse.asArtwork() = Artwork(
     title = this.title,
     description = this.description,
     year = this.year
+)
+
+fun GetRecommendArtworkResponse.asArtwork() = Artwork(
+    artworkId = this.artworkId,
+    imageUrl = this.imageUrl,
+    title = this.title,
+    description = this.description,
+    year = this.year,
 )
 
 fun GetRandomGalleriesResponse.asGalleryBanner() = GalleryBanner(
