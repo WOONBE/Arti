@@ -11,16 +11,19 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
+import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryThemeAdapter
 import com.hexa.arti.ui.artmuseum.util.showAddThemeDialog
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
@@ -32,8 +35,25 @@ private const val TAG = "MyGalleryFragment"
 class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragment_my_gallery){
 
     private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
+    private val mainActivityViewModel : MainActivityViewModel by activityViewModels()
     private val myGalleryViewModel : MyGalleryViewModel by viewModels()
+    private var galleryId = 0
+    private var userId = 0
     override fun init() {
+
+        lifecycleScope.launch {
+
+            mainActivityViewModel.getLoginData().collect { d ->
+                Log.d(TAG, "onCreate: ${d?.galleryId}")
+                d?.let {
+                    userId = d.memberId
+                    galleryId = d.galleryId
+                }
+
+
+            }
+        }
+
 
         with(binding){
             adapter = MyGalleryThemeAdapter(requireContext(), onArtWorkDelete = { themeId, artWorkId ->
@@ -42,9 +62,9 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 // 테마 내부 이미지 삭제
                 myGalleryViewModel.deleteThemeDelete(themeId,artWorkId)
             }, onThemeDelete = { themeId ->
-                Log.d(TAG, "init: ${themeId}")
+                Log.d(TAG, "init: ${themeId} galleryId $galleryId")
                 // 갤러리 아이디 받아오기 필요
-                myGalleryViewModel.deleteTheme(1, themeId)
+                myGalleryViewModel.deleteTheme(galleryId, themeId)
 
             })
             myGalleryThemeRv.adapter = adapter
@@ -56,7 +76,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 with(myGalleryViewModel){
                     updateThemeDto.observe(viewLifecycleOwner){
                         Log.d(TAG, "init: aaaaa $it")
-                        myGalleryActivityViewModel.getMyGalleryTheme(1)
+                        myGalleryActivityViewModel.getMyGalleryTheme(galleryId)
                     }
                 }
 
@@ -82,7 +102,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
             }
 
             myGalleryThemeAddBtn.setOnClickListener {
-                showAddThemeDialog(requireContext(),1,myGalleryViewModel)
+                showAddThemeDialog(requireContext(),galleryId,myGalleryViewModel)
             }
         }
 
@@ -120,7 +140,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     isFocusable = false
                     isEnabled = false
                 }
-                myGalleryViewModel.updateGalleryName(myGalleryNameTv.text.toString(),1)
+                myGalleryViewModel.updateGalleryName(myGalleryNameTv.text.toString(),galleryId)
 
             }
             // 미술관 이름 변경 취소 버튼
@@ -164,7 +184,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     isEnabled = false
                 }
 
-                myGalleryViewModel.updateGalleryDescription(myGalleryInfoEt.text.toString(),1)
+                myGalleryViewModel.updateGalleryDescription(myGalleryInfoEt.text.toString(),galleryId)
 
             }
 
@@ -184,7 +204,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
             // 미술관 실행 버튼
             myGalleryPlayBtn.setOnClickListener {
-                val action = MyGalleryHomeFragmentDirections.actionMyGalleryHomeFragmentToArtGalleryDetailFragment(1)
+                val action = MyGalleryHomeFragmentDirections.actionMyGalleryHomeFragmentToArtGalleryDetailFragment(galleryId)
                 navigate(action)
             }
             // 썸네일 이미지 클릭

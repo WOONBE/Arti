@@ -50,7 +50,7 @@ class SurveyFragment : BaseFragment<FragmentSurveyBinding>(R.layout.fragment_sur
                     binding.surveyProgressTv.text = "$i%"
                 }
                 click = true
-                if(status >= 99) navigate(R.id.action_surveyFragment_to_homeFragment)
+                if(status >= 99) navigate(R.id.action_surveyFragment_to_createGalleryFragment)
             }
 
                 CoroutineScope(Dispatchers.Main).launch {

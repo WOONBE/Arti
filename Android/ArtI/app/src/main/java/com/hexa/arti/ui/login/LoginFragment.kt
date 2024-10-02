@@ -3,6 +3,7 @@ package com.hexa.arti.ui.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -29,16 +30,16 @@ class LoginFragment :
         initObserve()
         with(binding) {
             loginBtn.setOnClickListener {
-                startActivity(Intent(requireContext(), MainActivity::class.java))
-//                if(!loginIdEt.text.isNullOrBlank() && !loginPwEt.text.isNullOrBlank() ){
-//                    loginActivity.showLoadingDialog()
-//                    loginViewModel.updateEmail(loginIdEt.text.toString())
-//                    loginViewModel.updatePass(loginPwEt.text.toString())
-//                    loginViewModel.login()
-//                }
-//                else{
-//                    makeToast("ID와 PW를 입력해주세요")
-//                }
+//                startActivity(Intent(requireContext(), MainActivity::class.java))
+                if(!loginIdEt.text.isNullOrBlank() && !loginPwEt.text.isNullOrBlank() ){
+                    loginActivity.showLoadingDialog()
+                    loginViewModel.updateEmail(loginIdEt.text.toString())
+                    loginViewModel.updatePass(loginPwEt.text.toString())
+                    loginViewModel.login()
+                }
+                else{
+                    makeToast("ID와 PW를 입력해주세요")
+                }
 
             }
             signBtn.setOnClickListener {
@@ -49,6 +50,7 @@ class LoginFragment :
 
     private fun initObserve() {
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { status ->
+            Log.d("확인", "initObserve: $status")
             when (status) {
                 1 -> {
                     loginActivity.hideLoadingDialog()
@@ -58,6 +60,7 @@ class LoginFragment :
 
                 2 -> {
                     loginActivity.hideLoadingDialog()
+                    loginViewModel.loginReset()
                     makeToast("로그인 실패")
                 }
                 else -> {

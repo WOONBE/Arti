@@ -76,6 +76,7 @@ class MyGalleryViewModel @Inject constructor(
 
     fun updateGalleryName(name : String,galleryId : Int){
         _updateGalleryDto.value = _updateGalleryDto.value?.copy(name = name)
+        Log.d(TAG, "updateGalleryName: ${name} ${galleryId}")
         updateGallery(galleryId)
     }
     fun updateGalleryThumbnail(){

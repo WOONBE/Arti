@@ -1,8 +1,11 @@
 package com.hexa.arti.repository
 
+import android.util.Log
 import com.google.gson.Gson
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
+import com.hexa.arti.data.model.artmuseum.GalleryRequest
+import com.hexa.arti.data.model.artmuseum.GalleryResponse
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponseItem
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
@@ -11,6 +14,9 @@ import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse
 import com.hexa.arti.network.GalleryApi
 import com.hexa.arti.util.asArtist
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
@@ -81,6 +87,35 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun postGallery(
+        image: MultipartBody.Part,
+        galleryDto: GalleryRequest
+    ): Result<GalleryResponse> {
+
+        val userJson = Gson().toJson(galleryDto)
+        val userRequestBody = userJson.toRequestBody("application/json".toMediaTypeOrNull())
+        val requestBody = MultipartBody.Part.createFormData("galleryRequest", null, userRequestBody)
+
+        val result = galleryAPI.postGallery(requestBody,image)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
     override suspend fun postTheme(themeDto: CreateThemeDto): Result<ThemeResponseItem> {
         val result = galleryAPI.postGalleryTheme(themeDto)
 
@@ -129,7 +164,11 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
 
     override suspend fun updateArtGallery(galleryId: Int,updateGalleryDto: UpdateGalleryDto): Result<ResponseBody> {
+        Log.d("확인", "updateArtGallery: $galleryId $updateGalleryDto")
+
         val result = galleryAPI.updateMyGallery(galleryId,updateGalleryDto)
+
+        Log.d("확인", "updateArtGallery: $result")
 
         if (result.isSuccessful) {
             result.body()?.let {
