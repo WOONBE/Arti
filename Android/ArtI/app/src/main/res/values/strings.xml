@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">ArtI</string>
-    <string name="menu_home">홈</string>
-    <string name="menu_search">검색</string>
-    <string name="menu_art_museum">미술관</string>
-    <string name="menu_profile">프로필</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-</resources>

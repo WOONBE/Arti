@@ -1,0 +1,14 @@
+services:
+  arti:
+    image: alsgml1532/arti:latest
+    container_name: arti
+    volumes:
+      - /home/ubuntu/artwork:/var/images
+    ports:
+      - 8080:8080
+    networks:
+      - arti
+
+networks:
+  arti:
+    external: true
