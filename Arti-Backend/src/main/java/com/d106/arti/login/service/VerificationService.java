@@ -12,31 +12,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VerificationService {
 
-    private final VerificationRepository verificationCodeRepository;
+    private final VerificationRepository verificationRepository;
 
-    public VerificationService(VerificationRepository verificationCodeRepository) {
-        this.verificationCodeRepository = verificationCodeRepository;
+    public VerificationService(VerificationRepository verificationRepository) {
+        this.verificationRepository = verificationRepository;
     }
 
     public void saveVerificationCode(String email, String code) {
         Verification verificationCode = new Verification();
         verificationCode.setEmail(email);
         verificationCode.setCode(code);
-        verificationCode.setExpiryDate(LocalDateTime.now().plusMinutes(10));
-        verificationCodeRepository.save(verificationCode);
+        verificationCode.setExpiryDate(LocalDateTime.now().plusMinutes(10));  // 10분 후 만료
+        verificationRepository.save(verificationCode);
     }
 
     public boolean verifyCode(String email, String code) {
-        Verification storedCode = verificationCodeRepository.findById(email).orElse(null);
+        Verification storedCode = verificationRepository.findById(email).orElse(null);
         if (storedCode == null || storedCode.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return false;
+            return false;  // 코드가 없거나 만료되었으면 실패
         }
-        return storedCode.getCode().equals(code);
+        return storedCode.getCode().equals(code);  // 코드가 일치하면 성공
     }
 
-    @Scheduled(fixedRate = 600000)
-    @Transactional
+    public boolean isVerifiedEmail(String email) {
+        Verification verification = verificationRepository.findById(email).orElse(null);
+        return verification != null && verification.getExpiryDate().isAfter(LocalDateTime.now());  // 이메일이 존재하고 만료되지 않은 경우
+    }
+
+    @Scheduled(fixedRate = 600000)  // 10분 간격으로 실행
     public void deleteExpiredCodes() {
-        verificationCodeRepository.deleteAllByExpiryDateBefore(LocalDateTime.now());
+        verificationRepository.deleteAllByExpiryDateBefore(LocalDateTime.now());
     }
 }
