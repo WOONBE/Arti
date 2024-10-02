@@ -31,4 +31,24 @@ class ArtistRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getRandomArtists(): Result<List<Artist>> {
+        val result = artistApi.getRandomArtists()
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it.map { artistResponse -> artistResponse.asArtist() })
+            }
+
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
 }

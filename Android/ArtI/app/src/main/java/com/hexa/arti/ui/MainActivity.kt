@@ -53,8 +53,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             }
         }
         with(myGalleryActivityViewModel){
-            getMyGallery(1)
-            getMyGalleryTheme(1)
+//            getMyGallery(1)
+//            getMyGalleryTheme(1)
         }
 
 

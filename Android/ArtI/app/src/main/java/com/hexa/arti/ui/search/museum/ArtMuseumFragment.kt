@@ -1,4 +1,4 @@
-package com.hexa.arti.ui.search
+package com.hexa.arti.ui.search.museum
 
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide

@@ -1,4 +1,4 @@
-package com.hexa.arti.ui.search
+package com.hexa.arti.ui.search.artwork
 
 import android.util.Log
 import androidx.navigation.fragment.findNavController

@@ -9,5 +9,6 @@ interface ArtistApi {
     @GET("artists/search")
     suspend fun getArtistByString(@Query("keyword") keyword: String): Response<List<GetArtistResponse>>
 
-
+    @GET("artists/random")
+    suspend fun getRandomArtists(): Response<List<GetArtistResponse>>
 }

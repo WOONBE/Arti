@@ -5,19 +5,29 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.hexa.arti.data.model.search.ArtMuseum
+import com.bumptech.glide.Glide
+import com.hexa.arti.R
+import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.databinding.ItemArtMuseumBinding
 
 class ArtMuseumAdapter(
     private val onItemClick: () -> Unit
-) : ListAdapter<ArtMuseum, ArtMuseumAdapter.ArtMuseumViewHolder>(ArtMuseumDiffUtil()) {
+) : ListAdapter<GalleryBanner, ArtMuseumAdapter.ArtMuseumViewHolder>(ArtMuseumDiffUtil()) {
 
     class ArtMuseumViewHolder(
         private val binding: ItemArtMuseumBinding,
         private val onItemClick: () -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(artMuseum: ArtMuseum) {
+        fun bind(galleryBanner: GalleryBanner) {
+
+            Glide.with(binding.root.context)
+                .load(galleryBanner.imageUrl)
+                .error(R.drawable.gallery_example)
+                .into(binding.ivArtMuseum)
+
+            binding.tvArtTitle.text = galleryBanner.name
+
             itemView.setOnClickListener {
                 onItemClick()
             }
@@ -38,12 +48,12 @@ class ArtMuseumAdapter(
 }
 
 
-class ArtMuseumDiffUtil : DiffUtil.ItemCallback<ArtMuseum>() {
-    override fun areItemsTheSame(oldItem: ArtMuseum, newItem: ArtMuseum): Boolean {
-        return oldItem.id == newItem.id
+class ArtMuseumDiffUtil : DiffUtil.ItemCallback<GalleryBanner>() {
+    override fun areItemsTheSame(oldItem: GalleryBanner, newItem: GalleryBanner): Boolean {
+        return oldItem.galleryId == newItem.galleryId
     }
 
-    override fun areContentsTheSame(oldItem: ArtMuseum, newItem: ArtMuseum): Boolean {
+    override fun areContentsTheSame(oldItem: GalleryBanner, newItem: GalleryBanner): Boolean {
         return oldItem == newItem
     }
 }
