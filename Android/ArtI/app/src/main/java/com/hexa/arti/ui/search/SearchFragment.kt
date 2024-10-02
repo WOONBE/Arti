@@ -17,8 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.artwork.Artwork
-import com.hexa.arti.data.model.search.ArtMuseum
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
@@ -124,20 +122,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
         binding.rvArtistResult.layoutManager = layoutManager
 
-        val mockArtMuseumData = listOf(
-            ArtMuseum(1, "1", "1"),
-            ArtMuseum(2, "1", "1"),
-            ArtMuseum(3, "1", "1"),
-        )
 
-        val mockArtData = listOf(
-            Artwork(1, "1","","",""),
-            Artwork(2, "1","","",""),
-            Artwork(3, "1","","",""),
-        )
-
-        artMuseumAdapter.submitList(mockArtMuseumData)
-//        artAdapter.submitList(mockArtData)
+//        artMuseumAdapter.submitList(mockGalleryBannerData)
     }
 
     private fun initViews() {
@@ -171,8 +157,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
 
                 val keyword = v.text.toString()
-
-//                viewModel.getArtworkByString(keyword)
 
                 viewModel.getArtworkByString(keyword)
                 viewModel.getArtistByString(keyword)

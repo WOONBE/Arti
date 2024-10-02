@@ -3,21 +3,63 @@ package com.hexa.arti.repository
 import com.google.gson.Gson
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
+import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
-import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponseItem
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
+import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse
 import com.hexa.arti.network.GalleryApi
-import com.hexa.arti.util.asArtist
+import com.hexa.arti.util.asArtwork
+import com.hexa.arti.util.asGalleryBanner
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class ArtGalleryRepositoryImpl @Inject constructor(
     private val galleryAPI: GalleryApi
-) : ArtGalleryRepository
-{
+) : ArtGalleryRepository {
+
+    override suspend fun getRandomGalleries(): Result<List<GalleryBanner>> {
+        val result = galleryAPI.getRandomGalleries()
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it.map { gallery -> gallery.asGalleryBanner() })
+            }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
+    override suspend fun getRandomGenreArtworks(genreLabel: String): Result<List<Artwork>> {
+        val result = galleryAPI.getRandomGenreArtworks(genreLabel)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it.map { getRandomGenreArtWorkResponse -> getRandomGenreArtWorkResponse.asArtwork() })
+            }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
     override suspend fun getArtGallery(galleryId: Int): Result<ArtGalleryResponse> {
         val result = galleryAPI.getGalley(galleryId)
 
@@ -81,7 +123,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun postTheme(themeDto: CreateThemeDto): Result<ThemeResponseItem> {
+ override suspend fun postTheme(themeDto: CreateThemeDto): Result<ThemeResponseItem> {
         val result = galleryAPI.postGalleryTheme(themeDto)
 
         if (result.isSuccessful) {

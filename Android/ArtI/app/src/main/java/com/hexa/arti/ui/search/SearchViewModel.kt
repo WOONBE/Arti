@@ -36,19 +36,6 @@ class SearchViewModel @Inject constructor(
     private val _artworkResult = MutableStateFlow<PagingData<Artwork>>(PagingData.empty())
     val artWorkResult: StateFlow<PagingData<Artwork>> = _artworkResult.asStateFlow()
 
-
-    fun getArtWorkById(id: Int) {
-        viewModelScope.launch {
-            artWorkRepository.getArtWorkById(id).onSuccess { response ->
-                Log.d("확인", "성공 ${response}")
-            }.onFailure { error ->
-                if (error is ApiException) {
-                    Log.d("확인", "실패 ${error.code} ${error.message}")
-                }
-            }
-        }
-    }
-
     fun getArtworkByString(keyword: String){
         viewModelScope.launch {
             artWorkRepository.getArtWorksByStringWithPaging(keyword)
@@ -70,7 +57,5 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
-
-
 
 }
