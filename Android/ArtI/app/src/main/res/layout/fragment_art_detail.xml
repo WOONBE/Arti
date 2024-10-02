@@ -152,7 +152,58 @@
                 app:layout_constraintBottom_toTopOf="@id/art_detail_submit_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/art_detail_theme_tv" />
+                app:layout_constraintTop_toBottomOf="@+id/art_detail_theme_tv"
+                android:layout_gravity="center">
+
+                <!-- RadioButtons added manually -->
+                <RadioButton
+                    android:id="@+id/theme1"
+                    android:layout_width="0dp"
+                    app:layout_columnWeight="1"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Option 1" />
+
+                <RadioButton
+                    android:id="@+id/theme2"
+                    android:layout_width="0dp"
+                    app:layout_columnWeight="1"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Option 2" />
+
+                <RadioButton
+                    android:id="@+id/theme3"
+                    android:layout_width="0dp"
+                    app:layout_columnWeight="1"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Option 3" />
+
+                <RadioButton
+                    android:id="@+id/theme4"
+                    android:layout_width="0dp"
+                    app:layout_columnWeight="1"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Option 1" />
+
+                <RadioButton
+                    android:id="@+id/theme5"
+                    android:layout_width="0dp"
+                    app:layout_columnWeight="1"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Option 2" />
+
+                <RadioButton
+                    android:id="@+id/theme6"
+                    android:layout_width="0dp"
+                    app:layout_columnWeight="1"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content"
+                    android:text="Option 3" />
+            </androidx.gridlayout.widget.GridLayout>
 
 
             <androidx.appcompat.widget.AppCompatButton

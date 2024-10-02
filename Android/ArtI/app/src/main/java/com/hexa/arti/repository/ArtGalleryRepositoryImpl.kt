@@ -123,12 +123,8 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-
-    override suspend fun getPostTheme(
-        galleryId: Int,
-        themeDto: CreateThemeDto
-    ): Result<ThemeResponseItem> {
-        val result = galleryAPI.postGalleryTheme(galleryId, themeDto)
+ override suspend fun postTheme(themeDto: CreateThemeDto): Result<ThemeResponseItem> {
+        val result = galleryAPI.postGalleryTheme(themeDto)
 
         if (result.isSuccessful) {
             result.body()?.let {
@@ -148,11 +144,34 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateArtGallery(
-        galleryId: Int,
-        updateGalleryDto: UpdateGalleryDto
+    override suspend fun postArtworkTheme(
+        themeId: Int,
+        artworkId: Int,
+        description: String
     ): Result<ResponseBody> {
-        val result = galleryAPI.updateMyGallery(galleryId, updateGalleryDto)
+        val result = galleryAPI.postArtworkTheme(themeId,artworkId,description)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
+
+    override suspend fun updateArtGallery(galleryId: Int,updateGalleryDto: UpdateGalleryDto): Result<ResponseBody> {
+        val result = galleryAPI.updateMyGallery(galleryId,updateGalleryDto)
 
         if (result.isSuccessful) {
             result.body()?.let {
@@ -173,7 +192,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteTheme(galleryId: Int, themeId: Int): Result<ResponseBody> {
-        val result = galleryAPI.deleteTheme(galleryId, themeId)
+        val result = galleryAPI.deleteTheme(galleryId,themeId)
         if (result.isSuccessful) {
             result.body()?.let {
                 return Result.success(it)
@@ -192,11 +211,8 @@ class ArtGalleryRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deleteThemeArtWork(
-        themeId: Int,
-        artworkId: Int
-    ): Result<ResponseBody> {
-        val result = galleryAPI.deleteThemeArtwork(themeId, artworkId)
+    override suspend fun deleteThemeArtWork(themeId: Int, artworkId: Int): Result<ResponseBody> {
+        val result = galleryAPI.deleteThemeArtwork(themeId,artworkId)
         if (result.isSuccessful) {
             result.body()?.let {
                 return Result.success(it)

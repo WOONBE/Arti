@@ -1,42 +1,47 @@
 package com.hexa.arti.ui.artGalleryDetail
 
-import android.os.Bundle
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.util.Log
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentArtDetailBinding
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
+
 
 private const val TAG = "ArtDetailFragment"
 @AndroidEntryPoint
 class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragment_art_detail) {
 
     private val args: ArtDetailFragmentArgs by navArgs()
-    private val artDetailViewModel : ArtDetailViewModel by viewModels()
-    private var selectedThemeId:Int = 1
+    private val artDetailViewModel: ArtDetailViewModel by viewModels()
+    private var selectedThemeId: Int = 1
+    private var selectDescription : String = ""
     override fun init() {
         artDetailViewModel.getMyGalleryTheme(1)
-        artDetailViewModel.galleryTheme.observe(viewLifecycleOwner){
+        artDetailViewModel.galleryTheme.observe(viewLifecycleOwner) {
             Log.d(TAG, "init: $it")
             setupRadioButtons(it)
         }
-        with(binding){
-                Log.d(TAG, "init: ${args.imgUrl}")
-                Glide.with(requireContext())
-                    .load(args.imgUrl)
-                    .into(artDetailIv)
-                artDetailTitleTv.text = args.imgTitle
-                artDetailAuthorTv.text = args.imgArtist
-                artDetailCreateTv.text = args.imgYear
+        with(binding) {
+            Log.d(TAG, "init: ${args.imgUrl}")
+            Glide.with(requireContext())
+                .load(args.imgUrl)
+                .into(artDetailIv)
+            artDetailTitleTv.text = args.imgTitle
+            artDetailAuthorTv.text = args.imgArtist
+            artDetailCreateTv.text = args.imgYear
 
             artDetailCancelBtn.setOnClickListener {
 
@@ -48,8 +53,25 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
             }
             artDetailSubmitBtn.setOnClickListener {
                 Log.d("Selected Theme ID", "Selected Theme ID: $selectedThemeId")
-                artDetailCl.visibility = View.VISIBLE
-                artDetailThemeCl.visibility = View.GONE
+
+                val description = EditText(requireContext())
+
+                AlertDialog.Builder(requireContext())
+                    .setTitle("설명")
+                    .setMessage("작품에 대해 설명헤주세요")
+                    .setView(description)
+                    .setPositiveButton("확인"
+                    ) { dialog, which ->
+                        artDetailViewModel.postArtwork(themeId = selectedThemeId,args.imgId,description.text.toString())
+                        artDetailCl.visibility = View.VISIBLE
+                        artDetailThemeCl.visibility = View.GONE
+                    }
+                    .setNegativeButton("취소"
+                    ) { dialog, which ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                    .show()
             }
             artDetailSaveBtn.setOnClickListener {
                 artDetailCl.visibility = View.GONE
@@ -60,37 +82,51 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
 
     }
 
-    private fun setupRadioButtons(themes: List<Pair<Int, String>>) {
+    private fun setupRadioButtons(l: List<MyGalleryThemeItem>) {
         val gridLayout = binding.gridLayout
-        gridLayout.removeAllViews() // 기존 뷰 제거
-        val radioGroup = RadioGroup(requireContext())
-        radioGroup.orientation = RadioGroup.HORIZONTAL // 가로 배열
 
-        themes.forEachIndexed { index, theme ->
-            val radioButton = RadioButton(requireContext()).apply {
-                id = theme.first  // theme id를 RadioButton id로 설정
-                text = theme.second  // theme title을 RadioButton의 텍스트로 설정
-                layoutParams = GridLayout.LayoutParams().apply {
-                    width = ViewGroup.LayoutParams.MATCH_PARENT / 3  // GridLayout에서 비율로 배분
-                    height = ViewGroup.LayoutParams.WRAP_CONTENT
-                    columnSpec = GridLayout.spec(index % 3, 1f)  // 3열 배치
-                    rowSpec = GridLayout.spec(index / 3)
-                    setMargins(8, 8, 8, 8)  // 여백 설정
-                }
-            }
-
-            // RadioGroup에 RadioButton 추가
-            radioGroup.addView(radioButton)
-
-            // RadioButton이 선택되었을 때의 동작
-            radioButton.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    selectedThemeId = theme.first
-                }
+        // GridLayout 내 모든 RadioButton 찾기
+        val radioButtonList = mutableListOf<RadioButton>()
+        for (i in 0 until gridLayout.childCount) {
+            val view = gridLayout.getChildAt(i)
+            if (view is RadioButton) {
+                radioButtonList.add(view)
             }
         }
 
-        // GridLayout에 RadioGroup 추가
-        gridLayout.addView(radioGroup)
+        // 각 RadioButton에 테마 할당 (필요한 개수만큼 설정하고 나머지는 GONE 처리)
+        radioButtonList.forEachIndexed { index, radioButton ->
+            if (index < l.size) {
+                val (id, title) = l[index]
+                radioButton.apply {
+                    text = title
+                    this.id = id  // 테마의 ID를 RadioButton의 id로 설정
+                    visibility = View.VISIBLE
+                    isChecked = false  // 초기 상태에서 선택되지 않도록 설정
+                }
+            } else {
+                radioButton.visibility = View.GONE  // 사용되지 않는 RadioButton 숨기기
+            }
+        }
+
+        // 각 RadioButton 클릭 시 다른 버튼들 해제 및 선택된 RadioButton 정보 로그 출력
+        radioButtonList.forEach { radioButton ->
+            radioButton.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) {
+                    // 다른 모든 RadioButton 해제
+                    radioButtonList.forEach { btn ->
+                        if (btn != buttonView) {
+                            btn.isChecked = false
+                        }
+                    }
+
+                    // 선택된 RadioButton의 ID와 텍스트 가져오기
+                    val selectedId = buttonView.id
+                    val selectedText = buttonView.text.toString()
+                    selectedThemeId = selectedId
+                    Log.d("RadioButton", "Selected: $selectedId, Text: $selectedText $l")
+                }
+            }
+        }
     }
 }

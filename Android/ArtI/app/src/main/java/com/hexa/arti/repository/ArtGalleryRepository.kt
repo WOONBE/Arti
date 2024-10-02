@@ -1,5 +1,6 @@
 package com.hexa.arti.repository
 
+import android.credentials.CredentialDescription
 import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
@@ -26,11 +27,15 @@ interface ArtGalleryRepository {
         galleryId : Int
     )  : Result<List<MyGalleryThemeItem>>
 
-    suspend fun getPostTheme(
-        galleryId : Int,
+    suspend fun postTheme(
         themeDto : CreateThemeDto
     ) : Result<ThemeResponseItem>
 
+    suspend fun postArtworkTheme(
+        themeId: Int,
+        artworkId: Int,
+        description: String
+    ) : Result<ResponseBody>
 
     suspend fun updateArtGallery(
         galleryId : Int,
