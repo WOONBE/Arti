@@ -12,4 +12,6 @@ public class LoginResponse {
 
     private String token;
     private long expiresIn;
+    private Integer memberId;
+    private Integer galleryId;
 }
