@@ -1,32 +1,34 @@
-package com.hexa.arti.ui.home
+package com.hexa.arti.ui.search.artwork
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hexa.arti.data.model.home.GetRecommendGalleriesResponse
+import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.repository.HomeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class ArtBannerViewModel @Inject constructor(
     private val homeRepository: HomeRepository
 ) : ViewModel() {
 
-    private val _resultGalleries = MutableLiveData<List<GetRecommendGalleriesResponse>>()
-    val resultGalleries = _resultGalleries
+    private val _resultArtworks = MutableLiveData<List<Artwork>>()
+    val resultArtworks = _resultArtworks
 
-    fun getRecommendGalleries(userId: Int) {
+    fun getRecommendArtworks(userId: Int) {
         viewModelScope.launch {
-            homeRepository.getRecommendGalleries(userId).onSuccess {
-                _resultGalleries.value = it
+            homeRepository.getRecommendArtworks(userId).onSuccess {
+                _resultArtworks.value = it
             }.onFailure { error ->
                 if (error is ApiException) {
-                    _resultGalleries.value = emptyList()
+                    _resultArtworks.value = emptyList()
                 }
             }
         }
     }
+
 }

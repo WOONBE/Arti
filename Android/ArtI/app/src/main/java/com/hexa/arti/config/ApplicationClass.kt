@@ -65,5 +65,10 @@ class ApplicationClass : Application() {
             "우키요에",
             "매너리즘"
         )
+
+        val KOREAN_TO_ENGLISH_MAP: Map<String, String> by lazy {
+            REPRESENT_ARTWORKS_KOR.zip(REPRESENT_ARTWORKS).toMap()
+        }
     }
+
 }

@@ -10,6 +10,7 @@ import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
 import com.hexa.arti.data.model.response.GetRandomGenreArtWorkResponse
+import com.hexa.arti.data.model.response.GetSearchGalleryResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -21,6 +22,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GalleryApi {
+
+    @GET("galleries/search")
+    suspend fun getSearchGallery(@Query("keyword") keyword: String): Response<List<GetSearchGalleryResponse>>
 
     @GET("galleries/random")
     suspend fun getRandomGalleries(): Response<List<GetRandomGalleriesResponse>>

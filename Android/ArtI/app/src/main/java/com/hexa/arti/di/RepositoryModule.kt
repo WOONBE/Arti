@@ -8,6 +8,8 @@ import com.hexa.arti.repository.ArtWorkUploadRepository
 import com.hexa.arti.repository.ArtWorkUploadRepositoryImpl
 import com.hexa.arti.repository.ArtistRepository
 import com.hexa.arti.repository.ArtistRepositoryImpl
+import com.hexa.arti.repository.HomeRepository
+import com.hexa.arti.repository.HomeRepositoryImpl
 import com.hexa.arti.repository.LoginRepository
 import com.hexa.arti.repository.LoginRepositoryImpl
 import com.hexa.arti.repository.SignUpRepository
@@ -38,23 +40,29 @@ interface RepositoryModule {
     @Binds
     fun bindLoginRepository(
         loginRepositoryImpl: LoginRepositoryImpl
-    ) : LoginRepository
+    ): LoginRepository
 
     @Singleton
     @Binds
     fun bindSignUpRepository(
         signUpRepositoryImpl: SignUpRepositoryImpl
-    ) : SignUpRepository
+    ): SignUpRepository
 
     @Singleton
     @Binds
     fun bindArtWorkUploadRepository(
         artWorkUploadRepositoryImpl: ArtWorkUploadRepositoryImpl
-    ) : ArtWorkUploadRepository
+    ): ArtWorkUploadRepository
 
     @Singleton
     @Binds
     fun bindArtGalleryRepository(
         artGalleryRepositoryImpl: ArtGalleryRepositoryImpl
-    ) : ArtGalleryRepository
+    ): ArtGalleryRepository
+
+    @Singleton
+    @Binds
+    fun bindHomeRepository(
+        homeRepositoryImpl: HomeRepositoryImpl
+    ): HomeRepository
 }

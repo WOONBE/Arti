@@ -1,6 +1,6 @@
 package com.hexa.arti.ui.search.museum
 
-import androidx.datastore.preferences.protobuf.Api
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,12 +19,13 @@ class ArtMuseumBannerViewModel @Inject constructor(
     private val _resultMuseums = MutableLiveData<List<GalleryBanner>>()
     val resultMuseums = _resultMuseums
 
-    fun getRandomMuseums(){
+    fun getRandomMuseums() {
         viewModelScope.launch {
             artGalleryRepository.getRandomGalleries().onSuccess { response ->
+                Log.d("확인", "미술관 데이터 ${response}")
                 _resultMuseums.value = response
             }.onFailure { error ->
-                if(error is ApiException){
+                if (error is ApiException) {
                     _resultMuseums.value = emptyList()
                 }
             }

@@ -10,6 +10,7 @@ import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse
+import com.hexa.arti.data.model.response.GetSearchGalleryResponse
 import com.hexa.arti.network.GalleryApi
 import com.hexa.arti.util.asArtwork
 import com.hexa.arti.util.asGalleryBanner
@@ -19,6 +20,26 @@ import javax.inject.Inject
 class ArtGalleryRepositoryImpl @Inject constructor(
     private val galleryAPI: GalleryApi
 ) : ArtGalleryRepository {
+
+    override suspend fun getSearchGalleries(keyword: String): Result<List<GetSearchGalleryResponse>> {
+        val result = galleryAPI.getSearchGallery(keyword)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
 
     override suspend fun getRandomGalleries(): Result<List<GalleryBanner>> {
         val result = galleryAPI.getRandomGalleries()
