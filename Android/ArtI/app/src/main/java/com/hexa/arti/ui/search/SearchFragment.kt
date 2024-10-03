@@ -17,13 +17,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.artwork.Artwork
-import com.hexa.arti.data.model.search.ArtMuseum
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentSearchBinding
-import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
+import com.hexa.arti.ui.search.adapter.GalleryAdapter
 import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,12 +32,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private val viewModel: SearchViewModel by viewModels()
 
-    private val artMuseumAdapter = ArtMuseumAdapter {
+    private val galleryAdapter = GalleryAdapter {
         Log.d("확인", "미술관 아이템 클릭")
-    }
-
-    private val artAdapter = ArtworkAdapter {
-        Log.d("확인", "작품 아이템 클릭")
     }
 
     private val artworkPagingAdapter = ArtworkPagingAdapter {
@@ -64,7 +58,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
                     }
                 }
             })
-        initUIState()
+        initObserve()
         initAdapters()
         initViews()
 
@@ -80,7 +74,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         }
     }
 
-    private fun initUIState() {
+    private fun initObserve() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -100,6 +94,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             artistAdapter.submitList(it)
         }
 
+        viewModel.galleriesResult.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                galleryAdapter.submitList(it)
+            } else {
+                galleryAdapter.submitList(it)
+            }
+        }
+
     }
 
     private fun updateConstraintArtist() {
@@ -117,27 +119,13 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     private fun initAdapters() {
-        binding.rvArtMuseumResult.adapter = artMuseumAdapter
+        binding.rvArtMuseumResult.adapter = galleryAdapter
         binding.rvArtResult.adapter = artworkPagingAdapter
         binding.rvArtistResult.adapter = artistAdapter
         val layoutManager =
             GridLayoutManager(requireContext(), 2, GridLayoutManager.HORIZONTAL, false)
         binding.rvArtistResult.layoutManager = layoutManager
 
-        val mockArtMuseumData = listOf(
-            ArtMuseum(1, "1", "1"),
-            ArtMuseum(2, "1", "1"),
-            ArtMuseum(3, "1", "1"),
-        )
-
-        val mockArtData = listOf(
-            Artwork(1, "1","","",""),
-            Artwork(2, "1","","",""),
-            Artwork(3, "1","","",""),
-        )
-
-        artMuseumAdapter.submitList(mockArtMuseumData)
-//        artAdapter.submitList(mockArtData)
     }
 
     private fun initViews() {
@@ -172,8 +160,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
                 val keyword = v.text.toString()
 
-//                viewModel.getArtworkByString(keyword)
-
+                viewModel.getSearchGalleries(keyword)
                 viewModel.getArtworkByString(keyword)
                 viewModel.getArtistByString(keyword)
 

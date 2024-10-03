@@ -10,6 +10,9 @@ import com.hexa.arti.data.model.artmuseum.ThemeResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import okhttp3.MultipartBody
+import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
+import com.hexa.arti.data.model.response.GetRandomGenreArtWorkResponse
+import com.hexa.arti.data.model.response.GetSearchGalleryResponse
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
@@ -22,15 +25,25 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface GalleryApi  {
+interface GalleryApi {
+
+    @GET("galleries/search")
+    suspend fun getSearchGallery(@Query("keyword") keyword: String): Response<List<GetSearchGalleryResponse>>
+
+    @GET("galleries/random")
+    suspend fun getRandomGalleries(): Response<List<GetRandomGalleriesResponse>>
+
+    @GET("galleries/artworks/random")
+    suspend fun getRandomGenreArtworks(@Query("genreLabel") genreLabel: String): Response<List<GetRandomGenreArtWorkResponse>>
+
     @GET("galleries/{galleryId}")
-    suspend fun getGalley(@Path("galleryId") galleryId : Int ) : Response<ArtGalleryResponse>
+    suspend fun getGalley(@Path("galleryId") galleryId: Int): Response<ArtGalleryResponse>
 
     @GET("galleries/{galleryId}/themes")
-    suspend fun getGalleryTheme(@Path("galleryId") galleryId: Int) : Response<ThemeResponse>
+    suspend fun getGalleryTheme(@Path("galleryId") galleryId: Int): Response<ThemeResponse>
 
     @GET("galleries/{themeId}/artworks")
-    suspend fun getGalleryThemeArtwork(@Path("themeId") themeId: Int) : Response<ThemeArtworksResponse>
+    suspend fun getGalleryThemeArtwork(@Path("themeId") themeId: Int): Response<ThemeArtworksResponse>
 
     // 사용자가 구독한 미술관
     @GET("galleries/subscriptions/{memberId}")
@@ -60,5 +73,8 @@ interface GalleryApi  {
     suspend fun deleteTheme(@Path("galleryId") galleryId: Int, @Path("themeId") themeId: Int) : Response<ResponseBody>
 
     @DELETE("/galleries/themes/{themeId}/artworks/{artworkId}")
-    suspend fun deleteThemeArtwork(@Path("themeId") themeId: Int, @Path("artworkId") artworkId : Int) : Response<ResponseBody>
- }
+    suspend fun deleteThemeArtwork(
+        @Path("themeId") themeId: Int,
+        @Path("artworkId") artworkId: Int
+    ): Response<ResponseBody>
+}

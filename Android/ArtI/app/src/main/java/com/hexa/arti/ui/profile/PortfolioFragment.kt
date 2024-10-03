@@ -1,12 +1,18 @@
 package com.hexa.arti.ui.profile
 
+import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.utils.ColorTemplate
+import com.hexa.arti.BuildConfig
 import com.hexa.arti.R
+import com.hexa.arti.config.ApplicationClass
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.portfolio.PortfolioGenre
 import com.hexa.arti.databinding.FragmentPortfolioBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,27 +22,50 @@ import dagger.hilt.android.AndroidEntryPoint
 class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
 
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val portfolioViewModel: PortfolioViewModel by viewModels()
 
     override fun init() {
+        initObserve()
         initViews()
+    }
+
+    private fun initObserve() {
+        portfolioViewModel.resultGenres.observe(viewLifecycleOwner) { genres ->
+            initChart(genres)
+        }
     }
 
     private fun initViews() {
         mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
             if (state == MainActivityViewModel.PORTFOLIO_FRAGMENT) {
-                initChart()
+                portfolioViewModel.resultGenres.value?.let {
+                    initChart(it)
+                    updateGenreViews(it)
+                }
             }
         }
+
+        portfolioViewModel.getPortfolio(1)
     }
 
-    private fun initChart() {
+    private fun initChart(genres: List<PortfolioGenre>) {
         val dataList = ArrayList<PieEntry>()
 
-        dataList.add(PieEntry(1f, "팝아트"))
-        dataList.add(PieEntry(2f, "인상주의"))
-        dataList.add(PieEntry(1f, "르네상스"))
-        dataList.add(PieEntry(3f, "입체파"))
-        dataList.add(PieEntry(1f, "그 외"))
+        val sortedGenres = genres.sortedByDescending { it.count }
+        val totalCount = genres.sumOf { it.count }
+
+        if (sortedGenres.size <= 4) {
+            sortedGenres.forEachIndexed() { index, genre ->
+                dataList.add(PieEntry((genre.count.toFloat() / totalCount) * 100, genre.genre))
+            }
+        } else {
+            sortedGenres.take(4).forEach { genre ->
+                dataList.add(PieEntry((genre.count.toFloat() / totalCount) * 100, genre.genre))
+            }
+
+            val otherCount = sortedGenres.drop(4).sumOf { it.count }
+            dataList.add(PieEntry((otherCount.toFloat() / totalCount) * 100, "그 외"))
+        }
 
         val dataSet = PieDataSet(dataList, "")
         with(dataSet) {
@@ -59,9 +88,62 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
     }
 
+    private fun updateGenreViews(genres: List<PortfolioGenre>) {
+        // 장르를 4개까지 사용, 그 외는 GONE 처리
+        val genreTextViews = listOf(
+            binding.tvRepresentGenre1,
+            binding.tvRepresentGenre2,
+            binding.tvRepresentGenre3,
+            binding.tvRepresentGenre4
+        )
+
+        val genrePercentageTextViews = listOf(
+            binding.tvPercentage1,
+            binding.tvPercentage2,
+            binding.tvPercentage3,
+            binding.tvPercentage4
+        )
+
+        val genreImageViews = listOf(
+            binding.ivRepresentGenre1,
+            binding.ivRepresentGenre2,
+            binding.ivRepresentGenre3,
+            binding.ivRepresentGenre4
+        )
+
+        val circleImageViews = listOf(
+            binding.ivChartCircle1,
+            binding.ivChartCircle2,
+            binding.ivChartCircle3,
+            binding.ivChartCircle4
+        )
+
+        for (i in genreTextViews.indices) {
+            if (i < genres.size) {
+                genreTextViews[i].text = genres[i].genre
+                genrePercentageTextViews[i].text =
+                    "${(genres[i].count.toFloat() / genres.sumOf { it.count } * 100).toInt()}%"
+                Glide.with(requireContext())
+                    .load("${BuildConfig.SERVER_URL}static/genre/${ApplicationClass.KOREAN_TO_ENGLISH_MAP[genres[i].genre]}.jpg")
+                    .error(R.drawable.temp_represent1)
+                    .circleCrop()
+                    .into(genreImageViews[i])
+                genreTextViews[i].visibility = View.VISIBLE
+                genrePercentageTextViews[i].visibility = View.VISIBLE
+                genreImageViews[i].visibility = View.VISIBLE
+                circleImageViews[i].visibility = View.VISIBLE
+            } else {
+                genreTextViews[i].visibility = View.GONE
+                genrePercentageTextViews[i].visibility = View.GONE
+                genreImageViews[i].visibility = View.GONE
+                circleImageViews[i].visibility = View.GONE
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        initChart()
+        portfolioViewModel.getPortfolio(1)
     }
 
 }

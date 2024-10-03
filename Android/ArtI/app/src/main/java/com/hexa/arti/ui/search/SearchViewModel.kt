@@ -1,19 +1,16 @@
 package com.hexa.arti.ui.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.liveData
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
+import com.hexa.arti.data.model.response.GetSearchGalleryResponse
 import com.hexa.arti.data.model.search.Artist
+import com.hexa.arti.repository.ArtGalleryRepository
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +24,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val artWorkRepository: ArtWorkRepository,
     private val artistRepository: ArtistRepository,
+    private val artGalleryRepository: ArtGalleryRepository,
 ) : ViewModel() {
     var state = SearchFragment.BASE_STATE
 
@@ -36,24 +34,26 @@ class SearchViewModel @Inject constructor(
     private val _artworkResult = MutableStateFlow<PagingData<Artwork>>(PagingData.empty())
     val artWorkResult: StateFlow<PagingData<Artwork>> = _artworkResult.asStateFlow()
 
+    private val _galleriesResult = MutableLiveData<List<GetSearchGalleryResponse>>()
+    val galleriesResult = _galleriesResult
 
-    fun getArtWorkById(id: Int) {
+    fun getSearchGalleries(keyword: String) {
         viewModelScope.launch {
-            artWorkRepository.getArtWorkById(id).onSuccess { response ->
-                Log.d("확인", "성공 ${response}")
+            artGalleryRepository.getSearchGalleries(keyword).onSuccess {
+                _galleriesResult.value = it
             }.onFailure { error ->
                 if (error is ApiException) {
-                    Log.d("확인", "실패 ${error.code} ${error.message}")
+                    _galleriesResult.value = emptyList()
                 }
             }
         }
     }
 
-    fun getArtworkByString(keyword: String){
+    fun getArtworkByString(keyword: String) {
         viewModelScope.launch {
             artWorkRepository.getArtWorksByStringWithPaging(keyword)
                 .cachedIn(viewModelScope)
-                .collect{
+                .collect {
                     _artworkResult.value = it
                 }
         }
@@ -70,7 +70,5 @@ class SearchViewModel @Inject constructor(
             }
         }
     }
-
-
 
 }

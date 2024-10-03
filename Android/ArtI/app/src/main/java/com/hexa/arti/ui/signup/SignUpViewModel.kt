@@ -19,7 +19,11 @@ class SignUpViewModel @Inject constructor(
     private val _signUpModel = MutableLiveData<SignUpModel>(SignUpModel("", "", ""))
     val signUpModel: LiveData<SignUpModel> = _signUpModel
 
-    private val _signStatus = MutableLiveData<Int>(0)
+
+    private val _codeStatus = MutableLiveData<Int>()
+    val codeStatus : LiveData<Int> = _codeStatus
+
+    private val _signStatus = MutableLiveData<Int>()
     val signStatus: LiveData<Int> = _signStatus
     fun signUp() {
         // retrofit
@@ -29,6 +33,28 @@ class SignUpViewModel @Inject constructor(
                 _signStatus.value = 1
             }.onFailure {
                 _signStatus.value = 2
+            }
+        }
+    }
+
+    fun sendEmail(email : String){
+        viewModelScope.launch {
+            signUpRepository.sendEmail(email).onSuccess {
+
+            }.onFailure {
+
+            }
+        }
+    }
+
+    fun checkEmailCode(email : String, code : String){
+
+        Log.d(TAG, "checkEmailCode: $email $code " )
+        viewModelScope.launch {
+            signUpRepository.checkEmailCode(email,code).onSuccess {
+                _codeStatus.value = 1
+            }.onFailure {
+                _codeStatus.value = 2
             }
         }
     }
@@ -43,5 +69,13 @@ class SignUpViewModel @Inject constructor(
 
     fun updatePassword(pass: String) {
         _signUpModel.value = _signUpModel.value?.copy(password = pass)
+    }
+
+    fun updateCode(){
+        _codeStatus.value = 0
+    }
+
+    fun updateStatus(){
+        _signStatus.value = 0
     }
 }
