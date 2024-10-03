@@ -73,7 +73,8 @@ class SignUpRepositoryImpl @Inject constructor(
     }
 
     override suspend fun checkEmailCode(email: String, code: String): Result<ResponseBody> {
-        val result = signUpApi.checkEmailCode(EmailCodeDto(email, code))
+
+        val result = signUpApi.checkEmailCode(EmailCodeDto(code,email))
         Log.d(TAG, "postSignUp: $result")
 
         // 성공적인 응답 처리

@@ -23,14 +23,16 @@ class SignUpViewModel @Inject constructor(
     private val _codeStatus = MutableLiveData<Int>()
     val codeStatus : LiveData<Int> = _codeStatus
 
-    private val _signStatus = MutableLiveData<Int>(0)
+    private val _signStatus = MutableLiveData<Int>()
     val signStatus: LiveData<Int> = _signStatus
     fun signUp() {
         // retrofit
         viewModelScope.launch {
 
             signUpRepository.postSignUp(_signUpModel.value!!).onSuccess {
+                _signStatus.value = 1
             }.onFailure {
+                _signStatus.value = 2
             }
         }
     }
@@ -46,6 +48,8 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun checkEmailCode(email : String, code : String){
+
+        Log.d(TAG, "checkEmailCode: $email $code " )
         viewModelScope.launch {
             signUpRepository.checkEmailCode(email,code).onSuccess {
                 _codeStatus.value = 1
@@ -71,4 +75,7 @@ class SignUpViewModel @Inject constructor(
         _codeStatus.value = 0
     }
 
+    fun updateStatus(){
+        _signStatus.value = 0
+    }
 }

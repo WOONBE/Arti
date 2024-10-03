@@ -61,6 +61,10 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
 
                 2 -> {
                     makeToast("회원가입이 실패하였습니다.")
+                    signUpViewModel.updateStatus()
+                }
+                else -> {
+
                 }
             }
         }
@@ -73,12 +77,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
                 }
                 2->{
                     makeToast("인증번호를 다시 확인해주세요")
+                    signUpViewModel.updateCode()
                 }
                 else->{
 
                 }
             }
-            signUpViewModel.updateCode()
+
 
         }
     }
