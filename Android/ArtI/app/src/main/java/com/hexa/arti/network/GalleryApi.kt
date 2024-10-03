@@ -4,6 +4,7 @@ import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.GalleryResponse
+import com.hexa.arti.data.model.artmuseum.SubscriptionGallery
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
@@ -30,6 +31,10 @@ interface GalleryApi  {
 
     @GET("galleries/{themeId}/artworks")
     suspend fun getGalleryThemeArtwork(@Path("themeId") themeId: Int) : Response<ThemeArtworksResponse>
+
+    // 사용자가 구독한 미술관
+    @GET("galleries/subscriptions/{memberId}")
+    suspend fun getSubscriptionsGalleries(@Path("memberId") memberId : Int) : Response<SubscriptionGallery>
 
     @Multipart
     @POST("galleries")

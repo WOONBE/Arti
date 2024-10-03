@@ -6,6 +6,7 @@ import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.GalleryResponse
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.SubscriptionGallery
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import okhttp3.MultipartBody
@@ -19,6 +20,10 @@ interface ArtGalleryRepository {
     suspend fun getArtGalleryThemes(
         galleryId : Int
     )  : Result<List<MyGalleryThemeItem>>
+
+    suspend fun getSubscriptionGalleries(
+        memberId : Int
+    ): Result<SubscriptionGallery>
 
     suspend fun postGallery(
         image : MultipartBody.Part,

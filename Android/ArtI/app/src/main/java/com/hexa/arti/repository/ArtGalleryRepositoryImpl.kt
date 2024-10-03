@@ -7,6 +7,7 @@ import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.GalleryResponse
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
+import com.hexa.arti.data.model.artmuseum.SubscriptionGallery
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponseItem
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
@@ -73,6 +74,27 @@ class ArtGalleryRepositoryImpl @Inject constructor(
                     }
                 }
                 return Result.success(myGalleryThemeItems)
+            }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
+
+    override suspend fun getSubscriptionGalleries(memberId: Int): Result<SubscriptionGallery> {
+        val result = galleryAPI.getSubscriptionsGalleries(memberId)
+
+        if (result.isSuccessful) {
+            result.body()?.let {
+
+                return Result.success(it)
             }
             return Result.failure(Exception())
         } else {
