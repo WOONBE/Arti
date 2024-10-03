@@ -13,7 +13,7 @@ import logging
 from fastapi import HTTPException
 from typing import List
 from sqlalchemy.orm import Session
-from config.models import Gallery, Member, Theme, Artwork_Theme, Artwork
+from config.models import Gallery, Member, Theme, Artwork_Theme, Artwork, Cold_Start
 from .schema import GalleryBase, Owner, ThemeBase, ArtworksBase
 from .deepLearning import EfficientNetV2
 
@@ -212,9 +212,18 @@ def recommend_gallery(user_id, db: Session):
 
     # 사용자 미술관 정보 추출
     user_gallery = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
-    user_gallery_path = user_gallery.gallery_img
+    if not user_gallery:
+        cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
+        if not cold_start_artworks or len(cold_start_artworks) < 5:
+            raise HTTPException(status_code=404, detail="Cold Start: Not enough artworks available for recommendation.")
+        
+        cold_start_artwork_ids = [cs.artwork_id for cs in cold_start_artworks]
+        result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_artwork_ids)).all()
+        user_gallery_path = [cs.filename for cs in result_artworks]
+    else:
+        user_gallery_path = list(user_gallery.gallery_img)
 
-    user_gallery_vector = compute_gallery_vector_batch([user_gallery_path], model, device)
+    user_gallery_vector = compute_gallery_vector_batch(user_gallery_path, model, device)
 
     if user_gallery_vector is None:
         raise ValueError("User gallery vector could not be computed.")
@@ -286,8 +295,34 @@ def recommend_artwork(user_id, db : Session):
     user_gallery = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
 
     if not user_gallery:
-        raise HTTPException(status_code=404, detail="User gallery not found")
+        cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
+        if not cold_start_artworks or len(cold_start_artworks) < 5:
+            raise HTTPException(status_code=404, detail="Cold Start: Not enough artworks available for recommendation.")
+        
+        cold_start_artwork_ids = [cs.artwork_id for cs in cold_start_artworks]
+        result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_artwork_ids)).all()
+        cold_start_artwork_path = [cs.filename for cs in result_artworks]
 
+        cold_artworks_vector = compute_artwork_vector_batch(cold_start_artwork_path, model, device)
+
+        filtered_artwork_vector = np.delete(all_artwork_vector, cold_start_artwork_ids, axis=0)
+
+        recommended_artworks = recommend_similar_artworks(cold_artworks_vector, filtered_artwork_vector, list(range(len(all_artwork_vector))), top_k=50)
+
+        result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
+
+        result = []
+        for artwork in result_artworks:
+            base = ArtworksBase(
+                artwork_id=artwork.artwork_id,
+                title=artwork.title,
+                description=artwork.description,
+                year=artwork.year,
+                image_url='https://j11d106.p.ssafy.io/static/' + artwork.filename
+            )
+            result.append(base)
+
+        return result
 
     user_theme = db.query(Theme).filter(Theme.gallery_id.in_([user_gallery.gallery_id])).all()
     user_theme_idx = [theme.theme_id for theme in user_theme]
@@ -296,7 +331,34 @@ def recommend_artwork(user_id, db : Session):
     user_artwork_idx = [artwork.artwork_id for artwork in user_artworks_path]
 
     if len(user_artwork_idx) < 5:
-        raise HTTPException(status_code=500, detail="Not enough artworks")
+        cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
+        if not cold_start_artworks or len(cold_start_artworks) < 5:
+            raise HTTPException(status_code=404, detail="Cold Start: Not enough artworks available for recommendation.")
+        
+        cold_start_artwork_ids = [cs.artwork_id for cs in cold_start_artworks]
+        result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_artwork_ids)).all()
+        cold_start_artwork_path = [cs.filename for cs in result_artworks]
+
+        cold_artworks_vector = compute_artwork_vector_batch(cold_start_artwork_path, model, device)
+
+        filtered_artwork_vector = np.delete(all_artwork_vector, cold_start_artwork_ids, axis=0)
+
+        recommended_artworks = recommend_similar_artworks(cold_artworks_vector, filtered_artwork_vector, list(range(len(all_artwork_vector))), top_k=50)
+
+        result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
+
+        result = []
+        for artwork in result_artworks:
+            base = ArtworksBase(
+                artwork_id=artwork.artwork_id,
+                title=artwork.title,
+                description=artwork.description,
+                year=artwork.year,
+                image_url='https://j11d106.p.ssafy.io/static/' + artwork.filename
+            )
+            result.append(base)
+
+        return result
 
     user_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(user_artwork_idx)).limit(5)
     user_artworks_path = [artwork.filename for artwork in user_artworks]
