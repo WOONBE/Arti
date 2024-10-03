@@ -30,7 +30,7 @@ private const val TAG = "MainActivity"
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    private val isFirst = true
+    private var isFirst = true
     private var isShowDialog = false
     lateinit var navController : NavController
     private val mainActivityViewModel : MainActivityViewModel by viewModels()
@@ -45,17 +45,29 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
-        setBottomNavHide()
-        // Coroutine 내에서 값을 수집
-        lifecycleScope.launch {
-            mainActivityViewModel.getJwtToken().collect { token ->
-                Log.d(TAG, "onCreate: $token")
-            }
-        }
         with(myGalleryActivityViewModel){
-//            getMyGallery(1)
-//            getMyGalleryTheme(1)
+            // Coroutine 내에서 값을 수집
+            lifecycleScope.launch {
+
+                mainActivityViewModel.getLoginData().collect { d ->
+                    Log.d(TAG, "onCreate: ${d?.galleryId}")
+                    if(d?.galleryId == -1){
+                        isFirst = true
+                    }
+                    else {
+                        isFirst = false
+                        getMyGallery(d!!.galleryId)
+                        getMyGalleryTheme(d.galleryId)
+                    }
+
+                    if (isFirst) navController.navigate(R.id.surveyFragment)
+
+                }
+            }
+
+
         }
+        setBottomNavHide()
 
 
     }
@@ -69,8 +81,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         binding.bnMenu.setupWithNavController(navController)
 
-
-//        if (isFirst) navController.navigate(R.id.surveyFragment)
 
         binding.btnArtUpload.setOnClickListener {
             navController.navigate(R.id.artworkUploadFragment)

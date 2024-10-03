@@ -178,7 +178,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         }
         imageSize = currentIndex
         val adapter = GalleryDetailViewPagerAdapter(combinedImageList) { dto ->
-            val action = ArtGalleryDetailFragmentDirections.actionArtGalleryDetailFragmentToArtDetailFragment(imgId = dto.id, imgTitle = dto.title,imgUrl = dto.imageUrl, imgYear = dto.year, imgArtist = dto.artist)
+            val action = ArtGalleryDetailFragmentDirections.actionArtGalleryDetailFragmentToArtDetailFragment(imgId = dto.id, imgTitle = dto.title,imgUrl = dto.imageUrl, imgYear = dto.year, imgArtist = dto.artist, galleryId = args.galleryId)
             navigate(action)
         }
         binding.viewPager.adapter = adapter

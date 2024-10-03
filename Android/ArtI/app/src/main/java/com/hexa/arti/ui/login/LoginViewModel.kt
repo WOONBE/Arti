@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hexa.arti.data.model.login.LoginResponse
 import com.hexa.arti.repository.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,9 @@ class LoginViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) : ViewModel() {
     private val JWT_TOKEN_KEY = stringPreferencesKey("jwt_token")
+    private val MEMBER_ID_KEY = stringPreferencesKey("member_id")
+    private val GALLERY_ID_KEY = stringPreferencesKey("gallery_id")
+
 
     private val _email = MutableLiveData<String>("")
     val email: LiveData<String> = _email
@@ -33,39 +37,52 @@ class LoginViewModel @Inject constructor(
     private val _pass = MutableLiveData<String>("")
     val pass: LiveData<String> = _pass
 
-    private val _loginStatus = MutableLiveData(0)
+    private val _loginStatus = MutableLiveData<Int>()
     val loginStatus: LiveData<Int> = _loginStatus
 
     fun login() {
-//        viewModelScope.launch {
-//            loginRepository.postLogin(_email.value.toString(), _pass.value.toString()).onSuccess {
-//                response ->
-//                Log.d(TAG, "login: ${response}")
-//                Log.d(TAG, "login: ${response.token}")
-//                saveJwtToken(response.token)
-//                _loginStatus.value = 1
-//            }.onFailure {
-//                error ->
-//                Log.d(TAG, "login: ${error}")
-//                _loginStatus.value = 2
-//            }
-//        }
-        _loginStatus.value = 1
-    }
-
-    // JWT 토큰 저장
-    suspend fun saveJwtToken(token: String) {
         viewModelScope.launch {
-            dataStore.edit { preferences ->
-                preferences[JWT_TOKEN_KEY] = token
+            loginRepository.postLogin(_email.value.toString(), _pass.value.toString()).onSuccess {
+                response ->
+                Log.d(TAG, "login: ${response}")
+                Log.d(TAG, "login: ${response.token}")
+                saveLoginData(response.token,response.memberId,response.galleryId)
+                _loginStatus.value = 1
+            }.onFailure {
+                error ->
+                Log.d(TAG, "login: ${error}")
+                _loginStatus.value = 2
             }
         }
     }
 
-    // JWT 토큰 읽기
-    fun getJwtToken(): Flow<String?> {
+    // JWT 토큰 저장
+    suspend fun saveLoginData(token: String, memberId: Int, galleryId: Int) {
+        viewModelScope.launch {
+            dataStore.edit { preferences ->
+                preferences[JWT_TOKEN_KEY] = token
+                preferences[MEMBER_ID_KEY] = memberId.toString()  // Int를 String으로 변환하여 저장
+                preferences[GALLERY_ID_KEY] = galleryId.toString()  // Int를 String으로 변환하여 저장
+            }
+        }
+    }
+
+    fun getLoginData(): Flow<LoginResponse?> {
         return dataStore.data.map { preferences ->
-            preferences[JWT_TOKEN_KEY] ?: ""
+            val token = preferences[JWT_TOKEN_KEY] ?: ""
+            val memberId = preferences[MEMBER_ID_KEY]?.toIntOrNull() ?: -1
+            val galleryId = preferences[GALLERY_ID_KEY]?.toIntOrNull() ?: -1
+
+            if (token.isNotEmpty()) {
+                LoginResponse(
+                    token = token,
+                    expiresIn = 0,  // 저장하지 않은 값은 0 또는 기본값 설정
+                    memberId = memberId,
+                    galleryId = galleryId
+                )
+            } else {
+                null
+            }
         }
     }
 
@@ -76,5 +93,7 @@ class LoginViewModel @Inject constructor(
     fun updatePass(pw: String) {
         _pass.value = pw
     }
-
+    fun loginReset(){
+        _loginStatus.value = 0
+    }
 }

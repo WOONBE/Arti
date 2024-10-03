@@ -80,10 +80,8 @@
         android:name="com.hexa.arti.ui.survey.SurveyFragment"
         android:label="SurveyFragment">
         <action
-            android:id="@+id/action_surveyFragment_to_homeFragment"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_surveyFragment_to_createGalleryFragment"
+            app:destination="@id/createGalleryFragment" />
     </fragment>
     <fragment
         android:id="@+id/myGalleryFragment"
@@ -124,6 +122,9 @@
         <argument
             android:name="imgTitle"
             app:argType="string" />
+        <argument
+            android:name="galleryId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/artBannerFragment"
@@ -270,5 +271,13 @@
             app:argType="com.hexa.arti.data.model.search.Artist"
             app:nullable="false" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/createGalleryFragment"
+        android:name="com.hexa.arti.ui.survey.CreateGalleryFragment"
+        android:label="CreateGallertFragment" >
+        <action
+            android:id="@+id/action_createGallertFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
