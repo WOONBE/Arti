@@ -35,6 +35,7 @@ class Artwork(Base):
     member = relationship("Member", back_populates="artworks")
     theme = relationship("Theme", back_populates="artworks")
     artwork_theme = relationship("Artwork_Theme", back_populates="artwork")
+    cold_start = relationship("Cold_Start", back_populates="artwork")
 
 class Artist(Base):
     __tablename__ = "artist"
@@ -62,6 +63,7 @@ class Member(Base):
 
     artworks = relationship("Artwork", back_populates="member")
     galleries = relationship("Gallery", back_populates="member")
+    cold_start = relationship("Cold_Start", back_populates="member")
     # themes = relationship("Theme", back_populates="member")
 
 class Gallery(Base):
@@ -112,3 +114,13 @@ class Audio(Base):
     gallery_id = Column(Integer, ForeignKey("gallery.gallery_id"))
 
     gallery = relationship("Gallery", back_populates="audio")
+
+class Cold_Start(Base):
+    __tablename__='cold_start'
+
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
+    artwork_id = Column(Integer, ForeignKey("artwork.artwork_id"))
+    member_id = Column(Integer, ForeignKey("member.member_id"))
+
+    artwork = relationship("Artwork", back_populates="cold_start")
+    member = relationship("Member", back_populates="cold_start")

@@ -19,6 +19,7 @@ from recommend import urls as rec_url
 from generation import urls as gen_url
 from music import urls as music_url
 from portfolio import urls as portfolio_url
+from cold_start import urls as cold_start_url
 from config.database import SessionLocal, engine, Base, SQLALCHEMY_DATABASE_URL
 from config.models import Artist, Artwork
 from config.module import get_db
@@ -49,6 +50,7 @@ app.include_router(rec_url.router)
 app.include_router(gen_url.router)
 app.include_router(portfolio_url.router)
 app.include_router(music_url.router)
+app.include_router(cold_start_url.router)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -60,48 +62,20 @@ async def log_process_time(request: Request, call_next):
     process_time = time.time() - start_time
     logger.info(f"Request URL: {request.url}, Process time: {process_time}")
     return response
-
-@app.get('/fastapi/artist/{artist_id}')
-def get_artist(artist_id : int, db : Session = Depends(get_db)):
-    result = db.query(Artist).filter(Artist.artist_id == artist_id).first()
-    return result
-
-@app.get('/fastapi/{artwork_id}')
-def get_test(artwork_id : int, db : Session = Depends(get_db)):
-    try:
-        results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
-        return {
-            "result" : results,
-            "path" :  '/artwork/images/' + results.filename
-        }
-    except Exception as e:
-        return HTTPException(status_code=500, detail=str(e))
-
-@app.get('/fastapi/image/{artwork_id}')
-def get_image(artwork_id: int, db: Session = Depends(get_db)):
-    try:
-        # DB에서 artwork_id에 해당하는 레코드 조회
-        results = db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
-
-        if not results:
-            raise HTTPException(status_code=404, detail="Artwork not found in the database")
-
-        # 이미지 경로 설정 (EC2 절대 경로)
-        # image_path = os.path.join('/home/ubuntu/artwork', results.filename)
-        image_path = os.path.join('/artwork/images', results.filename)
-
-        # 이미지 파일이 존재하는지 확인
-        if os.path.exists(image_path):
-            return FileResponse(image_path, media_type='image/jpg')
-        else:
-            raise HTTPException(status_code=404, detail="Image not found")
-
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
     
 if __name__ == "__main__":
     import uvicorn
     import torch
+    import nest_asyncio
+    from pyngrok import ngrok
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using {device} device")
-    uvicorn.run("main:app", reload=True)
+    ngrok.set_auth_token("2mdpOxrsU0FtqgSYHIfuPF2gmCC_2pB6jYnvRZcMKnKch8LFc")
+
+    # ngrok_tunnel = ngrok.connect(8000)
+    public_url = ngrok.connect(addr="8000", domain="just-shiner-manually.ngrok-free.app")
+    print("Public URL:", public_url)
+    # print('공용 URL:', ngrok_tunnel.public_url)
+    nest_asyncio.apply()
+    uvicorn.run("main:app")

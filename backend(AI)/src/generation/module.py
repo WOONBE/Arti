@@ -20,8 +20,7 @@ def insert_post(post_ai : post_ai_image, db: Session):
         artwork_type = post_ai.artwork_type,
         member_id = post_ai.member_id,
         ai_artwork_title = post_ai.ai_artwork_title,
-        ai_img_url = post_ai.ai_img_url,
-        is_deleted = post_ai.is_deleted
+        ai_artwork_img = post_ai.ai_img_url
     )
 
     db.add(post)
@@ -106,22 +105,12 @@ def transfer_image(content_image: UploadFile = File(), style_image: int = Form()
     stylized_image_np = (stylized_image_np * 255).astype(np.uint8)
     image_pil = Image.fromarray(stylized_image_np)
 
-    # save_dir = 'backend(AI)/generated_images'
-    # if not os.path.exists(save_dir):
-    #     os.makedirs(save_dir)
-
-    # image_filename = f'{uuid.uuid4()}.jpg'
-    # image_path = os.path.join(save_dir, image_filename)
-    # image_pil.save(image_path)
-
-    # return image_path
-
     img_byte_arr = BytesIO()
     image_pil.save(img_byte_arr, format='JPEG')
     img_byte_arr.seek(0)
 
     s3_filename = f"{uuid.uuid4()}.jpg"
-    bucket_name = 'ssafy-arti.s3.ap-northeast-2'
+    bucket_name = 'ssafy-arti'
     upload_to_s3(img_byte_arr, bucket_name, s3_filename)
 
     s3_url = f"https://{bucket_name}.s3.amazonaws.com/{s3_filename}"

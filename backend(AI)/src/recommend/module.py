@@ -94,7 +94,7 @@ def custom_base(top_view_galleries, similar_galleries, db: Session):
             gallery_id=top_gallery.gallery_id,
             gallery_title=top_gallery.gallery_title,
             gallery_desc=top_gallery.gallery_desc,
-            gallery_img='https://j11d106.p.ssafy.io/static/' + top_gallery.gallery_img,
+            gallery_img=top_gallery.gallery_img,
             gallery_view=top_gallery.gallery_view
         )
         top_user_base = db.query(Member).filter(Member.member_id == top_gallery.owner_id).first()
@@ -110,9 +110,20 @@ def custom_base(top_view_galleries, similar_galleries, db: Session):
             artwork_list = []
             for artwork in top_artworks:
                 file = db.query(Artwork).filter(Artwork.artwork_id == artwork.artwork_id).first()
+                
+                if file.artwork_type == 'AI':
+                    artwork_title = file.ai_artwork_title
+                    artwork_url = file.ai_artwork_img
+                else:
+                    artwork_title = file.title
+                    artwork_url = 'https://j11d106.p.ssafy.io/static/' + file.filename
+
                 top_artwork = ArtworksBase(
                     artwork_id=artwork.artwork_id,
-                    image_url='https://j11d106.p.ssafy.io/static/' + file.filename
+                    title=artwork_title,
+                    description=file.description,
+                    year=file.year,
+                    image_url=artwork_url
                 )
                 artwork_list.append(top_artwork)
             theme_base = ThemeBase(
@@ -134,7 +145,7 @@ def custom_base(top_view_galleries, similar_galleries, db: Session):
             gallery_id=similar_gallery.gallery_id,
             gallery_title=similar_gallery.gallery_title,
             gallery_desc=similar_gallery.gallery_desc,
-            gallery_img='https://j11d106.p.ssafy.io/static/' + similar_gallery.gallery_img,
+            gallery_img=similar_gallery.gallery_img,
             gallery_view=similar_gallery.gallery_view
         )
         sim_user_base = db.query(Member).filter(Member.member_id == similar_gallery.owner_id).first()
@@ -150,10 +161,22 @@ def custom_base(top_view_galleries, similar_galleries, db: Session):
             artwork_list = []
             for artwork in sim_artworks:
                 file = db.query(Artwork).filter(Artwork.artwork_id == artwork.artwork_id).first()
+
+                if file.artwork_type == 'AI':
+                    artwork_title = file.ai_artwork_title
+                    artwork_url = file.ai_artwork_img
+                else:
+                    artwork_title = file.title
+                    artwork_url = 'https://j11d106.p.ssafy.io/static/' + file.filename
+
                 sim_artwork = ArtworksBase(
                     artwork_id=artwork.artwork_id,
-                    image_url='https://j11d106.p.ssafy.io/static/' + file.filename
+                    title=artwork_title,
+                    description=file.description,
+                    year=file.year,
+                    image_url=artwork_url
                 )
+                
                 artwork_list.append(sim_artwork)
             theme_base = ThemeBase(
                 theme_id=sim_theme_filter.theme_id,
@@ -293,6 +316,9 @@ def recommend_artwork(user_id, db : Session):
     for artwork in result_artworks:
         base = ArtworksBase(
             artwork_id=artwork.artwork_id,
+            title = artwork.title,
+            description = artwork.description,
+            year = artwork.year,
             image_url='https://j11d106.p.ssafy.io/static/' + artwork.filename
         )
         result.append(base)

@@ -31,6 +31,9 @@ class Owner(BaseModel):
 class ArtworksBase(BaseModel):
     id: Optional[int] = None
     artwork_id : int
+    description : str
+    year : str
+    title : str
     image_url : str
     
 class ThemeBase(BaseModel):

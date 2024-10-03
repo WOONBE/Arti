@@ -7,7 +7,6 @@ class post_ai_image(BaseModel):
     artwork_type : str
     ai_artwork_title : str
     ai_img_url : str
-    is_deleted : Optional[int] = 0
 
     class Config:
         from_attributes = True

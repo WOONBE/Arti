@@ -4,7 +4,7 @@ from config.models import Gallery, Theme, Artwork, Artwork_Theme
 art_styles_mapping = {
     "Abstract Expressionism": "추상표현주의",
     "Expressionism": "표현주의",
-    "Color Field_Painting": "컬러 필드",
+    "Color Field Painting": "컬러 필드",
     "Synthetic Cubism": "종합적 입체파",
     "Minimalism": "미니멀리즘",
     "Pop Art": "팝 아트",
