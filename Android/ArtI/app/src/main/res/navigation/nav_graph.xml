@@ -115,6 +115,9 @@
         <argument
             android:name="imgTitle"
             app:argType="string" />
+        <argument
+            android:name="galleryId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/artBannerFragment"

@@ -9,15 +9,21 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.GridLayout
 import android.widget.RadioButton
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentArtDetailBinding
+import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 private const val TAG = "ArtDetailFragment"
@@ -26,9 +32,20 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
 
     private val args: ArtDetailFragmentArgs by navArgs()
     private val artDetailViewModel: ArtDetailViewModel by viewModels()
+    private val mainActivityViewModel : MainActivityViewModel by activityViewModels()
     private var selectedThemeId: Int = 1
     private var selectDescription : String = ""
     override fun init() {
+
+        CoroutineScope(Dispatchers.Main).launch {
+            mainActivityViewModel.getLoginData().collect { d ->
+                d?.let {
+                    if(it.galleryId == args.galleryId) binding.artDetailSaveBtn.visibility = View.GONE
+                }
+
+            }
+        }
+
         artDetailViewModel.getMyGalleryTheme(1)
         artDetailViewModel.galleryTheme.observe(viewLifecycleOwner) {
             Log.d(TAG, "init: $it")
@@ -51,6 +68,7 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
                 artDetailCl.visibility = View.VISIBLE
                 artDetailThemeCl.visibility = View.GONE
             }
+
             artDetailSubmitBtn.setOnClickListener {
                 Log.d("Selected Theme ID", "Selected Theme ID: $selectedThemeId")
 

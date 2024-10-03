@@ -37,7 +37,8 @@ interface ArtGalleryRepository {
 
     suspend fun updateArtGallery(
         galleryId : Int,
-        updateGalleryDto: UpdateGalleryDto
+        image : MultipartBody.Part,
+        galleryDto: GalleryRequest
     ) : Result<ResponseBody>
 
     suspend fun deleteTheme(

@@ -6,11 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
+import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.repository.ArtGalleryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 private const val TAG = "MyGalleryViewModel"
@@ -19,8 +21,11 @@ class MyGalleryViewModel @Inject constructor(
     private val galleryRepository: ArtGalleryRepository
 ): ViewModel() {
 
-    private val _updateGalleryDto  = MutableLiveData<UpdateGalleryDto>()
-    val updateGalleryDto : LiveData<UpdateGalleryDto> = _updateGalleryDto
+    private val _updateGalleryDto  = MutableLiveData<GalleryRequest>()
+    val updateGalleryDto : LiveData<GalleryRequest> = _updateGalleryDto
+
+    private val _thumbnail = MutableLiveData<MultipartBody.Part>()
+    val thumbnail : LiveData<MultipartBody.Part> = _thumbnail
 
     private val _updateThemeDto = MutableLiveData<ThemeResponseItem>()
     val updateThemeDto : LiveData<ThemeResponseItem> = _updateThemeDto
@@ -41,7 +46,7 @@ class MyGalleryViewModel @Inject constructor(
 
     fun updateGallery(galleryId : Int){
         viewModelScope.launch {
-            galleryRepository.updateArtGallery(galleryId,_updateGalleryDto.value!!)
+            galleryRepository.updateArtGallery(galleryId,_thumbnail.value!!,_updateGalleryDto.value!!)
         }
 
     }
@@ -69,18 +74,23 @@ class MyGalleryViewModel @Inject constructor(
     }
 
 
-    fun getGalleryDto(updateGalleryDto: UpdateGalleryDto){
+    fun getGalleryDto(updateGalleryDto: GalleryRequest){
+        Log.d(TAG, "getGalleryDto: ${updateGalleryDto}")
         _updateGalleryDto.value = updateGalleryDto
     }
+    fun getImage(image : MultipartBody.Part){
 
+        _thumbnail.value = image
+    }
 
     fun updateGalleryName(name : String,galleryId : Int){
         _updateGalleryDto.value = _updateGalleryDto.value?.copy(name = name)
         Log.d(TAG, "updateGalleryName: ${name} ${galleryId}")
         updateGallery(galleryId)
     }
-    fun updateGalleryThumbnail(){
-
+    fun updateThumbnail(image :MultipartBody.Part,galleryId: Int){
+        _thumbnail.value = image
+        updateGallery(galleryId)
     }
     fun updateGalleryDescription(description : String,galleryId : Int){
         _updateGalleryDto.value = _updateGalleryDto.value?.copy(description = description)

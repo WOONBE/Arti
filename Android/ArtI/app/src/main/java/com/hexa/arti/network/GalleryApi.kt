@@ -42,8 +42,10 @@ interface GalleryApi  {
     @POST("galleries/themes/{themeId}/artworks/{artworkId}")
     suspend fun postArtworkTheme(@Path("themeId") themeId: Int, @Path("artworkId") artworkId: Int, @Query("description") description: String) : Response<ResponseBody>
 
+    @Multipart
     @PUT("galleries/{galleryId}")
-    suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Body updateGalleryDto : UpdateGalleryDto) : Response<ResponseBody>
+    suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Part galleryRequest: MultipartBody.Part,
+                                @Part image: MultipartBody.Part) : Response<ResponseBody>
 
     @PUT("galleries/themes/{themeId")
     suspend fun updateMyGalleryTheme(@Path("themeId") themeId: Int): Response<ResponseBody>

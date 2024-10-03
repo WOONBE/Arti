@@ -118,7 +118,8 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
     override suspend fun postTheme(themeDto: CreateThemeDto): Result<ThemeResponseItem> {
         val result = galleryAPI.postGalleryTheme(themeDto)
-
+        Log.d("확인", "postTheme: $themeDto")
+        Log.d("확인", "postTheme: $result")
         if (result.isSuccessful) {
             result.body()?.let {
                 return Result.success(it)
@@ -163,10 +164,13 @@ class ArtGalleryRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun updateArtGallery(galleryId: Int,updateGalleryDto: UpdateGalleryDto): Result<ResponseBody> {
-        Log.d("확인", "updateArtGallery: $galleryId $updateGalleryDto")
-
-        val result = galleryAPI.updateMyGallery(galleryId,updateGalleryDto)
+    override suspend fun updateArtGallery(galleryId: Int,  image : MultipartBody.Part,galleryDto: GalleryRequest): Result<ResponseBody> {
+        val userJson = Gson().toJson(galleryDto)
+        val userRequestBody = userJson.toRequestBody("application/json".toMediaTypeOrNull())
+        val requestBody = MultipartBody.Part.createFormData("galleryRequest", null, userRequestBody)
+        Log.d("확인", "updateArtGallery: $image")
+        Log.d("확인", "updateArtGallery: $galleryDto")
+        val result = galleryAPI.updateMyGallery(galleryId,requestBody,image)
 
         Log.d("확인", "updateArtGallery: $result")
 

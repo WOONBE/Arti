@@ -9,12 +9,14 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
 import com.hexa.arti.ui.MainActivityViewModel
@@ -25,6 +27,7 @@ import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.io.FileOutputStream
@@ -89,8 +92,16 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                         .into(myGalleryThumbnailIv)
                     myGalleryInfoEt.setText(it.description)
 
-                    myGalleryViewModel.getGalleryDto(updateGalleryDto = UpdateGalleryDto(it.description,it.image, it.name,it.ownerId))
-
+                    myGalleryViewModel.getGalleryDto(
+                        updateGalleryDto = GalleryRequest(it.description, it.name,it.ownerId)
+                    )
+                    var file = File("")
+                    val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+                    myGalleryViewModel.getImage(MultipartBody.Part.createFormData(
+                        "image",
+                        file.name,
+                        requestFile
+                    ))
 
                 }
                 // 테마
@@ -254,7 +265,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize = 10 * 1024 * 1024 // 10MB
+        val maxSize = 10 * 512 * 512 // 10MB
         if (file.length() > maxSize) {
             file = compressImage(file)
 
@@ -264,6 +275,13 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
             }
         }
         val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+        myGalleryViewModel.updateThumbnail(
+            MultipartBody.Part.createFormData(
+                "image",
+                file.name,
+                requestFile
+            ),galleryId
+        )
     }
 
 }
