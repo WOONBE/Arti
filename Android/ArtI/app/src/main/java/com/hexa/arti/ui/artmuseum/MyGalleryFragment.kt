@@ -95,13 +95,6 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     myGalleryViewModel.getGalleryDto(
                         updateGalleryDto = GalleryRequest(it.description, it.name,it.ownerId)
                     )
-                    var file = File("")
-                    val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-                    myGalleryViewModel.getImage(MultipartBody.Part.createFormData(
-                        "image",
-                        file.name,
-                        requestFile
-                    ))
 
                 }
                 // 테마

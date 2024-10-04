@@ -12,7 +12,9 @@ import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.repository.ArtGalleryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 private const val TAG = "MyGalleryViewModel"
@@ -46,10 +48,20 @@ class MyGalleryViewModel @Inject constructor(
 
     fun updateGallery(galleryId : Int){
         viewModelScope.launch {
+            _thumbnail.value = _thumbnail.value ?: createEmptyImagePart("image")
             galleryRepository.updateArtGallery(galleryId,_thumbnail.value!!,_updateGalleryDto.value!!)
         }
 
     }
+
+    private fun createEmptyImagePart(name: String): MultipartBody.Part {
+        val emptyData = ByteArray(0)
+
+        val requestBody = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), emptyData)
+
+        return MultipartBody.Part.createFormData(name, "empty_image.png", requestBody)
+    }
+
     fun deleteTheme(galleryId: Int, themeId: Int){
         viewModelScope.launch {
             galleryRepository.deleteTheme(galleryId,themeId).onSuccess {
