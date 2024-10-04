@@ -58,6 +58,7 @@ class ImageUploadFragment :
                 mainActivity.hideLoadingDialog()
                 val action = ImageUploadFragmentDirections.actionImageUploadFragmentToArtworkResultFragment(it,1)
                 navigate(action)
+                imageUploadViewModel.updateImageResponse()
             }
         }
     }

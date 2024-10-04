@@ -60,6 +60,9 @@ interface GalleryApi {
     @POST("galleries/themes/{themeId}/artworks/{artworkId}")
     suspend fun postArtworkTheme(@Path("themeId") themeId: Int, @Path("artworkId") artworkId: Int, @Query("description") description: String) : Response<ResponseBody>
 
+    @POST("galleries/themes/{themeId}/aiartworks/{artworkId}")
+    suspend fun postArtworkAITheme(@Path("themeId") themeId: Int, @Path("artworkId") artworkId: Int, @Query("description") description: String) : Response<ResponseBody>
+
     @Multipart
     @PUT("galleries/{galleryId}")
     suspend fun updateMyGallery(@Path("galleryId") galleryId: Int, @Part galleryRequest: MultipartBody.Part,
