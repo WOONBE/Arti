@@ -25,6 +25,7 @@ import com.d106.arti.gallery.dto.request.ThemeRequest;
 import com.d106.arti.gallery.dto.response.GalleryResponse;
 import com.d106.arti.gallery.dto.response.SubscribedGalleryResponse;
 import com.d106.arti.gallery.dto.response.ThemeResponse;
+import com.d106.arti.gallery.dto.response.ThemeWithArtworksResponse;
 import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.gallery.repository.ThemeRepository;
 import com.d106.arti.global.exception.BadRequestException;
@@ -368,6 +369,53 @@ public class GalleryService {
         // 검색된 갤러리를 GalleryResponse로 변환하여 반환
         return galleries.stream()
             .map(GalleryResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    // 특정 미술관 ID로 테마와 그 테마에 속한 모든 미술품 조회
+    @Transactional(readOnly = true)
+    public List<ThemeWithArtworksResponse> getAllThemesWithArtworksByGalleryId(Integer galleryId) {
+        // 특정 galleryId에 속한 테마 조회
+        List<Theme> themes = themeRepository.findByGalleryId(galleryId);
+
+        // 각 테마에 속한 미술품들을 조회하고, 함께 DTO로 변환
+        return themes.stream()
+            .map(theme -> {
+                List<ArtworkResponse> artworks = theme.getArtworks().stream()
+                    .map(ArtworkTheme::getArtwork)
+                    .map(artwork -> {
+                        if (artwork instanceof AiArtwork) {
+                            AiArtwork aiArtwork = (AiArtwork) artwork;
+                            return ArtworkResponse.builder()
+                                .id(aiArtwork.getId())
+                                .title(aiArtwork.getAiArtworkTitle())
+                                .description(aiArtwork.getArtworkImage())
+                                .imageUrl(aiArtwork.getArtworkImage())
+                                .artist(aiArtwork.getMember().getNickname())
+                                .build();
+                        } else if (artwork instanceof NormalArtWork) {
+                            NormalArtWork normalArtwork = (NormalArtWork) artwork;
+                            return ArtworkResponse.builder()
+                                .id(normalArtwork.getId())
+                                .title(normalArtwork.getTitle())
+                                .artist(normalArtwork.getArtist().getEngName())
+                                .year(normalArtwork.getYear())
+                                .description(normalArtwork.getDescription())
+                                .imageUrl(imageBaseUrl + normalArtwork.getFilename())
+                                .build();
+                        } else {
+                            throw new BadRequestException(INVALID_ARTWORK_TYPE);
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+                // 테마와 해당 미술품들을 ThemeWithArtworksResponse로 변환하여 반환
+                return ThemeWithArtworksResponse.builder()
+                    .themeId(theme.getId())
+                    .themeName(theme.getName())
+                    .artworks(artworks)
+                    .build();
+            })
             .collect(Collectors.toList());
     }
 
