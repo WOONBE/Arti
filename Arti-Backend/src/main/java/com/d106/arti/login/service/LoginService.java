@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class LoginService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
+    @Transactional
     public Integer register(String email, String password, String nickname) {
         BCryptPasswordEncoder bcryptPasswordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = bcryptPasswordEncoder.encode(password);
@@ -27,7 +29,7 @@ public class LoginService {
             .build();
         return memberRepository.save(member).getId();
     }
-
+    @Transactional
     public LoginResponse login(String email, String password) {
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(email, password));

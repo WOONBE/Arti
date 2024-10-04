@@ -36,19 +36,6 @@ public class ArtworkService {
     @Value("${server.image.base-url}")
     private String imageBaseUrl;
 
-//    // 검색 메서드
-//    @Transactional(readOnly = true)
-//    public List<NormalArtworkResponse> searchArtworks(String keyword) {
-//        List<NormalArtWork> artworks = artworkRepository.search(keyword);
-//
-//        if (artworks.isEmpty()) {
-//            throw new BadRequestException(NOT_FOUND_ARTWORK);
-//        }
-//
-//        return artworks.stream()
-//            .map(artwork -> NormalArtworkResponse.fromEntity(artwork, imageBaseUrl))
-//            .collect(Collectors.toList());
-//    }
 
     @Transactional(readOnly = true)
     public Page<NormalArtworkResponse> searchArtworks(String keyword, int page) {

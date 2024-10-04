@@ -52,11 +52,27 @@ public class GalleryController {
         return ResponseEntity.ok().build();
     }
 
+    // 3.5 테마에 AI미술품 추가
+    @PostMapping("/themes/{themeId}/aiartworks/{artworkId}")
+    @Operation(summary = "테마에 AI미술품 추가", description = "특정 테마에 AI미술품을 추가하는 API")
+    public ResponseEntity<Void> addAiArtworkToTheme(@PathVariable Integer themeId, @PathVariable Integer artworkId, @RequestParam String description) {
+        galleryService.addAiArtworkToTheme(themeId, artworkId, description);
+        return ResponseEntity.ok().build();
+    }
+
     // 4. 테마에서 미술품 삭제
     @DeleteMapping("/themes/{themeId}/artworks/{artworkId}")
     @Operation(summary = "테마의 미술품 삭제", description = "특정 테마의 미술품을 삭제하는 API")
     public ResponseEntity<Void> removeArtworkFromTheme(@PathVariable Integer themeId, @PathVariable Integer artworkId) {
         galleryService.removeArtworkFromTheme(themeId, artworkId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 4.5 테마에서 AI미술품 삭제
+    @DeleteMapping("/themes/{themeId}/aiartworks/{artworkId}")
+    @Operation(summary = "테마의 Ai미술품 삭제", description = "특정 테마의 Ai미술품을 삭제하는 API")
+    public ResponseEntity<Void> removeAiArtworkFromTheme(@PathVariable Integer themeId, @PathVariable Integer artworkId) {
+        galleryService.removeAiArtworkFromTheme(themeId, artworkId);
         return ResponseEntity.ok().build();
     }
 
