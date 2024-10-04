@@ -7,6 +7,7 @@ import com.d106.arti.gallery.dto.request.ThemeRequest;
 import com.d106.arti.gallery.dto.response.GalleryResponse;
 import com.d106.arti.gallery.dto.response.SubscribedGalleryResponse;
 import com.d106.arti.gallery.dto.response.ThemeResponse;
+import com.d106.arti.gallery.dto.response.ThemeWithArtworksResponse;
 import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.gallery.service.GalleryService;
 import com.d106.arti.member.domain.Member;
@@ -168,7 +169,17 @@ public class GalleryController {
 
 
 
+    // 특정 미술관의 테마와 테마에 속한 모든 미술품 조회
+    @GetMapping("/{galleryId}/themes-with-artworks")
+    @Operation(summary = "미술관 내부 테마 및 미술품 전체 조회", description = "미술관 내부 테마 및 미술품 전체 조회하는 API")
+    public ResponseEntity<List<ThemeWithArtworksResponse>> getAllThemesWithArtworksByGalleryId(
+        @PathVariable Integer galleryId) {
 
+        // GalleryService를 통해 해당 미술관의 테마 및 미술품 조회
+        List<ThemeWithArtworksResponse> themesWithArtworks = galleryService.getAllThemesWithArtworksByGalleryId(galleryId);
 
+        // 조회된 정보를 ResponseEntity로 반환
+        return ResponseEntity.ok(themesWithArtworks);
+    }
 
 }
