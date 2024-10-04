@@ -250,7 +250,7 @@ public class GalleryService {
                         .title(aiArtwork.getAiArtworkTitle()) // AI 작품의 제목 사용
                         .description(aiArtwork.getArtworkImage()) // 이미지를 설명으로 예시
                         .imageUrl(aiArtwork.getArtworkImage())
-                        .year(aiArtwork.getCreateDate().toString())
+//                        .year(aiArtwork.getCreateDate().toString())
                         .artist(aiArtwork.getMember().getNickname())
                         .build();
                 } else if (artwork instanceof NormalArtWork) {
