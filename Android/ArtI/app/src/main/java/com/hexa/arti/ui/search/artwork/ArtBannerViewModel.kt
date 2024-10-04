@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.search.artwork
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,8 +24,10 @@ class ArtBannerViewModel @Inject constructor(
         viewModelScope.launch {
             homeRepository.getRecommendArtworks(userId).onSuccess {
                 _resultArtworks.value = it
+                Log.d("확인","데이터 받아옴 ${it}")
             }.onFailure { error ->
                 if (error is ApiException) {
+                    Log.d("확인", "실패 ${error}")
                     _resultArtworks.value = emptyList()
                 }
             }

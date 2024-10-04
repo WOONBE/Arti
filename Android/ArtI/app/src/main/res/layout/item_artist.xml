@@ -7,7 +7,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="8dp">
 
@@ -23,13 +23,13 @@
 
         <TextView
             android:id="@+id/tv_artist_name"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="@font/inter_28pt_black"
+            android:maxLines="1"
             android:text="잠만보"
             android:textSize="16sp"
-            android:maxLines="1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_artist"
             app:layout_constraintTop_toTopOf="@id/iv_artist" />
@@ -38,12 +38,13 @@
             android:id="@+id/tv_artist_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
-            android:maxLines="1"
             android:ellipsize="end"
+            android:maxLines="1"
             android:text="하루종일 잠만 자는 화가"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tv_artist_name"
+            app:layout_constraintStart_toEndOf="@id/iv_artist"
             app:layout_constraintTop_toBottomOf="@id/tv_artist_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

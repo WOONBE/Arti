@@ -1,10 +1,10 @@
 package com.hexa.arti.ui.search.artist
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentArtistBannerBinding
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,20 +15,21 @@ class ArtistBannerFragment :
 
     private val viewModel: ArtistBannerViewModel by viewModels()
 
-    private val artistAdapter = ArtistAdapter {
-        Log.d("확인", "아이템클릭 확인")
+    private val artistAdapter = ArtistAdapter { artist ->
+        moveToArtistDetailFragment(artist)
     }
 
     override fun init() {
         initObserve()
         initViews()
 
-        viewModel.getRandomArtists()
+        if (viewModel.resultArtists.value.isNullOrEmpty()) {
+            viewModel.getRandomArtists()
+        }
     }
 
     private fun initObserve() {
         viewModel.resultArtists.observe(viewLifecycleOwner) {
-            Log.d("확인", "결과는 ${it}")
             if (it.isEmpty()) {
                 artistAdapter.submitList(emptyList())
             } else {
@@ -44,5 +45,13 @@ class ArtistBannerFragment :
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun moveToArtistDetailFragment(artist: Artist) {
+        findNavController().navigate(
+            ArtistBannerFragmentDirections.actionArtistBannerFragmentToArtistDetailFragment(
+                artist
+            )
+        )
     }
 }

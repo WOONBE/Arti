@@ -37,8 +37,8 @@ fun GetRecommendArtworkResponse.asArtwork() = Artwork(
     artworkId = this.artworkId,
     imageUrl = this.imageUrl,
     title = this.title,
-    description = this.description,
     year = this.year,
+    writer = this.writer,
 )
 
 fun GetRandomGalleriesResponse.asGalleryBanner() = GalleryBanner(

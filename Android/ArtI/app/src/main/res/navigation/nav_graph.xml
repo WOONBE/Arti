@@ -145,7 +145,11 @@
     <fragment
         android:id="@+id/artistBannerFragment"
         android:name="com.hexa.arti.ui.search.artist.ArtistBannerFragment"
-        android:label="ArtistBannerFragment" />
+        android:label="ArtistBannerFragment" >
+        <action
+            android:id="@+id/action_artistBannerFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/selectArtworkFragment"
         android:name="com.hexa.arti.ui.artwork.SelectArtworkFragment"

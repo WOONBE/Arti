@@ -26,12 +26,11 @@ class SelectArtworkViewModel @Inject constructor(
     private val _artworkResult = MutableStateFlow<PagingData<Artwork>>(PagingData.empty())
     val artWorkResult: StateFlow<PagingData<Artwork>> = _artworkResult.asStateFlow()
 
-    fun getArtworkByString(keyword: String){
+    fun getArtworkByString(keyword: String) {
         viewModelScope.launch {
-            Log.d("확인", "검색어 ${keyword}")
             artWorkRepository.getArtWorksByStringWithPaging(keyword)
                 .cachedIn(viewModelScope)
-                .collect{
+                .collect {
                     _artworkResult.value = it
                 }
         }
