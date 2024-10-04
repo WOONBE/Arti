@@ -30,7 +30,7 @@ class ImageUploadViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _imageResponse = MutableLiveData<String>("")
+    private val _imageResponse = MutableLiveData<String>()
     val imageResponse: LiveData<String> = _imageResponse
 
     private val _artworkResult = MutableLiveData<Artwork>()
@@ -72,5 +72,7 @@ class ImageUploadViewModel @Inject constructor(
             }
         }
     }
-
+    fun updateImageResponse(){
+        _imageResponse.value = ""
+    }
 }

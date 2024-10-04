@@ -1,6 +1,8 @@
 package com.hexa.arti.network
 
+import com.hexa.arti.data.model.artworkupload.ArtWorkAIDto
 import com.hexa.arti.data.model.artworkupload.ArtWorkUploadDto
+import com.hexa.arti.data.model.artworkupload.ArtworkAIResponse
 import com.hexa.arti.data.model.survey.SurveyListDto
 import com.hexa.arti.data.model.survey.SurveyResponse
 import okhttp3.MultipartBody
@@ -22,15 +24,12 @@ interface ArtWorkUpload {
         @Part("style_image") styleImage: RequestBody
     ): Response<ArtWorkUploadDto>
 
-
-    @GET("artwork/ai/show")
-    suspend fun getImage(
-        @Query("image_path") imagePath: String
-    ): Response<ResponseBody>
-
     @GET("start/")
     suspend fun getSurveyImage() : Response<SurveyResponse>
 
     @POST("start/save")
     suspend fun saveSurvey(@Body surveyListDto: SurveyListDto) : Response<ResponseBody>
+
+    @POST("artwork/ai/save")
+    suspend fun saveAIImage(@Body artWorkAIDto : ArtWorkAIDto) : Response<ArtworkAIResponse>
 }

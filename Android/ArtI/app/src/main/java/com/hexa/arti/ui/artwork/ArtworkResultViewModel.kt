@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hexa.arti.data.model.artwork.Artwork
+import com.hexa.arti.data.model.artworkupload.ArtWorkAIDto
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtWorkUploadRepository
@@ -31,19 +32,8 @@ class ArtworkResultViewModel  @Inject constructor(
     private val _artworkResult = MutableLiveData<Artwork>()
     val artworkResult: LiveData<Artwork> = _artworkResult
 
-
-    fun getImageUri(imagePath : String) {
-        viewModelScope.launch {
-            artWorkUploadRepository.getImage(imagePath).onSuccess {
-                response->
-                val imageStream = response.byteStream()
-                val byteArray = imageStream.readBytes() // InputStream을 ByteArray로 변환
-                _imageUri.value = byteArray
-            }.onFailure {
-            }
-        }
-    }
-
+    private val _successStatus = MutableLiveData<Int>()
+    val successStatus : LiveData<Int> = _successStatus
 
     fun getArtWork(id : Int){
         viewModelScope.launch {
@@ -55,6 +45,45 @@ class ArtworkResultViewModel  @Inject constructor(
                     Log.d("확인", "실패 ${error.code} ${error.message}")
                     _artworkResult.value = Artwork(0,"","","","")
                 }
+            }
+        }
+    }
+
+
+    fun saveArtwork(themeId : Int,artworkId : Int, description : String ){
+        viewModelScope.launch {
+            artWorkUploadRepository.saveArtwork(themeId = themeId, artworkId = artworkId, description =description ).onSuccess {
+                Log.d("확인", "saveArtwork: $it")
+                _successStatus.value = 1
+            }
+        }
+    }
+
+    private fun saveArtworkAI(themeId : Int, artworkId : Int, description : String ){
+
+        Log.d("확인", "saveArtwork: $themeId $artworkId $description ")
+
+        viewModelScope.launch {
+            artWorkUploadRepository.saveArtworkAI(themeId = themeId, artworkId = artworkId, description =description ).onSuccess {
+                Log.d("확인", "saveArtwork: $it")
+                _successStatus.value = 1
+            }
+        }
+    }
+
+    fun updateSuccessStatus(){
+        _successStatus.value = 0
+    }
+
+    fun getAIArtworkId(artWorkAIDto : ArtWorkAIDto,themeId: Int){
+        Log.d("확인", "saveArtworkai: $artWorkAIDto $themeId")
+
+        viewModelScope.launch {
+            artWorkUploadRepository.saveAIImage(artWorkAIDto).onSuccess {
+                saveArtworkAI(themeId, it.artwork_id, artWorkAIDto.ai_artwork_title)
+                Log.d("확인", "saveArtworkai: $it")
+            }.onFailure {
+                Log.d("확인", "saveArtworkai:  ㅁ; $it")
             }
         }
     }

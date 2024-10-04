@@ -53,7 +53,6 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     galleryId = d.galleryId
                 }
 
-
             }
         }
 
@@ -258,7 +257,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize = 10 * 512 * 512 // 10MB
+        val maxSize =  512 * 512 // 1MB
         if (file.length() > maxSize) {
             file = compressImage(file)
 
