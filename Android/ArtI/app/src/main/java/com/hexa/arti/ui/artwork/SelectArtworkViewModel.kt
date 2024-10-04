@@ -5,10 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.repository.ArtWorkRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,21 +23,16 @@ class SelectArtworkViewModel @Inject constructor(
     private val artWorkRepository: ArtWorkRepository
 ) : ViewModel() {
 
-    private val _artworkResult = MutableLiveData<List<Artwork>>()
-    val artworkResult: LiveData<List<Artwork>> = _artworkResult
+    private val _artworkResult = MutableStateFlow<PagingData<Artwork>>(PagingData.empty())
+    val artWorkResult: StateFlow<PagingData<Artwork>> = _artworkResult.asStateFlow()
 
-    fun getSearchArtWork(search: String){
-        Log.d(TAG, "getSearchArtWork: $search")
+    fun getArtworkByString(keyword: String) {
         viewModelScope.launch {
-//            artWorkRepository.getArtWorkByString(search).onSuccess { response ->
-//                _artworkResult.value = response
-//                Log.d(TAG, "response: $response")
-//            }.onFailure { error ->
-//                if (error is ApiException) {
-//                    Log.d(TAG, "response: ${error.code}")
-//                    _artworkResult.value = emptyList()
-//                }
-//            }
+            artWorkRepository.getArtWorksByStringWithPaging(keyword)
+                .cachedIn(viewModelScope)
+                .collect {
+                    _artworkResult.value = it
+                }
         }
     }
 

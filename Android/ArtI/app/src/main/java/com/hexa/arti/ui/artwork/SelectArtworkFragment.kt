@@ -7,6 +7,9 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artwork.Artwork
@@ -15,7 +18,10 @@ import com.hexa.arti.ui.artwork.adapter.SelectArtworkAdapter
 import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.min
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 private const val TAG = "SelectArtworkFragment"
 
@@ -26,7 +32,6 @@ class SelectArtworkFragment :
     private val selectArtworkViewModel: SelectArtworkViewModel by viewModels()
     private lateinit var adapter: SelectArtworkAdapter
     private var isClicked = false
-    private var tempList = listOf(Artwork(0, "", "","",""))
 
     override fun init() {
 
@@ -36,23 +41,17 @@ class SelectArtworkFragment :
                     id
                 )
             navigate(action)
-        }
-        )
+        })
 
-        selectArtworkViewModel.artworkResult.observe(viewLifecycleOwner) {
-            isClicked = false
-            Log.d(TAG, "init: ${it}")
-            if (it.isNotEmpty()) {
-                binding.noSearchTv.visibility = GONE
-                Log.d(TAG, "init: bb")
-                mainActivity.hideLoadingDialog()
-                tempList = it.toList()
-                adapter.submitList(tempList)
-
-            }
-            else{
-                mainActivity.hideLoadingDialog()
-                binding.noSearchTv.visibility = VISIBLE
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                selectArtworkViewModel.artWorkResult.collect{ pagingData ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        binding.noSearchTv.visibility = GONE
+                        mainActivity.hideLoadingDialog()
+                        adapter.submitData(pagingData)
+                    }
+                }
             }
         }
 
@@ -68,7 +67,7 @@ class SelectArtworkFragment :
                     ) {
                         // 검색 또는 엔터 키가 눌렸을 때
                         isClicked = true
-                        selectArtworkViewModel.getSearchArtWork(artworkSearchEt.text.toString())
+                        selectArtworkViewModel.getArtworkByString(artworkSearchEt.text.toString())
                         mainActivity.showLoadingDialog()
                         return@OnEditorActionListener true
                     }
