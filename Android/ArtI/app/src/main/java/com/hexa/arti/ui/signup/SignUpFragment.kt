@@ -174,7 +174,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
                 } else if (signPwEt.text.isNullOrBlank()) {
                     makeToast("비밀번호를 설정해주세요")
                 } else if (!isPasswordValid(signPwEt.text.toString())) {
-                    makeToast("비밀번호가 유효하지 않습니다. 다시 확인해 주세요")
+                    makeToast("비밀번호는 대소문자 + 특수기호!@#$ 9~16자리로 입력해주세요 ")
                 } else if (signPwEt.text.equals(signPwVerifyEt.text)) {
                     makeToast("비밀번호 확인 값이 다릅니다.")
                 } else {

@@ -276,6 +276,10 @@
         android:id="@+id/createGalleryFragment"
         android:name="com.hexa.arti.ui.survey.CreateGalleryFragment"
         android:label="CreateGallertFragment" >
+        <argument
+            android:name="surveyList"
+            app:argType="integer[]"
+            app:nullable="false" />
         <action
             android:id="@+id/action_createGallertFragment_to_homeFragment"
             app:destination="@id/homeFragment" />

@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artmuseum
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -21,9 +22,11 @@ class SubscribeViewModel @Inject constructor(
     val subscriptionGallery : LiveData<List<Subscriber>> = _subscriptionGallery
 
     fun getSubscriptionGalleries(memberId : Int){
+        Log.d("확인", "getSubscriptionGalleries: ${memberId}")
         viewModelScope.launch {
             val list = arrayListOf <Subscriber>()
             artGalleryRepository.getSubscriptionGalleries(memberId).onSuccess {
+                Log.d("확인", "getSubscriptionGalleries:  성공 $it")
                 it.forEach{
                     data ->
                     list.add(
@@ -32,7 +35,7 @@ class SubscribeViewModel @Inject constructor(
                 }
                 _subscriptionGallery.value = list
             }.onFailure {
-
+                Log.d("확인", "getSubscriptionGalleries:  시;ㄹ패 $it")
             }
         }
     }

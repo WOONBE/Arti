@@ -10,11 +10,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
+import com.hexa.arti.data.model.survey.SurveyListDto
 import com.hexa.arti.databinding.FragmentCreateGalleryBinding
 import com.hexa.arti.ui.MainActivityViewModel
+import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -32,9 +35,18 @@ class CreateGalleryFragment :
 
     private val createGalleryViewModel: CreateGalleryViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
-
+    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
+    private val args: CreateGalleryFragmentArgs by navArgs()
+    private lateinit var surveyList: String
     private var userId = 0
     override fun init() {
+
+
+        Log.d(
+            TAG,
+            "init: ${args.surveyList[0]} ${args.surveyList[1]} ${args.surveyList[2]} ${args.surveyList[3]} ${args.surveyList[4]}"
+        )
+        surveyList = "[${args.surveyList[0]},${args.surveyList[1]},${args.surveyList[2]},${args.surveyList[3]},${args.surveyList[4]}]"
         lifecycleScope.launch {
             mainActivityViewModel.getLoginData().collect { d ->
                 Log.d(TAG, "onCreate: $d")
@@ -45,10 +57,15 @@ class CreateGalleryFragment :
         with(createGalleryViewModel) {
             galleryResponse.observe(viewLifecycleOwner) {
                 Log.d(TAG, "init: $it")
-                createGalleryViewModel.createTheme(it.id, binding.createGalleryThemeEt.text.toString())
+                myGalleryActivityViewModel.getMyGallery(it.id)
+                createGalleryViewModel.createTheme(
+                    it.id,
+                    binding.createGalleryThemeEt.text.toString()
+                )
+
             }
 
-            themeDto.observe(viewLifecycleOwner){
+            themeDto.observe(viewLifecycleOwner) {
                 Log.d(TAG, "init2: $it")
                 mainActivity.hideLoadingDialog()
                 navigate(R.id.action_createGallertFragment_to_homeFragment)
@@ -56,93 +73,94 @@ class CreateGalleryFragment :
         }
 
 
-    with(binding)
-    {
-        createGalleryBtn.setOnClickListener {
+        with(binding)
+        {
+            createGalleryBtn.setOnClickListener {
 
-            if (createGalleryNameEt.text.toString().isEmpty()) {
-                makeToast("미술관 이름을 작성해주세요")
-            } else if (createGalleryInfoEt.text.toString().isEmpty()) {
-                makeToast("미술관 소개글을 작성해주세요")
-            } else if (createGalleryThemeEt.text.toString().isEmpty()) {
-                makeToast("미술관 태마를 작성해주세요")
-            } else if (!createGalleryViewModel.thumbnail.isInitialized) {
-                makeToast("썸네일을 등록해주세요")
-            } else {
-                createGalleryViewModel.createGallery(
-                    GalleryRequest(
-                        description = createGalleryInfoEt.text.toString(),
-                        name = createGalleryNameEt.text.toString(),
-                        ownerId = userId
+                if (createGalleryNameEt.text.toString().isEmpty()) {
+                    makeToast("미술관 이름을 작성해주세요")
+                } else if (createGalleryInfoEt.text.toString().isEmpty()) {
+                    makeToast("미술관 소개글을 작성해주세요")
+                } else if (createGalleryThemeEt.text.toString().isEmpty()) {
+                    makeToast("미술관 태마를 작성해주세요")
+                } else if (!createGalleryViewModel.thumbnail.isInitialized) {
+                    makeToast("썸네일을 등록해주세요")
+                } else {
+                    createGalleryViewModel.saveSurvey(SurveyListDto(surveyList, userId))
+                    createGalleryViewModel.createGallery(
+                        GalleryRequest(
+                            description = createGalleryInfoEt.text.toString(),
+                            name = createGalleryNameEt.text.toString(),
+                            ownerId = userId
+                        )
                     )
-                )
-                mainActivity.showLoadingDialog()
+                    mainActivity.showLoadingDialog()
+                }
             }
-        }
-        createGalleryThumbnailCv.setOnClickListener {
-            openImagePicker()
-        }
-    }
-}
-
-private fun openImagePicker() {
-    getImageLauncher.launch("image/*")
-}
-
-private val getImageLauncher =
-    registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let { handleImage(it) }
-    }
-
-private fun uriToFile(context: Context, uri: Uri): File {
-    val contentResolver = context.contentResolver
-    val file =
-        File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg")
-
-    contentResolver.openInputStream(uri)?.use { inputStream ->
-        FileOutputStream(file).use { outputStream ->
-            val buffer = ByteArray(1024)
-            var length: Int
-            while (inputStream.read(buffer).also { length = it } > 0) {
-                outputStream.write(buffer, 0, length)
+            createGalleryThumbnailCv.setOnClickListener {
+                openImagePicker()
             }
         }
     }
-    return file
-}
 
-private fun compressImage(file: File): File {
-    val bitmap = BitmapFactory.decodeFile(file.path)
-    val compressedFile = File(file.parent, "compressed_${file.name}")
-    FileOutputStream(compressedFile).use { outputStream ->
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% 압축 품질
+    private fun openImagePicker() {
+        getImageLauncher.launch("image/*")
     }
-    return compressedFile
-}
 
-private fun handleImage(imageUri: Uri) {
-    var file = uriToFile(requireContext(), imageUri)
+    private val getImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let { handleImage(it) }
+        }
 
-    val maxSize = 10 * 1024 * 1024 // 10MB
-    if (file.length() > maxSize) {
-        file = compressImage(file)
+    private fun uriToFile(context: Context, uri: Uri): File {
+        val contentResolver = context.contentResolver
+        val file =
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg")
 
+        contentResolver.openInputStream(uri)?.use { inputStream ->
+            FileOutputStream(file).use { outputStream ->
+                val buffer = ByteArray(1024)
+                var length: Int
+                while (inputStream.read(buffer).also { length = it } > 0) {
+                    outputStream.write(buffer, 0, length)
+                }
+            }
+        }
+        return file
+    }
+
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(file.parent, "compressed_${file.name}")
+        FileOutputStream(compressedFile).use { outputStream ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% 압축 품질
+        }
+        return compressedFile
+    }
+
+    private fun handleImage(imageUri: Uri) {
+        var file = uriToFile(requireContext(), imageUri)
+
+        val maxSize = 10 * 1024 * 1024 // 10MB
         if (file.length() > maxSize) {
-            makeToast("File size still exceeds limit after compression")
-            return
+            file = compressImage(file)
+
+            if (file.length() > maxSize) {
+                makeToast("File size still exceeds limit after compression")
+                return
+            }
         }
-    }
-    binding.createGalleryThumbnailIv.setImageURI(imageUri)
-    val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-    createGalleryViewModel.updateThumbnail(
-        MultipartBody.Part.createFormData(
-            "image",
-            file.name,
-            requestFile
+        binding.createGalleryThumbnailIv.setImageURI(imageUri)
+        val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+        createGalleryViewModel.updateThumbnail(
+            MultipartBody.Part.createFormData(
+                "image",
+                file.name,
+                requestFile
+            )
         )
-    )
 
 
-}
+    }
 
 }
