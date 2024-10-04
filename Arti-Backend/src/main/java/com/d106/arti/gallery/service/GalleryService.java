@@ -160,6 +160,14 @@ public class GalleryService {
         themeRepository.save(theme);
     }
 
+    @Transactional
+    public void addAiArtworkToTheme(Integer themeId, Integer artworkId, String description) {
+        Theme theme = themeRepository.findById(themeId).orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
+        Artwork artwork = aiArtworkRepository.findById(artworkId).orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK_ID));
+        theme.addArtwork(artwork, description);
+        themeRepository.save(theme);
+    }
+
 
     // 4. 테마에서 미술품 삭제
     @Transactional
@@ -167,6 +175,14 @@ public class GalleryService {
         Theme theme = themeRepository.findById(themeId).orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
         Artwork artwork = artworkRepository.findById(artworkId).orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK_ID));
 
+        theme.removeArtwork(artwork);
+        themeRepository.save(theme);
+    }
+
+    @Transactional
+    public void removeAiArtworkFromTheme(Integer themeId, Integer artworkId) {
+        Theme theme = themeRepository.findById(themeId).orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
+        Artwork artwork = aiArtworkRepository.findById(artworkId).orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK_ID));
         theme.removeArtwork(artwork);
         themeRepository.save(theme);
     }
