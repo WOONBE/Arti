@@ -53,39 +53,65 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
     }
 
     private fun initObserve() {
-        signUpViewModel.signStatus.observe(viewLifecycleOwner) { status ->
-            when (status) {
-                1 -> {
-                    loginActivity.moveLogin()
-                }
+        with(signUpViewModel){
+            signStatus.observe(viewLifecycleOwner) { status ->
+                when (status) {
+                    1 -> {
+                        loginActivity.moveLogin()
+                    }
 
-                2 -> {
-                    makeToast("회원가입이 실패하였습니다.")
-                    signUpViewModel.updateStatus()
-                }
-                else -> {
+                    2 -> {
+                        makeToast("회원가입이 실패하였습니다.")
+                        signUpViewModel.updateStatus()
+                    }
+                    else -> {
 
-                }
-            }
-        }
-        signUpViewModel.codeStatus.observe(viewLifecycleOwner){ status->
-            when(status){
-                1->{
-                    isCheckCode = true
-                    binding.signCertificationEt.isEnabled = false
-                    binding.signCertificationBtn.isEnabled = false
-                }
-                2->{
-                    makeToast("인증번호를 다시 확인해주세요")
-                    signUpViewModel.updateCode()
-                }
-                else->{
-
+                    }
                 }
             }
 
+            codeStatus.observe(viewLifecycleOwner){ status->
+                when(status){
+                    1->{
+                        isCheckCode = true
+                        binding.signCertificationEt.isEnabled = false
+                        binding.signCertificationBtn.isEnabled = false
+                        binding.signCertificationBtn.text = "확인"
+                    }
+                    2->{
+                        makeToast("인증번호를 다시 확인해주세요")
+                        signUpViewModel.updateCode()
+                    }
+                    else->{
 
+                    }
+                }
+
+
+            }
+
+            emailVerify.observe(viewLifecycleOwner){
+                binding.signEmailBtn.isEnabled = true
+                when(it){
+                    1 -> {
+                        with(binding) {
+                            Animation(false)
+                            signEmailBtn.text = "재전송"
+                            signEmailEt.isEnabled = false
+                            signUpViewModel.updateEmail(signEmailEt.text.toString())
+                            signCertificationEt.isEnabled = true
+                            signCertificationBtn.isEnabled = true
+                            isSendEmail = true
+                        }
+                    }
+                    2 -> {
+                        makeToast("${errorMessage.value}")
+                    }
+                }
+            }
         }
+
+
     }
 
     override fun init() {
@@ -108,25 +134,18 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
 
             /* 이메일 인증 */
             signEmailBtn.setOnClickListener {
-
+                signEmailBtn.isEnabled = false
                 if(emailPattern.matcher(signEmailEt.text.toString()).matches()){
-                    isCheckCode = false
                     if (!isSendEmail) {
-                        Animation(false)
-                        signEmailBtn.text = "재전송"
-                        signEmailEt.isEnabled = false
-                        signUpViewModel.updateEmail(signEmailEt.text.toString())
                         signUpViewModel.sendEmail(signEmailEt.text.toString())
-                        signCertificationEt.isEnabled = true
-                        signCertificationBtn.isEnabled = true
-                        isSendEmail = true
                     } else {
+                        isCheckCode = false
                         signEmailBtn.text = "전송"
                         signEmailEt.isEnabled = true
                         Animation(true)
-
                         signCertificationEt.setText("")
                         isSendEmail = false
+                        binding.signCertificationBtn.text = "인증"
                     }
                 }
                 else makeToast("이메일 형식을 맞춰주세요")
@@ -155,7 +174,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
                 } else if (signPwEt.text.isNullOrBlank()) {
                     makeToast("비밀번호를 설정해주세요")
                 } else if (!isPasswordValid(signPwEt.text.toString())) {
-                    makeToast("비밀번호가 유효하지 않습니다. 다시 확인해 주세요")
+                    makeToast("비밀번호는 대소문자 + 특수기호!@#$ 9~16자리로 입력해주세요 ")
                 } else if (signPwEt.text.equals(signPwVerifyEt.text)) {
                     makeToast("비밀번호 확인 값이 다릅니다.")
                 } else {
