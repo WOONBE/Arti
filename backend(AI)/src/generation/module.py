@@ -27,7 +27,9 @@ def insert_post(post_ai : post_ai_image, db: Session):
     db.commit()
     db.refresh(post)
 
-    return post
+    return {
+        "artwork_id" : post.artwork_id
+    }
 
 def crop_center(image):
     shape = image.shape

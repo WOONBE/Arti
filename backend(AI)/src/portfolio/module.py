@@ -104,6 +104,7 @@ def get_portfoilo(member_id, db:Session):
 
     for artwork in artworks:
         genre_str = artwork.genre
+        if genre_str == None: continue
         genres_cleaned = genre_str.strip("[]").replace("'", "").split(", ")
         for genre in genres_cleaned:
             if genre in art_styles_mapping:

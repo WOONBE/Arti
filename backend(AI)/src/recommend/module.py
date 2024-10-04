@@ -321,6 +321,8 @@ def recommend_artwork(user_id, db: Session):
                 raise HTTPException(status_code=404, detail="No artworks available for recommendation.")
             
             cold_start_idx = [idx.artwork_id for idx in cold_start_artworks]
+            cold_start_idx = [i for i in cold_start_idx if i < all_artwork_vector.shape[0]]
+            
             cold_start_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_idx)).all()
             cold_start_artwork_paths = [f"https://j11d106.p.ssafy.io/static/{artwork.filename}" for artwork in cold_start_artworks]
             logging.info(f"Cold start artworks: {cold_start_artwork_paths}")
@@ -330,7 +332,9 @@ def recommend_artwork(user_id, db: Session):
             recommended_artworks = recommend_similar_artworks(cold_artwork_vector, filtered_artwork_vector, list(range(len(all_artwork_vector))), top_k=50)
 
             result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
-            return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}"} for artwork in result_artworks]
+            return [
+                {"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}", "year" : artwork.year, "writer" : artwork.artist_name}
+                for artwork in result_artworks]
 
         # 갤러리 테마 및 미술품 처리
         user_theme = db.query(Theme).filter(Theme.gallery_id == user_gallery.gallery_id).all()
@@ -344,6 +348,8 @@ def recommend_artwork(user_id, db: Session):
             logging.info("Not enough user artworks, falling back to cold start.")
             cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
             cold_start_idx = [idx.artwork_id for idx in cold_start_artworks]
+            cold_start_idx = [i for i in cold_start_idx if i < all_artwork_vector.shape[0]]
+
             cold_start_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_idx)).all()
             cold_start_artwork_paths = [f"https://j11d106.p.ssafy.io/static/{artwork.filename}" for artwork in cold_start_artworks]
             
@@ -352,9 +358,10 @@ def recommend_artwork(user_id, db: Session):
             recommended_artworks = recommend_similar_artworks(cold_artwork_vector, filtered_artwork_vector, list(range(len(all_artwork_vector))), top_k=50)
 
             result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
-            return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}"} for artwork in result_artworks]
+            return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}", "year" : artwork.year, "writer" : artwork.artist_name} for artwork in result_artworks]
 
         user_artwork_ids = [idx.artwork_id for idx in user_artwork_ids]
+        user_artwork_ids = [i for i in user_artwork_ids if i < all_artwork_vector.shape[0]]
         user_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(user_artwork_ids)).all()
         user_artwork_paths = [f"https://j11d106.p.ssafy.io/static/{artwork.filename}" for artwork in user_artworks]
         logging.info(f"User artwork paths: {user_artwork_paths}")
@@ -368,7 +375,7 @@ def recommend_artwork(user_id, db: Session):
         recommended_artworks = recommend_similar_artworks(user_artwork_vector, filtered_artwork_vector, list(range(len(all_artwork_vector))), top_k=50)
 
         result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
-        return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}"} for artwork in result_artworks]
+        return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}", "year" : artwork.year, "writer" : artwork.artist_name} for artwork in result_artworks]
 
     except Exception as e:
         logging.error(f"Error in recommend_artwork: {str(e)}")

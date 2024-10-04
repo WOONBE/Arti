@@ -8,12 +8,12 @@ from .schema import post_start
 
 router = APIRouter(prefix="/start")
 
-@router.get("/")
+@router.get("/", tags=['cold_start'])
 def cold_start(db : Session = Depends(get_db)):
     result = start(db)
     return result
 
-@router.post('/save')
+@router.post('/save', tags=['cold_start'])
 def cold_start_save(member : post_start, db : Session = Depends(get_db)):
     start_save(member, db)
     return

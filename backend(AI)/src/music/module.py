@@ -78,7 +78,7 @@ async def generation_music(gallery_id: int, db: Session):
             audio_data = audio_data[:-int(samples_to_trim)]
 
         # 오디오 파일 저장
-        audio_save_directory = '/audio'
+        audio_save_directory = 'audio'
         os.makedirs(audio_save_directory, exist_ok=True)
         wav_file_name = f"generated_audio_{gallery_id}.wav"
         wav_file_path = os.path.join(audio_save_directory, wav_file_name).replace('\\', '/')

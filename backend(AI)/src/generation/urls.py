@@ -10,7 +10,7 @@ import os
 router = APIRouter(prefix='/artwork')
 
 
-@router.post('/ai')
+@router.post('/ai', tags=['generation'])
 def generation_image(content_image: UploadFile = File(), style_image : int = Form(), db : Session = Depends(get_db)):
     
     image_path = transfer_image(content_image, style_image, db)
@@ -24,7 +24,7 @@ def generation_image(content_image: UploadFile = File(), style_image : int = For
     # else:
     #     raise HTTPException(status_code=400, detail="Image not found")
 
-@router.post('/ai/save')
+@router.post('/ai/save',tags=['generation'])
 def get_image(image: post_ai_image, db: Session = Depends(get_db)):
 
     return insert_post(image, db)

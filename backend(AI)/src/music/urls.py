@@ -7,12 +7,12 @@ from .module import generation_music, delete_music_db, get_music, show_music_bas
 
 router = APIRouter(prefix='/music')
 
-@router.post('/{gallery_id}')
+@router.post('/{gallery_id}', tags=['music'])
 async def music(gallery_id: int, db: Session = Depends(get_db)):
     audio_path = await generation_music(gallery_id, db)
     return {"message": "Music generated successfully", "audio_path": audio_path}
 
-@router.get('/{gallery_id}')
+@router.get('/{gallery_id}', tags=['music'])
 def listen_music(gallery_id: int, db: Session = Depends(get_db)):
     result = get_music(gallery_id, db)
 
@@ -33,12 +33,12 @@ def listen_music(gallery_id: int, db: Session = Depends(get_db)):
         media_type='audio/wav'
     )
 
-@router.delete('/{gallery_id}')
+@router.delete('/{gallery_id}', tags=['music'])
 def delete_music(gallery_id: int, db: Session = Depends(get_db)):  # 오타 수정
     result = delete_music_db(gallery_id, db)
     return result
 
-@router.get('/{audio_path:path}')
+@router.get('/{audio_path:path}', tags=['music'])
 def show_music(audio_path: str):
     file_path = show_music_base(audio_path)
 

@@ -68,6 +68,9 @@ if __name__ == "__main__":
     import torch
     import nest_asyncio
     from pyngrok import ngrok
+    import gc
+
+    gc.disable()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using {device} device")
