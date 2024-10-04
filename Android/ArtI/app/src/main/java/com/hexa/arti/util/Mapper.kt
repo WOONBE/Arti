@@ -38,12 +38,14 @@ fun GetRecommendArtworkResponse.asArtwork() = Artwork(
     imageUrl = this.imageUrl,
     title = this.title,
     year = this.year,
-    writer = this.writer,
+    artist = this.writer,
 )
 
 fun GetRandomGalleriesResponse.asGalleryBanner() = GalleryBanner(
     galleryId = this.id,
     imageUrl = this.image,
     ownerId = this.ownerId,
-    name = this.name
+    name = this.name,
+    description = this.description,
+    viewCount = this.viewCount
 )

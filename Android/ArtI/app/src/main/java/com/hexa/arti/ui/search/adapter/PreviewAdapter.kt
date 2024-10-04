@@ -7,26 +7,26 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
-import com.hexa.arti.data.model.search.PreviewImage
+import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.ItemPreviewImageBinding
 
 class PreviewAdapter(
-    private val onImageClick: (PreviewImage) -> Unit,
-) : ListAdapter<PreviewImage, PreviewAdapter.PreviewViewHolder>(PreviewDiffUtil()) {
+    private val onImageClick: (ThemeArtwork) -> Unit,
+) : ListAdapter<ThemeArtwork, PreviewAdapter.PreviewViewHolder>(PreviewDiffUtil()) {
 
 
     class PreviewViewHolder(
         private val binding: ItemPreviewImageBinding,
-        private val onImageClick: (PreviewImage) -> Unit,
+        private val onImageClick: (ThemeArtwork) -> Unit,
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(previewImage: PreviewImage) {
+        fun bind(previewImage: ThemeArtwork) {
             if (previewImage.isFocus) {
                 binding.clPreviewImage.setBackgroundResource(R.drawable.background_preview_focus)
             } else {
                 binding.clPreviewImage.setBackgroundResource(0)
             }
             Glide.with(binding.root.context)
-                .load(previewImage.url)
+                .load(previewImage.imageUrl)
                 .error(R.drawable.gallery_sample2)
                 .into(binding.ivPreviewImage)
             itemView.setOnClickListener {
@@ -48,12 +48,12 @@ class PreviewAdapter(
     }
 }
 
-class PreviewDiffUtil : DiffUtil.ItemCallback<PreviewImage>() {
-    override fun areItemsTheSame(oldItem: PreviewImage, newItem: PreviewImage): Boolean {
+class PreviewDiffUtil : DiffUtil.ItemCallback<ThemeArtwork>() {
+    override fun areItemsTheSame(oldItem: ThemeArtwork, newItem: ThemeArtwork): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: PreviewImage, newItem: PreviewImage): Boolean {
+    override fun areContentsTheSame(oldItem: ThemeArtwork, newItem: ThemeArtwork): Boolean {
         return oldItem == newItem
     }
 

@@ -4,6 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
+import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.databinding.FragmentArtMuseumBannerBinding
 import com.hexa.arti.ui.search.adapter.ArtMuseumAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,8 +15,8 @@ class ArtMuseumBannerFragment :
 
     private val viewModel: ArtMuseumBannerViewModel by viewModels()
 
-    private val artMuseumAdapter = ArtMuseumAdapter {
-        moveToArtMuseumFragment()
+    private val artMuseumAdapter = ArtMuseumAdapter { gallery ->
+        moveToArtMuseumFragment(gallery)
     }
 
     override fun init() {
@@ -44,8 +45,12 @@ class ArtMuseumBannerFragment :
         viewModel.getRandomMuseums()
     }
 
-    private fun moveToArtMuseumFragment() {
-        findNavController().navigate(R.id.action_artMuseumBannerFragment_to_artMuseumFragment)
+    private fun moveToArtMuseumFragment(gallery: GalleryBanner) {
+        findNavController().navigate(
+            ArtMuseumBannerFragmentDirections.actionArtMuseumBannerFragmentToArtMuseumFragment(
+                gallery
+            )
+        )
     }
 
 }
