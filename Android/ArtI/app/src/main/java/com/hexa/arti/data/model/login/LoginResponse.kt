@@ -5,5 +5,9 @@ import com.google.gson.annotations.SerializedName
 data class LoginResponse(
     val expiresIn: Int,
     @SerializedName("token")
-    val token: String
+    val token: String,
+    @SerializedName("memberId")
+    val memberId: Int,
+    @SerializedName("galleryId")
+    val galleryId : Int
 )

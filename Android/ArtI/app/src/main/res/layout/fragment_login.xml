@@ -54,7 +54,7 @@
                 android:id="@+id/login_id_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="aa"
+                android:text="aa@aa.com"
                 android:background="@drawable/shape_login_edit_text"
                 app:layout_constraintBottom_toTopOf="@id/login_pw_tv"
                 app:layout_constraintEnd_toEndOf="parent"

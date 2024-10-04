@@ -16,6 +16,7 @@ class ArtworkPagingSource(
         val pageNumber = params.key ?: 1
         return try {
             val response = artWorkApi.getArtworksByStringWithPaging(pageNumber,keyword)
+            Log.d("확인", "검색어4: ${response}")
             val artWorks = response.artWorks.map { it.asArtwork() }
             LoadResult.Page(
                 data = artWorks,

@@ -2,6 +2,7 @@ package com.hexa.arti.ui.signup
 
 import android.net.Uri
 import android.transition.TransitionManager
+import android.util.Patterns
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,12 +15,14 @@ import com.hexa.arti.databinding.FragmentSignUpBinding
 import com.hexa.arti.util.handleImage
 import com.hexa.arti.util.isPasswordValid
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.regex.Pattern
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sign_up) {
 
     private var isCheckCode = false
     private var isSendEmail = false
+    private val emailPattern: Pattern = Patterns.EMAIL_ADDRESS
     private val signUpViewModel: SignUpViewModel by viewModels()
 
 
@@ -58,8 +61,30 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
 
                 2 -> {
                     makeToast("회원가입이 실패하였습니다.")
+                    signUpViewModel.updateStatus()
+                }
+                else -> {
+
                 }
             }
+        }
+        signUpViewModel.codeStatus.observe(viewLifecycleOwner){ status->
+            when(status){
+                1->{
+                    isCheckCode = true
+                    binding.signCertificationEt.isEnabled = false
+                    binding.signCertificationBtn.isEnabled = false
+                }
+                2->{
+                    makeToast("인증번호를 다시 확인해주세요")
+                    signUpViewModel.updateCode()
+                }
+                else->{
+
+                }
+            }
+
+
         }
     }
 
@@ -83,31 +108,34 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
 
             /* 이메일 인증 */
             signEmailBtn.setOnClickListener {
-                isCheckCode = false
-                if (!isSendEmail) {
-                    Animation(false)
-                    signEmailBtn.text = "재전송"
-                    signEmailEt.isEnabled = false
-                    signUpViewModel.updateEmail(signEmailEt.text.toString())
 
-                    signCertificationEt.isEnabled = true
-                    signCertificationBtn.isEnabled = true
-                    isSendEmail = true
-                } else {
-                    signEmailBtn.text = "전송"
-                    signEmailEt.isEnabled = true
-                    Animation(true)
+                if(emailPattern.matcher(signEmailEt.text.toString()).matches()){
+                    isCheckCode = false
+                    if (!isSendEmail) {
+                        Animation(false)
+                        signEmailBtn.text = "재전송"
+                        signEmailEt.isEnabled = false
+                        signUpViewModel.updateEmail(signEmailEt.text.toString())
+                        signUpViewModel.sendEmail(signEmailEt.text.toString())
+                        signCertificationEt.isEnabled = true
+                        signCertificationBtn.isEnabled = true
+                        isSendEmail = true
+                    } else {
+                        signEmailBtn.text = "전송"
+                        signEmailEt.isEnabled = true
+                        Animation(true)
 
-                    signCertificationEt.setText("")
-                    isSendEmail = false
+                        signCertificationEt.setText("")
+                        isSendEmail = false
+                    }
                 }
+                else makeToast("이메일 형식을 맞춰주세요")
+
             }
 
             /* 인증 번호 확인 */
             signCertificationBtn.setOnClickListener {
-                isCheckCode = true
-                signCertificationEt.isEnabled = false
-                signCertificationBtn.isEnabled = false
+                signUpViewModel.checkEmailCode(signEmailEt.text.toString(),signCertificationEt.text.toString())
             }
 
             /* 뒤로 가기 */

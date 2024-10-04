@@ -15,6 +15,7 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.databinding.FragmentSelectArtworkBinding
 import com.hexa.arti.ui.artwork.adapter.SelectArtworkAdapter
+import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
 import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +55,22 @@ class SelectArtworkFragment :
                 }
             }
         }
+//        selectArtworkViewModel.artWorkResult.observe(viewLifecycleOwner) {
+//            isClicked = false
+//            Log.d(TAG, "init: ${it}")
+//            if (it.isNotEmpty()) {
+//                binding.noSearchTv.visibility = GONE
+//                Log.d(TAG, "init: bb")
+//                mainActivity.hideLoadingDialog()
+//                tempList = it.toList()
+//                adapter.submitList(tempList)
+//
+//            }
+//            else{
+//                mainActivity.hideLoadingDialog()
+//                binding.noSearchTv.visibility = VISIBLE
+//            }
+//        }
 
         with(binding) {
 

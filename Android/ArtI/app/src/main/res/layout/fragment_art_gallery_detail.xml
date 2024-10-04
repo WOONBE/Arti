@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:paddingEnd="4dp"
-                android:text="테마 : 이것좀보세요"
+                android:text="나만의 미술품을 생성해보세요"
                 android:elevation="10dp"
                 app:textStrokeWidth="10"
                 app:textStrokeColor="@color/black"
