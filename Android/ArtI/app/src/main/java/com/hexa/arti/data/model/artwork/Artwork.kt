@@ -4,8 +4,9 @@ data class Artwork(
     val artworkId: Int,
     val title: String,
     val imageUrl: String,
-    val description: String,
-    val year: String
+    val description: String? = null,
+    val year: String,
+    val writer: String? = null
 ) {
 
 }
