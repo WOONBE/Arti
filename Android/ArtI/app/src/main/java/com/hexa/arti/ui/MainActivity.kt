@@ -45,6 +45,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+        showLoadingDialog()
         with(myGalleryActivityViewModel){
             // Coroutine 내에서 값을 수집
             lifecycleScope.launch {
@@ -61,7 +62,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                     }
 
                     if (isFirst) navController.navigate(R.id.surveyFragment)
-
+                    hideLoadingDialog()
                 }
             }
 

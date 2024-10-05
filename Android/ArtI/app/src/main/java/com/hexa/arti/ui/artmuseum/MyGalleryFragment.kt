@@ -53,7 +53,6 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     galleryId = d.galleryId
                 }
 
-
             }
         }
 
@@ -95,13 +94,6 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     myGalleryViewModel.getGalleryDto(
                         updateGalleryDto = GalleryRequest(it.description, it.name,it.ownerId)
                     )
-                    var file = File("")
-                    val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-                    myGalleryViewModel.getImage(MultipartBody.Part.createFormData(
-                        "image",
-                        file.name,
-                        requestFile
-                    ))
 
                 }
                 // 테마
@@ -265,7 +257,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize = 10 * 512 * 512 // 10MB
+        val maxSize =  512 * 512 // 1MB
         if (file.length() > maxSize) {
             file = compressImage(file)
 

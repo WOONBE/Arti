@@ -58,18 +58,36 @@ class SignUpRepositoryImpl @Inject constructor(
 
         // 오류 응답 처리
         val errorBody = result.errorBody()?.string()
-        val errorResponse = if (errorBody != null) {
-            Gson().fromJson(errorBody, ErrorResponse::class.java)
-        } else {
-            ErrorResponse(code = result.code(), message = "Unknown error")
-        }
+        Log.d(TAG, "Error body: $errorBody")
 
-        return Result.failure(
-            ApiException(
-                code = errorResponse.code,
-                message = errorResponse.message
+        // 오류 응답이 객체가 아닌 단순 문자열일 수 있으므로 이를 처리
+        return if (errorBody != null) {
+            try {
+                // 객체 형식의 오류일 경우
+                val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+                Result.failure(
+                    ApiException(
+                        code = errorResponse.code,
+                        message = errorResponse.message
+                    )
+                )
+            } catch (e: JsonSyntaxException) {
+                // 오류 응답이 문자열일 경우
+                Result.failure(
+                    ApiException(
+                        code = result.code(),
+                        message = errorBody
+                    )
+                )
+            }
+        } else {
+            Result.failure(
+                ApiException(
+                    code = result.code(),
+                    message = "Unknown error"
+                )
             )
-        )
+        }
     }
 
     override suspend fun checkEmailCode(email: String, code: String): Result<ResponseBody> {

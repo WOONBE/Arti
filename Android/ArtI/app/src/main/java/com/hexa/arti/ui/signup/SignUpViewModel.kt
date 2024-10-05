@@ -19,6 +19,12 @@ class SignUpViewModel @Inject constructor(
     private val _signUpModel = MutableLiveData<SignUpModel>(SignUpModel("", "", ""))
     val signUpModel: LiveData<SignUpModel> = _signUpModel
 
+    private val _emailVerify = MutableLiveData<Int>()
+    val emailVerify : LiveData<Int> = _emailVerify
+
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage : LiveData<String> = _errorMessage
+
 
     private val _codeStatus = MutableLiveData<Int>()
     val codeStatus : LiveData<Int> = _codeStatus
@@ -40,9 +46,12 @@ class SignUpViewModel @Inject constructor(
     fun sendEmail(email : String){
         viewModelScope.launch {
             signUpRepository.sendEmail(email).onSuccess {
-
+                _emailVerify.value = 1
+                Log.d(TAG, "sendEmail: $it")
             }.onFailure {
-
+                _errorMessage.value = it.message
+                _emailVerify.value = 2
+                Log.d(TAG, "sendEmail: $it")
             }
         }
     }
