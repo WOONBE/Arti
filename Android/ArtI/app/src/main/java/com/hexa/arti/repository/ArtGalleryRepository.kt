@@ -5,6 +5,7 @@ import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.GalleryResponse
 import com.hexa.arti.data.model.artmuseum.GalleryBanner
+import com.hexa.arti.data.model.artmuseum.GetTotalThemeResponse
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.data.model.artmuseum.SubscriptionGallery
 import com.hexa.arti.data.model.artmuseum.ThemeResponseItem
@@ -15,6 +16,8 @@ import com.hexa.arti.data.model.response.GetSearchGalleryResponse
 import okhttp3.ResponseBody
 
 interface ArtGalleryRepository {
+
+    suspend fun getThemeWithArtworks(galleryId: Int): Result<List<GetTotalThemeResponse>>
 
     suspend fun getSearchGalleries(keyword: String): Result<List<GetSearchGalleryResponse>>
 

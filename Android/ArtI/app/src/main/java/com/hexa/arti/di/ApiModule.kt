@@ -6,6 +6,7 @@ import com.hexa.arti.network.ArtistApi
 import com.hexa.arti.network.GalleryApi
 import com.hexa.arti.network.HomeApi
 import com.hexa.arti.network.LoginApi
+import com.hexa.arti.network.MemberApi
 import com.hexa.arti.network.SignUpApi
 import dagger.Module
 import dagger.Provides
@@ -54,4 +55,9 @@ object ApiModule {
     @Provides
     fun provideHomeApiService(@Named("arti_fast") retrofit: Retrofit): HomeApi =
         retrofit.create(HomeApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideMemberApiService(@Named("arti_fast") retrofit: Retrofit): MemberApi =
+        retrofit.create(MemberApi::class.java)
 }

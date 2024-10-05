@@ -4,6 +4,7 @@ import com.hexa.arti.data.model.artmuseum.ArtGalleryResponse
 import com.hexa.arti.data.model.artmuseum.CreateThemeDto
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
 import com.hexa.arti.data.model.artmuseum.GalleryResponse
+import com.hexa.arti.data.model.artmuseum.GetTotalThemeResponse
 import com.hexa.arti.data.model.artmuseum.SubscriptionGallery
 import com.hexa.arti.data.model.artmuseum.ThemeArtworksResponse
 import com.hexa.arti.data.model.artmuseum.ThemeResponse
@@ -26,6 +27,9 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GalleryApi {
+
+    @GET("galleries/{galleryId}/themes-with-artworks")
+    suspend fun getThemeWithArtworks(@Path("galleryId") galleryId: Int): Response<List<GetTotalThemeResponse>>
 
     @GET("galleries/search")
     suspend fun getSearchGallery(@Query("keyword") keyword: String): Response<List<GetSearchGalleryResponse>>

@@ -11,12 +11,12 @@ import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.databinding.ItemArtMuseumBinding
 
 class ArtMuseumAdapter(
-    private val onItemClick: () -> Unit
+    private val onItemClick: (GalleryBanner) -> Unit
 ) : ListAdapter<GalleryBanner, ArtMuseumAdapter.ArtMuseumViewHolder>(ArtMuseumDiffUtil()) {
 
     class ArtMuseumViewHolder(
         private val binding: ItemArtMuseumBinding,
-        private val onItemClick: () -> Unit
+        private val onItemClick: (GalleryBanner) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(galleryBanner: GalleryBanner) {
@@ -29,7 +29,7 @@ class ArtMuseumAdapter(
             binding.tvArtTitle.text = galleryBanner.name
 
             itemView.setOnClickListener {
-                onItemClick()
+                onItemClick(galleryBanner)
             }
         }
     }

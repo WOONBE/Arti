@@ -6,7 +6,7 @@ data class Artwork(
     val imageUrl: String,
     val description: String? = null,
     val year: String,
-    val writer: String? = null
+    val artist: String? = null
 ) {
 
 }

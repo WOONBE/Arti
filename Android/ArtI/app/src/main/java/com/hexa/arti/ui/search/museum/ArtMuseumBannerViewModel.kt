@@ -22,7 +22,6 @@ class ArtMuseumBannerViewModel @Inject constructor(
     fun getRandomMuseums() {
         viewModelScope.launch {
             artGalleryRepository.getRandomGalleries().onSuccess { response ->
-                Log.d("확인", "미술관 데이터 ${response}")
                 _resultMuseums.value = response
             }.onFailure { error ->
                 if (error is ApiException) {

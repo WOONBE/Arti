@@ -1,7 +1,11 @@
 package com.hexa.arti.util
 
 import com.hexa.arti.data.model.artmuseum.GalleryBanner
+import com.hexa.arti.data.model.artmuseum.GetTotalThemeResponse
+import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.data.model.artwork.Artwork
+import com.hexa.arti.data.model.home.HomeTheme
+import com.hexa.arti.data.model.home.PreviewImage
 import com.hexa.arti.data.model.response.GetArtWorkResponse
 import com.hexa.arti.data.model.response.GetArtistResponse
 import com.hexa.arti.data.model.response.GetRandomGalleriesResponse
@@ -38,12 +42,25 @@ fun GetRecommendArtworkResponse.asArtwork() = Artwork(
     imageUrl = this.imageUrl,
     title = this.title,
     year = this.year,
-    writer = this.writer,
+    artist = this.writer,
 )
 
 fun GetRandomGalleriesResponse.asGalleryBanner() = GalleryBanner(
     galleryId = this.id,
     imageUrl = this.image,
     ownerId = this.ownerId,
-    name = this.name
+    name = this.name,
+    description = this.description,
+    viewCount = this.viewCount
+)
+
+fun ThemeArtwork.asPreviewImage() = PreviewImage(
+    artworkId = this.id,
+    imageUrl = this.imageUrl
+)
+
+fun GetTotalThemeResponse.asHomeTheme() = HomeTheme(
+    themeId = this.themeId,
+    themeName = this.themeName,
+    artworks = this.artworks.map { it.asPreviewImage() }
 )

@@ -1,100 +1,179 @@
 package com.hexa.arti.ui.search.museum
 
+import android.graphics.Color
+import android.graphics.drawable.VectorDrawable
+import android.util.Log
+import android.view.View
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.data.model.home.HomeTheme
-import com.hexa.arti.data.model.search.PreviewImage
+import com.hexa.arti.data.model.artmuseum.GalleryBanner
+import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
+import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
 import com.hexa.arti.ui.search.adapter.PreviewAdapter
-import kotlin.random.Random
+import com.hexa.arti.util.asHomeTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragment_art_museum) {
 
+    private val viewModel: ArtMuseumViewModel by viewModels()
+    private val args: ArtMuseumFragmentArgs by navArgs()
     private val previewAdapter = PreviewAdapter { clickedImage ->
         changeFocusItem(clickedImage)
     }
-
     private val themeAdapter = ThemeAdapter()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private var isBookmarked = false
+    private var memberId = 0
 
     override fun init() {
-        initViews()
+        Log.d("확인", "갤러리 ${args.gallery}")
+        initObserve()
+        initViews(args.gallery)
+        initUserData()
     }
 
-    private fun initViews() {
+    private fun initObserve() {
+        viewModel.resultTotalTheme.observe(viewLifecycleOwner) { resultTotalTheme ->
+            if (resultTotalTheme.isEmpty()) {
+                Log.d("확인", "통신에러")
+            } else {
+                val totalArtworks = mutableListOf<ThemeArtwork>()
+                for (theme in resultTotalTheme) {
+                    for (artwork in theme.artworks) {
+                        totalArtworks.add(artwork)
+                    }
+                }
+                if (totalArtworks.isEmpty()) {
+                    binding.clTotalMuseum.visibility = View.GONE
+                    binding.tvNoArtworks.visibility = View.VISIBLE
+                } else {
+                    totalArtworks[0] = totalArtworks[0].copy(isFocus = true)
+                    Glide.with(requireContext())
+                        .load(totalArtworks[0].imageUrl)
+                        .error(R.drawable.gallery_sample2)
+                        .into(binding.ivArtImage)
 
-        val mockUrl = listOf(
-            "https://upload.wikimedia.org/wikipedia/commons/8/87/2012_Henrique_Matos_Optical_Motion_01.jpg",
-            "https://i0.wp.com/blog.rightbrain.co.kr/wp-content/uploads/2014/11/victorvasarely_02.jpg?fit=408%2C328&ssl=1",
-            "https://cdn.knupresscenter.com/news/photo/201103/14901_1621_4915.jpg",
-            "https://cdn.knupresscenter.com/news/photo/201103/14901_1622_4915.jpg",
-            "https://cicamuseum.com/wp-content/uploads/2014/03/semikim_01.jpg",
-        )
+                    binding.tvArtTitle.text = totalArtworks[0].title
+                    previewAdapter.submitList(totalArtworks)
 
-        binding.rvPreview.apply {
-            adapter = previewAdapter
-            val previewMockData = mutableListOf<PreviewImage>()
-            for (i in 0..20) {
-                previewMockData.add(PreviewImage(id = i, url = mockUrl[Random.nextInt(5)]))
+                    themeAdapter.submitList(resultTotalTheme.map { it.asHomeTheme() })
+                }
             }
-            previewMockData[0] = previewMockData[0].copy(isFocus = true)
-            Glide.with(requireContext())
-                .load(previewMockData[0].url)
-                .error(R.drawable.gallery_example)
-                .into(binding.ivArtImage)
-
-            previewAdapter.submitList(previewMockData)
         }
 
-        binding.rvTheme.apply {
-            adapter = themeAdapter
-            val artThemeList = listOf(
-                HomeTheme(1,1,"하하", emptyList()),
-                HomeTheme(2,2,"헤헤", emptyList()),
-                HomeTheme(3,3,"히히", emptyList()),
-            )
-
-            themeAdapter.submitList(artThemeList)
+        viewModel.subscriptionGallery.observe(viewLifecycleOwner) {
+            Log.d("확인", "구독목록 ${it}")
+            if (it.any { it.galleryId == args.gallery.galleryId }) {
+                val drawable = binding.ivBookmark.drawable
+                if (drawable is VectorDrawable) {
+                    drawable.mutate()
+                    drawable.setTint(Color.parseColor("#386BF6"))
+                }
+                isBookmarked = true
+            }
         }
+
+        viewModel.subscribeResult.observe(viewLifecycleOwner) {
+            makeToast(it)
+        }
+    }
+
+    private fun initViews(gallery: GalleryBanner) {
+        binding.rvPreview.adapter = previewAdapter
+
+        binding.rvTheme.adapter = themeAdapter
+
+        viewModel.getTotalThemes(gallery.galleryId)
 
         binding.ivRight.setOnClickListener {
             val nextFocusedIndex = previewAdapter.currentList.indexOfFirst { it.isFocus } + 1
 
-            if(nextFocusedIndex >= previewAdapter.currentList.size)return@setOnClickListener
+            if (nextFocusedIndex >= previewAdapter.currentList.size) return@setOnClickListener
 
             changeFocusItem(previewAdapter.currentList[nextFocusedIndex])
 
-            binding.rvPreview.layoutManager?.smoothScrollToPosition(binding.rvPreview, RecyclerView.State(), nextFocusedIndex)
+            binding.rvPreview.layoutManager?.smoothScrollToPosition(
+                binding.rvPreview,
+                RecyclerView.State(),
+                nextFocusedIndex
+            )
         }
 
         binding.ivLeft.setOnClickListener {
 
             val prevFocusedIndex = previewAdapter.currentList.indexOfFirst { it.isFocus } - 1
 
-            if(prevFocusedIndex < 0)return@setOnClickListener
+            if (prevFocusedIndex < 0) return@setOnClickListener
 
             changeFocusItem(previewAdapter.currentList[prevFocusedIndex])
 
-            binding.rvPreview.layoutManager?.smoothScrollToPosition(binding.rvPreview, RecyclerView.State(), prevFocusedIndex)
+            binding.rvPreview.layoutManager?.smoothScrollToPosition(
+                binding.rvPreview,
+                RecyclerView.State(),
+                prevFocusedIndex
+            )
         }
+
+        binding.ivBookmark.setOnClickListener {
+            if (isBookmarked) {
+                val drawable = binding.ivBookmark.drawable
+                if (drawable is VectorDrawable) {
+                    drawable.mutate()
+                    drawable.setTint(Color.parseColor("#000000"))
+                }
+                viewModel.unSubscribe(memberId, args.gallery.galleryId)
+            } else {
+                val drawable = binding.ivBookmark.drawable
+                if (drawable is VectorDrawable) {
+                    drawable.mutate()
+                    drawable.setTint(Color.parseColor("#386BF6"))
+                }
+                viewModel.subscribe(memberId, args.gallery.galleryId)
+            }
+
+        }
+
+        binding.tvMuseumTitle.text = gallery.name
+        binding.tvIntroduceContent.text = gallery.description
 
     }
 
-    private fun changeFocusItem(clickedImage: PreviewImage) {
+    private fun changeFocusItem(clickedImage: ThemeArtwork) {
         val updateList = previewAdapter.currentList.map { previewImage ->
             previewImage.copy(isFocus = (previewImage.id == clickedImage.id))
         }
 
+        binding.tvArtTitle.text = clickedImage.title
+
         Glide.with(requireContext())
-            .load(clickedImage.url)
+            .load(clickedImage.imageUrl)
             .error(R.drawable.gallery_sample2)
             .into(binding.ivArtImage)
 
         previewAdapter.submitList(updateList)
     }
 
+    private fun initUserData() {
+        CoroutineScope(Dispatchers.Main).launch {
+            mainActivityViewModel.getLoginData().collect { userData ->
+                userData?.let {
+                    memberId = userData.memberId
+                    viewModel.getSubscriptionGalleries(userData.memberId)
+                }
+            }
+        }
+    }
 
 
 }
