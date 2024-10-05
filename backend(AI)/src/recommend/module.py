@@ -10,6 +10,7 @@ import numpy as np
 
 import logging
 import traceback
+import random
 
 import aiohttp
 import asyncio
@@ -91,7 +92,7 @@ def recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery
     
     try:
         distances, indices = index.search(user_gallery_vector, top_k)
-        print(f"Search result - distances: {distances}, indices: {indices}")
+        # print(f"Search result - distances: {distances}, indices: {indices}")
     except Exception as e:
         print(f"Error in faiss search: {e}")
         raise
@@ -227,11 +228,11 @@ def recommend_gallery(user_id, db: Session):
     user_gallery = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
 
     if not user_gallery:
-        cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
+        cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).all()
         if not cold_start_artworks or len(cold_start_artworks) < 5:
             raise HTTPException(status_code=404, detail="Cold Start: Not enough artworks available for recommendation.")
         
-        cold_start_artwork_ids = [cs.artwork_id for cs in cold_start_artworks]
+        cold_start_artwork_ids = [cs.artwork_id for cs in random.sample(cold_start_artworks,3)]
         result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_artwork_ids)).all()
         user_gallery_path = ['https://j11d106.p.ssafy.io/static/' + cs.filename for cs in result_artworks]
     else:
@@ -248,9 +249,11 @@ def recommend_gallery(user_id, db: Session):
         raise ValueError("Other gallery vector could not be computed.")
 
     # 미술관 추천(3개)
-    similar_gallery_ids = recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery_idx)
+    similar_gallery_ids = recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery_idx, 50)
 
-    similar_galleries = db.query(Gallery).filter(Gallery.gallery_id.in_(similar_gallery_ids)).all()
+    recommed_idx = [idx for idx in random.sample(set(similar_gallery_ids), 3)]
+
+    similar_galleries = db.query(Gallery).filter(Gallery.gallery_id.in_(recommed_idx)).all()
 
     result = custom_base(top_view_galleries, similar_galleries, db)
 
@@ -316,13 +319,13 @@ def recommend_artwork(user_id, db: Session):
 
         if not user_gallery:
             logging.info("No user gallery found, falling back to cold start.")
-            cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
+            cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).all()
             if not cold_start_artworks:
                 raise HTTPException(status_code=404, detail="No artworks available for recommendation.")
             
-            cold_start_idx = [idx.artwork_id for idx in cold_start_artworks]
+            cold_start_idx = [idx.artwork_id for idx in random.sample(cold_start_artworks, 3)]
             cold_start_idx = [i for i in cold_start_idx if i < all_artwork_vector.shape[0]]
-            
+
             cold_start_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_idx)).all()
             cold_start_artwork_paths = [f"https://j11d106.p.ssafy.io/static/{artwork.filename}" for artwork in cold_start_artworks]
             logging.info(f"Cold start artworks: {cold_start_artwork_paths}")
@@ -346,8 +349,8 @@ def recommend_artwork(user_id, db: Session):
 
         if len(user_artwork_ids) < 5:
             logging.info("Not enough user artworks, falling back to cold start.")
-            cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).limit(5).all()
-            cold_start_idx = [idx.artwork_id for idx in cold_start_artworks]
+            cold_start_artworks = db.query(Cold_Start).filter(Cold_Start.member_id == user_id).all()
+            cold_start_idx = [idx.artwork_id for idx in random.sample(cold_start_artworks, 3)]
             cold_start_idx = [i for i in cold_start_idx if i < all_artwork_vector.shape[0]]
 
             cold_start_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(cold_start_idx)).all()
@@ -360,7 +363,7 @@ def recommend_artwork(user_id, db: Session):
             result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
             return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}", "year" : artwork.year, "writer" : artwork.artist_name} for artwork in result_artworks]
 
-        user_artwork_ids = [idx.artwork_id for idx in user_artwork_ids]
+        user_artwork_ids = [idx.artwork_id for idx in random.sample(user_artwork_ids, 3)]
         user_artwork_ids = [i for i in user_artwork_ids if i < all_artwork_vector.shape[0]]
         user_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(user_artwork_ids)).all()
         user_artwork_paths = [f"https://j11d106.p.ssafy.io/static/{artwork.filename}" for artwork in user_artworks]
