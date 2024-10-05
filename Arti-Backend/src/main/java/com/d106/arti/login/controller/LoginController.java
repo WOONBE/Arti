@@ -2,15 +2,9 @@ package com.d106.arti.login.controller;
 
 import com.d106.arti.login.dto.request.VerificationNumberRequest;
 import com.d106.arti.login.dto.request.VerificationRequest;
-import com.d106.arti.login.service.JwtService;
-import com.d106.arti.login.service.LoginRequest;
-import com.d106.arti.login.service.LoginResponse;
-import com.d106.arti.login.service.LoginService;
 import com.d106.arti.login.service.MailService;
-import com.d106.arti.login.service.RegisterRequest;
 import com.d106.arti.login.service.VerificationService;
 import com.d106.arti.member.repository.MemberRepository;
-import com.d106.arti.storage.StorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -26,9 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final JwtService jwtService;
-    private final LoginService loginService;
-    private final StorageService storageService;
     private final MailService mailService;
     private final VerificationService verificationService;
     private final MemberRepository memberRepository;
@@ -69,31 +60,5 @@ public class LoginController {
         } else {
             return ResponseEntity.status(401).body("인증 실패.");
         }
-    }
-    // 3. 회원가입 완료 (파일 첨부 포함)
-    @PostMapping("/register")
-    @Operation(summary = "회원가입", description = "인증된 이메일을 통한 회원가입을 위한 API")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-
-        if (!verificationService.isVerifiedEmail(request.getEmail())) {
-            return ResponseEntity.status(401).body("이메일 인증이 필요합니다.");
-        }
-
-
-        Integer memberId = loginService.register(
-                request.getEmail(),
-                request.getPassword(),
-                request.getNickname()
-        );
-
-
-        return ResponseEntity.ok(memberId);
-    }
-
-    // 4. 로그인
-    @PostMapping("/login")
-    @Operation(summary = "로그인", description = "로그인을 위한 API")
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(loginService.login(request.getEmail(), request.getPassword()));
     }
 }
