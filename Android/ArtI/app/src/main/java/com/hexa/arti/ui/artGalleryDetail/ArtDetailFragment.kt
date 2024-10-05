@@ -41,12 +41,12 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
             mainActivityViewModel.getLoginData().collect { d ->
                 d?.let {
                     if(it.galleryId == args.galleryId) binding.artDetailSaveBtn.visibility = View.GONE
+                    artDetailViewModel.getMyGalleryTheme(it.galleryId)
                 }
 
             }
         }
 
-        artDetailViewModel.getMyGalleryTheme(1)
         artDetailViewModel.galleryTheme.observe(viewLifecycleOwner) {
             Log.d(TAG, "init: $it")
             setupRadioButtons(it)
