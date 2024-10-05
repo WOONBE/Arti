@@ -15,7 +15,7 @@ public class MemberController {
 
     private final MemberService service;
 
-    @PatchMapping
+    @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
           @RequestBody ChangePasswordRequest request,
           Principal connectedUser
