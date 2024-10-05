@@ -392,6 +392,7 @@ public class GalleryService {
                                 .description(aiArtwork.getArtworkImage())
                                 .imageUrl(aiArtwork.getArtworkImage())
                                 .artist(aiArtwork.getMember().getNickname())
+                                .year(aiArtwork.getYear())
                                 .build();
                         } else if (artwork instanceof NormalArtWork) {
                             NormalArtWork normalArtwork = (NormalArtWork) artwork;
