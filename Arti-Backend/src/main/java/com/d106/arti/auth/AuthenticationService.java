@@ -1,6 +1,7 @@
 package com.d106.arti.auth;
 
 import com.d106.arti.config.JwtService;
+import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.member.domain.Role;
 import com.d106.arti.token.Token;
 import com.d106.arti.token.TokenRepository;
@@ -27,6 +28,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final GalleryRepository galleryRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = Member.builder()
@@ -52,15 +54,18 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var member = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
+        var jwtToken = jwtService.generateToken(member);
+        var refreshToken = jwtService.generateRefreshToken(member);
+        var gallery = galleryRepository.findFirstByOwner(member);
+        revokeAllUserTokens(member);
+        saveUserToken(member, jwtToken);
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .memberId(member.getId())
+                .galleryId(gallery.isPresent() ? gallery.get().getId() : -1)
                 .build();
     }
 
