@@ -12,6 +12,8 @@ import com.hexa.arti.repository.HomeRepository
 import com.hexa.arti.repository.HomeRepositoryImpl
 import com.hexa.arti.repository.LoginRepository
 import com.hexa.arti.repository.LoginRepositoryImpl
+import com.hexa.arti.repository.MemberRepository
+import com.hexa.arti.repository.MemberRepositoryImpl
 import com.hexa.arti.repository.SignUpRepository
 import com.hexa.arti.repository.SignUpRepositoryImpl
 import dagger.Binds
@@ -65,4 +67,10 @@ interface RepositoryModule {
     fun bindHomeRepository(
         homeRepositoryImpl: HomeRepositoryImpl
     ): HomeRepository
+
+    @Singleton
+    @Binds
+    fun bindMemberRepository(
+        memberRepositoryImpl: MemberRepositoryImpl
+    ): MemberRepository
 }

@@ -1,7 +1,10 @@
 package com.hexa.arti.ui.search.museum
 
+import android.graphics.Color
+import android.graphics.drawable.VectorDrawable
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
@@ -11,10 +14,14 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
+import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
 import com.hexa.arti.ui.search.adapter.PreviewAdapter
 import com.hexa.arti.util.asHomeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragment_art_museum) {
@@ -25,11 +32,15 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         changeFocusItem(clickedImage)
     }
     private val themeAdapter = ThemeAdapter()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private var isBookmarked = false
+    private var memberId = 0
 
     override fun init() {
         Log.d("확인", "갤러리 ${args.gallery}")
         initObserve()
         initViews(args.gallery)
+        initUserData()
     }
 
     private fun initObserve() {
@@ -59,6 +70,22 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
                     themeAdapter.submitList(resultTotalTheme.map { it.asHomeTheme() })
                 }
             }
+        }
+
+        viewModel.subscriptionGallery.observe(viewLifecycleOwner) {
+            Log.d("확인", "구독목록 ${it}")
+            if (it.any { it.galleryId == args.gallery.galleryId }) {
+                val drawable = binding.ivBookmark.drawable
+                if (drawable is VectorDrawable) {
+                    drawable.mutate()
+                    drawable.setTint(Color.parseColor("#386BF6"))
+                }
+                isBookmarked = true
+            }
+        }
+
+        viewModel.subscribeResult.observe(viewLifecycleOwner) {
+            makeToast(it)
         }
     }
 
@@ -98,8 +125,28 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
             )
         }
 
+        binding.ivBookmark.setOnClickListener {
+            if (isBookmarked) {
+                val drawable = binding.ivBookmark.drawable
+                if (drawable is VectorDrawable) {
+                    drawable.mutate()
+                    drawable.setTint(Color.parseColor("#000000"))
+                }
+                viewModel.unSubscribe(memberId, args.gallery.galleryId)
+            } else {
+                val drawable = binding.ivBookmark.drawable
+                if (drawable is VectorDrawable) {
+                    drawable.mutate()
+                    drawable.setTint(Color.parseColor("#386BF6"))
+                }
+                viewModel.subscribe(memberId, args.gallery.galleryId)
+            }
+
+        }
+
         binding.tvMuseumTitle.text = gallery.name
         binding.tvIntroduceContent.text = gallery.description
+
     }
 
     private fun changeFocusItem(clickedImage: ThemeArtwork) {
@@ -115,6 +162,17 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
             .into(binding.ivArtImage)
 
         previewAdapter.submitList(updateList)
+    }
+
+    private fun initUserData() {
+        CoroutineScope(Dispatchers.Main).launch {
+            mainActivityViewModel.getLoginData().collect { userData ->
+                userData?.let {
+                    memberId = userData.memberId
+                    viewModel.getSubscriptionGalleries(userData.memberId)
+                }
+            }
+        }
     }
 
 
