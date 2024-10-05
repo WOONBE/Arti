@@ -75,9 +75,25 @@ public class InstagramAccountService {
 
     // 현재 로그인한 사용자 정보 가져오기
     private Member getCurrentLoggedInMember() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("No logged-in member found"));
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        // 디버깅을 위한 로그 추가
+        System.out.println("Principal: " + principal);
+
+        if (principal instanceof String) {
+            String email = (String) principal;
+            System.out.println("Email: " + email);  // 이메일 로그 확인
+            return memberRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("No logged-in member found"));
+        }
+
+        if (principal instanceof Member) {
+            Member member = (Member) principal;
+            System.out.println("Member: " + member);  // Member 객체 로그 확인
+            return member;
+        }
+
+        throw new RuntimeException("Invalid authentication principal");
     }
 
     public Mono<String> getInstagramMediaUrls() {

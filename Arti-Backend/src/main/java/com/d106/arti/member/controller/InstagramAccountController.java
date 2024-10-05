@@ -50,6 +50,9 @@ public class InstagramAccountController {
     // 2. Instagram 인증 코드 받기 및 액세스 토큰 교환 (POST /instagram/auth)
     @PostMapping("/auth")
     public ResponseEntity<String> authenticateInstagram(@RequestParam("code") String code) {
+        // code 값 콘솔에 출력 (로그로 확인 가능)
+        System.out.println("Received Instagram authorization code: " + code);
+
         // 인증 코드를 사용하여 액세스 토큰 교환 및 저장
         instagramAccountService.authenticateAndSaveToken(code);
 
