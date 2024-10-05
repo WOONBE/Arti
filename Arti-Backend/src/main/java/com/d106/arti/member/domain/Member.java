@@ -55,6 +55,15 @@ public class Member extends BaseEntity implements UserDetails {
 //        subscription.setMember(this); // 양방향 관계 설정을 위함
 //    }
 
+    // Instagram 계정과 1:1 관계 설정
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    private InstagramAccount instagramAccount;
+
+    public void setInstagramAccount(InstagramAccount instagramAccount) {
+        this.instagramAccount = instagramAccount;
+        instagramAccount.setMember(this);  // 양방향 관계 설정
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
