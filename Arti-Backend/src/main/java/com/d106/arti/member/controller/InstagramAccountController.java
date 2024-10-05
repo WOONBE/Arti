@@ -2,6 +2,8 @@ package com.d106.arti.member.controller;
 
 import com.d106.arti.member.service.InstagramAccountService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -13,18 +15,31 @@ public class InstagramAccountController {
 
     private final InstagramAccountService instagramAccountService;
 
+    // application.properties 또는 application-dev.properties에서 값을 주입받기
+    @Value("${spring.security.oauth2.client.registration.instagram.client-id}")
+    private String clientId;
+
+    @Value("${spring.security.oauth2.client.registration.instagram.client-secret}")
+    private String clientSecret;
+
+    @Value("${spring.security.oauth2.client.registration.instagram.redirect-uri}")
+    private String redirectUri;
+
     // 1. Instagram 인증 리디렉션 URL 생성 (GET /instagram/redirect)
     @GetMapping("/redirect")
     public ResponseEntity<String> redirectToInstagram() {
-        String clientId = "YOUR_CLIENT_ID"; // Instagram 앱에서 제공받은 Client ID
-        String redirectUri = "https://your-backend-url.com/auth/callback"; // 등록된 리디렉션 URL
-
+        // 주입받은 값을 사용하여 리디렉션 URL 생성
+        System.out.println("Client ID: " + clientId);
+        System.out.println("Client Secret: " + clientSecret);
+        System.out.println("Redirect URI: " + redirectUri);
         // Instagram 인증 요청 URL 생성
         String instagramAuthUrl = "https://api.instagram.com/oauth/authorize" +
                 "?client_id=" + clientId +
                 "&redirect_uri=" + redirectUri +
                 "&scope=user_profile,user_media" +
-                "&response_type=code";
+                "&response_type=code" +
+                "&hl=ko";
+                ;
 
         // 리디렉션 URL 반환
         return ResponseEntity.status(302)
