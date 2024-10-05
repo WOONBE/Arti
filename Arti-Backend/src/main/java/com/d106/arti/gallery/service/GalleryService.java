@@ -32,7 +32,7 @@ import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import com.d106.arti.storage.StorageService;
-import jakarta.persistence.EntityNotFoundException;
+
 import java.util.Collections;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
