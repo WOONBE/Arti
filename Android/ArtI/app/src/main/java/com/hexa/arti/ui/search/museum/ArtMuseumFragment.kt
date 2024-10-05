@@ -26,7 +26,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
     private val themeAdapter = ThemeAdapter()
 
     override fun init() {
-        Log.d("확인","갤러리 ID ${args.gallery.galleryId}")
+        Log.d("확인", "갤러리 ID ${args.gallery.galleryId}")
         initObserve()
         initViews(args.gallery)
     }
@@ -36,7 +36,6 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
             if (resultTotalTheme.isEmpty()) {
                 Log.d("확인", "통신에러")
             } else {
-                //리스트 다 합쳐서 artwork 있나 확인
                 val totalArtworks = mutableListOf<ThemeArtwork>()
                 for (theme in resultTotalTheme) {
                     for (artwork in theme.artworks) {
@@ -47,7 +46,13 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
                     binding.clTotalMuseum.visibility = View.GONE
                     binding.tvNoArtworks.visibility = View.VISIBLE
                 } else {
-                    Log.d("확인", "$totalArtworks")
+                    totalArtworks[0] = totalArtworks[0].copy(isFocus = true)
+                    Glide.with(requireContext())
+                        .load(totalArtworks[0].imageUrl)
+                        .error(R.drawable.gallery_sample2)
+                        .into(binding.ivArtImage)
+
+                    binding.tvMuseumTitle.text = totalArtworks[0].title
                     previewAdapter.submitList(totalArtworks)
                 }
             }
@@ -98,6 +103,8 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         val updateList = previewAdapter.currentList.map { previewImage ->
             previewImage.copy(isFocus = (previewImage.id == clickedImage.id))
         }
+
+        binding.tvArtTitle.text = clickedImage.title
 
         Glide.with(requireContext())
             .load(clickedImage.imageUrl)
