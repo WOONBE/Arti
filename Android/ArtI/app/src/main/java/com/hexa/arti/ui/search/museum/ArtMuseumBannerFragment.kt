@@ -42,7 +42,9 @@ class ArtMuseumBannerFragment :
             findNavController().popBackStack()
         }
 
-        viewModel.getRandomMuseums()
+        if (viewModel.resultMuseums.value == null) {
+            viewModel.getRandomMuseums()
+        }
     }
 
     private fun moveToArtMuseumFragment(gallery: GalleryBanner) {

@@ -12,6 +12,6 @@ data class ThemeArtwork(
     val description: String,
     val imageUrl: String,
     val artist: String,
-    val year: Int,
+    val year: String? = null,
     val isFocus: Boolean = false,
 )

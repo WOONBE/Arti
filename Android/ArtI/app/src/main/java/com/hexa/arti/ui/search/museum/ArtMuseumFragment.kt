@@ -26,7 +26,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
     private val themeAdapter = ThemeAdapter()
 
     override fun init() {
-
+        Log.d("확인","갤러리 ID ${args.gallery.galleryId}")
         initObserve()
         initViews(args.gallery)
     }
@@ -47,6 +47,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
                     binding.clTotalMuseum.visibility = View.GONE
                     binding.tvNoArtworks.visibility = View.VISIBLE
                 } else {
+                    Log.d("확인", "$totalArtworks")
                     previewAdapter.submitList(totalArtworks)
                 }
             }
@@ -57,6 +58,8 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         binding.rvPreview.adapter = previewAdapter
 
         binding.rvTheme.adapter = themeAdapter
+
+        viewModel.getTotalThemes(gallery.galleryId)
 
         binding.ivRight.setOnClickListener {
             val nextFocusedIndex = previewAdapter.currentList.indexOfFirst { it.isFocus } + 1

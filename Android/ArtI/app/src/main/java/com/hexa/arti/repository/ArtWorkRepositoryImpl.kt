@@ -1,6 +1,5 @@
 package com.hexa.arti.repository
 
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -56,9 +55,7 @@ class ArtWorkRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getArtWorksByStringWithPaging(keyword: String): Flow<PagingData<Artwork>> {
-        Log.d("확인","검색어2 ${keyword}")
         val pagingSourceFactory = { ArtworkPagingSource(artWorkApi, keyword) }
-        Log.d("확인","검색어3 ${keyword}")
         return Pager(
             config = PagingConfig(
                 pageSize = 30,

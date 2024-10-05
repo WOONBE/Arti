@@ -33,6 +33,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
         if (result.isSuccessful) {
             result.body()?.let {
+                Log.d("확인","$it")
                 return Result.success(it)
             }
             return Result.failure(Exception())
