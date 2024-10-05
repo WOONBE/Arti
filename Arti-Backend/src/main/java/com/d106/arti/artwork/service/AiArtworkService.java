@@ -18,6 +18,8 @@ import com.d106.arti.gallery.domain.Theme;
 import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +46,7 @@ public class AiArtworkService {
 
         Theme theme = themeRepository.findById(request.getThemeId())
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
+
 
         AiArtwork aiArtwork = request.toAiArtwork(originalImage, member, theme);
         AiArtwork savedArtwork = aiArtworkRepository.save(aiArtwork);
