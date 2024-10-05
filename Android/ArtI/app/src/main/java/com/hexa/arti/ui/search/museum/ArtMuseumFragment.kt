@@ -13,6 +13,7 @@ import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
 import com.hexa.arti.ui.search.adapter.PreviewAdapter
+import com.hexa.arti.util.asHomeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +27,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
     private val themeAdapter = ThemeAdapter()
 
     override fun init() {
-        Log.d("확인", "갤러리 ID ${args.gallery.galleryId}")
+        Log.d("확인", "갤러리 ${args.gallery}")
         initObserve()
         initViews(args.gallery)
     }
@@ -52,8 +53,10 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
                         .error(R.drawable.gallery_sample2)
                         .into(binding.ivArtImage)
 
-                    binding.tvMuseumTitle.text = totalArtworks[0].title
+                    binding.tvArtTitle.text = totalArtworks[0].title
                     previewAdapter.submitList(totalArtworks)
+
+                    themeAdapter.submitList(resultTotalTheme.map { it.asHomeTheme() })
                 }
             }
         }
