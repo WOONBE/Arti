@@ -2,11 +2,14 @@ package com.d106.arti.member.controller;
 
 import com.d106.arti.member.service.InstagramAccountService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/instagram")
@@ -15,7 +18,6 @@ public class InstagramAccountController {
 
     private final InstagramAccountService instagramAccountService;
 
-    // application.properties 또는 application-dev.properties에서 값을 주입받기
     @Value("${spring.security.oauth2.client.registration.instagram.client-id}")
     private String clientId;
 
@@ -28,10 +30,6 @@ public class InstagramAccountController {
     // 1. Instagram 인증 리디렉션 URL 생성 (GET /instagram/redirect)
     @GetMapping("/redirect")
     public ResponseEntity<String> redirectToInstagram() {
-        // 주입받은 값을 사용하여 리디렉션 URL 생성
-        System.out.println("Client ID: " + clientId);
-        System.out.println("Client Secret: " + clientSecret);
-        System.out.println("Redirect URI: " + redirectUri);
         // Instagram 인증 요청 URL 생성
         String instagramAuthUrl = "https://api.instagram.com/oauth/authorize" +
                 "?client_id=" + clientId +
@@ -39,7 +37,6 @@ public class InstagramAccountController {
                 "&scope=user_profile,user_media" +
                 "&response_type=code" +
                 "&hl=ko";
-                ;
 
         // 리디렉션 URL 반환
         return ResponseEntity.status(302)
@@ -47,13 +44,19 @@ public class InstagramAccountController {
                 .build();
     }
 
-    // 2. Instagram 인증 코드 받기 및 액세스 토큰 교환 (POST /instagram/auth)
-    @PostMapping("/auth")
-    public ResponseEntity<String> authenticateInstagram(@RequestParam("code") String code) {
-        // code 값 콘솔에 출력 (로그로 확인 가능)
-        System.out.println("Received Instagram authorization code: " + code);
+    // 2. Instagram 인증 코드 받기 및 액세스 토큰 교환 (GET /instagram/callback)
+    @GetMapping("/callback")
+    public ResponseEntity<String> handleInstagramCallback(@RequestParam("code") String code) {
+        System.out.println("Received Instagram authorization code (with #_): " + code);
 
-        // 인증 코드를 사용하여 액세스 토큰 교환 및 저장
+        // #_ 이후를 제거하여 실제 코드만 남기기
+        if (code.contains("#")) {
+            code = code.split("#")[0]; // #_ 또는 # 이후의 모든 부분 제거
+        }
+
+        System.out.println("Processed Instagram authorization code (cleaned): " + code);
+
+        // `code`를 사용해 토큰 교환 및 Instagram 계정 연동 로직 호출
         instagramAccountService.authenticateAndSaveToken(code);
 
         return ResponseEntity.ok("Instagram account linked successfully.");
