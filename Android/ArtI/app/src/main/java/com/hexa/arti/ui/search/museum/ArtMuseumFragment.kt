@@ -1,7 +1,5 @@
 package com.hexa.arti.ui.search.museum
 
-import android.graphics.Color
-import android.graphics.drawable.VectorDrawable
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -15,9 +13,11 @@ import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
 import com.hexa.arti.ui.MainActivityViewModel
+import com.hexa.arti.ui.home.HomeFragmentDirections
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
 import com.hexa.arti.ui.search.adapter.PreviewAdapter
 import com.hexa.arti.util.asHomeTheme
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -133,6 +133,10 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
 
         binding.tvMuseumTitle.text = gallery.name
         binding.tvIntroduceContent.text = gallery.description
+
+        binding.ivPlay.setOnClickListener {
+            navigate(ArtMuseumFragmentDirections.actionArtMuseumFragmentToArtGalleryDetailFragment(args.gallery.galleryId))
+        }
 
     }
 

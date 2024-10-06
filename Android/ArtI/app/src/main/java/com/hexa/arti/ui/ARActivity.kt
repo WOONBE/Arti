@@ -104,9 +104,8 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
                 config.instantPlacementMode = Config.InstantPlacementMode.DISABLED
                 config.lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
-
-
             }
+
             onSessionUpdated = { _, frame ->
                 if (anchorNode == null) {
                     frame.getUpdatedPlanes()
@@ -145,7 +144,7 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
     }
 
-    fun addAnchorNode(anchor: Anchor) {
+    private fun addAnchorNode(anchor: Anchor) {
         sceneView.addChildNode(
             AnchorNode(sceneView.engine, anchor)
                 .apply {
@@ -160,7 +159,7 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
         )
     }
 
-    fun buildImageNode(): ImageNode? {
+    private fun buildImageNode(): ImageNode? {
 
         imageBitmap ?: return null
 

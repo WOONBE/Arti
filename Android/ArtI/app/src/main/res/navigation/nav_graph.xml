@@ -267,6 +267,9 @@
             android:name="gallery"
             app:argType="com.hexa.arti.data.model.artmuseum.GalleryBanner"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_artMuseumFragment_to_artGalleryDetailFragment"
+            app:destination="@id/artGalleryDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/artistDetailFragment"
