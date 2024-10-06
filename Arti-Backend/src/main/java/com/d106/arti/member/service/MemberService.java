@@ -94,7 +94,7 @@ public class MemberService {
 
     @Transactional
     public Map<String, Object> unsubscribeGallery(Integer memberId, Integer galleryId) {
-        // 1. 회원 정보 조회
+        // 1. 회원 정보 조회ue
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
