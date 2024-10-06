@@ -1,13 +1,15 @@
 package com.hexa.arti.ui
 
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.ar.core.Anchor
 import com.google.ar.core.Config
 import com.google.ar.core.Plane
@@ -17,11 +19,10 @@ import com.hexa.arti.util.setFullScreen
 import io.github.sceneview.ar.ARSceneView
 import io.github.sceneview.ar.arcore.getUpdatedPlanes
 import io.github.sceneview.ar.node.AnchorNode
+import io.github.sceneview.math.Rotation
 import io.github.sceneview.math.Size
 import io.github.sceneview.node.ImageNode
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
@@ -51,10 +52,30 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
             }
         }
 
+    var imageBitmap: Bitmap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        imageUrl = intent.getStringExtra("키")
+        imageUrl = intent.getStringExtra("image")
+
+        imageUrl?.let {
+            Glide.with(this)
+                .asBitmap()
+                .load(imageUrl)
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        imageBitmap = resource
+//                        findViewById<ImageView>(R.id.iv_test).setImageBitmap(resource)
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
+        }
 
         setFullScreen(
             findViewById(R.id.rootView),
@@ -67,13 +88,24 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
         sceneView = findViewById<ARSceneView?>(R.id.sceneView).apply {
             lifecycle = this@ARActivity.lifecycle
             planeRenderer.isEnabled = true
+
             configureSession { session, config ->
                 config.depthMode = when (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) {
                     true -> Config.DepthMode.AUTOMATIC
                     else -> Config.DepthMode.DISABLED
                 }
+
+
+
+                config.focusMode = Config.FocusMode.AUTO
+                config.planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
+                config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+
+
                 config.instantPlacementMode = Config.InstantPlacementMode.DISABLED
                 config.lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
+
+
             }
             onSessionUpdated = { _, frame ->
                 if (anchorNode == null) {
@@ -87,7 +119,30 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
             onTrackingFailureChanged = { reason ->
                 this@ARActivity.trackingFailureReason = reason
             }
+
+//            setOnTouchListener { view, event ->
+//                if (event.action == MotionEvent.ACTION_DOWN) {
+//                    val session = sceneView.session
+//                    session?.let {
+//                        val frame: Frame = session.update()
+//                        val hitResults = frame.hitTest(event)
+//                        for (hit in hitResults) {
+//                            val trackable = hit.trackable
+//                            if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose)) {
+//                                addAnchorNode(hit.createAnchor())
+//                                break
+//                            }
+//                        }
+//                    }
+//                    view.performClick()
+//                }
+//                true
+//            }
+            planeRenderer.isEnabled = false
+
         }
+
+
     }
 
     fun addAnchorNode(anchor: Anchor) {
@@ -105,32 +160,21 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
         )
     }
 
-    suspend fun buildImageNode(): ImageNode? {
-        val bitmap = downloadImageAsBitmap(imageUrl!!) ?: return null
+    fun buildImageNode(): ImageNode? {
+
+        imageBitmap ?: return null
 
         val imageNode = ImageNode(
             materialLoader = sceneView.materialLoader,
-            bitmap = bitmap,
+            bitmap = imageBitmap!!,
             size = Size(0.5f, 0.5f)
         )
 
+        imageNode.rotation = Rotation(-90f, 0f, 0f)  // x축 기준 90도 회전
         imageNode.isEditable = true
-        return imageNode
-    }
 
-    suspend fun downloadImageAsBitmap(url: String): Bitmap? {
-        return withContext(Dispatchers.IO) {
-            try {
-                Glide.with(this@ARActivity)
-                    .asBitmap()
-                    .load(url)
-                    .submit()
-                    .get()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                null
-            }
-        }
+
+        return imageNode
     }
 
 
