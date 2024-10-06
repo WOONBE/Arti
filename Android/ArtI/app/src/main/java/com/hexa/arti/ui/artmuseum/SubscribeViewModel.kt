@@ -30,7 +30,12 @@ class SubscribeViewModel @Inject constructor(
                 it.forEach{
                     data ->
                     list.add(
-                        Subscriber(data.galleryId,data.galleryImage,data.galleryName,data.ownerName)
+                        Subscriber(data.galleryId,
+                            data.galleryImage,
+                            data.galleryName,
+                            data.ownerName ,
+                            data.galleryDescription ?: " "
+                            ,data.viewCount)
                     )
                 }
                 _subscriptionGallery.value = list

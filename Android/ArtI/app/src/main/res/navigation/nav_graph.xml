@@ -57,7 +57,7 @@
         android:id="@+id/subscribeFragment"
         android:name="com.hexa.arti.ui.artmuseum.SubscribeFragment"
         android:label="fragment_subscribe"
-        tools:layout="@layout/fragment_subscribe"></fragment>
+        tools:layout="@layout/fragment_subscribe"/>
     <fragment
         android:id="@+id/portfolioFragment"
         android:name="com.hexa.arti.ui.profile.PortfolioFragment"
@@ -231,6 +231,9 @@
         <action
             android:id="@+id/action_myGalleryHomeFragment_to_artGalleryDetailFragment"
             app:destination="@id/artGalleryDetailFragment" />
+        <action
+            android:id="@+id/action_myGalleryHomeFragment_to_artMuseumFragment"
+            app:destination="@id/artMuseumFragment" />
     </fragment>
     <fragment
         android:id="@+id/genreBannerFragment"
