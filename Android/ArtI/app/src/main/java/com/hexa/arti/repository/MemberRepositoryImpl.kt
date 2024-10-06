@@ -1,5 +1,6 @@
 package com.hexa.arti.repository
 
+import android.util.Log
 import com.google.gson.Gson
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse

@@ -73,7 +73,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         }
 
         viewModel.subscriptionGallery.observe(viewLifecycleOwner) {
-            Log.d("확인", "구독목록 ${it}")
+            Log.d("확인", "현재 미술관 ${args.gallery.galleryId} 구독목록 ${it}")
             if (it.any { it.galleryId == args.gallery.galleryId }) {
                 val drawable = binding.ivBookmark.drawable
                 if (drawable is VectorDrawable) {
