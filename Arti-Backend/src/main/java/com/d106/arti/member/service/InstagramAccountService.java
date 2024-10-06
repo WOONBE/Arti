@@ -2,7 +2,6 @@ package com.d106.arti.member.service;
 
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.domain.OauthToken;
-import com.d106.arti.member.dto.request.InstagramTokenRequest;
 import com.d106.arti.member.dto.response.InstagramTokenResponse;
 import com.d106.arti.member.repository.InstagramAccountRepository;
 import com.d106.arti.member.repository.MemberRepository;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -44,8 +45,12 @@ public class InstagramAccountService {
         String tokenUrl = "https://api.instagram.com/oauth/access_token";
 
         // POST 요청을 위한 파라미터 설정
-        InstagramTokenRequest tokenRequest = new InstagramTokenRequest(clientId, clientSecret,
-            "authorization_code", redirectUri, code);
+        MultiValueMap<String, String> tokenRequest = new LinkedMultiValueMap<>();
+        tokenRequest.add("client_id", clientId);
+        tokenRequest.add("client_secret", clientSecret);
+        tokenRequest.add("grant_type", "authorization_code");
+        tokenRequest.add("redirect_uri", redirectUri);
+        tokenRequest.add("code", code);
 
         // WebClient를 사용하여 비동기 방식으로 토큰 요청
         InstagramTokenResponse tokenResponse = webClient.post().uri(tokenUrl)
