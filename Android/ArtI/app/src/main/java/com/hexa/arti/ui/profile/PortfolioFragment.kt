@@ -87,6 +87,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         binding.tvRepresentGenre1.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre1.text}"
             val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre1.text.toString()]
             englishName?.let{
                 getRepresentArtists(it)
@@ -94,6 +95,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         binding.tvRepresentGenre2.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre2.text}"
             val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
             englishName?.let{
                 getRepresentArtists(it)
@@ -101,6 +103,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         binding.tvRepresentGenre3.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre3.text}"
             val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
             englishName?.let{
                 getRepresentArtists(it)
@@ -111,6 +114,12 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private fun initChart(genres: List<PortfolioGenre>) {
 
         updateGenreViews(genres)
+        val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[genres[0].genre]
+        englishName?.let{
+            getRepresentArtists(it)
+        }
+
+        binding.tvRepresentArtist.text = "대표 화가 : ${genres[0].genre}"
 
         val dataList = ArrayList<PieEntry>()
 
