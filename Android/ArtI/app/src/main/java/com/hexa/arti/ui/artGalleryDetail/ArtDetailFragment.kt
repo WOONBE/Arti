@@ -2,6 +2,7 @@ package com.hexa.arti.ui.artGalleryDetail
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
@@ -18,6 +19,7 @@ import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentArtDetailBinding
+import com.hexa.arti.ui.ARActivity
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,6 +69,12 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
             artDetailBackBtn.setOnClickListener {
                 artDetailCl.visibility = View.VISIBLE
                 artDetailThemeCl.visibility = View.GONE
+            }
+
+            artDetailArBtn.setOnClickListener {
+                val intent = Intent(requireContext(), ARActivity::class.java)
+                intent.putExtra("키",args.imgUrl)
+                startActivity(intent)
             }
 
             artDetailSubmitBtn.setOnClickListener {
