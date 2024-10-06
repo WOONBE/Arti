@@ -38,7 +38,9 @@ class ArtMuseumViewModel @Inject constructor(
                             data.galleryId,
                             data.galleryImage,
                             data.galleryName,
-                            data.ownerName
+                            data.ownerName,
+                            data.galleryDescription ?: "ㅁㅁ",
+                            data.viewCount
                         )
                     )
                 }

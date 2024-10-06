@@ -12,7 +12,7 @@ import com.hexa.arti.data.model.artmuseum.Subscriber
 import com.hexa.arti.databinding.ItemSubscribeBinding
 
 class SubScribeAdapter(val context: Context,
-                       val onClick: (Int) -> Unit,) : ListAdapter<Subscriber, SubScribeAdapter.SubscriberViewHolder>(SubscriberDiffCallback()) {
+                       val onClick: (Subscriber) -> Unit,) : ListAdapter<Subscriber, SubScribeAdapter.SubscriberViewHolder>(SubscriberDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubscriberViewHolder {
         val binding = ItemSubscribeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,7 +33,7 @@ class SubScribeAdapter(val context: Context,
                 subscribeNameTv.text = subscriber.name
                 subscribeUsernameTv.text = subscriber.username
                 subscribeLt.setOnClickListener {
-                    onClick(subscriber.galleryId)
+                    onClick(subscriber)
                 }
             }
         }

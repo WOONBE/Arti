@@ -4,5 +4,7 @@ data class Subscriber(
     val galleryId : Int,
     val profileImageResId: String,
     val name: String,
-    val username: String
+    val username: String,
+    val galleryDescription : String,
+    val viewCount : Int
 )
