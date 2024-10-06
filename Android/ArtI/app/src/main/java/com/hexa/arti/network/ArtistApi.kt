@@ -11,4 +11,7 @@ interface ArtistApi {
 
     @GET("artists/random")
     suspend fun getRandomArtists(): Response<List<GetArtistResponse>>
+
+    @GET("artists/by-genre")
+    suspend fun getRepresentArtists(@Query("genre") genre: String): Response<List<GetArtistResponse>>
 }

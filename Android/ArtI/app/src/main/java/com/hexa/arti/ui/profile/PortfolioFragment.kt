@@ -33,6 +33,27 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         portfolioViewModel.resultGenres.observe(viewLifecycleOwner) { genres ->
             initChart(genres)
         }
+
+        portfolioViewModel.resultArtist.observe(viewLifecycleOwner) { artists ->
+            Glide.with(requireContext())
+                .load(artists[0].imageUrl)
+                .error(R.drawable.temp_represent_artist)
+                .into(binding.ivRepresentArtist1)
+
+            Glide.with(requireContext())
+                .load(artists[1].imageUrl)
+                .error(R.drawable.temp_represent_artist)
+                .into(binding.ivRepresentArtist2)
+
+            Glide.with(requireContext())
+                .load(artists[2].imageUrl)
+                .error(R.drawable.temp_represent_artist)
+                .into(binding.ivRepresentArtist3)
+
+            binding.tvRepresentArtist1.text = artists[0].korName
+            binding.tvRepresentArtist2.text = artists[1].korName
+            binding.tvRepresentArtist3.text = artists[2].korName
+        }
     }
 
     private fun initViews() {
@@ -44,6 +65,29 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
                 }
             }
         }
+
+        binding.tvRepresentGenre1.setOnClickListener {
+            val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre1.text.toString()]
+            englishName?.let{
+                getRepresentArtists(it)
+            }
+        }
+
+        binding.tvRepresentGenre2.setOnClickListener {
+            val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
+            englishName?.let{
+                getRepresentArtists(it)
+            }
+        }
+
+        binding.tvRepresentGenre3.setOnClickListener {
+            val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
+            englishName?.let{
+                getRepresentArtists(it)
+            }
+        }
+
+
 
         portfolioViewModel.getPortfolio(1)
     }
@@ -139,6 +183,10 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
                 circleImageViews[i].visibility = View.GONE
             }
         }
+    }
+
+    private fun getRepresentArtists(genre: String){
+        portfolioViewModel.getRepresentArtists(genre)
     }
 
     override fun onResume() {

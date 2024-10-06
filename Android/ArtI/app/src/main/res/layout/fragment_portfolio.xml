@@ -9,8 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_portfolio"
             android:layout_width="match_parent"
@@ -69,13 +69,14 @@
 
                 <TextView
                     android:id="@+id/tv_represent_genre1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="팝아트"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre1"
+                    app:layout_constraintEnd_toStartOf="@id/tv_percentage1"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre1"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre1" />
 
@@ -118,13 +119,14 @@
 
                 <TextView
                     android:id="@+id/tv_represent_genre2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="인상주의"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre2"
+                    app:layout_constraintEnd_toStartOf="@id/tv_percentage2"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre2"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre2" />
 
@@ -166,13 +168,14 @@
 
                 <TextView
                     android:id="@+id/tv_represent_genre3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="르네상스"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre3"
+                    app:layout_constraintEnd_toStartOf="@id/tv_percentage3"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre3"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre3" />
 
@@ -214,13 +217,14 @@
 
                 <TextView
                     android:id="@+id/tv_represent_genre4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="입체파"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre4"
+                    app:layout_constraintEnd_toStartOf="@id/tv_percentage4"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre4"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre4" />
 
@@ -268,9 +272,9 @@
                 android:id="@+id/tv_represent_artist_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Oscar_Claude Monet"
-                android:maxLines="1"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Oscar_Claude Monet"
                 app:layout_constraintEnd_toEndOf="@id/iv_represent_artist_1"
                 app:layout_constraintStart_toStartOf="@id/iv_represent_artist_1"
                 app:layout_constraintTop_toBottomOf="@id/iv_represent_artist_1" />
@@ -288,9 +292,9 @@
                 android:id="@+id/tv_represent_artist_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Oscar_Claude Monet"
-                android:maxLines="1"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Oscar_Claude Monet"
                 app:layout_constraintEnd_toEndOf="@id/iv_represent_artist_2"
                 app:layout_constraintStart_toStartOf="@id/iv_represent_artist_2"
                 app:layout_constraintTop_toBottomOf="@id/iv_represent_artist_2" />
@@ -308,9 +312,9 @@
                 android:id="@+id/tv_represent_artist_3"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:text="Oscar_Claude Monet"
-                android:maxLines="1"
                 android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Oscar_Claude Monet"
                 app:layout_constraintEnd_toEndOf="@id/iv_represent_artist_3"
                 app:layout_constraintStart_toStartOf="@id/iv_represent_artist_3"
                 app:layout_constraintTop_toBottomOf="@id/iv_represent_artist_3" />
