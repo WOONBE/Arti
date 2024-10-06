@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.profile
 
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,6 +17,9 @@ import com.hexa.arti.data.model.portfolio.PortfolioGenre
 import com.hexa.arti.databinding.FragmentPortfolioBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -23,8 +27,10 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val portfolioViewModel: PortfolioViewModel by viewModels()
+    private var userId: Int = -1
 
     override fun init() {
+        initUserData()
         initObserve()
         initViews()
     }
@@ -86,10 +92,6 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
                 getRepresentArtists(it)
             }
         }
-
-
-
-        portfolioViewModel.getPortfolio(1)
     }
 
     private fun initChart(genres: List<PortfolioGenre>) {
@@ -189,9 +191,22 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         portfolioViewModel.getRepresentArtists(genre)
     }
 
+    private fun initUserData(){
+        CoroutineScope(Dispatchers.Main).launch {
+            mainActivityViewModel.getLoginData().collect { userData ->
+                userData?.let {
+                    portfolioViewModel.getPortfolio(it.memberId)
+                    userId = it.memberId
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        portfolioViewModel.getPortfolio(1)
+        if(userId >= 0) {
+            portfolioViewModel.getPortfolio(userId)
+        }
     }
 
 }
