@@ -73,13 +73,8 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         }
 
         viewModel.subscriptionGallery.observe(viewLifecycleOwner) {
-            Log.d("확인", "현재 미술관 ${args.gallery.galleryId} 구독목록 ${it}")
             if (it.any { it.galleryId == args.gallery.galleryId }) {
-                val drawable = binding.ivBookmark.drawable
-                if (drawable is VectorDrawable) {
-                    drawable.mutate()
-                    drawable.setTint(Color.parseColor("#386BF6"))
-                }
+                binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 isBookmarked = true
             }
         }
@@ -127,18 +122,10 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
 
         binding.ivBookmark.setOnClickListener {
             if (isBookmarked) {
-                val drawable = binding.ivBookmark.drawable
-                if (drawable is VectorDrawable) {
-                    drawable.mutate()
-                    drawable.setTint(Color.parseColor("#000000"))
-                }
+                binding.ivBookmark.setImageResource(R.drawable.ic_unbookmark)
                 viewModel.unSubscribe(memberId, args.gallery.galleryId)
             } else {
-                val drawable = binding.ivBookmark.drawable
-                if (drawable is VectorDrawable) {
-                    drawable.mutate()
-                    drawable.setTint(Color.parseColor("#386BF6"))
-                }
+                binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 viewModel.subscribe(memberId, args.gallery.galleryId)
             }
 
