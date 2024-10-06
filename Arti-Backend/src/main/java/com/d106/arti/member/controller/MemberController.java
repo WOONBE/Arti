@@ -17,8 +17,8 @@ public class MemberController {
 
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
-          @RequestBody ChangePasswordRequest request,
-          Principal connectedUser
+            @RequestBody ChangePasswordRequest request,
+            Principal connectedUser
     ) {
         service.changePassword(request, connectedUser);
         return ResponseEntity.ok().build();
