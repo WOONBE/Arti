@@ -5,18 +5,46 @@ import com.google.gson.Gson
 import com.hexa.arti.data.model.profile.ChangePass
 import com.hexa.arti.data.model.response.ApiException
 import com.hexa.arti.data.model.response.ErrorResponse
-import com.hexa.arti.data.model.response.PostSubscribeResponse
-import com.hexa.arti.network.MemberApi
+import com.hexa.arti.network.UserAPI
 import okhttp3.ResponseBody
 import javax.inject.Inject
 
-class MemberRepositoryImpl @Inject constructor(
-    private val memberApi: MemberApi
-) : MemberRepository {
+class UserRepositoryImpl @Inject constructor(
+    private val userAPI: UserAPI
+) : UserRepository{
+    override suspend fun postChangeNickname(nickName: String): Result<ResponseBody> {
+        val result = userAPI.changeNickname(Pair("nickName",nickName))
 
+        Log.d("확인", "postChangePass: $result")
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
 
-    override suspend fun postSubscribe(memberId: Int, galleryId: Int): Result<PostSubscribeResponse> {
-        val result = memberApi.postSubscribe(memberId, galleryId)
+    }
+
+    override suspend fun postChangePass(
+        currentPassword: String,
+        newPassword: String,
+        confirmationPassword: String
+    ): Result<ResponseBody> {
+        val result = userAPI.changePass(
+            ChangePass(
+            currentPassword,newPassword,confirmationPassword
+        )
+        )
+        Log.d("확인", "postChangePass: $result")
         if (result.isSuccessful) {
             result.body()?.let {
                 return Result.success(it)
@@ -33,26 +61,4 @@ class MemberRepositoryImpl @Inject constructor(
             )
         }
     }
-
-    override suspend fun postUnsubscribe(memberId: Int, galleryId: Int): Result<PostSubscribeResponse> {
-        val result = memberApi.postUnsubscribe(memberId, galleryId)
-
-        if (result.isSuccessful) {
-            result.body()?.let {
-                return Result.success(it)
-            }
-            return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
-        }
-    }
-
-
 }
