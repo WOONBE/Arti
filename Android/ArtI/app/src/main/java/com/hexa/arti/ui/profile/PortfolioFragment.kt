@@ -41,24 +41,38 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         portfolioViewModel.resultArtist.observe(viewLifecycleOwner) { artists ->
+
             Glide.with(requireContext())
                 .load(artists[0].imageUrl)
                 .error(R.drawable.temp_represent_artist)
+                .override(200, 200)
+                .circleCrop()
                 .into(binding.ivRepresentArtist1)
 
             Glide.with(requireContext())
                 .load(artists[1].imageUrl)
                 .error(R.drawable.temp_represent_artist)
+                .override(200, 200)
+                .circleCrop()
                 .into(binding.ivRepresentArtist2)
 
             Glide.with(requireContext())
                 .load(artists[2].imageUrl)
                 .error(R.drawable.temp_represent_artist)
+                .override(200, 200)
+                .circleCrop()
                 .into(binding.ivRepresentArtist3)
 
             binding.tvRepresentArtist1.text = artists[0].korName
             binding.tvRepresentArtist2.text = artists[1].korName
             binding.tvRepresentArtist3.text = artists[2].korName
+
+            binding.ivRepresentArtist1.visibility = View.VISIBLE
+            binding.ivRepresentArtist2.visibility = View.VISIBLE
+            binding.ivRepresentArtist3.visibility = View.VISIBLE
+            binding.tvRepresentArtist1.visibility = View.VISIBLE
+            binding.tvRepresentArtist2.visibility = View.VISIBLE
+            binding.tvRepresentArtist3.visibility = View.VISIBLE
         }
     }
 
@@ -67,7 +81,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             if (state == MainActivityViewModel.PORTFOLIO_FRAGMENT) {
                 portfolioViewModel.resultGenres.value?.let {
                     initChart(it)
-                    updateGenreViews(it)
+
                 }
             }
         }
@@ -95,6 +109,9 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     }
 
     private fun initChart(genres: List<PortfolioGenre>) {
+
+        updateGenreViews(genres)
+
         val dataList = ArrayList<PieEntry>()
 
         val sortedGenres = genres.sortedByDescending { it.count }
