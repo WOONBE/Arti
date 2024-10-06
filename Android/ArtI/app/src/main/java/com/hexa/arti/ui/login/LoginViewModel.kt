@@ -29,7 +29,7 @@ class LoginViewModel @Inject constructor(
     private val JWT_TOKEN_KEY = stringPreferencesKey("jwt_token")
     private val MEMBER_ID_KEY = stringPreferencesKey("member_id")
     private val GALLERY_ID_KEY = stringPreferencesKey("gallery_id")
-
+    private val REFRESH_TOEKN_KEY = stringPreferencesKey("refresh_token")
 
     private val _email = MutableLiveData<String>("")
     val email: LiveData<String> = _email
@@ -46,7 +46,7 @@ class LoginViewModel @Inject constructor(
                 response ->
                 Log.d(TAG, "login: ${response}")
                 Log.d(TAG, "login: ${response.token}")
-                saveLoginData(response.token,response.memberId,response.galleryId)
+                saveLoginData(response.token,response.memberId,response.galleryId,response.refreshToken)
                 _loginStatus.value = 1
             }.onFailure {
                 error ->
@@ -57,12 +57,13 @@ class LoginViewModel @Inject constructor(
     }
 
     // JWT 토큰 저장
-    suspend fun saveLoginData(token: String, memberId: Int, galleryId: Int) {
+    suspend fun saveLoginData(token: String, memberId: Int, galleryId: Int, refreshToken : String) {
         viewModelScope.launch {
             dataStore.edit { preferences ->
                 preferences[JWT_TOKEN_KEY] = token
                 preferences[MEMBER_ID_KEY] = memberId.toString()  // Int를 String으로 변환하여 저장
                 preferences[GALLERY_ID_KEY] = galleryId.toString()  // Int를 String으로 변환하여 저장
+                preferences[REFRESH_TOEKN_KEY] = refreshToken
             }
         }
     }
@@ -72,11 +73,12 @@ class LoginViewModel @Inject constructor(
             val token = preferences[JWT_TOKEN_KEY] ?: ""
             val memberId = preferences[MEMBER_ID_KEY]?.toIntOrNull() ?: -1
             val galleryId = preferences[GALLERY_ID_KEY]?.toIntOrNull() ?: -1
+            val refreshToken = preferences[REFRESH_TOEKN_KEY] ?: ""
 
             if (token.isNotEmpty()) {
                 LoginResponse(
                     token = token,
-                    expiresIn = 0,  // 저장하지 않은 값은 0 또는 기본값 설정
+                    refreshToken = refreshToken,  // 저장하지 않은 값은 0 또는 기본값 설정
                     memberId = memberId,
                     galleryId = galleryId
                 )

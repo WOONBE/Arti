@@ -18,7 +18,7 @@ class MainActivityViewModel @Inject constructor(
     private val JWT_TOKEN_KEY = stringPreferencesKey("jwt_token")
     private val MEMBER_ID_KEY = stringPreferencesKey("member_id")
     private val GALLERY_ID_KEY = stringPreferencesKey("gallery_id")
-
+    private val REFRESH_TOEKN_KEY = stringPreferencesKey("refresh_token")
 
     private val _fragmentState = MutableLiveData<Int>()
     val fragmentState: MutableLiveData<Int> = _fragmentState
@@ -29,11 +29,11 @@ class MainActivityViewModel @Inject constructor(
             val token = preferences[JWT_TOKEN_KEY] ?: ""
             val memberId = preferences[MEMBER_ID_KEY]?.toIntOrNull() ?: -1
             val galleryId = preferences[GALLERY_ID_KEY]?.toIntOrNull() ?: -1
-
+            val refreshToken = preferences[REFRESH_TOEKN_KEY] ?: ""
             if (token.isNotEmpty()) {
                 LoginResponse(
                     token = token,
-                    expiresIn = 0,  // 저장하지 않은 값은 0 또는 기본값 설정
+                    refreshToken = refreshToken,  // 저장하지 않은 값은 0 또는 기본값 설정
                     memberId = memberId,
                     galleryId = galleryId
                 )
