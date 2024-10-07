@@ -30,6 +30,7 @@ public class InstagramController {
 
     @GetMapping("/redirect")
     public ResponseEntity<String> redirect() {
+        System.out.println(redirectUri);
         String url = UriComponentsBuilder.fromHttpUrl("https://api.instagram.com/oauth/authorize")
             .queryParam("client_id", clientId).queryParam("redirect_uri", redirectUri)
             .queryParam("scope", "user_profile,user_media").queryParam("response_type", "code")
