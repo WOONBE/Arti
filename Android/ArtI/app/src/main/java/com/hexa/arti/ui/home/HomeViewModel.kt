@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.home
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,8 +22,10 @@ class HomeViewModel @Inject constructor(
     fun getRecommendGalleries(userId: Int) {
         viewModelScope.launch {
             homeRepository.getRecommendGalleries(userId).onSuccess {
+                Log.d("확인", "홈 성공 ${userId}")
                 _resultGalleries.value = it
             }.onFailure { error ->
+                Log.d("확인", "홈 실패 ${userId}")
                 if (error is ApiException) {
                     _resultGalleries.value = emptyList()
                 }
