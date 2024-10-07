@@ -16,6 +16,9 @@ import com.hexa.arti.data.model.portfolio.PortfolioGenre
 import com.hexa.arti.databinding.FragmentPortfolioBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
@@ -23,8 +26,10 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val portfolioViewModel: PortfolioViewModel by viewModels()
+    private var userId: Int = -1
 
     override fun init() {
+        initUserData()
         initObserve()
         initViews()
     }
@@ -33,22 +38,91 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         portfolioViewModel.resultGenres.observe(viewLifecycleOwner) { genres ->
             initChart(genres)
         }
-    }
 
-    private fun initViews() {
         mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
             if (state == MainActivityViewModel.PORTFOLIO_FRAGMENT) {
                 portfolioViewModel.resultGenres.value?.let {
                     initChart(it)
-                    updateGenreViews(it)
                 }
             }
         }
 
-        portfolioViewModel.getPortfolio(1)
+        portfolioViewModel.resultArtist.observe(viewLifecycleOwner) { artists ->
+
+            Glide.with(requireContext())
+                .load(artists[0].imageUrl)
+                .error(R.drawable.temp_represent_artist)
+                .override(200, 200)
+                .circleCrop()
+                .into(binding.ivRepresentArtist1)
+
+            Glide.with(requireContext())
+                .load(artists[1].imageUrl)
+                .error(R.drawable.temp_represent_artist)
+                .override(200, 200)
+                .circleCrop()
+                .into(binding.ivRepresentArtist2)
+
+            Glide.with(requireContext())
+                .load(artists[2].imageUrl)
+                .error(R.drawable.temp_represent_artist)
+                .override(200, 200)
+                .circleCrop()
+                .into(binding.ivRepresentArtist3)
+
+            binding.tvRepresentArtist1.text = artists[0].korName
+            binding.tvRepresentArtist2.text = artists[1].korName
+            binding.tvRepresentArtist3.text = artists[2].korName
+
+            binding.ivRepresentArtist1.visibility = View.VISIBLE
+            binding.ivRepresentArtist2.visibility = View.VISIBLE
+            binding.ivRepresentArtist3.visibility = View.VISIBLE
+            binding.tvRepresentArtist1.visibility = View.VISIBLE
+            binding.tvRepresentArtist2.visibility = View.VISIBLE
+            binding.tvRepresentArtist3.visibility = View.VISIBLE
+        }
+    }
+
+    private fun initViews() {
+
+        binding.tvRepresentGenre1.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre1.text}"
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre1.text.toString()]
+            englishName?.let {
+                getRepresentArtists(it)
+            }
+        }
+
+        binding.tvRepresentGenre2.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre2.text}"
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
+            englishName?.let {
+                getRepresentArtists(it)
+            }
+        }
+
+        binding.tvRepresentGenre3.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre3.text}"
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
+            englishName?.let {
+                getRepresentArtists(it)
+            }
+        }
     }
 
     private fun initChart(genres: List<PortfolioGenre>) {
+        if (genres.isEmpty()) return
+        updateGenreViews(genres)
+        val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[genres[0].genre]
+        englishName?.let {
+            getRepresentArtists(it)
+        }
+
+        binding.tvRepresentArtist.text = "대표 화가 : ${genres[0].genre}"
+
         val dataList = ArrayList<PieEntry>()
 
         val sortedGenres = genres.sortedByDescending { it.count }
@@ -141,9 +215,26 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
     }
 
+    private fun getRepresentArtists(genre: String) {
+        portfolioViewModel.getRepresentArtists(genre)
+    }
+
+    private fun initUserData() {
+        CoroutineScope(Dispatchers.Main).launch {
+            mainActivityViewModel.getLoginData().collect { userData ->
+                userData?.let {
+                    portfolioViewModel.getPortfolio(it.memberId)
+                    userId = it.memberId
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
-        portfolioViewModel.getPortfolio(1)
+        if (userId >= 0) {
+            portfolioViewModel.getPortfolio(userId)
+        }
     }
 
 }

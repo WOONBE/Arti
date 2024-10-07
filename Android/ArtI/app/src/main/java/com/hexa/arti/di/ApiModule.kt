@@ -59,7 +59,7 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideMemberApiService(@Named("arti_fast") retrofit: Retrofit): MemberApi =
+    fun provideMemberApiService(@Named("arti") retrofit: Retrofit): MemberApi =
         retrofit.create(MemberApi::class.java)
 
     @Singleton

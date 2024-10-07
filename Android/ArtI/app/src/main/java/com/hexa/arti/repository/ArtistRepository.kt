@@ -6,4 +6,6 @@ interface ArtistRepository {
     suspend fun getArtist(keyword: String): Result<List<Artist>>
 
     suspend fun getRandomArtists(): Result<List<Artist>>
+
+    suspend fun getRepresentArtists(genre: String): Result<List<Artist>>
 }

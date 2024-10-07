@@ -1,23 +1,20 @@
 package com.hexa.arti.ui.artGalleryDetail
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.content.Intent
 import android.util.Log
-import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.GridLayout
 import android.widget.RadioButton
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentArtDetailBinding
+import com.hexa.arti.ui.ARActivity
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,20 +24,22 @@ import kotlinx.coroutines.launch
 
 
 private const val TAG = "ArtDetailFragment"
+
 @AndroidEntryPoint
 class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragment_art_detail) {
 
     private val args: ArtDetailFragmentArgs by navArgs()
     private val artDetailViewModel: ArtDetailViewModel by viewModels()
-    private val mainActivityViewModel : MainActivityViewModel by activityViewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private var selectedThemeId: Int = 1
-    private var selectDescription : String = ""
+    private var selectDescription: String = ""
     override fun init() {
 
         CoroutineScope(Dispatchers.Main).launch {
             mainActivityViewModel.getLoginData().collect { d ->
                 d?.let {
-                    if(it.galleryId == args.galleryId) binding.artDetailSaveBtn.visibility = View.GONE
+                    if (it.galleryId == args.galleryId) binding.artDetailSaveBtn.visibility =
+                        View.GONE
                     artDetailViewModel.getMyGalleryTheme(it.galleryId)
                 }
 
@@ -69,6 +68,12 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
                 artDetailThemeCl.visibility = View.GONE
             }
 
+            artDetailArBtn.setOnClickListener {
+                val intent = Intent(requireContext(), ARActivity::class.java)
+                intent.putExtra("image", args.imgUrl)
+                startActivity(intent)
+            }
+
             artDetailSubmitBtn.setOnClickListener {
                 Log.d("Selected Theme ID", "Selected Theme ID: $selectedThemeId")
 
@@ -78,13 +83,19 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
                     .setTitle("설명")
                     .setMessage("작품에 대해 설명헤주세요")
                     .setView(description)
-                    .setPositiveButton("확인"
+                    .setPositiveButton(
+                        "확인"
                     ) { dialog, which ->
-                        artDetailViewModel.postArtwork(themeId = selectedThemeId,args.imgId,description.text.toString())
+                        artDetailViewModel.postArtwork(
+                            themeId = selectedThemeId,
+                            args.imgId,
+                            description.text.toString()
+                        )
                         artDetailCl.visibility = View.VISIBLE
                         artDetailThemeCl.visibility = View.GONE
                     }
-                    .setNegativeButton("취소"
+                    .setNegativeButton(
+                        "취소"
                     ) { dialog, which ->
                         dialog.dismiss()
                     }

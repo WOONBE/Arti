@@ -96,4 +96,6 @@ dependencies {
     implementation(libs.piechart)
     //paging3
     implementation(libs.paging3)
+    //AR
+    implementation("io.github.sceneview:arsceneview:2.2.1")
 }
