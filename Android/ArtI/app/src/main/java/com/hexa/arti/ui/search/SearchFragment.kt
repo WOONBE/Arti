@@ -91,6 +91,12 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.artWorkResult.collect { pagingData ->
                     artworkPagingAdapter.submitData(pagingData)
+                    Log.d("확인","유닛 카운트 ${artworkPagingAdapter.itemCount}")
+                    if(artworkPagingAdapter.itemCount == 0){
+                        binding.tvNoResultArtwork.visibility = View.VISIBLE
+                    } else{
+                        binding.tvNoResultArtwork.visibility = View.GONE
+                    }
                 }
             }
         }
@@ -107,10 +113,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
         viewModel.galleriesResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
-                galleryAdapter.submitList(it)
+                binding.tvNoResultArtMuseum.visibility = View.VISIBLE
             } else {
-                galleryAdapter.submitList(it)
+                binding.tvNoResultArtist.visibility = View.GONE
             }
+            galleryAdapter.submitList(it)
         }
 
     }
