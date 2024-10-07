@@ -133,7 +133,8 @@
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.hexa.arti.ui.profile.MyPageFragment"
-        android:label="MyPageFragment"></fragment>
+        android:label="MyPageFragment">
+    </fragment>
     <fragment
         android:id="@+id/profileDetailFragment"
         android:name="com.hexa.arti.ui.profile.ProfileDetailFragment"
@@ -218,6 +219,9 @@
         <action
             android:id="@+id/action_settingFragment_to_profileDetailFragment"
             app:destination="@id/profileDetailFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_instagramFragment"
+            app:destination="@id/instagramFragment" />
     </fragment>
     <fragment
         android:id="@+id/myGalleryHomeFragment"
@@ -298,4 +302,9 @@
             android:id="@+id/action_createGallertFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/instagramFragment"
+        android:name="com.hexa.arti.ui.profile.InstagramFragment"
+        android:label="InstagramFragment" />
 </navigation>
