@@ -54,12 +54,11 @@ public class InstagramAccountService {
 
         if (tokenResponse != null) {
             // 받은 토큰 저장 및 Instagram 계정 연동
-            String instagramUsername = tokenResponse.getUsername();  // username 가져오기
 
             // InstagramAccount 엔티티에 저장
             InstagramAccount instagramAccount = InstagramAccount.builder()
-                .instagramUsername(instagramUsername)  // username을 email 대신 사용
                 .member(member)  // 현재 로그인한 Member와 연동
+                .accessToken(tokenResponse.getAccessToken())
                 .build();
 
             instagramAccountRepository.save(instagramAccount);  // 저장
