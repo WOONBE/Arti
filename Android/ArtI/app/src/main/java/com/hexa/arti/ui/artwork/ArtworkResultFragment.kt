@@ -92,6 +92,9 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
 
             artworkResultViewModel.artworkResult.observe(viewLifecycleOwner){
                 artworkResultEt.setText(it.title)
+                Glide.with(requireContext())
+                    .load(it.imageUrl)
+                    .into(artworkResultImg)
             }
 
             myGalleryActivityViewModel.myGalleryTheme.observe(viewLifecycleOwner){
@@ -116,7 +119,6 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
             artworkResultThemeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     val selectedItem = itemList[position]
-                    makeToast( "Selected: ${selectedItem.name}, ID: ${selectedItem.id}")
                     themeId = selectedItem.id
                 }
 

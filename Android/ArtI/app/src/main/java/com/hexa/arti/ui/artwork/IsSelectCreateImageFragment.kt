@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.util.Log
 import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import com.hexa.arti.R
@@ -26,6 +27,7 @@ class IsSelectCreateImageFragment : BaseFragment<FragmentIsSelectCreateImageBind
             }
             // 아니오
             artworkMaintainBtn.setOnClickListener {
+                Log.d("확인", "init: ${args.artId.toString()}")
                 val action = IsSelectCreateImageFragmentDirections.actionIsSelectCreateImageFragmentToArtworkResultFragment(args.artId.toString(),0)
                 navigate(action)
             }
