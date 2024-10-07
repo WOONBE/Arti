@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from config.models import Gallery, Theme, Artwork, Artwork_Theme
+from config.models import Gallery, Theme, Artwork, Artwork_Theme, Artist
 
 art_styles_mapping = {
     "Abstract Expressionism": "추상표현주의",
@@ -61,9 +61,7 @@ art_styles_list = [
     "매너리즘"
 ]
 
-
-
-def get_portfoilo(member_id, db:Session):
+async def get_portfoilo(member_id, db:Session):
     art_styles_dict = {
     "추상표현주의": 0,
     "표현주의": 0,
@@ -111,6 +109,7 @@ def get_portfoilo(member_id, db:Session):
                 art_styles_dict[art_styles_mapping[genre]] += 1
 
     all_genre = []
+    
     for genre in art_styles_list:
         if art_styles_dict[genre] != 0:
             data = {

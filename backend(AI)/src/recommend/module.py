@@ -11,6 +11,7 @@ import numpy as np
 import logging
 import traceback
 import random
+import time
 
 import aiohttp
 import asyncio
@@ -83,6 +84,7 @@ def compute_gallery_vector_batch(artworks: List[str], model, device):
         raise HTTPException(status_code=500, detail=f"Vector batch processing error: {str(e)}")
 
 def recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery_idx, top_k=3):
+    time.sleep(0.1)
     if user_gallery_vector.ndim == 1:
         user_gallery_vector = np.expand_dims(user_gallery_vector, axis=0)
         
@@ -99,59 +101,8 @@ def recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery
 
     return [gallery_idx[i] for i in indices[0]]
 
-def custom_base(top_view_galleries, similar_galleries, db: Session):
+def custom_base(similar_galleries, db: Session):
     result = []
-
-    # 최다 조회수 미술관 처리
-    for top_gallery in top_view_galleries:
-        top_gal = GalleryBase(
-            gallery_id=top_gallery.gallery_id,
-            gallery_title=top_gallery.gallery_title,
-            gallery_desc=top_gallery.gallery_desc,
-            gallery_img=top_gallery.gallery_img,
-            gallery_view=top_gallery.gallery_view
-        )
-        top_user_base = db.query(Member).filter(Member.member_id == top_gallery.owner_id).first()
-        top_user = Owner(
-            member_id=top_user_base.member_id,
-            email=top_user_base.email,
-            nickname=top_user_base.nickname
-        )
-        top_theme = []
-        top_theme_base = db.query(Theme).filter(Theme.gallery_id == top_gallery.gallery_id).all()
-        for top_theme_filter in top_theme_base:
-            top_artworks = db.query(Artwork_Theme).filter(Artwork_Theme.theme_id == top_theme_filter.theme_id).all()
-            artwork_list = []
-            for artwork in top_artworks:
-                file = db.query(Artwork).filter(Artwork.artwork_id == artwork.artwork_id).first()
-                
-                if file.artwork_type == 'AI':
-                    artwork_title = file.ai_artwork_title
-                    artwork_url = file.ai_artwork_img
-                else:
-                    artwork_title = file.title
-                    artwork_url = 'https://j11d106.p.ssafy.io/static/' + file.filename
-
-                top_artwork = ArtworksBase(
-                    artwork_id=artwork.artwork_id,
-                    title=artwork_title,
-                    description=file.description,
-                    year=file.year,
-                    image_url=artwork_url
-                )
-                artwork_list.append(top_artwork)
-            theme_base = ThemeBase(
-                theme_id=top_theme_filter.theme_id,
-                theme_name=top_theme_filter.theme_name,
-                artworks=artwork_list
-            )
-            top_theme.append(theme_base)
-
-        result.append({
-            'gallery': top_gal,
-            'user': top_user,
-            'theme': top_theme
-        })
 
     # 추천된 미술관 처리
     for similar_gallery in similar_galleries:
@@ -214,15 +165,10 @@ def recommend_gallery(user_id, db: Session):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    # 일주일간 최다 조회수 미술관 추출(3개)
-    top_view_galleries = db.query(Gallery).order_by(Gallery.gallery_view.desc()).limit(3).all()
-
-    top_gallery_ids = {gallery.gallery_id for gallery in top_view_galleries}
-
     # 자신을 제외한 미술관 정보 추출
     art_galleries = db.query(Gallery).filter(Gallery.owner_id != user_id).all()
-    art_gallery_data = [gallery.gallery_img for gallery in art_galleries if gallery.gallery_id not in top_gallery_ids]
-    gallery_idx = [gallery.gallery_id for gallery in art_galleries if gallery.gallery_id not in top_gallery_ids]
+    art_gallery_data = [gallery.gallery_img for gallery in art_galleries]
+    gallery_idx = [gallery.gallery_id for gallery in art_galleries]
 
     # 사용자 미술관 정보 추출
     user_gallery = db.query(Gallery).filter(Gallery.owner_id == user_id).first()
@@ -248,14 +194,14 @@ def recommend_gallery(user_id, db: Session):
     if all_gallery_vector is None:
         raise ValueError("Other gallery vector could not be computed.")
 
-    # 미술관 추천(3개)
+    # 미술관 추천(6개)
     similar_gallery_ids = recommend_similar_galleries(user_gallery_vector, all_gallery_vector, gallery_idx, 50)
 
-    recommed_idx = [idx for idx in random.sample(set(similar_gallery_ids), 3)]
+    recommed_idx = [idx for idx in random.sample(set(similar_gallery_ids), 6)]
 
     similar_galleries = db.query(Gallery).filter(Gallery.gallery_id.in_(recommed_idx)).all()
 
-    result = custom_base(top_view_galleries, similar_galleries, db)
+    result = custom_base(similar_galleries, db)
 
     return result
 
@@ -291,6 +237,7 @@ def compute_artwork_vector_batch(artworks: List[str], model, device):
         return None
     
 def recommend_similar_artworks(user_artworks_vector, all_artworks_vector, artwork_idx, top_k=50):
+    time.sleep(0.1)
     # 벡터 차원 확인
     logging.info(f"user_artworks_vector shape: {user_artworks_vector.shape}")
     logging.info(f"all_artworks_vector shape: {all_artworks_vector.shape}")
@@ -301,6 +248,10 @@ def recommend_similar_artworks(user_artworks_vector, all_artworks_vector, artwor
         logging.info(f"Averaged user_artworks_vector shape: {user_artworks_vector.shape}")
     
     d = user_artworks_vector.shape[0]  # 벡터 차원 (27)
+
+    user_artworks_vector = user_artworks_vector.astype(np.float32)
+    all_artworks_vector = all_artworks_vector.astype(np.float32)
+
     index = faiss.IndexFlatL2(d)  # FAISS 인덱스 초기화
     
     index.add(all_artworks_vector)  # 전체 미술품 벡터 추가
@@ -363,8 +314,8 @@ def recommend_artwork(user_id, db: Session):
             result_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(recommended_artworks)).all()
             return [{"artwork_id": artwork.artwork_id, "title": artwork.title, "image_url": f"https://j11d106.p.ssafy.io/static/{artwork.filename}", "year" : artwork.year, "writer" : artwork.artist_name} for artwork in result_artworks]
 
-        user_artwork_ids = [idx.artwork_id for idx in random.sample(user_artwork_ids, 3)]
-        user_artwork_ids = [i for i in user_artwork_ids if i < all_artwork_vector.shape[0]]
+        user_artwork_ids = [i.artwork_id for i in user_artwork_ids if i.artwork_id < all_artwork_vector.shape[0]]
+        user_artwork_ids = [idx for idx in random.sample(user_artwork_ids, 3)]
         user_artworks = db.query(Artwork).filter(Artwork.artwork_id.in_(user_artwork_ids)).all()
         user_artwork_paths = [f"https://j11d106.p.ssafy.io/static/{artwork.filename}" for artwork in user_artworks]
         logging.info(f"User artwork paths: {user_artwork_paths}")
