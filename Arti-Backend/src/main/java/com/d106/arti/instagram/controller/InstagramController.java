@@ -39,6 +39,7 @@ public class InstagramController {
 
     @PostMapping("/save-token")
     public ResponseEntity<?> saveToken(@RequestBody SaveTokenRequest request) {
+        System.out.println(request.getCode());
         return ResponseEntity.ok().build();
     }
 }
