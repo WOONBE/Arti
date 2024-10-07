@@ -41,7 +41,9 @@ class CreateGalleryViewModel @Inject constructor(
 
     fun createGallery(galleryDto : GalleryRequest){
         viewModelScope.launch {
+            Log.d("확인", "createGallery: ${galleryDto}")
             galleryRepository.postGallery(_thumbnail.value!!,galleryDto).onSuccess {
+                Log.d("확인", "createGallery: ${galleryDto}")
                 saveGalleryData(it.id)
                 _galleryResponse.value = it
                 Log.d("확인", "galleryRepository: $it")

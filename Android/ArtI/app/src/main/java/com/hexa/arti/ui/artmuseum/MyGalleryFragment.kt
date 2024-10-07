@@ -258,14 +258,16 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         var file = uriToFile(requireContext(), imageUri)
 
         val maxSize =  512 * 512 // 1MB
+        Log.d(TAG, "handleImage: ${file.length()}")
         if (file.length() > maxSize) {
             file = compressImage(file)
-
+            Log.d(TAG, "handleImage: ${file.length()}")
             if (file.length() > maxSize) {
                 makeToast("File size still exceeds limit after compression")
                 return
             }
         }
+        Log.d(TAG, "handleImage: ${file.length()}")
         val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
         myGalleryViewModel.updateThumbnail(
             MultipartBody.Part.createFormData(

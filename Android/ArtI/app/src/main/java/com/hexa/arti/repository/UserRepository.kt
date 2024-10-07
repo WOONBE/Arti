@@ -10,4 +10,6 @@ interface UserRepository {
         newPassword: String,
         confirmationPassword: String
     ): Result<ResponseBody>
+
+    suspend fun getUserNickname() : Result<String>
 }

@@ -17,4 +17,7 @@ interface UserAPI {
     suspend fun changePass(
         @Body password: ChangePass
     ) : Response<ResponseBody>
+
+    @POST("members/nickname")
+    suspend fun getNickname() : Response<String>
 }

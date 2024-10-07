@@ -20,6 +20,7 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentProfileDetailBinding
 import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.MainActivityViewModel
+import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.util.handleImage
 import com.hexa.arti.util.isPasswordValid
 import com.hexa.arti.util.popBackStack
@@ -34,7 +35,7 @@ import java.io.FileOutputStream
 class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layout.fragment_profile_detail) {
 
     private val profileDetailViewModel: ProfileDetailViewModel by viewModels()
-
+    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
     private val ars : ProfileDetailFragmentArgs by navArgs()
     private lateinit var userToken : String
     override fun init() {
@@ -47,6 +48,7 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
             when(it){
                 1 ->{
                     makeToast("프로필이 수정되었습니다")
+                    myGalleryActivityViewModel.updateNickname(binding.profileDetailNickEt.text.toString())
                     popBackStack()
                     profileDetailViewModel.updateSuccessStatus()
                 }

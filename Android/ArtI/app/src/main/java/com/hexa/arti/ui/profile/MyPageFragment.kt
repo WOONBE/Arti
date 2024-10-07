@@ -6,16 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentMyPageBinding
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.setting.SettingFragmentDirections
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page){
+
+    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
 
     override fun init() {
     }
@@ -24,6 +28,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding){
+            myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner){
+                myPageProfileNameTv.text = " ${it}님 어서오세요."
+            }
 
             // 프로필 편집
             myPageProfileModifyTv.setOnClickListener {

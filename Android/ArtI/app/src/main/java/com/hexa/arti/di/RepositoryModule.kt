@@ -14,6 +14,8 @@ import com.hexa.arti.repository.LoginRepository
 import com.hexa.arti.repository.LoginRepositoryImpl
 import com.hexa.arti.repository.MemberRepository
 import com.hexa.arti.repository.MemberRepositoryImpl
+import com.hexa.arti.repository.MusicRepository
+import com.hexa.arti.repository.MusicRepositoryImpl
 import com.hexa.arti.repository.SignUpRepository
 import com.hexa.arti.repository.SignUpRepositoryImpl
 import com.hexa.arti.repository.UserRepository
@@ -81,4 +83,10 @@ interface RepositoryModule {
     fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Singleton
+    @Binds
+    fun bindMusicRepository(
+        musicRepositoryImpl: MusicRepositoryImpl
+    ): MusicRepository
 }

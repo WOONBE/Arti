@@ -15,6 +15,7 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.portfolio.PortfolioGenre
 import com.hexa.arti.databinding.FragmentPortfolioBinding
 import com.hexa.arti.ui.MainActivityViewModel
+import com.hexa.arti.ui.MyGalleryActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
 
+    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val portfolioViewModel: PortfolioViewModel by viewModels()
     private var userId: Int = -1
@@ -35,6 +37,11 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     }
 
     private fun initObserve() {
+        myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner){
+            binding.tvPortfolioTitle.text  = "${it}님의 포트폴리오"
+        }
+
+
         portfolioViewModel.resultGenres.observe(viewLifecycleOwner) { genres ->
             initChart(genres)
         }
