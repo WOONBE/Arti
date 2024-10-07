@@ -10,6 +10,8 @@ import com.hexa.arti.repository.ArtistRepository
 import com.hexa.arti.repository.ArtistRepositoryImpl
 import com.hexa.arti.repository.HomeRepository
 import com.hexa.arti.repository.HomeRepositoryImpl
+import com.hexa.arti.repository.InstagramRepository
+import com.hexa.arti.repository.InstagramRepositoryImpl
 import com.hexa.arti.repository.LoginRepository
 import com.hexa.arti.repository.LoginRepositoryImpl
 import com.hexa.arti.repository.MemberRepository
@@ -81,4 +83,10 @@ interface RepositoryModule {
     fun bindUserRepository(
         userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
+
+    @Singleton
+    @Binds
+    fun bindInstagramRepository(
+        instagramRepositoryImpl: InstagramRepositoryImpl
+    ): InstagramRepository
 }
