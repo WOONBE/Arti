@@ -5,6 +5,7 @@ import com.hexa.arti.network.ArtWorkUpload
 import com.hexa.arti.network.ArtistApi
 import com.hexa.arti.network.GalleryApi
 import com.hexa.arti.network.HomeApi
+import com.hexa.arti.network.InstagramApi
 import com.hexa.arti.network.LoginApi
 import com.hexa.arti.network.MemberApi
 import com.hexa.arti.network.MusicApi
@@ -72,4 +73,9 @@ object ApiModule {
     @Provides
     fun provideMusicApiService(@Named("arti_fast") retrofit: Retrofit): MusicApi =
         retrofit.create(MusicApi::class.java)
+
+    @Singleton
+    @Provides  
+    fun provideInstagramApiService(@Named("arti") retrofit: Retrofit): InstagramApi =
+        retrofit.create(InstagramApi::class.java)
 }

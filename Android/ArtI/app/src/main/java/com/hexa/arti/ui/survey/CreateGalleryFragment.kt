@@ -143,6 +143,7 @@ class CreateGalleryFragment :
 
         val maxSize = 1024 * 1024 // 10MB
         while(file.length() > maxSize) {
+        if (file.length() > maxSize) {
             file = compressImage(file)
         }
         binding.createGalleryThumbnailIv.setImageURI(imageUri)

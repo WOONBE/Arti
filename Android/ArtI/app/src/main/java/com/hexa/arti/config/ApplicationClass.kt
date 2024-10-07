@@ -21,7 +21,7 @@ class ApplicationClass : Application() {
             "Realism",
             "Fauvism",
             "Action_painting",
-            "Pointilism",
+            "Pointillism",
             "Contemporary_Realism",
             "Symbolism",
             "Analytical_Cubism",

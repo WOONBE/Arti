@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import android.webkit.WebViewClient
+import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentMyPageBinding
@@ -46,6 +48,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             myPageInfoTv.setOnClickListener {
                 val action = SettingFragmentDirections.actionSettingFragmentToProfileDetailFragment(2)
                 navigate(action)
+            }
+            //인스타그램
+            tvInstagram.setOnClickListener {
+                navigate(R.id.action_settingFragment_to_instagramFragment)
             }
             // 로그아웃
             myPageLogoutTv.setOnClickListener { mainActivity.moveLogin() }

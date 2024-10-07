@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.profile
 
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -229,6 +230,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
             mainActivityViewModel.getLoginData().collect { userData ->
+                Log.d("확인","포폴에서 콜렉트 불림")
                 userData?.let {
                     portfolioViewModel.getPortfolio(it.memberId)
                     userId = it.memberId
