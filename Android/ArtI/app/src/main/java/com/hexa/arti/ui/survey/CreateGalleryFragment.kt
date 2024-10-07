@@ -58,6 +58,7 @@ class CreateGalleryFragment :
             galleryResponse.observe(viewLifecycleOwner) {
                 Log.d(TAG, "init: $it")
                 myGalleryActivityViewModel.getMyGallery(it.id)
+                createGalleryViewModel.saveSurvey(SurveyListDto(surveyList, userId))
                 createGalleryViewModel.createTheme(
                     it.id,
                     binding.createGalleryThemeEt.text.toString()
@@ -76,7 +77,7 @@ class CreateGalleryFragment :
         with(binding)
         {
             createGalleryBtn.setOnClickListener {
-
+                Log.d(TAG, "init: $userId")
                 if (createGalleryNameEt.text.toString().isEmpty()) {
                     makeToast("미술관 이름을 작성해주세요")
                 } else if (createGalleryInfoEt.text.toString().isEmpty()) {
@@ -86,7 +87,6 @@ class CreateGalleryFragment :
                 } else if (!createGalleryViewModel.thumbnail.isInitialized) {
                     makeToast("썸네일을 등록해주세요")
                 } else {
-                    createGalleryViewModel.saveSurvey(SurveyListDto(surveyList, userId))
                     createGalleryViewModel.createGallery(
                         GalleryRequest(
                             description = createGalleryInfoEt.text.toString(),
@@ -142,13 +142,9 @@ class CreateGalleryFragment :
         var file = uriToFile(requireContext(), imageUri)
 
         val maxSize = 1024 * 1024 // 10MB
+        while(file.length() > maxSize) {
         if (file.length() > maxSize) {
             file = compressImage(file)
-
-            if (file.length() > maxSize) {
-                makeToast("File size still exceeds limit after compression")
-                return
-            }
         }
         binding.createGalleryThumbnailIv.setImageURI(imageUri)
         val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())

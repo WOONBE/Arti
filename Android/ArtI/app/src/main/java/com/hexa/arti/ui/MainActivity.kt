@@ -63,6 +63,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                         isFirst = false
                         getMyGallery(d!!.galleryId)
                         getMyGalleryTheme(d.galleryId)
+                        getNickName()
                     }
 
                     if (isFirst) navController.navigate(R.id.surveyFragment)

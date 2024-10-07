@@ -61,4 +61,24 @@ class UserRepositoryImpl @Inject constructor(
             )
         }
     }
+
+    override suspend fun getUserNickname(): Result<String> {
+        val result = userAPI.getNickname()
+        Log.d("확인", "postChangePass: $result")
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+            return Result.failure(Exception())
+        } else {
+            val errorResponse =
+                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+            return Result.failure(
+                ApiException(
+                    code = errorResponse.code,
+                    message = errorResponse.message
+                )
+            )
+        }
+    }
 }

@@ -18,7 +18,9 @@ class AuthInterceptor @Inject constructor(
         val url = originalRequest.url.toString()
 
         // 특정 도메인에만 토큰 추가 (예: "example.com" 도메인에만 추가)
-        return if (url.contains("members/change-nickname") || url.contains("members/change-password")) {
+        return if (url.contains("members/change-nickname") ||
+            url.contains("members/change-password") ||
+            url.contains("members/nickname") ) {
             // DataStore에서 토큰 가져오기
             val token = runBlocking {
                 dataStore.data.map { preferences ->

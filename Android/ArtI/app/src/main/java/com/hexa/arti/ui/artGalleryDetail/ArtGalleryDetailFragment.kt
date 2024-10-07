@@ -2,13 +2,16 @@ package com.hexa.arti.ui.artGalleryDetail
 
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -18,6 +21,7 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.MyGalleryThemeItem
 import com.hexa.arti.databinding.FragmentArtGalleryDetailBinding
 import com.hexa.arti.ui.MainActivity
+import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.artGalleryDetail.adapter.GalleryDetailViewPagerAdapter
 import com.hexa.arti.ui.artGalleryDetail.adapter.GalleryThemeMenuAdapter
 import com.hexa.arti.util.navigate
@@ -25,6 +29,8 @@ import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.net.HttpURLConnection
+import java.net.URL
 
 private const val TAG = "ArtGalleryDetailFragmen"
 
@@ -34,30 +40,101 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
     private val args : ArtGalleryDetailFragmentArgs by navArgs()
 
     private val artGalleryViewModel : ArtGalleryDetailViewModel by viewModels()
+    private val mainActivityViewModel : MainActivityViewModel by activityViewModels()
     private lateinit var adapter: GalleryDetailViewPagerAdapter
 
-
+    private var musicStreamUrl = ""
     private var imageSize = 0
-
+    private var isReady = false
+    private var code = 0
     private lateinit var mediaPlayer: MediaPlayer
     private var isPlaying = false
-    
+    private var isLoading = false
+    private var userGalleryId : Int = 0
+    private var galleryId : Int = 0
     override fun init() {
-
-
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            isEnabled = false
-            requireActivity().onBackPressed()
-            mainActivity.changePortrait()
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         // galleryId를 이용해 테마 데이터 요청
-        val galleryId = args.galleryId
+        galleryId = args.galleryId
         artGalleryViewModel.getGallery(galleryId)
+        artGalleryViewModel.getMusic(galleryId)
+
+        initMedia()
+        // 음악 시작
+        binding.galleryBgmPlayPtn.setOnClickListener {
+            if(isLoading){
+                makeToast("음악을 생성하고 있습니다. 잠시만 기다려 주세요")
+                return@setOnClickListener
+            }
+            if(isReady) {
+                if(code == 200) {
+                    if (!isPlaying) {
+                        binding.galleryBgmPlayPtn.visibility = View.GONE
+                        binding.galleryBgmStopBtn.visibility = View.VISIBLE
+                        isPlaying = true
+
+                        // 코루틴을 사용하여 음악 재생
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            playMusic()
+                        }
+                    }
+                }
+                else{
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("음악 생성")
+                        .setMessage("테마에 맞는 음악이 없습니다. \n음악을 생성하시겠습니까")
+                        .setPositiveButton("확인") { dialog, _ ->
+                            makeToast("음악 생성중입니다. 3분정도 시간이 소요됩니다.")
+                            artGalleryViewModel.createMusic(galleryId)
+                            // 확인 버튼 클릭 시 실행할 코드
+                            isLoading = true
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("취소") { dialog, _ ->
+                            // 취소 버튼 클릭 시 실행할 코드
+                            dialog.dismiss()  // 다이얼로그 닫기
+                        }
+                        .create()
+                        .show()
+                }
+            }
+            else makeToast("음악을 불러오는 중입니다 잠시만 기다려주세요")
+        }
+
+
+        lifecycleScope.launch {
+
+            mainActivityViewModel.getLoginData().collect { d ->
+                Log.d("확인", "onCreate: ${d?.galleryId}")
+                d?.let {
+                    userGalleryId = d.galleryId
+
+                }
+
+            }
+        }
+
+
+        artGalleryViewModel.musicGetStatus.observe(viewLifecycleOwner){
+            isReady = true
+            when(it){
+                200 -> {
+                    code = 200
+                    Log.d(TAG, "init: aaaaaaaaaaaaa")
+
+                    artGalleryViewModel.updateMusicGetStatus()
+                }
+                400 ->{
+                    code = 400
+                    Log.d(TAG, "init: aaaaaaaaaaaaa")
+
+                    artGalleryViewModel.updateMusicGetStatus()
+                }
+                else ->{
+
+                }
+            }
+        }
+
 
         // 테마 데이터를 관찰하고 업데이트
         artGalleryViewModel.galleryDetail.observe(viewLifecycleOwner) { themes ->
@@ -71,19 +148,18 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
                 binding.viewPager.setCurrentItem(pageNum, false)
             }
         }
+        artGalleryViewModel.musicUrl.observe(viewLifecycleOwner){
+            if(it != "") {
+                musicStreamUrl = it
+                makeToast("셍성 완료")
+                initMedia()
+                artGalleryViewModel.updateUrl()
+            }
+        }
 
-        Log.d(TAG, "onViewCreated: ${artGalleryViewModel.getPageNum()}")
 
-
-        // 미디어 플레이어 설정 (음악 파일 경로 또는 리소스)
-        mediaPlayer = MediaPlayer.create(requireContext(), R.raw.gallery_bgm)
-
-        initEvent()
-
-    }
-
-    private fun initEvent(){
         with(binding){
+
             galleryDetailLeftIb.setOnClickListener {
                 if (binding.viewPager.currentItem > 1) {
                     binding.viewPager.currentItem -= 1
@@ -96,25 +172,6 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
 
                 }
             }
-            // 음악 시작
-            galleryBgmPlayPtn.setOnClickListener {
-                if (!isPlaying) {
-                    binding.galleryBgmPlayPtn.visibility = View.GONE
-                    binding.galleryBgmStopBtn.visibility = View.VISIBLE
-                    isPlaying = true
-
-                    // 코루틴을 사용하여 음악 재생
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        playMusic()
-                    }
-                }
-            }
-            // 음악 종료
-            galleryBgmStopBtn.setOnClickListener {
-                stopMusic()
-                binding.galleryBgmPlayPtn.visibility = View.VISIBLE
-                binding.galleryBgmStopBtn.visibility = View.GONE
-            }
 
             galleryMenuBtn.setOnClickListener {
                 binding.drawerLayout.openDrawer(GravityCompat.END)
@@ -123,12 +180,51 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
                 mainActivity.changePortrait()
                 popBackStack()
             }
+
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            isEnabled = false
+            requireActivity().onBackPressed()
+            mainActivity.changePortrait()
+        }
+    }
+
+private fun initMedia(){
+    // 스트리밍 URL 설정 (예시 URL)
+    musicStreamUrl = "https://just-shiner-manually.ngrok-free.app/music/${galleryId}"
+
+    // MediaPlayer 초기화 및 스트리밍 URL 설정
+    mediaPlayer = MediaPlayer().apply {
+        setAudioStreamType(AudioManager.STREAM_MUSIC)  // 음악 스트림 설정
+        setDataSource(musicStreamUrl)  // 스트리밍 URL 설정
+        isLooping = true  // 무한 반복 재생 설정
+        prepareAsync()  // 비동기 준비
+    }
+    // 음악 준비가 완료되면
+    mediaPlayer.setOnPreparedListener {
+        initEvent()
+    }
+
+}
+
+
+    private fun initEvent(){
+        with(binding){
+            // 음악 종료
+            galleryBgmStopBtn.setOnClickListener {
+                stopMusic()
+                binding.galleryBgmPlayPtn.visibility = View.VISIBLE
+                binding.galleryBgmStopBtn.visibility = View.GONE
+            }
         }
 
     }
-    // 코루틴을 사용한 음악 재생 함수
     private suspend fun playMusic() {
-        mediaPlayer.start()
+        // 음악이 준비되면 재생
+        if (!mediaPlayer.isPlaying) {
+            mediaPlayer.start()
+        }
 
         // 음악이 끝날 때까지 대기
         while (mediaPlayer.isPlaying) {
@@ -141,14 +237,16 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         binding.galleryBgmStopBtn.visibility = View.GONE
     }
 
+
     // 음악 정지 함수
     private fun stopMusic() {
         if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-            mediaPlayer.seekTo(0) // 음악을 처음으로 돌림
+            mediaPlayer.pause()  // 음악 일시정지
+            mediaPlayer.seekTo(0)  // 음악을 처음으로 돌림
         }
         isPlaying = false
     }
+
 
     private fun handlePageSelected(position: Int) {
         when(position){
@@ -225,6 +323,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
     // 뷰가 파괴될 때 MediaPlayer 해제
     override fun onDestroyView() {
         super.onDestroyView()
-        mediaPlayer.release()
+        mediaPlayer.release()  // MediaPlayer 리소스 해제
     }
+
 }

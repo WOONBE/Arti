@@ -12,7 +12,7 @@ interface SignUpApi {
     suspend fun signUp(@Body signUpModel: SignUpModel) : Response<ResponseBody>
 
     @POST("auth/request-auth-number")
-    suspend fun sendEmail(@Body signUpModel: SignUpModel) : Response<ResponseBody>
+    suspend fun sendEmail(@Body signUpModel: Map<String,String>) : Response<ResponseBody>
 
     @POST("auth/verify-code")
     suspend fun checkEmailCode(@Body emailCodeDto: EmailCodeDto) : Response<ResponseBody>

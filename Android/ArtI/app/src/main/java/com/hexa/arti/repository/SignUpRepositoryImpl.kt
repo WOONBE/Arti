@@ -46,7 +46,7 @@ class SignUpRepositoryImpl @Inject constructor(
     }
 
     override suspend fun sendEmail(email: String) : Result<ResponseBody> {
-        val result = signUpApi.sendEmail(SignUpModel(email,"",""))
+        val result = signUpApi.sendEmail(mapOf(Pair("email",email)))
         Log.d(TAG, "postSignUp: ${result}")
         // 성공적인 응답 처리
         if (result.isSuccessful) {
