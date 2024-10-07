@@ -13,7 +13,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userAPI: UserAPI
 ) : UserRepository{
     override suspend fun postChangeNickname(nickName: String): Result<ResponseBody> {
-        val result = userAPI.changeNickname(Pair("nickName",nickName))
+        val result = userAPI.changeNickname(mapOf(Pair("newNickname",nickName)))
 
         Log.d("확인", "postChangePass: $result")
         if (result.isSuccessful) {
@@ -41,7 +41,7 @@ class UserRepositoryImpl @Inject constructor(
     ): Result<ResponseBody> {
         val result = userAPI.changePass(
             ChangePass(
-            currentPassword,newPassword,confirmationPassword
+            currentPassword = currentPassword, newPassword = newPassword, confirmationPassword = confirmationPassword
         )
         )
         Log.d("확인", "postChangePass: $result")

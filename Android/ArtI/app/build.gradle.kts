@@ -67,6 +67,7 @@ dependencies {
     kapt(libs.hilt.compiler)
     //retrofit
     implementation(libs.bundles.network)
+    implementation(libs.logging.interceptor)
     //viewmodel
     implementation(libs.viewmodel)
     implementation(libs.activity.ktx)

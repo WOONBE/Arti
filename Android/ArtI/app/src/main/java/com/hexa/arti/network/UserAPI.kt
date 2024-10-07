@@ -10,7 +10,7 @@ interface UserAPI {
 
     @POST("members/change-nickname")
     suspend fun changeNickname(
-        @Body nickname: Pair<String,String>
+        @Body nickname: Map<String,String>
     ) : Response<ResponseBody>
 
     @POST("members/change-password")

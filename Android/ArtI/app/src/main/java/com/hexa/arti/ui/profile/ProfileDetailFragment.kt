@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavArgs
 import androidx.navigation.fragment.navArgs
 import com.hexa.arti.R
@@ -42,6 +43,27 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
     }
 
     private fun initView(){
+        profileDetailViewModel.successStatus.observe(viewLifecycleOwner){
+            when(it){
+                1 ->{
+                    makeToast("프로필이 수정되었습니다")
+                    popBackStack()
+                    profileDetailViewModel.updateSuccessStatus()
+                }
+                2->{
+                    makeToast("오류가 발생했습니다. 다시 시도해주세요")
+                }
+                3->{
+                    makeToast("비밀번호가 변경되었습니다.")
+                    popBackStack()
+                    profileDetailViewModel.updateSuccessStatus()
+                }
+                else ->{
+
+                }
+            }
+
+        }
 
         with(binding){
             when(ars.detailType){
@@ -85,7 +107,6 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
                 }
                 else{
                     profileDetailViewModel.changePass(profilePassOldEt.text.toString(), profilePassNewEt.text.toString(), profilePassNewCheckEt.text.toString())
-                    makeToast("비밀번호가 변경되었습니다.")
 //                    popBackStack()
                 }
             }
