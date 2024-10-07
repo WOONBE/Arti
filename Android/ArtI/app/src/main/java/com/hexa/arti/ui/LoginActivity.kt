@@ -1,6 +1,7 @@
 package com.hexa.arti.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.fragment.NavHostFragment

@@ -9,6 +9,8 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentArtBannerBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
+import com.hexa.arti.util.LoadingDialog
+import com.hexa.arti.util.LoadingRecommendDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +18,9 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragment_art_banner) {
+
+    private var isShowDialog = false
+    private lateinit var loadingDialog: LoadingRecommendDialog
 
     private val viewModel: ArtBannerViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -32,6 +37,7 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
             findNavController().popBackStack()
         }
 
+        showLoadingDialog()
         initObserve()
         initUserData()
     }
@@ -49,8 +55,25 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     private fun initObserve() {
         viewModel.resultArtworks.observe(viewLifecycleOwner) {
             artAdapter.submitList(it)
+            hideLoadingDialog()
         }
     }
 
+    fun showLoadingDialog() {
+        Log.d("확인","이거호출")
+        if(!isShowDialog){
+            isShowDialog = true
+            loadingDialog = LoadingRecommendDialog()
+            loadingDialog.isCancelable = false
+            loadingDialog.show(mainActivity.supportFragmentManager, "loading")
+        }
+    }
 
+    fun hideLoadingDialog() {
+        Log.d("확인","이거호출2")
+        if(isShowDialog){
+            isShowDialog = false
+            loadingDialog.dismiss()
+        }
+    }
 }

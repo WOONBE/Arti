@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseActivity
+import com.hexa.arti.data.model.login.LoginResponse
 import com.hexa.arti.databinding.ActivityMainBinding
 import com.hexa.arti.util.LoadingDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,6 +37,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val mainActivityViewModel : MainActivityViewModel by viewModels()
     private val myGalleryActivityViewModel : MyGalleryActivityViewModel by viewModels()
     private lateinit var loadingDialog: LoadingDialog
+    var userData: LoginResponse? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +54,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
                 mainActivityViewModel.getLoginData().collect { d ->
                     Log.d(TAG, "onCreate: ${d?.galleryId}")
+                    Log.d("확인","메인에서 콜렉트 불림")
+                    userData = d
                     if(d?.galleryId == -1){
                         isFirst = true
                     }

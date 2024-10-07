@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.hexa.arti.R
 
-class LoadingDialog : DialogFragment() {
+class LoadingRecommendDialog : DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.dialog_loading, container, false)
+        return inflater.inflate(R.layout.dialog_loading_recommend, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
