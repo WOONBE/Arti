@@ -39,7 +39,7 @@ public class InstagramAccountService {
 
         // 액세스 토큰 요청 URL
         String tokenUrl = "https://api.instagram.com/oauth/access_token";
-
+        System.out.println(redirectUri);
         // POST 요청을 위한 파라미터 설정
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("client_id", clientId);
