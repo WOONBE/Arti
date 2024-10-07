@@ -141,7 +141,7 @@ class CreateGalleryFragment :
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize = 10 * 1024 * 1024 // 10MB
+        val maxSize = 1024 * 1024 // 10MB
         if (file.length() > maxSize) {
             file = compressImage(file)
 
