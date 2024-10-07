@@ -1,5 +1,9 @@
 package com.d106.arti.instagram.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +40,31 @@ public class InstagramController {
     }
 
     @PostMapping("/save-token")
-    public ResponseEntity<?> saveToken(@RequestBody SaveTokenRequest request) {
-        System.out.println(request.getUrl());
+    public ResponseEntity<?> saveToken(@RequestBody SaveTokenRequest request)
+        throws URISyntaxException {
+        Map<String, String> queryParams = extractQueryParams(request.getUrl());
+        String codeWithoutSuffix = queryParams.get("code").split("#")[0];
+
         return ResponseEntity.ok().build();
+    }
+
+    private static Map<String, String> extractQueryParams(String uriString)
+        throws URISyntaxException {
+        URI uri = new URI(uriString);
+        String query = uri.getQuery();
+
+        Map<String, String> queryParams = new HashMap<>();
+
+        if (query != null && !query.isEmpty()) {
+            String[] pairs = query.split("&");
+            for (String pair : pairs) {
+                String[] keyValue = pair.split("=");
+                String key = keyValue[0];
+                String value = keyValue.length > 1 ? keyValue[1] : "";
+                queryParams.put(key, value);
+            }
+        }
+
+        return queryParams;
     }
 }
