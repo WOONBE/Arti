@@ -23,7 +23,11 @@ class ArtworkPagingSource(
                 nextKey = if (pageNumber == response.totalPages) null else pageNumber + 1
             )
         } catch (e: Exception) {
-            LoadResult.Error(e)
+            LoadResult.Page(
+                data = emptyList(),
+                prevKey = if (pageNumber == 1) null else pageNumber - 1,
+                nextKey = if (pageNumber == 60) null else pageNumber + 1
+            )
         }
     }
 

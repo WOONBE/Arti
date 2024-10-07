@@ -1,11 +1,13 @@
 package com.hexa.arti.ui.search
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -25,6 +27,8 @@ import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
 import com.hexa.arti.util.asGalleryBanner
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -57,13 +61,31 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         moveToArtistDetailFragment(artist)
     }
 
+    private fun updateConstraintForArtist() {
+        val constraintSet = ConstraintSet()
+
+        constraintSet.clone(binding.clSearchResult)
+
+        constraintSet.connect(
+            R.id.tv_artist_result,
+            ConstraintSet.TOP,
+            R.id.rv_art_result,
+            ConstraintSet.BOTTOM
+        )
+
+        constraintSet.applyTo(binding.clSearchResult)
+    }
+
     override fun init() {
 
         artworkPagingAdapter.addLoadStateListener { loadStates ->
-            if (loadStates.refresh is LoadState.NotLoading && artworkPagingAdapter.itemCount == 0) {
-                binding.tvNoResultArtwork.visibility = View.VISIBLE
-            } else if (loadStates.refresh is LoadState.NotLoading) {
-                binding.tvNoResultArtwork.visibility = View.GONE
+            CoroutineScope(Dispatchers.Main).launch {
+                if (loadStates.refresh is LoadState.NotLoading && artworkPagingAdapter.itemCount == 0) {
+                    binding.tvNoResultArtwork.visibility = View.VISIBLE
+                } else if (loadStates.refresh is LoadState.NotLoading) {
+                    binding.tvNoResultArtwork.visibility = View.GONE
+                    updateConstraintForArtist()
+                }
             }
         }
 
@@ -101,7 +123,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.artWorkResult.collect { pagingData ->
-                    artworkPagingAdapter.submitData(pagingData)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        artworkPagingAdapter.submitData(pagingData)
+                    }
                 }
             }
         }
