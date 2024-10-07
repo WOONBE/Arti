@@ -30,10 +30,13 @@ datastore = "1.1.1"
 paging3 = "3.1.1"
 #piechart
 piechart = "v3.1.0"
+
+loggingInterceptor = "4.9.1"
+
 #AR
 
-
 [libraries]
+logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

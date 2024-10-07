@@ -8,6 +8,7 @@ import com.hexa.arti.network.HomeApi
 import com.hexa.arti.network.LoginApi
 import com.hexa.arti.network.MemberApi
 import com.hexa.arti.network.SignUpApi
+import com.hexa.arti.network.UserAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,4 +61,9 @@ object ApiModule {
     @Provides
     fun provideMemberApiService(@Named("arti") retrofit: Retrofit): MemberApi =
         retrofit.create(MemberApi::class.java)
+
+    @Singleton
+    @Provides
+    fun provideUserApiService(@Named("arti") retrofit: Retrofit): UserAPI =
+        retrofit.create(UserAPI::class.java)
 }

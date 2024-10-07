@@ -16,6 +16,8 @@ import com.hexa.arti.repository.MemberRepository
 import com.hexa.arti.repository.MemberRepositoryImpl
 import com.hexa.arti.repository.SignUpRepository
 import com.hexa.arti.repository.SignUpRepositoryImpl
+import com.hexa.arti.repository.UserRepository
+import com.hexa.arti.repository.UserRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -73,4 +75,10 @@ interface RepositoryModule {
     fun bindMemberRepository(
         memberRepositoryImpl: MemberRepositoryImpl
     ): MemberRepository
+
+    @Singleton
+    @Binds
+    fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 }

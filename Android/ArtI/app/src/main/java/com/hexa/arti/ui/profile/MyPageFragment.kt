@@ -12,8 +12,9 @@ import com.hexa.arti.databinding.FragmentMyPageBinding
 import com.hexa.arti.ui.MainActivity
 import com.hexa.arti.ui.setting.SettingFragmentDirections
 import com.hexa.arti.util.navigate
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page){
 
     override fun init() {
