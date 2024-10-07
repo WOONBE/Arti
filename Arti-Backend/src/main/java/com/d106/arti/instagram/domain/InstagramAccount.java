@@ -1,7 +1,6 @@
 package com.d106.arti.instagram.domain;
 
 import com.d106.arti.member.domain.Member;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,9 +25,6 @@ public class InstagramAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    @Column(nullable = false, unique = true)
-    private String instagramUsername;
 
     // Member와 1:1 관계 설정
     @OneToOne
