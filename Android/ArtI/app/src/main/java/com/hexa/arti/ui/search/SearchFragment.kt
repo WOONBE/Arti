@@ -22,7 +22,9 @@ import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
 import com.hexa.arti.ui.search.adapter.GalleryAdapter
+import com.hexa.arti.ui.search.genre.GenreDetailFragmentDirections
 import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -36,8 +38,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         Log.d("확인", "미술관 아이템 클릭")
     }
 
-    private val artworkPagingAdapter = ArtworkPagingAdapter {
-        Log.d("확인", "페이징 아이템 클릭")
+    private val artworkPagingAdapter = ArtworkPagingAdapter { artwork ->
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToArtDetailFragment(
+                imgId = artwork.artworkId,
+                imgTitle = artwork.title,
+                imgUrl = artwork.imageUrl,
+                imgYear = artwork.year,
+                imgArtist = artwork.artist.toString(),
+                galleryId = -1,
+            )
+        navigate(action)
     }
 
     private val artistAdapter = ArtistAdapter { artist ->

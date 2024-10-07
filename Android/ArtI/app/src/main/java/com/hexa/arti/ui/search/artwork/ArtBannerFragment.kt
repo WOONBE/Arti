@@ -9,8 +9,9 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentArtBannerBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
-import com.hexa.arti.util.LoadingDialog
+import com.hexa.arti.ui.search.genre.GenreDetailFragmentDirections
 import com.hexa.arti.util.LoadingRecommendDialog
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,8 +26,17 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     private val viewModel: ArtBannerViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
-    val artAdapter = ArtworkAdapter {
-        Log.d("확인", "작품 클릭 확인")
+    private val artAdapter = ArtworkAdapter { artwork ->
+        val action =
+            ArtBannerFragmentDirections.actionArtBannerFragmentToArtDetailFragment(
+                imgId = artwork.artworkId,
+                imgTitle = artwork.title,
+                imgUrl = artwork.imageUrl,
+                imgYear = artwork.year,
+                imgArtist = artwork.artist.toString(),
+                galleryId = -1,
+            )
+        navigate(action)
     }
 
 
@@ -60,8 +70,7 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     }
 
     fun showLoadingDialog() {
-        Log.d("확인","이거호출")
-        if(!isShowDialog){
+        if (!isShowDialog) {
             isShowDialog = true
             loadingDialog = LoadingRecommendDialog()
             loadingDialog.isCancelable = false
@@ -70,8 +79,7 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     }
 
     fun hideLoadingDialog() {
-        Log.d("확인","이거호출2")
-        if(isShowDialog){
+        if (isShowDialog) {
             isShowDialog = false
             loadingDialog.dismiss()
         }

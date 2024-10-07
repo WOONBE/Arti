@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_searchFragment_to_artistDetailFragment"
             app:destination="@id/artistDetailFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/artworkUploadFragment"
@@ -129,7 +132,11 @@
     <fragment
         android:id="@+id/artBannerFragment"
         android:name="com.hexa.arti.ui.search.artwork.ArtBannerFragment"
-        android:label="ArtBannerFragment" />
+        android:label="ArtBannerFragment" >
+        <action
+            android:id="@+id/action_artBannerFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/myPageFragment"
         android:name="com.hexa.arti.ui.profile.MyPageFragment"
@@ -264,6 +271,9 @@
             android:name="genreName"
             app:argType="string"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_genreDetailFragment_to_artDetailFragment"
+            app:destination="@id/artDetailFragment" />
 
     </fragment>
     <fragment
