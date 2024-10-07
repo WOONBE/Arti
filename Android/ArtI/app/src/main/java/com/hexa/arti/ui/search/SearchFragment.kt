@@ -14,15 +14,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
-import com.hexa.arti.ui.search.adapter.ArtworkAdapter
 import com.hexa.arti.ui.search.adapter.GalleryAdapter
-import com.hexa.arti.ui.search.genre.GenreDetailFragmentDirections
 import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +34,7 @@ import kotlinx.coroutines.launch
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search) {
 
     private val viewModel: SearchViewModel by viewModels()
+
 
     private val galleryAdapter = GalleryAdapter {
         Log.d("확인", "미술관 아이템 클릭")
@@ -56,6 +58,15 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     }
 
     override fun init() {
+
+        artworkPagingAdapter.addLoadStateListener { loadStates ->
+            if (loadStates.refresh is LoadState.NotLoading && artworkPagingAdapter.itemCount == 0) {
+                binding.tvNoResultArtwork.visibility = View.VISIBLE
+            } else if (loadStates.refresh is LoadState.NotLoading) {
+                binding.tvNoResultArtwork.visibility = View.GONE
+            }
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -91,12 +102,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.artWorkResult.collect { pagingData ->
                     artworkPagingAdapter.submitData(pagingData)
-                    Log.d("확인","유닛 카운트 ${artworkPagingAdapter.itemCount}")
-                    if(artworkPagingAdapter.itemCount == 0){
-                        binding.tvNoResultArtwork.visibility = View.VISIBLE
-                    } else{
-                        binding.tvNoResultArtwork.visibility = View.GONE
-                    }
                 }
             }
         }
@@ -115,7 +120,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             if (it.isEmpty()) {
                 binding.tvNoResultArtMuseum.visibility = View.VISIBLE
             } else {
-                binding.tvNoResultArtist.visibility = View.GONE
+                binding.tvNoResultArtMuseum.visibility = View.GONE
             }
             galleryAdapter.submitList(it)
         }
