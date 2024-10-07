@@ -22,9 +22,8 @@ class HomeFragment :
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
 
     private val viewpageAdapter = ViewpageAdapter(
-        onPlayClick = { itemNumber ->
-            Log.d("확인", "클릭 확인요 ${itemNumber}")
-            val action = HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(1)
+        onPlayClick = { item ->
+            val action = HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(item.homeGallery.galleryId)
             navigate(action)
         },
         onSliding = {

@@ -13,7 +13,7 @@ interface MemberApi {
         @Path("galleryId") galleryId: Int,
     ): Response<PostSubscribeResponse>
 
-    @POST("members/{memberId}/subscribe/{galleryId}")
+    @POST("members/{memberId}/unsubscribe/{galleryId}")
     suspend fun postUnsubscribe(
         @Path("memberId") memberId: Int,
         @Path("galleryId") galleryId: Int,

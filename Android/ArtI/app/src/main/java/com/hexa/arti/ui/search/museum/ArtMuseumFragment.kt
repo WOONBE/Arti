@@ -1,7 +1,5 @@
 package com.hexa.arti.ui.search.museum
 
-import android.graphics.Color
-import android.graphics.drawable.VectorDrawable
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
@@ -15,9 +13,11 @@ import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
 import com.hexa.arti.ui.MainActivityViewModel
+import com.hexa.arti.ui.home.HomeFragmentDirections
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
 import com.hexa.arti.ui.search.adapter.PreviewAdapter
 import com.hexa.arti.util.asHomeTheme
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,13 +73,8 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         }
 
         viewModel.subscriptionGallery.observe(viewLifecycleOwner) {
-            Log.d("확인", "구독목록 ${it}")
             if (it.any { it.galleryId == args.gallery.galleryId }) {
-                val drawable = binding.ivBookmark.drawable
-                if (drawable is VectorDrawable) {
-                    drawable.mutate()
-                    drawable.setTint(Color.parseColor("#386BF6"))
-                }
+                binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 isBookmarked = true
             }
         }
@@ -127,18 +122,10 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
 
         binding.ivBookmark.setOnClickListener {
             if (isBookmarked) {
-                val drawable = binding.ivBookmark.drawable
-                if (drawable is VectorDrawable) {
-                    drawable.mutate()
-                    drawable.setTint(Color.parseColor("#000000"))
-                }
+                binding.ivBookmark.setImageResource(R.drawable.ic_unbookmark)
                 viewModel.unSubscribe(memberId, args.gallery.galleryId)
             } else {
-                val drawable = binding.ivBookmark.drawable
-                if (drawable is VectorDrawable) {
-                    drawable.mutate()
-                    drawable.setTint(Color.parseColor("#386BF6"))
-                }
+                binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 viewModel.subscribe(memberId, args.gallery.galleryId)
             }
 
@@ -146,6 +133,10 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
 
         binding.tvMuseumTitle.text = gallery.name
         binding.tvIntroduceContent.text = gallery.description
+
+        binding.ivPlay.setOnClickListener {
+            navigate(ArtMuseumFragmentDirections.actionArtMuseumFragmentToArtGalleryDetailFragment(args.gallery.galleryId))
+        }
 
     }
 
