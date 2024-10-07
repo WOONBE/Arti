@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,14 +31,13 @@ public class InstagramController {
     }
 
     @GetMapping("/callback")
-    public ResponseEntity<String> callback(@RequestParam("code") String code) {
-        String codeWithSuffix = code.split("#")[0];
-        return ResponseEntity.ok(codeWithSuffix);
+    public ResponseEntity<String> callback() {
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/save-token")
     public ResponseEntity<?> saveToken(@RequestBody SaveTokenRequest request) {
-        System.out.println(request.getCode());
+        System.out.println(request.getUrl());
         return ResponseEntity.ok().build();
     }
 }

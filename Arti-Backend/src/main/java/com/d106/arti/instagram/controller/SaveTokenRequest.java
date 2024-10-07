@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public class SaveTokenRequest {
 
-    private String code;
+    private String url;
 }
