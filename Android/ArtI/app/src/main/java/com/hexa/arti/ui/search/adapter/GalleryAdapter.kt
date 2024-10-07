@@ -11,12 +11,12 @@ import com.hexa.arti.data.model.response.GetSearchGalleryResponse
 import com.hexa.arti.databinding.ItemArtMuseumBinding
 
 class GalleryAdapter(
-    private val onItemClick: () -> Unit
+    private val onItemClick: (GetSearchGalleryResponse) -> Unit
 ) : ListAdapter<GetSearchGalleryResponse, GalleryAdapter.GalleryViewHolder>(GalleryDiffUtil()) {
 
     class GalleryViewHolder(
         private val binding: ItemArtMuseumBinding,
-        private val onItemClick: () -> Unit
+        private val onItemClick: (GetSearchGalleryResponse) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(gallery: GetSearchGalleryResponse) {
@@ -29,7 +29,7 @@ class GalleryAdapter(
             binding.tvArtTitle.text = gallery.name
 
             itemView.setOnClickListener {
-                onItemClick()
+                onItemClick(gallery)
             }
         }
     }

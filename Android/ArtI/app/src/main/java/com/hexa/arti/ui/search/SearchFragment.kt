@@ -1,7 +1,6 @@
 package com.hexa.arti.ui.search
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -15,9 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
-import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Artist
@@ -25,6 +22,7 @@ import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
 import com.hexa.arti.ui.search.adapter.GalleryAdapter
 import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
+import com.hexa.arti.util.asGalleryBanner
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,8 +34,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     private val viewModel: SearchViewModel by viewModels()
 
 
-    private val galleryAdapter = GalleryAdapter {
-        Log.d("확인", "미술관 아이템 클릭")
+    private val galleryAdapter = GalleryAdapter { gallery ->
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToArtMuseumFragment(gallery.asGalleryBanner())
+        navigate(action)
     }
 
     private val artworkPagingAdapter = ArtworkPagingAdapter { artwork ->

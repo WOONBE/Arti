@@ -46,6 +46,9 @@
         <action
             android:id="@+id/action_searchFragment_to_artDetailFragment"
             app:destination="@id/artDetailFragment" />
+        <action
+            android:id="@+id/action_searchFragment_to_artMuseumFragment"
+            app:destination="@id/artMuseumFragment" />
     </fragment>
     <fragment
         android:id="@+id/artworkUploadFragment"
