@@ -1,6 +1,5 @@
 package com.hexa.arti.ui.profile
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -40,6 +39,14 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             initChart(genres)
         }
 
+        mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
+            if (state == MainActivityViewModel.PORTFOLIO_FRAGMENT) {
+                portfolioViewModel.resultGenres.value?.let {
+                    initChart(it)
+                }
+            }
+        }
+
         portfolioViewModel.resultArtist.observe(viewLifecycleOwner) { artists ->
 
             Glide.with(requireContext())
@@ -77,45 +84,40 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     }
 
     private fun initViews() {
-        mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
-            if (state == MainActivityViewModel.PORTFOLIO_FRAGMENT) {
-                portfolioViewModel.resultGenres.value?.let {
-                    initChart(it)
-
-                }
-            }
-        }
 
         binding.tvRepresentGenre1.setOnClickListener {
             binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre1.text}"
-            val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre1.text.toString()]
-            englishName?.let{
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre1.text.toString()]
+            englishName?.let {
                 getRepresentArtists(it)
             }
         }
 
         binding.tvRepresentGenre2.setOnClickListener {
             binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre2.text}"
-            val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
-            englishName?.let{
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
+            englishName?.let {
                 getRepresentArtists(it)
             }
         }
 
         binding.tvRepresentGenre3.setOnClickListener {
             binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre3.text}"
-            val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
-            englishName?.let{
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
+            englishName?.let {
                 getRepresentArtists(it)
             }
         }
     }
 
     private fun initChart(genres: List<PortfolioGenre>) {
-
+        if (genres.isEmpty()) return
         updateGenreViews(genres)
         val englishName = ApplicationClass.KOREAN_TO_ENGLISH_MAP[genres[0].genre]
-        englishName?.let{
+        englishName?.let {
             getRepresentArtists(it)
         }
 
@@ -213,11 +215,11 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
     }
 
-    private fun getRepresentArtists(genre: String){
+    private fun getRepresentArtists(genre: String) {
         portfolioViewModel.getRepresentArtists(genre)
     }
 
-    private fun initUserData(){
+    private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
             mainActivityViewModel.getLoginData().collect { userData ->
                 userData?.let {
@@ -230,7 +232,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
     override fun onResume() {
         super.onResume()
-        if(userId >= 0) {
+        if (userId >= 0) {
             portfolioViewModel.getPortfolio(userId)
         }
     }
