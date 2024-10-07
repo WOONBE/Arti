@@ -1,12 +1,10 @@
 package com.d106.arti.instagram.service;
 
-import com.d106.arti.member.domain.InstagramAccount;
+import com.d106.arti.instagram.domain.InstagramAccount;
 import com.d106.arti.member.domain.Member;
-import com.d106.arti.member.domain.OauthToken;
 import com.d106.arti.member.dto.request.InstagramTokenRequest;
 import com.d106.arti.member.dto.response.InstagramTokenResponse;
-import com.d106.arti.member.repository.InstagramAccountRepository;
-import com.d106.arti.member.repository.OauthTokenRepository;
+import com.d106.arti.instagram.repository.InstagramAccountRepository;
 import java.security.Principal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +19,6 @@ import reactor.core.publisher.Mono;
 public class InstagramAccountService {
 
     private final InstagramAccountRepository instagramAccountRepository;
-    private final OauthTokenRepository oauthTokenRepository;
     private final WebClient webClient;
 
     @Value("${spring.security.oauth2.client.registration.instagram.client-id}")
@@ -43,17 +40,12 @@ public class InstagramAccountService {
         String tokenUrl = "https://api.instagram.com/oauth/access_token";
 
         // POST 요청을 위한 파라미터 설정
-        InstagramTokenRequest tokenRequest = new InstagramTokenRequest(
-            clientId, clientSecret, "authorization_code", redirectUri, code
-        );
+        InstagramTokenRequest tokenRequest = new InstagramTokenRequest(clientId, clientSecret,
+            "authorization_code", redirectUri, code);
 
         // WebClient를 사용하여 비동기 방식으로 토큰 요청
-        InstagramTokenResponse tokenResponse = webClient.post()
-            .uri(tokenUrl)
-            .bodyValue(tokenRequest)
-            .retrieve()
-            .bodyToMono(InstagramTokenResponse.class)
-            .block();
+        InstagramTokenResponse tokenResponse = webClient.post().uri(tokenUrl)
+            .bodyValue(tokenRequest).retrieve().bodyToMono(InstagramTokenResponse.class).block();
 
         if (tokenResponse != null) {
             // 받은 토큰 저장 및 Instagram 계정 연동
@@ -61,31 +53,31 @@ public class InstagramAccountService {
 
             // InstagramAccount 엔티티에 저장
             InstagramAccount instagramAccount = InstagramAccount.builder()
-                .instagramEmail(instagramUsername)  // username을 email 대신 사용
-                .member(loggedInMember)  // 현재 로그인한 Member와 연동
+                .instagramUsername(instagramUsername)  // username을 email 대신 사용
+                .member(member)  // 현재 로그인한 Member와 연동
                 .build();
 
             instagramAccountRepository.save(instagramAccount);  // 저장
+
+
         } else {
             throw new RuntimeException("Failed to retrieve access token from Instagram");
         }
     }
 
-    public Mono<String> getInstagramMediaUrls() {
-        Member currentMember = getCurrentLoggedInMember(); // 현재 로그인한 회원을 가져옴
+    public Mono<String> getInstagramMediaUrls(Principal connectedUser) {
+        Member currentMember = (Member) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         // 회원의 Instagram 계정 정보 가져오기
-        OauthToken oauthToken = oauthTokenRepository.findByMemberId(currentMember.getId())
+        InstagramAccount instagramAccount = instagramAccountRepository.findByMember(currentMember)
             .orElseThrow(() -> new RuntimeException("No Instagram account linked for this user."));
 
         // Instagram API에서 media_url 필드만 가져오기
         String url = "https://graph.instagram.com/me/media?fields=media_url&access_token="
-            + oauthToken.getAccessToken();
+            + instagramAccount.getAccessToken();
 
         // WebClient로 비동기 방식으로 Instagram API에서 media_url 필드만 가져오기
-        return webClient.get()
-            .uri(url)
-            .retrieve()
+        return webClient.get().uri(url).retrieve()
             .bodyToMono(String.class); // 응답을 String으로 변환하고 비동기로 처리
     }
 }

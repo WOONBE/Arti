@@ -1,7 +1,9 @@
 package com.d106.arti.instagram.controller;
 
+import com.d106.arti.instagram.service.InstagramAccountService;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class InstagramController {
 
+    private final InstagramAccountService instagramAccountService;
     @Value("${spring.security.oauth2.client.registration.instagram.client-id}")
     private String clientId;
 
@@ -40,12 +43,20 @@ public class InstagramController {
     }
 
     @PostMapping("/save-token")
-    public ResponseEntity<?> saveToken(@RequestBody SaveTokenRequest request)
-        throws URISyntaxException {
+    public ResponseEntity<?> saveToken(
+        @RequestBody SaveTokenRequest request,
+        Principal connectedUser
+    ) throws URISyntaxException {
         Map<String, String> queryParams = extractQueryParams(request.getUrl());
         String codeWithoutSuffix = queryParams.get("code").split("#")[0];
-
+        instagramAccountService.authenticateAndSaveToken(codeWithoutSuffix, connectedUser);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/media")
+    public ResponseEntity<?> getInstagramMediaUrls(Principal connectedUser) {
+        return ResponseEntity.ok(
+            instagramAccountService.getInstagramMediaUrls(connectedUser).block());
     }
 
     private static Map<String, String> extractQueryParams(String uriString)

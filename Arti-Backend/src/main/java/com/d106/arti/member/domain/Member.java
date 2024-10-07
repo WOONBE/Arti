@@ -1,6 +1,7 @@
 package com.d106.arti.member.domain;
 
 import com.d106.arti.global.common.BaseEntity;
+import com.d106.arti.instagram.domain.InstagramAccount;
 import jakarta.persistence.*;
 
 import jakarta.persistence.Column;
