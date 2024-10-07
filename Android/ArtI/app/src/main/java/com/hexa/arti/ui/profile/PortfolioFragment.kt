@@ -39,6 +39,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
     private fun initObserve() {
         myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner){
+            Log.d("확인", "initObserve: $it")
             binding.tvPortfolioTitle.text  = "${it}님의 포트폴리오"
         }
 

@@ -4,6 +4,7 @@ import com.hexa.arti.data.model.profile.ChangePass
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface UserAPI {
@@ -18,6 +19,6 @@ interface UserAPI {
         @Body password: ChangePass
     ) : Response<ResponseBody>
 
-    @POST("members/nickname")
+    @GET("members/nickname")
     suspend fun getNickname() : Response<String>
 }

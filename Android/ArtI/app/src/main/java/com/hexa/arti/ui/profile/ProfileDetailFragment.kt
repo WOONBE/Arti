@@ -44,6 +44,8 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
     }
 
     private fun initView(){
+
+
         profileDetailViewModel.successStatus.observe(viewLifecycleOwner){
             when(it){
                 1 ->{
@@ -66,8 +68,11 @@ class ProfileDetailFragment : BaseFragment<FragmentProfileDetailBinding>(R.layou
             }
 
         }
-
+        myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner){
+            binding.profileDetailNickEt.setText(it)
+        }
         with(binding){
+
             when(ars.detailType){
                 0-> {
                     profileDetailModifyCl.visibility = View.VISIBLE

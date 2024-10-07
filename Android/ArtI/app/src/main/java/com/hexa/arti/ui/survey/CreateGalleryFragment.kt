@@ -35,7 +35,7 @@ class CreateGalleryFragment :
 
     private val createGalleryViewModel: CreateGalleryViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
-    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
+    private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
     private val args: CreateGalleryFragmentArgs by navArgs()
     private lateinit var surveyList: String
     private var userId = 0
@@ -46,7 +46,8 @@ class CreateGalleryFragment :
             TAG,
             "init: ${args.surveyList[0]} ${args.surveyList[1]} ${args.surveyList[2]} ${args.surveyList[3]} ${args.surveyList[4]}"
         )
-        surveyList = "[${args.surveyList[0]},${args.surveyList[1]},${args.surveyList[2]},${args.surveyList[3]},${args.surveyList[4]}]"
+        surveyList =
+            "[${args.surveyList[0]},${args.surveyList[1]},${args.surveyList[2]},${args.surveyList[3]},${args.surveyList[4]}]"
         lifecycleScope.launch {
             mainActivityViewModel.getLoginData().collect { d ->
                 Log.d(TAG, "onCreate: $d")
@@ -142,21 +143,22 @@ class CreateGalleryFragment :
         var file = uriToFile(requireContext(), imageUri)
 
         val maxSize = 1024 * 1024 // 10MB
-        while(file.length() > maxSize) {
-        if (file.length() > maxSize) {
-            file = compressImage(file)
-        }
-        binding.createGalleryThumbnailIv.setImageURI(imageUri)
-        val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-        createGalleryViewModel.updateThumbnail(
-            MultipartBody.Part.createFormData(
-                "image",
-                file.name,
-                requestFile
+        while (file.length() > maxSize) {
+            if (file.length() > maxSize) {
+                file = compressImage(file)
+            }
+            binding.createGalleryThumbnailIv.setImageURI(imageUri)
+            val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+            createGalleryViewModel.updateThumbnail(
+                MultipartBody.Part.createFormData(
+                    "image",
+                    file.name,
+                    requestFile
+                )
             )
-        )
 
+
+        }
 
     }
-
 }
