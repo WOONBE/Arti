@@ -38,34 +38,33 @@ public class ArtistService {
             .collect(Collectors.toList());
     }
 
-        @Transactional(readOnly = true)
-        public List<ArtistResponse> searchByKorName(String korName) {
-            return artistRepository.findByKorNameContaining(korName)
-                .stream()
-                .map(ArtistResponse::toArtistResponse)
-                .collect(Collectors.toList());
+    @Transactional(readOnly = true)
+    public List<ArtistResponse> searchByKorName(String korName) {
+        return artistRepository.findByKorNameContaining(korName)
+            .stream()
+            .map(ArtistResponse::toArtistResponse)
+            .collect(Collectors.toList());
+    }
+    @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "searchArtists", key = "#keyword", sync = true, cacheManager = "rcm")
+    public List<ArtistResponse> search(String keyword) {
+        Set<Artist> resultSet = new HashSet<>();
+
+        if (keyword != null && !keyword.isEmpty()) {
+            resultSet.addAll(artistRepository.findByEngNameContaining(keyword));
+            resultSet.addAll(artistRepository.findByKorNameContaining(keyword));
         }
 
-        @Transactional(readOnly = true)
-//        @Cacheable(cacheNames = "searchKeyword", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
-        public List<ArtistResponse> search(String keyword) {
-            Set<Artist> resultSet = new HashSet<>();
+        List<ArtistResponse> resultList = resultSet.stream()
+            .map(ArtistResponse::toArtistResponse)
+            .collect(Collectors.toList());
 
-            if (keyword != null && !keyword.isEmpty()) {
-                resultSet.addAll(artistRepository.findByEngNameContaining(keyword));
-                resultSet.addAll(artistRepository.findByKorNameContaining(keyword));
-            }
-
-            List<ArtistResponse> resultList = resultSet.stream()
-                .map(ArtistResponse::toArtistResponse)
-                .collect(Collectors.toList());
-
-            if (resultList.isEmpty()) {
-                throw new BadRequestException(NOT_FOUND_ARTIST);
-            }
-
-            return resultList;
+        if (resultList.isEmpty()) {
+            throw new BadRequestException(NOT_FOUND_ARTIST);
         }
+
+        return resultList;
+    }
     // ID로 단건 조회
     @Transactional(readOnly = true)
     public ArtistResponse findArtistById(Integer artistId) {
@@ -76,7 +75,7 @@ public class ArtistService {
 
     // 캐시를 적용하여 50명의 화가를 랜덤하게 가져오는 메서드
     @Transactional(readOnly = true)
-//    @Cacheable(cacheNames = "randomArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
+    @Cacheable(cacheNames = "randomArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> getRandomArtists() {
         // 모든 화가를 가져온 후 랜덤하게 섞는다
         List<Artist> allArtists = artistRepository.findAll();
@@ -98,7 +97,7 @@ public class ArtistService {
 
     // 장르로 검색된 미술품들의 화가를 중복 없이 3명만 반환하는 메서드
     @Transactional(readOnly = true)
-//    @Cacheable(cacheNames = "genreArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
+    @Cacheable(cacheNames = "genreArtists", key = "#genreLabel", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> getArtistsByGenre(String genreLabel) {
 
         String formattedGenreLabel = genreLabel.trim().toUpperCase();
