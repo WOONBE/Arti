@@ -32,7 +32,7 @@ import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import com.d106.arti.storage.StorageService;
-import jakarta.persistence.EntityNotFoundException;
+
 import java.util.Collections;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -251,7 +251,7 @@ public class GalleryService {
                         .title(aiArtwork.getAiArtworkTitle()) // AI 작품의 제목 사용
                         .description(aiArtwork.getArtworkImage()) // 이미지를 설명으로 예시
                         .imageUrl(aiArtwork.getArtworkImage())
-//                        .year(aiArtwork.getCreateDate().toString())
+                        .year(aiArtwork.getYear())
                         .artist(aiArtwork.getMember().getNickname())
                         .build();
                 } else if (artwork instanceof NormalArtWork) {
@@ -392,6 +392,7 @@ public class GalleryService {
                                 .description(aiArtwork.getArtworkImage())
                                 .imageUrl(aiArtwork.getArtworkImage())
                                 .artist(aiArtwork.getMember().getNickname())
+                                .year(aiArtwork.getYear())
                                 .build();
                         } else if (artwork instanceof NormalArtWork) {
                             NormalArtWork normalArtwork = (NormalArtWork) artwork;

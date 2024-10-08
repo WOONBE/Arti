@@ -1,14 +1,9 @@
 package com.d106.arti.gallery.domain;
 
-import com.d106.arti.artwork.domain.AiArtwork;
-import com.d106.arti.artwork.domain.Artist;
 import com.d106.arti.artwork.domain.Artwork;
-import com.d106.arti.artwork.domain.ThemeArtwork;
 import com.d106.arti.artwork.domain.*;
 import com.d106.arti.global.common.BaseEntity;
-import com.d106.arti.member.domain.Member;
 import jakarta.persistence.*;
-import lombok.*;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

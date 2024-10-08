@@ -2,6 +2,7 @@ package com.d106.arti.login.service;
 
 import com.d106.arti.login.domain.Verification;
 import com.d106.arti.login.repository.VerificationRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class VerificationService {
 
+    @Autowired
     private final VerificationRepository verificationRepository;
 
     public VerificationService(VerificationRepository verificationRepository) {
@@ -39,6 +41,7 @@ public class VerificationService {
         return verification != null && verification.getExpiryDate().isAfter(LocalDateTime.now());  // 이메일이 존재하고 만료되지 않은 경우
     }
 
+    @Transactional  // 트랜잭션을 보장
     @Scheduled(fixedRate = 600000)  // 10분 간격으로 실행
     public void deleteExpiredCodes() {
         verificationRepository.deleteAllByExpiryDateBefore(LocalDateTime.now());

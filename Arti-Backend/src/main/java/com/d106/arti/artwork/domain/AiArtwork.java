@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -52,6 +54,10 @@ public class AiArtwork extends Artwork {
     @ManyToOne
     @JoinColumn(name = "THEME_ID") // 테마와의 외래 키
     private Theme theme;
+
+    @Column(name = "AI_YEAR")
+    @Builder.Default
+    private String year = String.valueOf(LocalDate.now().getYear());
 
 //    // 테마와 연관관계 메서드
 //    public void updateTheme(Theme theme) {

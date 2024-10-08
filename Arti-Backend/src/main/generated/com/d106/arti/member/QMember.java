@@ -1,8 +1,7 @@
-package com.d106.arti.member;
+package com.d106.arti.member_;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import com.d106.arti.member.domain.Member;
 import com.querydsl.core.types.dsl.*;
 
 import com.querydsl.core.types.PathMetadata;

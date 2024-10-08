@@ -1,10 +1,14 @@
 package com.d106.arti.artwork.service;
 
+import static com.d106.arti.global.exception.ExceptionCode.INVALID_GENRE;
 import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_ARTIST;
 
 import com.d106.arti.artwork.domain.Artist;
+import com.d106.arti.artwork.domain.NormalArtWork;
 import com.d106.arti.artwork.dto.response.ArtistResponse;
 import com.d106.arti.artwork.repository.ArtistRepository;
+import com.d106.arti.artwork.repository.ArtworkRepository;
+import com.d106.arti.gallery.domain.Genre;
 import com.d106.arti.global.exception.BadRequestException;
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArtistService {
 
     private final ArtistRepository artistRepository;
+    private final ArtworkRepository artworkRepository;
 
     @Transactional(readOnly = true)
     public List<ArtistResponse> searchByEngName(String engName) {
@@ -90,6 +95,43 @@ public class ArtistService {
             .map(ArtistResponse::toArtistResponse)
             .collect(Collectors.toList());
     }
+
+    // 장르로 검색된 미술품들의 화가를 중복 없이 3명만 반환하는 메서드
+    @Transactional(readOnly = true)
+    @Cacheable(value = "artistsByGenre", key = "#genreLabel")
+    public List<ArtistResponse> getArtistsByGenre(String genreLabel) {
+
+        String formattedGenreLabel = genreLabel.trim().toUpperCase();
+
+        Genre genre;
+        try {
+            genre = Genre.valueOf(formattedGenreLabel); // Enum 값이 존재하는지 확인
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException(INVALID_GENRE); // 유효하지 않은 장르일 경우 예외 처리
+        }
+
+
+        String genreLabelForSearch = formattedGenreLabel.replace("_", " ");
+
+
+        List<NormalArtWork> artworks = artworkRepository.findAllByGenreContaining(genreLabelForSearch);
+
+        // 5. 화가 중복 없이 최대 3명 선택
+        Set<Artist> uniqueArtists = new HashSet<>(); // 중복 제거를 위한 Set 사용
+        for (NormalArtWork artwork : artworks) {
+            if (uniqueArtists.size() < 3) {
+                uniqueArtists.add(artwork.getArtist());
+            } else {
+                break; // 화가가 3명이 되면 반복을 멈춤
+            }
+        }
+
+        // 6. 선택된 화가를 ArtistResponse로 변환하여 반환
+        return uniqueArtists.stream()
+                .map(ArtistResponse::toArtistResponse)
+                .collect(Collectors.toList());
+    }
+
 
 
 
