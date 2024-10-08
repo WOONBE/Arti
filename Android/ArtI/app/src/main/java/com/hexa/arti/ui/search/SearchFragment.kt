@@ -1,7 +1,6 @@
 package com.hexa.arti.ui.search
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -14,16 +13,20 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.search.Artist
 import com.hexa.arti.databinding.FragmentSearchBinding
 import com.hexa.arti.ui.search.adapter.ArtistAdapter
-import com.hexa.arti.ui.search.adapter.ArtworkAdapter
 import com.hexa.arti.ui.search.adapter.GalleryAdapter
 import com.hexa.arti.ui.search.paging.ArtworkPagingAdapter
+import com.hexa.arti.util.asGalleryBanner
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -32,19 +35,58 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     private val viewModel: SearchViewModel by viewModels()
 
-    private val galleryAdapter = GalleryAdapter {
-        Log.d("확인", "미술관 아이템 클릭")
+
+    private val galleryAdapter = GalleryAdapter { gallery ->
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToArtMuseumFragment(gallery.asGalleryBanner())
+        navigate(action)
     }
 
-    private val artworkPagingAdapter = ArtworkPagingAdapter {
-        Log.d("확인", "페이징 아이템 클릭")
+    private val artworkPagingAdapter = ArtworkPagingAdapter { artwork ->
+        val action =
+            SearchFragmentDirections.actionSearchFragmentToArtDetailFragment(
+                imgId = artwork.artworkId,
+                imgTitle = artwork.title,
+                imgUrl = artwork.imageUrl,
+                imgYear = artwork.year,
+                imgArtist = artwork.artist.toString(),
+                galleryId = -1,
+            )
+        navigate(action)
     }
 
     private val artistAdapter = ArtistAdapter { artist ->
         moveToArtistDetailFragment(artist)
     }
 
+    private fun updateConstraintForArtist() {
+        val constraintSet = ConstraintSet()
+
+        constraintSet.clone(binding.clSearchResult)
+
+        constraintSet.connect(
+            R.id.tv_artist_result,
+            ConstraintSet.TOP,
+            R.id.rv_art_result,
+            ConstraintSet.BOTTOM
+        )
+
+        constraintSet.applyTo(binding.clSearchResult)
+    }
+
     override fun init() {
+
+        artworkPagingAdapter.addLoadStateListener { loadStates ->
+            CoroutineScope(Dispatchers.Main).launch {
+                if (loadStates.refresh is LoadState.NotLoading && artworkPagingAdapter.itemCount == 0) {
+                    binding.tvNoResultArtwork.visibility = View.VISIBLE
+                } else if (loadStates.refresh is LoadState.NotLoading) {
+                    binding.tvNoResultArtwork.visibility = View.GONE
+                    updateConstraintForArtist()
+                }
+            }
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -79,7 +121,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.artWorkResult.collect { pagingData ->
-                    artworkPagingAdapter.submitData(pagingData)
+                    CoroutineScope(Dispatchers.Main).launch {
+                        artworkPagingAdapter.submitData(pagingData)
+                    }
                 }
             }
         }
@@ -96,10 +140,11 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
         viewModel.galleriesResult.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
-                galleryAdapter.submitList(it)
+                binding.tvNoResultArtMuseum.visibility = View.VISIBLE
             } else {
-                galleryAdapter.submitList(it)
+                binding.tvNoResultArtMuseum.visibility = View.GONE
             }
+            galleryAdapter.submitList(it)
         }
 
     }
@@ -302,7 +347,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     override fun onResume() {
         super.onResume()
         if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
-
     }
 
 

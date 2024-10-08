@@ -1,14 +1,13 @@
 package com.hexa.arti.ui.search.genre
 
-import android.util.Log
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentGenreDetailBinding
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,8 +17,17 @@ class GenreDetailFragment :
     private val args: GenreDetailFragmentArgs by navArgs()
     private val viewModel: GenreDetailViewModel by viewModels()
 
-    val artAdapter = ArtworkAdapter {
-        Log.d("확인", "클릭 확인")
+    private val artAdapter = ArtworkAdapter { artwork ->
+        val action =
+            GenreDetailFragmentDirections.actionGenreDetailFragmentToArtDetailFragment(
+                imgId = artwork.artworkId,
+                imgTitle = artwork.title,
+                imgUrl = artwork.imageUrl,
+                imgYear = artwork.year,
+                imgArtist = artwork.artist.toString(),
+                galleryId = -1,
+            )
+        navigate(action)
     }
 
 
@@ -27,11 +35,13 @@ class GenreDetailFragment :
         initViews()
         initObserve()
 
-        viewModel.getGenreRandomData(args.genreName)
+        if (viewModel.resultArtwork.value == null) {
+            viewModel.getGenreRandomData(args.genreName)
+        }
     }
 
-    private fun initObserve(){
-        viewModel.resultArtwork.observe(viewLifecycleOwner){ resultArtworks ->
+    private fun initObserve() {
+        viewModel.resultArtwork.observe(viewLifecycleOwner) { resultArtworks ->
             artAdapter.submitList(resultArtworks)
         }
     }
