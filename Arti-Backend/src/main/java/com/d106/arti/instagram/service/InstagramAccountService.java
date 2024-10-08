@@ -1,6 +1,7 @@
 package com.d106.arti.instagram.service;
 
 import com.d106.arti.instagram.domain.InstagramAccount;
+import com.d106.arti.instagram.domain.JsonResponse;
 import com.d106.arti.instagram.repository.InstagramAccountRepository;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.dto.response.InstagramTokenResponse;
@@ -75,7 +76,7 @@ public class InstagramAccountService {
         }
     }
 
-    public Mono<String> getInstagramMediaUrls(Principal connectedUser) {
+    public Mono<JsonResponse> getInstagramMediaUrls(Principal connectedUser) {
         Member currentMember = (Member) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         // 회원의 Instagram 계정 정보 가져오기
@@ -88,6 +89,6 @@ public class InstagramAccountService {
 
         // WebClient로 비동기 방식으로 Instagram API에서 media_url 필드만 가져오기
         return webClient.get().uri(url).retrieve()
-            .bodyToMono(String.class); // 응답을 String으로 변환하고 비동기로 처리
+            .bodyToMono(JsonResponse.class); // 응답을 String으로 변환하고 비동기로 처리
     }
 }
