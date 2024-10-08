@@ -42,6 +42,7 @@ public class ArtistService {
         }
 
         @Transactional(readOnly = true)
+        @Cacheable(cacheNames = "searchKeyword", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
         public List<ArtistResponse> search(String keyword) {
             Set<Artist> resultSet = new HashSet<>();
 
@@ -70,7 +71,7 @@ public class ArtistService {
 
     // 캐시를 적용하여 50명의 화가를 랜덤하게 가져오는 메서드
     @Transactional(readOnly = true)
-    @Cacheable(value = "randomArtistsCache", key = "'artists-50'")
+    @Cacheable(cacheNames = "randomArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> getRandomArtists() {
         // 모든 화가를 가져온 후 랜덤하게 섞는다
         List<Artist> allArtists = artistRepository.findAll();
