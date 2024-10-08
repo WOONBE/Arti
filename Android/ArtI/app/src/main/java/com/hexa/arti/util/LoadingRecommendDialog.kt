@@ -25,7 +25,7 @@ class LoadingRecommendDialog : DialogFragment() {
         super.onStart()
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+            resources.displayMetrics.heightPixels
         )
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }

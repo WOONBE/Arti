@@ -128,6 +128,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
                 binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 viewModel.subscribe(memberId, args.gallery.galleryId)
             }
+            isBookmarked = !isBookmarked
 
         }
 

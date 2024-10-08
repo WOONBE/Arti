@@ -76,7 +76,7 @@ class ArtMuseumViewModel @Inject constructor(
             memberRepository.postUnsubscribe(memberId, galleryId).onSuccess {
                 _subscribeResult.value = it.message
             }.onFailure {
-                _subscribeResult.value = "네트워크 오류! 구독 실패"
+                _subscribeResult.value = "네트워크 오류! 구독 취소 실패"
             }
         }
     }
