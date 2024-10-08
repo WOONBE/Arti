@@ -3,6 +3,7 @@ package com.hexa.arti.ui.artwork
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -19,11 +20,12 @@ class ArtworkUploadFragment :
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.artwork_fade_in)
         if (mainActivity.isUp) {
             startProgressBarAnimation(0, 20)
-        }else {
+        } else {
             startProgressBarAnimation(40, 20)
         }
         with(binding) {
             artworkBackBtn.setOnClickListener {
+                mainActivity.isUp = true
                 popBackStack()
             }
             artworkNextBtn.setOnClickListener {
@@ -35,6 +37,14 @@ class ArtworkUploadFragment :
             artworkNextBtn.startAnimation(fadeInAnimation)
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    mainActivity.isUp = true
+                    popBackStack()
+                }
+            })
     }
 
     private fun startProgressBarAnimation(start: Int, end: Int) {

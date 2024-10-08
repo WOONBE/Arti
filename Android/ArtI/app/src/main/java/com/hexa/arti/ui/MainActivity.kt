@@ -58,7 +58,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
                 mainActivityViewModel.getLoginData().collect { d ->
                     Log.d(TAG, "onCreate: ${d?.galleryId}")
-                    Log.d("확인","메인에서 콜렉트 불림")
                     userData = d
                     if(d?.galleryId == -1){
                         isFirst = true

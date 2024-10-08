@@ -40,7 +40,6 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
     private fun initObserve() {
         myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner) {
-            Log.d("확인", "initObserve: $it")
             binding.tvPortfolioTitle.text = "${it}님의 포트폴리오"
         }
 
@@ -61,6 +60,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             val fadeInAnimation =
                 AnimationUtils.loadAnimation(requireContext(), R.anim.artist_fade_in_slide_left)
 
+            Log.d("확인","아티스트 ${artists}")
             Glide.with(requireContext())
                 .load(artists[0].imageUrl)
                 .error(R.drawable.temp_represent_artist)
@@ -253,7 +253,6 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
             mainActivityViewModel.getLoginData().collect { userData ->
-                Log.d("확인", "포폴에서 콜렉트 불림")
                 userData?.let {
                     portfolioViewModel.getPortfolio(it.memberId)
                     userId = it.memberId
