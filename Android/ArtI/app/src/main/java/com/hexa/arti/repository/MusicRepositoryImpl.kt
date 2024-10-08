@@ -15,24 +15,39 @@ class MusicRepositoryImpl @Inject constructor(
 ) : MusicRepository {
 
     override suspend fun postMusic(galleryId: Int): Result<MusicDto> {
-       val result =  musicApi.postMusic(galleryId)
-        Log.d("확인", "postMusic: $result")
-        if (result.isSuccessful) {
-            result.body()?.let {
-                return Result.success(it)
+        return try {
+            val result = musicApi.postMusic(galleryId)
+            Log.d("확인", "postMusic: $result")
+
+            if (result.isSuccessful) {
+                result.body()?.let { musicDto ->
+                    return Result.success(musicDto)
+                }
+                Log.e("확인", "응답 본문이 null입니다.")
+                return Result.failure(Exception("응답 본문이 null입니다."))
+            } else {
+                val errorBody = result.errorBody()?.string()
+                Log.e("확인", "postMusic 실패: $errorBody")
+
+                try {
+                    val errorResponse = Gson().fromJson(errorBody, ErrorResponse::class.java)
+                    return Result.failure(
+                        ApiException(
+                            code = errorResponse.code,
+                            message = errorResponse.message
+                        )
+                    )
+                } catch (e: Exception) {
+                    Log.e("확인", "ErrorResponse 파싱 오류: ${e.message}")
+                    return Result.failure(Exception("서버 오류: $errorBody"))
+                }
             }
-            return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
+        } catch (e: Exception) {
+            Log.e("확인", "네트워크 또는 JSON 파싱 오류: ${e.message}")
+            return Result.failure(e)
         }
     }
+
 
     override suspend fun getMusic(galleryId: Int): Result<Response<ResponseBody>> {
         val result = musicApi.getMusic(galleryId)
