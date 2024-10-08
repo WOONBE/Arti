@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: net.logstash.logback:logstash-logback-encoder:8.0" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="net.logstash.logback" artifactId="logstash-logback-encoder" version="8.0" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.logstash.logback/logstash-logback-encoder/8.0/73a2ae828d20f710be8439af3c1a53d21a62dc0f/logstash-logback-encoder-8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
