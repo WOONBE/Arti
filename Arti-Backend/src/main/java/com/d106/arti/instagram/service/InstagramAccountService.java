@@ -2,10 +2,12 @@ package com.d106.arti.instagram.service;
 
 import com.d106.arti.instagram.domain.InstagramAccount;
 import com.d106.arti.instagram.domain.JsonResponse;
+import com.d106.arti.instagram.domain.Media;
 import com.d106.arti.instagram.repository.InstagramAccountRepository;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.dto.response.InstagramTokenResponse;
 import java.security.Principal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
@@ -76,7 +77,7 @@ public class InstagramAccountService {
         }
     }
 
-    public Mono<JsonResponse> getInstagramMediaUrls(Principal connectedUser) {
+    public List<String> getInstagramMediaUrls(Principal connectedUser) {
         Member currentMember = (Member) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
 
         // 회원의 Instagram 계정 정보 가져오기
@@ -88,7 +89,13 @@ public class InstagramAccountService {
             + instagramAccount.getAccessToken();
 
         // WebClient로 비동기 방식으로 Instagram API에서 media_url 필드만 가져오기
-        return webClient.get().uri(url).retrieve()
-            .bodyToMono(JsonResponse.class); // 응답을 String으로 변환하고 비동기로 처리
+        JsonResponse response = webClient.get().uri(url).retrieve()
+            .bodyToMono(JsonResponse.class).block();// 응답을 String으로 변환하고 비동기로 처리
+
+        if (response.getData() == null) {
+            throw new RuntimeException("Failed to retrieve instagram media from Instagram");
+        }
+
+        return response.getData().stream().limit(5).map(Media::getMedia_url).toList();
     }
 }

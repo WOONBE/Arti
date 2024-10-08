@@ -57,7 +57,7 @@ public class InstagramController {
     @GetMapping("/media")
     public ResponseEntity<?> getInstagramMediaUrls(Principal connectedUser) {
         return ResponseEntity.ok(
-            instagramAccountService.getInstagramMediaUrls(connectedUser).block());
+            instagramAccountService.getInstagramMediaUrls(connectedUser));
     }
 
     private static Map<String, String> extractQueryParams(String uriString)
