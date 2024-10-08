@@ -38,6 +38,7 @@ public class ArtworkService {
 
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "searchArtworks", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public Page<NormalArtworkResponse> searchArtworks(String keyword, int page) {
         // 페이지당 30개씩 처리하도록 Pageable 설정 (페이지 번호는 0부터 시작하므로 -1 처리)
         Pageable pageable = PageRequest.of(page - 1, 30);
@@ -65,7 +66,7 @@ public class ArtworkService {
 
     // 캐시를 적용하여 50개의 미술품을 랜덤하게 가져오는 메서드
     @Transactional(readOnly = true)
-    @Cacheable(value = "randomArtworksCache", key = "'artworks-50'")
+    @Cacheable(cacheNames = "ramdomArtworks", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtworkResponse> getRandomArtworks() {
         // 모든 미술품을 가져온 후 랜덤하게 섞는다
         List<NormalArtWork> artworks = artworkRepository.findAll();
