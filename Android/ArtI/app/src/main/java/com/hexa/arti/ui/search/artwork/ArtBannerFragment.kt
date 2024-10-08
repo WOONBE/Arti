@@ -1,7 +1,11 @@
 package com.hexa.arti.ui.search.artwork
 
+import android.view.View.GONE
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -51,10 +55,14 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     }
 
     private fun initUserData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            mainActivityViewModel.getLoginData().collect { userData ->
-                userData?.let {
-                    viewModel.getRecommendArtworks(userData.memberId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    mainActivityViewModel.getLoginData().collect { userData ->
+                        userData?.let {
+                            viewModel.getRecommendArtworks(userData.memberId)
+                        }
+                    }
                 }
             }
         }
