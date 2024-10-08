@@ -122,6 +122,7 @@ public class GalleryService {
 
     // 1. 특정 미술관 id를 받아서 테마 전체 조회되게 변경
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "themesByGalleryId", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ThemeResponse> getAllThemesByGalleryId(Integer galleryId) {
         List<Theme> themes = themeRepository.findByGalleryId(galleryId);
         return themes.stream()
@@ -231,6 +232,7 @@ public class GalleryService {
 
     // 테마에 담긴 모든 미술품 조회, 길이 너비 추가해야 할듯?
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "artworksByThemeId", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtworkResponse> getArtworksByThemeId(Integer themeId) {
         // Theme 조회
         Theme theme = themeRepository.findById(themeId)
@@ -273,7 +275,7 @@ public class GalleryService {
 
     // 장르에 해당하는 미술품 50개 랜덤으로 가져오기
     @Transactional(readOnly = true)
-    @Cacheable(value = "artworksByGenre", key = "#genreLabel")
+    @Cacheable(cacheNames = "artworksByGenre", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtworkResponse> getRandomArtworksByGenre(String genreLabel) {
         // 1. 입력받은 genreLabel을 대문자로 변환하여 Enum에서 확인
         String formattedGenreLabel = genreLabel.trim().toUpperCase();  // 입력값을 대문자로 변환
@@ -319,6 +321,7 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(cacheNames = "subGalleriesByMemberId", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<SubscribedGalleryResponse> getSubscribedGalleriesByMemberId(Integer memberId) {
         // memberId로 Member 조회
         Member member = memberRepository.findById(memberId)
@@ -337,7 +340,7 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "randomGalleriesCache", key = "'galleries-50'")
+    @Cacheable(value = "randomGalleries", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<GalleryResponse> getRandomGalleries() {
         // 모든 미술관을 조회
         List<Gallery> galleries = galleryRepository.findAll();
@@ -358,6 +361,7 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "searchGalleries", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<GalleryResponse> searchGalleryByName(String keyword) {
         // GalleryRepository에서 부분 검색 수행
         List<Gallery> galleries = galleryRepository.findByNameContaining(keyword);
@@ -374,6 +378,7 @@ public class GalleryService {
 
     // 특정 미술관 ID로 테마와 그 테마에 속한 모든 미술품 조회
     @Transactional(readOnly = true)
+    @Cacheable(value = "allGalleriesThings", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ThemeWithArtworksResponse> getAllThemesWithArtworksByGalleryId(Integer galleryId) {
         // 특정 galleryId에 속한 테마 조회
         List<Theme> themes = themeRepository.findByGalleryId(galleryId);
