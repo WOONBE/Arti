@@ -1,7 +1,10 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.Animator
+import android.animation.ValueAnimator
 import android.net.Uri
 import android.util.Log
+import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -23,15 +26,29 @@ class ImageUploadFragment :
 
     private val args: ImageUploadFragmentArgs by navArgs()
     private val imageUploadViewModel: ImageUploadViewModel by viewModels()
+    private var animator: Animator? = null
 
     private lateinit var image: MultipartBody.Part
     private var uri = ""
     override fun init() {
+
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        if (mainActivity.isUp) startProgressBarAnimation(60, 80)
+        else startProgressBarAnimation(100, 80)
+        mainActivity.isUp = false
+        mainActivity.isDoubleUp = true
+
         with(binding) {
 
+            artworkCreateImageTv.startAnimation(fadeInAnimation)
+            sourceImg.startAnimation(fadeInAnimation)
+            plusImg.startAnimation(fadeInAnimation)
+            originImg.startAnimation(fadeInAnimation)
+            artworkCreateImageBtn.startAnimation(fadeInAnimation)
+
             imageUploadViewModel.getArtWork(args.artId)
-            imageUploadViewModel.artworkResult.observe(viewLifecycleOwner){
-                Glide.with(requireContext()).load(it.imageUrl).into(originImg                                                          )
+            imageUploadViewModel.artworkResult.observe(viewLifecycleOwner) {
+                Glide.with(requireContext()).load(it.imageUrl).into(originImg)
             }
 
             artworkBackBtn.setOnClickListener {
@@ -56,7 +73,13 @@ class ImageUploadFragment :
         imageUploadViewModel.imageResponse.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 mainActivity.hideLoadingDialog()
-                val action = ImageUploadFragmentDirections.actionImageUploadFragmentToArtworkResultFragment(it,1)
+                mainActivity.isUp = true
+                mainActivity.isDoubleUp = false
+                val action =
+                    ImageUploadFragmentDirections.actionImageUploadFragmentToArtworkResultFragment(
+                        it,
+                        1
+                    )
                 navigate(action)
                 imageUploadViewModel.updateImageResponse()
             }
@@ -76,4 +99,19 @@ class ImageUploadFragment :
         getImageLauncher.launch("image/*")
     }
 
+    private fun startProgressBarAnimation(start: Int, end: Int) {
+        animator = ValueAnimator.ofInt(start, end).apply {
+            duration = 800
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Int
+                binding.progressBar.progress = progress
+            }
+        }
+        animator?.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        animator?.cancel()
+    }
 }

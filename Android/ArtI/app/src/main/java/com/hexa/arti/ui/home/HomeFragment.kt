@@ -84,7 +84,6 @@ class HomeFragment :
 
 
     fun showLoadingDialog() {
-        Log.d("확인", "이거호출")
         if (!isShowDialog) {
             isShowDialog = true
             loadingDialog = LoadingRecommendDialog()
@@ -94,7 +93,6 @@ class HomeFragment :
     }
 
     fun hideLoadingDialog() {
-        Log.d("확인", "이거호출2")
         if (isShowDialog) {
             isShowDialog = false
             loadingDialog?.dismiss()

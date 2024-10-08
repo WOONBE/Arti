@@ -23,10 +23,9 @@ class LoadingRecommendDialog : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        // 다이얼로그가 화면 전체를 덮도록 크기 설정
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT
+            resources.displayMetrics.heightPixels
         )
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }

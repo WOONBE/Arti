@@ -13,7 +13,6 @@ import com.hexa.arti.data.model.artmuseum.GalleryBanner
 import com.hexa.arti.data.model.artmuseum.ThemeArtwork
 import com.hexa.arti.databinding.FragmentArtMuseumBinding
 import com.hexa.arti.ui.MainActivityViewModel
-import com.hexa.arti.ui.home.HomeFragmentDirections
 import com.hexa.arti.ui.home.adapter.ThemeAdapter
 import com.hexa.arti.ui.search.adapter.PreviewAdapter
 import com.hexa.arti.util.asHomeTheme
@@ -73,6 +72,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         }
 
         viewModel.subscriptionGallery.observe(viewLifecycleOwner) {
+            Log.d("확인", "미술관 id ${args.gallery.galleryId} ${it}")
             if (it.any { it.galleryId == args.gallery.galleryId }) {
                 binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 isBookmarked = true
@@ -128,6 +128,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
                 binding.ivBookmark.setImageResource(R.drawable.ic_bookmark)
                 viewModel.subscribe(memberId, args.gallery.galleryId)
             }
+            isBookmarked = !isBookmarked
 
         }
 
@@ -135,7 +136,11 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         binding.tvIntroduceContent.text = gallery.description
 
         binding.ivPlay.setOnClickListener {
-            navigate(ArtMuseumFragmentDirections.actionArtMuseumFragmentToArtGalleryDetailFragment(args.gallery.galleryId))
+            navigate(
+                ArtMuseumFragmentDirections.actionArtMuseumFragmentToArtGalleryDetailFragment(
+                    args.gallery.galleryId
+                )
+            )
         }
 
     }

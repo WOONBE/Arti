@@ -1,9 +1,11 @@
 package com.hexa.arti.ui.search.genre
 
+import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.hexa.arti.R
+import com.hexa.arti.config.ApplicationClass
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentGenreDetailBinding
 import com.hexa.arti.ui.search.adapter.ArtworkAdapter
@@ -32,6 +34,7 @@ class GenreDetailFragment :
 
 
     override fun init() {
+        Log.d("확인","args 값 ${args.genreName}")
         initViews()
         initObserve()
 
@@ -47,6 +50,9 @@ class GenreDetailFragment :
     }
 
     private fun initViews() {
+
+        binding.tvGenreDetail.text = ApplicationClass.KOREAN_TO_ENGLISH_MAP[args.genreName]
+
         binding.rvArt.adapter = artAdapter
 
         binding.ivBack.setOnClickListener {

@@ -255,6 +255,7 @@
                 android:fontFamily="@font/inter_28pt_black"
                 android:text="대표 화가"
                 android:textSize="24sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cl_genre" />
 

@@ -1,8 +1,6 @@
 package com.hexa.arti.ui.artwork
 
-import android.net.Uri
 import android.util.Log
-import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,28 +12,26 @@ import com.hexa.arti.repository.ArtWorkRepository
 import com.hexa.arti.repository.ArtWorkUploadRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import java.io.InputStream
 import javax.inject.Inject
 
 private const val TAG = "ArtworkResultViewModel"
 
 @HiltViewModel
-class ArtworkResultViewModel  @Inject constructor(
+class ArtworkResultViewModel @Inject constructor(
     private val artWorkUploadRepository: ArtWorkUploadRepository,
     private val artWorkRepository: ArtWorkRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private val _imageUri = MutableLiveData<ByteArray>()
-    val imageUri : LiveData<ByteArray> = _imageUri
+    val imageUri: LiveData<ByteArray> = _imageUri
 
     private val _artworkResult = MutableLiveData<Artwork>()
     val artworkResult: LiveData<Artwork> = _artworkResult
 
     private val _successStatus = MutableLiveData<Int>()
-    val successStatus : LiveData<Int> = _successStatus
+    val successStatus: LiveData<Int> = _successStatus
 
-    fun getArtWork(id : Int){
+    fun getArtWork(id: Int) {
         viewModelScope.launch {
             artWorkRepository.getArtWorkById(id).onSuccess { response ->
                 Log.d("확인", "성공 ${response}")
@@ -43,39 +39,47 @@ class ArtworkResultViewModel  @Inject constructor(
             }.onFailure { error ->
                 if (error is ApiException) {
                     Log.d("확인", "실패 ${error.code} ${error.message}")
-                    _artworkResult.value = Artwork(0,"","","","")
+                    _artworkResult.value = Artwork(0, "", "", "", "")
                 }
             }
         }
     }
 
 
-    fun saveArtwork(themeId : Int,artworkId : Int, description : String ){
+    fun saveArtwork(themeId: Int, artworkId: Int, description: String) {
         viewModelScope.launch {
-            artWorkUploadRepository.saveArtwork(themeId = themeId, artworkId = artworkId, description =description ).onSuccess {
+            artWorkUploadRepository.saveArtwork(
+                themeId = themeId,
+                artworkId = artworkId,
+                description = description
+            ).onSuccess {
                 Log.d("확인", "saveArtwork: $it")
                 _successStatus.value = 1
             }
         }
     }
 
-    private fun saveArtworkAI(themeId : Int, artworkId : Int, description : String ){
+    private fun saveArtworkAI(themeId: Int, artworkId: Int, description: String) {
 
         Log.d("확인", "saveArtwork: $themeId $artworkId $description ")
 
         viewModelScope.launch {
-            artWorkUploadRepository.saveArtworkAI(themeId = themeId, artworkId = artworkId, description =description ).onSuccess {
+            artWorkUploadRepository.saveArtworkAI(
+                themeId = themeId,
+                artworkId = artworkId,
+                description = description
+            ).onSuccess {
                 Log.d("확인", "saveArtwork: $it")
                 _successStatus.value = 1
             }
         }
     }
 
-    fun updateSuccessStatus(){
+    fun updateSuccessStatus() {
         _successStatus.value = 0
     }
 
-    fun getAIArtworkId(artWorkAIDto : ArtWorkAIDto,themeId: Int){
+    fun getAIArtworkId(artWorkAIDto: ArtWorkAIDto, themeId: Int) {
         Log.d("확인", "saveArtworkai: $artWorkAIDto $themeId")
 
         viewModelScope.launch {
