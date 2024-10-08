@@ -1,13 +1,11 @@
 package com.hexa.arti.ui.search
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
@@ -349,7 +347,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     override fun onResume() {
         super.onResume()
         if (viewModel.state == BASE_STATE) mainActivity.hideBottomNav(false)
-
     }
 
 
