@@ -43,6 +43,7 @@ fun GetRandomGenreArtWorkResponse.asArtwork() = Artwork(
     artworkId = this.id,
     imageUrl = this.imageUrl,
     title = this.title,
+    artist = this.artist,
     description = this.description,
     year = this.year
 )

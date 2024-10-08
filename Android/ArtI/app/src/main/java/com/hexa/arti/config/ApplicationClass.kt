@@ -69,6 +69,10 @@ class ApplicationClass : Application() {
         val KOREAN_TO_ENGLISH_MAP: Map<String, String> by lazy {
             REPRESENT_ARTWORKS_KOR.zip(REPRESENT_ARTWORKS).toMap()
         }
+
+        val ENGLISH_TO_KOREAN_MAP: Map<String, String> by lazy {
+            REPRESENT_ARTWORKS.zip(REPRESENT_ARTWORKS_KOR).toMap()
+        }
     }
 
 }

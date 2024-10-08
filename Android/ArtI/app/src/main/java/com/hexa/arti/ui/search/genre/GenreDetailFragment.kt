@@ -51,7 +51,7 @@ class GenreDetailFragment :
 
     private fun initViews() {
 
-        binding.tvGenreDetail.text = ApplicationClass.KOREAN_TO_ENGLISH_MAP[args.genreName]
+        binding.tvGenreDetail.text = ApplicationClass.ENGLISH_TO_KOREAN_MAP[args.genreName]
 
         binding.rvArt.adapter = artAdapter
 
