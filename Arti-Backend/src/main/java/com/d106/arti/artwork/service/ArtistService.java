@@ -76,7 +76,7 @@ public class ArtistService {
 
     // 캐시를 적용하여 50명의 화가를 랜덤하게 가져오는 메서드
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "randomArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
+//    @Cacheable(cacheNames = "randomArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> getRandomArtists() {
         // 모든 화가를 가져온 후 랜덤하게 섞는다
         List<Artist> allArtists = artistRepository.findAll();
@@ -98,7 +98,7 @@ public class ArtistService {
 
     // 장르로 검색된 미술품들의 화가를 중복 없이 3명만 반환하는 메서드
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "genreArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
+//    @Cacheable(cacheNames = "genreArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> getArtistsByGenre(String genreLabel) {
 
         String formattedGenreLabel = genreLabel.trim().toUpperCase();
