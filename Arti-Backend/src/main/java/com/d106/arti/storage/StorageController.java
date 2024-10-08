@@ -15,7 +15,7 @@ public class StorageController {
 
     private final StorageService storageService;
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<String> storeFile(@RequestParam("file") MultipartFile file) {
         UploadFile uploadFile = storageService.storeFile(file);
         return ResponseEntity.ok(uploadFile.getStoreFilename());

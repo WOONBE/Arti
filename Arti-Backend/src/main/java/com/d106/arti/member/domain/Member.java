@@ -1,16 +1,23 @@
 package com.d106.arti.member.domain;
 
 import com.d106.arti.token.Token;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Data
 @Builder
@@ -35,15 +42,6 @@ public class Member implements UserDetails {
 
     @OneToMany(mappedBy = "member")
     private List<Token> tokens;
-
-    // Instagram 계정과 1:1 관계 설정
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
-    private InstagramAccount instagramAccount;
-
-    public void setInstagramAccount(InstagramAccount instagramAccount) {
-        this.instagramAccount = instagramAccount;
-        instagramAccount.setMember(this);  // 양방향 관계 설정
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
