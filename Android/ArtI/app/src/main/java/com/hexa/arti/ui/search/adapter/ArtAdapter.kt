@@ -6,9 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy
-import com.bumptech.glide.request.RequestOptions
 import com.hexa.arti.R
 import com.hexa.arti.data.model.artwork.Artwork
 import com.hexa.arti.databinding.ItemArtBinding
@@ -48,11 +47,15 @@ class ArtworkAdapter(
 //                .error(R.drawable.gallery_example)
 //                .into(binding.ivArt)
 
+            val circularProgressDrawable = CircularProgressDrawable(binding.root.context)
+            circularProgressDrawable.strokeWidth = 5f
+            circularProgressDrawable.centerRadius = 30f
+            circularProgressDrawable.start()
+
             Glide.with(binding.root.context)
                 .load(artwork.imageUrl)
-                .placeholder(R.drawable.gallery_example)
-                .error(R.drawable.gallery_example)
-                .override(200, 200)  // 이미지 크기를 제한 (필요한 크기로 설정)
+                .placeholder(circularProgressDrawable)
+                .override(200, 200)
                 .into(binding.ivArt)
 
             binding.tvArtTitle.text = artwork.title

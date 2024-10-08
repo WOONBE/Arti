@@ -39,6 +39,7 @@ class GenreDetailFragment :
         initObserve()
 
         if (viewModel.resultArtwork.value == null) {
+            Log.d("확인","데이터 호출")
             viewModel.getGenreRandomData(args.genreName)
         }
     }
