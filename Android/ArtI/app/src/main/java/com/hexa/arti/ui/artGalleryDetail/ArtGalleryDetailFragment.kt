@@ -154,6 +154,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
                 musicStreamUrl = it
                 makeToast("셍성 완료")
                 isLoading = false
+                isReady = true
                 initMedia()
                 artGalleryViewModel.updateUrl()
             }
