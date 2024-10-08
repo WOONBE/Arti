@@ -76,8 +76,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
 
     override fun init() {
 
+
         artworkPagingAdapter.addLoadStateListener { loadStates ->
-            CoroutineScope(Dispatchers.Main).launch {
+            if (isAdded) {
                 if (loadStates.refresh is LoadState.NotLoading && artworkPagingAdapter.itemCount == 0) {
                     binding.tvNoResultArtwork.visibility = View.VISIBLE
                 } else if (loadStates.refresh is LoadState.NotLoading) {

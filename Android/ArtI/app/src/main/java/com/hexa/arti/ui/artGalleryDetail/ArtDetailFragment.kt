@@ -8,6 +8,9 @@ import android.widget.EditText
 import android.widget.RadioButton
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
@@ -18,8 +21,6 @@ import com.hexa.arti.ui.ARActivity
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
@@ -35,14 +36,16 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
     private var selectDescription: String = ""
     override fun init() {
 
-        CoroutineScope(Dispatchers.Main).launch {
-            mainActivityViewModel.getLoginData().collect { d ->
-                d?.let {
-                    if (it.galleryId == args.galleryId) binding.artDetailSaveBtn.visibility =
-                        View.GONE
-                    artDetailViewModel.getMyGalleryTheme(it.galleryId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainActivityViewModel.getLoginData().collect { d ->
+                    d?.let {
+                        if (it.galleryId == args.galleryId) {
+                            binding.artDetailSaveBtn.visibility = View.GONE
+                        }
+                        artDetailViewModel.getMyGalleryTheme(it.galleryId)
+                    }
                 }
-
             }
         }
 

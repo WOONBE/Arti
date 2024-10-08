@@ -8,7 +8,6 @@ import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentHomeBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.home.adapter.ViewpageAdapter
-import com.hexa.arti.util.LoadingDialog
 import com.hexa.arti.util.LoadingRecommendDialog
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +20,7 @@ class HomeFragment :
     BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     private var isShowDialog = false
-    private lateinit var loadingDialog: LoadingRecommendDialog
+    private var loadingDialog: LoadingRecommendDialog? = null
 
     private val viewModel: HomeViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
@@ -50,7 +49,7 @@ class HomeFragment :
 
     private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
-            if(viewModel.resultGalleries.value == null) {
+            if (viewModel.resultGalleries.value == null) {
                 showLoadingDialog()
                 mainActivityViewModel.getLoginData().collect { userData ->
                     userData?.let {
@@ -76,7 +75,7 @@ class HomeFragment :
 
     override fun onPause() {
         super.onPause()
-        loadingDialog.dismiss()
+        loadingDialog?.dismiss()
     }
 
     private fun initViews() {
@@ -85,20 +84,20 @@ class HomeFragment :
 
 
     fun showLoadingDialog() {
-        Log.d("확인","이거호출")
-        if(!isShowDialog){
+        Log.d("확인", "이거호출")
+        if (!isShowDialog) {
             isShowDialog = true
             loadingDialog = LoadingRecommendDialog()
-            loadingDialog.isCancelable = false
-            loadingDialog.show(mainActivity.supportFragmentManager, "loading")
+            loadingDialog!!.isCancelable = false
+            loadingDialog!!.show(mainActivity.supportFragmentManager, "loading")
         }
     }
 
     fun hideLoadingDialog() {
-        Log.d("확인","이거호출2")
-        if(isShowDialog){
+        Log.d("확인", "이거호출2")
+        if (isShowDialog) {
             isShowDialog = false
-            loadingDialog.dismiss()
+            loadingDialog?.dismiss()
         }
     }
 
