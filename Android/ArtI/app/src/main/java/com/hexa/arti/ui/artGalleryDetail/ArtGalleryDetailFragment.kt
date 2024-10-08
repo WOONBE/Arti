@@ -317,11 +317,6 @@ private fun initMedia(){
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.changeLandScope()
-    }
     // 뷰가 파괴될 때 MediaPlayer 해제
     override fun onDestroyView() {
         super.onDestroyView()
