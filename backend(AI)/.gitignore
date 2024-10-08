@@ -22,8 +22,8 @@ venv
 docs.zip
 archive.zip
 
-src/config/secrets_mariadb.json
-src/config/secrets.json
+/src/config/secrets_mariadb.json
+/src/config/secrets.json
 
 # vim temporary files
 *~

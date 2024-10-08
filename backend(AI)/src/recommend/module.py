@@ -1,4 +1,5 @@
 import requests
+import json
 import os
 from io import BytesIO
 import torch
@@ -183,7 +184,13 @@ def recommend_gallery(user_id, db: Session):
         user_gallery_path = ['https://j11d106.p.ssafy.io/static/' + cs.filename for cs in result_artworks]
     else:
         user_gallery_path = [user_gallery.gallery_img]
-
+        response = requests.get(f'https://j11d106.p.ssafy.io/members/{user_id}/instagram/media')
+        if response.status_code == 200:
+            instar = json.loads(str(response.content,'utf-8'))
+            if len(instar):
+                instar_random = random.sample(instar, 1)
+                user_gallery_path.append(instar_random)
+        
     user_gallery_vector = compute_gallery_vector_batch(user_gallery_path, model, device)
 
     if user_gallery_vector is None:
