@@ -2,6 +2,7 @@ package com.hexa.arti.ui.artwork
 
 import android.net.Uri
 import android.util.Log
+import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -27,11 +28,20 @@ class ImageUploadFragment :
     private lateinit var image: MultipartBody.Part
     private var uri = ""
     override fun init() {
+
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+
         with(binding) {
 
+            artworkCreateImageTv.startAnimation(fadeInAnimation)
+            sourceImg.startAnimation(fadeInAnimation)
+            plusImg.startAnimation(fadeInAnimation)
+            originImg.startAnimation(fadeInAnimation)
+            artworkCreateImageBtn.startAnimation(fadeInAnimation)
+
             imageUploadViewModel.getArtWork(args.artId)
-            imageUploadViewModel.artworkResult.observe(viewLifecycleOwner){
-                Glide.with(requireContext()).load(it.imageUrl).into(originImg                                                          )
+            imageUploadViewModel.artworkResult.observe(viewLifecycleOwner) {
+                Glide.with(requireContext()).load(it.imageUrl).into(originImg)
             }
 
             artworkBackBtn.setOnClickListener {
@@ -56,7 +66,11 @@ class ImageUploadFragment :
         imageUploadViewModel.imageResponse.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 mainActivity.hideLoadingDialog()
-                val action = ImageUploadFragmentDirections.actionImageUploadFragmentToArtworkResultFragment(it,1)
+                val action =
+                    ImageUploadFragmentDirections.actionImageUploadFragmentToArtworkResultFragment(
+                        it,
+                        1
+                    )
                 navigate(action)
                 imageUploadViewModel.updateImageResponse()
             }

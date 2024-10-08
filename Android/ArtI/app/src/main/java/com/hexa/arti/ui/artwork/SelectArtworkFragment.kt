@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.fragment.app.viewModels
@@ -35,6 +36,11 @@ class SelectArtworkFragment :
     private var isClicked = false
 
     override fun init() {
+
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.artwork_fade_in_slide_up)
+
+        binding.artworkCommentTv.startAnimation(fadeInAnimation)
+        binding.artworkSearchTl.startAnimation(fadeInAnimation)
 
         adapter = SelectArtworkAdapter(onClick = { id ->
             val action =

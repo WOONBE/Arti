@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.net.toUri
@@ -49,6 +50,14 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
     private var themeId : Int = 0
     private var userId : Int = 0
     override fun init() {
+        val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        binding.artworkResultTv.startAnimation(fadeInAnimation)
+        binding.artworkResultEt.startAnimation(fadeInAnimation)
+        binding.artworkResultImg.startAnimation(fadeInAnimation)
+        binding.artworkResultThemeTv.startAnimation(fadeInAnimation)
+        binding.artworkResultThemeSpinner.startAnimation(fadeInAnimation)
+        binding.artworkResultBtn.startAnimation(fadeInAnimation)
+
         val fragmentManager = requireActivity().supportFragmentManager
         Log.d("BackStack", "Back stack entry count: ${fragmentManager.backStackEntryCount}")
         lifecycleScope.launch {
