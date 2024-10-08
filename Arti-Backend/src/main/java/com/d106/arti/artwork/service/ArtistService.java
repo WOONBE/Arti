@@ -47,7 +47,7 @@ public class ArtistService {
         }
 
         @Transactional(readOnly = true)
-        @Cacheable(cacheNames = "searchKeyword", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
+//        @Cacheable(cacheNames = "searchKeyword", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
         public List<ArtistResponse> search(String keyword) {
             Set<Artist> resultSet = new HashSet<>();
 
