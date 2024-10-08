@@ -21,8 +21,6 @@ site_build
 venv
 docs.zip
 archive.zip
-
-package-lock.json
 # vim temporary files
 *~
 .*.sw?
