@@ -1,15 +1,14 @@
 package com.hexa.arti.ui.artmuseum
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Bundle
 import android.os.Environment
 import android.util.Log
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.net.toUri
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +16,6 @@ import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.data.model.artmuseum.GalleryRequest
-import com.hexa.arti.data.model.artmuseum.UpdateGalleryDto
 import com.hexa.arti.databinding.FragmentMyGalleryBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.MyGalleryActivityViewModel
@@ -35,11 +33,11 @@ import java.io.FileOutputStream
 private const val TAG = "MyGalleryFragment"
 
 @AndroidEntryPoint
-class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragment_my_gallery){
+class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragment_my_gallery) {
 
     private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
-    private val mainActivityViewModel : MainActivityViewModel by activityViewModels()
-    private val myGalleryViewModel : MyGalleryViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private val myGalleryViewModel: MyGalleryViewModel by viewModels()
     private var galleryId = 0
     private var userId = 0
     override fun init() {
@@ -57,33 +55,42 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         }
 
 
-        with(binding){
-            adapter = MyGalleryThemeAdapter(requireContext(), onArtWorkDelete = { themeId, artWorkId ->
+        with(binding) {
+            adapter =
+                MyGalleryThemeAdapter(requireContext(), onArtWorkDelete = { themeId, artWorkId ->
 
-                Log.d(TAG, "init: ${themeId} $artWorkId")
-                // 테마 내부 이미지 삭제
-                myGalleryViewModel.deleteThemeDelete(themeId,artWorkId)
-            }, onThemeDelete = { themeId ->
-                Log.d(TAG, "init: ${themeId} galleryId $galleryId")
-                // 갤러리 아이디 받아오기 필요
-                myGalleryViewModel.deleteTheme(galleryId, themeId)
+                    Log.d(TAG, "init: ${themeId} $artWorkId")
+                    // 테마 내부 이미지 삭제
+                    myGalleryViewModel.deleteThemeDelete(themeId, artWorkId)
+                }, onTextClick = {
+                    val scrollAmount = dpToPx(250, requireContext()) 
+                    binding.scrollView.post {
+                        ObjectAnimator.ofInt(binding.scrollView, "scrollY", binding.scrollView.scrollY + scrollAmount).apply {
+                            duration = 400L
+                            start()
+                        }
+                    }
+                }, onThemeDelete = { themeId ->
+                    Log.d(TAG, "init: ${themeId} galleryId $galleryId")
+                    // 갤러리 아이디 받아오기 필요
+                    myGalleryViewModel.deleteTheme(galleryId, themeId)
 
-            })
+                })
             myGalleryThemeRv.adapter = adapter
 
 
-            with(myGalleryActivityViewModel){
+            with(myGalleryActivityViewModel) {
 
                 // state가 바뀌면 미술관 get 호출로 update
-                with(myGalleryViewModel){
-                    updateThemeDto.observe(viewLifecycleOwner){
+                with(myGalleryViewModel) {
+                    updateThemeDto.observe(viewLifecycleOwner) {
                         Log.d(TAG, "init: aaaaa $it")
                         myGalleryActivityViewModel.getMyGalleryTheme(galleryId)
                     }
                 }
 
                 // 나의 미술관 이름. 썸네일, 소개
-                myGallery.observe(viewLifecycleOwner){
+                myGallery.observe(viewLifecycleOwner) {
                     Log.d(TAG, "init 11: $it")
                     myGalleryNameTv.setText(it.name)
                     Glide.with(requireContext())
@@ -92,12 +99,12 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     myGalleryInfoEt.setText(it.description)
 
                     myGalleryViewModel.getGalleryDto(
-                        updateGalleryDto = GalleryRequest(it.description, it.name,it.ownerId)
+                        updateGalleryDto = GalleryRequest(it.description, it.name, it.ownerId)
                     )
 
                 }
                 // 테마
-                myGalleryTheme.observe(viewLifecycleOwner){
+                myGalleryTheme.observe(viewLifecycleOwner) {
 
                     Log.d(TAG, "init 22: $it")
                     adapter.submitList(it)
@@ -105,20 +112,25 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
             }
 
             myGalleryThemeAddBtn.setOnClickListener {
-                showAddThemeDialog(requireContext(),galleryId,myGalleryViewModel)
+                showAddThemeDialog(requireContext(), galleryId, myGalleryViewModel)
             }
         }
 
         initEvent()
     }
+
     private lateinit var adapter: MyGalleryThemeAdapter
+    fun dpToPx(dp: Int, context: Context): Int {
+        val density = context.resources.displayMetrics.density
+        return (dp * density).toInt()
+    }
 
 
     private var initName = ""
     private var initInfo = ""
 
-    private fun initEvent(){
-        with(binding){
+    private fun initEvent() {
+        with(binding) {
             // 미술관 이름 변경
             myGalleryNameModifyBtn.setOnClickListener {
                 myGalleryNameModifyBtn.visibility = View.GONE
@@ -143,7 +155,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     isFocusable = false
                     isEnabled = false
                 }
-                myGalleryViewModel.updateGalleryName(myGalleryNameTv.text.toString(),galleryId)
+                myGalleryViewModel.updateGalleryName(myGalleryNameTv.text.toString(), galleryId)
 
             }
             // 미술관 이름 변경 취소 버튼
@@ -187,7 +199,10 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     isEnabled = false
                 }
 
-                myGalleryViewModel.updateGalleryDescription(myGalleryInfoEt.text.toString(),galleryId)
+                myGalleryViewModel.updateGalleryDescription(
+                    myGalleryInfoEt.text.toString(),
+                    galleryId
+                )
 
             }
 
@@ -207,7 +222,10 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
             // 미술관 실행 버튼
             myGalleryPlayBtn.setOnClickListener {
-                val action = MyGalleryHomeFragmentDirections.actionMyGalleryHomeFragmentToArtGalleryDetailFragment(galleryId)
+                val action =
+                    MyGalleryHomeFragmentDirections.actionMyGalleryHomeFragmentToArtGalleryDetailFragment(
+                        galleryId
+                    )
                 navigate(action)
             }
             // 썸네일 이미지 클릭
@@ -224,6 +242,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 binding.myGalleryThumbnailIv.setImageURI(it)
             }
         }
+
     private fun openImagePicker() {
         getImageLauncher.launch("image/*")
     }
@@ -257,7 +276,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize =  512 * 512 // 1MB
+        val maxSize = 512 * 512 // 1MB
         Log.d(TAG, "handleImage: ${file.length()}")
         if (file.length() > maxSize) {
             file = compressImage(file)
@@ -274,7 +293,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 "image",
                 file.name,
                 requestFile
-            ),galleryId
+            ), galleryId
         )
     }
 

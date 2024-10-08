@@ -12,6 +12,7 @@ import android.widget.GridLayout
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.core.animation.doOnEnd
+import androidx.core.animation.doOnStart
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -21,9 +22,12 @@ import com.hexa.arti.ui.artmuseum.util.MyGalleryThemeDiffCallback
 
 private const val TAG = "MyGalleryThemeAdapter"
 
-class MyGalleryThemeAdapter(val context: Context,
+class MyGalleryThemeAdapter(
+    val context: Context,
     val onArtWorkDelete: (Int, Int) -> Unit,
-    val onThemeDelete : (Int) -> Unit) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
+    val onTextClick: () -> Unit,
+    val onThemeDelete: (Int) -> Unit
+) : ListAdapter<MyGalleryThemeItem, MyGalleryThemeAdapter.MyGalleryThemeViewHolder>(
     MyGalleryThemeDiffCallback
 ) {
 
@@ -34,6 +38,7 @@ class MyGalleryThemeAdapter(val context: Context,
     override fun getItemId(position: Int): Long {
         return getItem(position).id.toLong()
     }
+
     // ViewHolder 정의
     inner class MyGalleryThemeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val themeTitleTv: EditText = view.findViewById(R.id.theme_title_tv)
@@ -50,7 +55,8 @@ class MyGalleryThemeAdapter(val context: Context,
             gridLayout.removeAllViews() // 이전 이미지 제거
             Log.d(TAG, "bind: ${item.images.size}")
             item.images.forEachIndexed { index, imageResId ->
-                val imageView = LayoutInflater.from(gridLayout.context).inflate(R.layout.gallery_theme_img, gridLayout, false) as ImageView
+                val imageView = LayoutInflater.from(gridLayout.context)
+                    .inflate(R.layout.gallery_theme_img, gridLayout, false) as ImageView
                 // 크기를 픽셀로 고정
                 val params = GridLayout.LayoutParams().apply {
                     width = 280 // px 값으로 고정
@@ -72,7 +78,7 @@ class MyGalleryThemeAdapter(val context: Context,
                 imageView.setOnLongClickListener {
                     showDeleteConfirmationDialog(imageView.context) {
                         Log.d(TAG, "bind: ${item.id} ${item.images[index]}")
-                        onArtWorkDelete(item.id,item.images[index].id)
+                        onArtWorkDelete(item.id, item.images[index].id)
                         removeImage(item, index) // 삭제 확인 후 이미지 삭제
                     }
                     true
@@ -88,7 +94,7 @@ class MyGalleryThemeAdapter(val context: Context,
             }
 
             themeKebabMenuIv.setOnClickListener { view ->
-                showPopupMenu(view,item)
+                showPopupMenu(view, item)
             }
             themeModifyIv.setOnClickListener {
                 themeModifyIv.visibility = View.GONE
@@ -110,6 +116,7 @@ class MyGalleryThemeAdapter(val context: Context,
             }
 
         }
+
         fun toggleGridLayout(gridLayout: GridLayout) {
             val isExpanded = gridLayout.visibility == View.VISIBLE
 
@@ -125,6 +132,10 @@ class MyGalleryThemeAdapter(val context: Context,
                 animator.doOnEnd {
                     gridLayout.visibility = View.GONE // 축소 후 숨김 처리
                 }
+                animator.doOnStart {
+                    onTextClick()
+                }
+
                 animator.duration = 300 // 애니메이션 지속 시간 (ms)
                 animator.start()
             } else {
@@ -145,11 +156,14 @@ class MyGalleryThemeAdapter(val context: Context,
                     gridLayout.layoutParams.height = value
                     gridLayout.requestLayout()
                 }
-
-                animator.duration = 300 // 애니메이션 지속 시간 (ms)
+                animator.doOnStart {
+                    onTextClick()
+                }
+                animator.duration = 300
                 animator.start()
             }
         }
+
         private fun showPopupMenu(view: View, myGalleryThemeItem: MyGalleryThemeItem) {
             val popupMenu = PopupMenu(view.context, view)
             val inflater: MenuInflater = popupMenu.menuInflater
@@ -168,6 +182,7 @@ class MyGalleryThemeAdapter(val context: Context,
                         }
                         true
                     }
+
                     R.id.my_gallery_delete -> {
                         // 테마 삭제 처리
                         showDeleteConfirmationDialog(view.context) {
@@ -176,6 +191,7 @@ class MyGalleryThemeAdapter(val context: Context,
                         }
                         true
                     }
+
                     else -> false
                 }
             }
@@ -204,6 +220,7 @@ class MyGalleryThemeAdapter(val context: Context,
             val dialog = builder.create()
             dialog.show()
         }
+
         private fun removeImage(item: MyGalleryThemeItem, imageIndex: Int) {
             val updatedImages = item.images.toMutableList()
             updatedImages.removeAt(imageIndex)
@@ -218,7 +235,8 @@ class MyGalleryThemeAdapter(val context: Context,
 
     // onCreateViewHolder: ViewHolder 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyGalleryThemeViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_my_gallery_theme, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_my_gallery_theme, parent, false)
         return MyGalleryThemeViewHolder(view)
     }
 
