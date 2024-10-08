@@ -20,5 +20,10 @@
         <module name="arti.main" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="arti" target="17" />
+      <module name="arti.main" target="17" />
+      <module name="arti.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
