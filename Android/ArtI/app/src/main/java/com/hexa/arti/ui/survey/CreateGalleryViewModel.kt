@@ -87,4 +87,8 @@ class CreateGalleryViewModel @Inject constructor(
             }
         }
     }
+
+    fun updateId(){
+        _themeDto.value = ThemeResponseItem(id = 0, name = "", galleryName = "")
+    }
 }

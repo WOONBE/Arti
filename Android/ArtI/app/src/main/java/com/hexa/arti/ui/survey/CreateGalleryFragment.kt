@@ -68,9 +68,12 @@ class CreateGalleryFragment :
             }
 
             themeDto.observe(viewLifecycleOwner) {
-                Log.d(TAG, "init2: $it")
-                mainActivity.hideLoadingDialog()
-                navigate(R.id.action_createGallertFragment_to_homeFragment)
+                if(it.id != 0) {
+                    Log.d(TAG, "init2: $it")
+                    mainActivity.hideLoadingDialog()
+                    navigate(R.id.action_createGalleryFragment_to_instagramSurveyFragment)
+                    updateId()
+                }
             }
         }
 
