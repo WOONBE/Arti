@@ -99,10 +99,10 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
                 config.focusMode = Config.FocusMode.AUTO
                 config.planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-                config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+//                config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
 
 
-                config.instantPlacementMode = Config.InstantPlacementMode.DISABLED
+                config.instantPlacementMode = Config.InstantPlacementMode.LOCAL_Y_UP
                 config.lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
             }
 
@@ -171,7 +171,7 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
         imageNode.rotation = Rotation(-90f, 0f, 0f)  // x축 기준 90도 회전
         imageNode.isEditable = true
-
+        imageNode.editableScaleRange = 0.3f..5.0f
 
         return imageNode
     }
