@@ -6,6 +6,7 @@ import com.d106.arti.member.repository.MemberRepository;
 import com.d106.arti.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.security.Principal;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,21 +55,18 @@ public class MemberController {
         return ResponseEntity.ok(instagramAccountService.getInstagramMediaUrls(member));
     }
 
-    // 미술관 구독 API
     @PostMapping("/{memberId}/subscribe/{galleryId}")
     @Operation(summary = "미술관 구독", description = "특정 미술관을 구독하는 API")
-    public ResponseEntity<String> subscribeGallery(@PathVariable Integer memberId,
-        @PathVariable Integer galleryId) {
-        String responseMessage = service.subscribeGallery(memberId, galleryId);
-        return ResponseEntity.ok(responseMessage);
+    public ResponseEntity<Map<String, Object>> subscribeGallery(@PathVariable Integer memberId, @PathVariable Integer galleryId) {
+        Map<String, Object> response = service.subscribeGallery(memberId, galleryId);
+        return ResponseEntity.ok(response);
     }
 
-    // 미술관 구독 취소 API
-    @DeleteMapping("/{memberId}/unsubscribe/{galleryId}")
-    @Operation(summary = "미술관 구독 취소", description = "특정 미술관을 구독 취소하는 API")
-    public ResponseEntity<String> unsubscribeGallery(@PathVariable Integer memberId,
-        @PathVariable Integer galleryId) {
-        String responseMessage = service.unsubscribeGallery(memberId, galleryId);
-        return ResponseEntity.ok(responseMessage);
+    @PostMapping("/{memberId}/unsubscribe/{galleryId}")
+    @Operation(summary = "미술관 구독 취소", description = "특정 미술관의 구독을 취소하는 API")
+    public ResponseEntity<Map<String, Object>> unsubscribeGallery(@PathVariable Integer memberId, @PathVariable Integer galleryId) {
+        Map<String, Object> response = service.unsubscribeGallery(memberId, galleryId);
+        return ResponseEntity.ok(response);
+
     }
 }
