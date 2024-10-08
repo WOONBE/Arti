@@ -21,16 +21,21 @@ class UserRepositoryImpl @Inject constructor(
                 return Result.success(it)
             }
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
 
     }
 
@@ -50,16 +55,21 @@ class UserRepositoryImpl @Inject constructor(
                 return Result.success(it)
             }
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun getUserNickname(): Result<String> {
@@ -70,15 +80,20 @@ class UserRepositoryImpl @Inject constructor(
                 return Result.success(it)
             }
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 }

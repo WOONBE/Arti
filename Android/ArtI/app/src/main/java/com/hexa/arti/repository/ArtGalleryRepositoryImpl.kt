@@ -118,16 +118,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun getArtGalleryThemes(galleryId: Int): Result<List<MyGalleryThemeItem>> {
@@ -160,16 +165,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
                 return Result.success(myGalleryThemeItems)
             }
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun getSubscriptionGalleries(memberId: Int): Result<SubscriptionGallery> {
@@ -181,16 +191,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
                 return Result.success(it)
             }
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun postGallery(
@@ -210,16 +225,20 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
+        } // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
         } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
+            ErrorResponse(code = result.code(), message = "Unknown error")
         }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
 
@@ -233,16 +252,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun postArtworkTheme(
@@ -258,16 +282,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
 
@@ -291,16 +320,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun deleteTheme(galleryId: Int, themeId: Int): Result<ResponseBody> {
@@ -311,16 +345,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
     override suspend fun deleteThemeArtWork(themeId: Int, artworkId: Int): Result<ResponseBody> {
@@ -331,16 +370,21 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
 
             return Result.failure(Exception())
-        } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
-            return Result.failure(
-                ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
-                )
-            )
         }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
     }
 
 }
