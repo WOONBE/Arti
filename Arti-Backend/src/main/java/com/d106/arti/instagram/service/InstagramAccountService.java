@@ -49,17 +49,23 @@ public class InstagramAccountService {
         parameters.add("code", code);
 
         // WebClient를 사용하여 비동기 방식으로 토큰 요청
-        InstagramTokenResponse tokenResponse = webClient.post().uri(tokenUrl)
-            .bodyValue(parameters).retrieve().bodyToMono(InstagramTokenResponse.class).block();
+        InstagramTokenResponse tokenResponse = webClient.post().uri(tokenUrl).bodyValue(parameters)
+            .retrieve().bodyToMono(InstagramTokenResponse.class).block();
 
         if (tokenResponse != null) {
             // 받은 토큰 저장 및 Instagram 계정 연동
 
-            // InstagramAccount 엔티티에 저장
-            InstagramAccount instagramAccount = InstagramAccount.builder()
-                .member(member)  // 현재 로그인한 Member와 연동
-                .accessToken(tokenResponse.getAccessToken())
-                .build();
+            InstagramAccount instagramAccount;
+
+            if (instagramAccountRepository.findByMember(member).isPresent()) {
+                instagramAccount = instagramAccountRepository.findByMember(member).get();
+                instagramAccount.setAccessToken(tokenResponse.getAccessToken());
+            } else {
+                // InstagramAccount 엔티티에 저장
+                instagramAccount = InstagramAccount.builder()
+                    .member(member)  // 현재 로그인한 Member와 연동
+                    .accessToken(tokenResponse.getAccessToken()).build();
+            }
 
             instagramAccountRepository.save(instagramAccount);  // 저장
 
