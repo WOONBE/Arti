@@ -2,6 +2,7 @@ package com.hexa.arti.ui.profile
 
 import android.util.Log
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragment_portfolio) {
 
-    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
+    private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val portfolioViewModel: PortfolioViewModel by viewModels()
     private var userId: Int = -1
@@ -38,9 +39,9 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     }
 
     private fun initObserve() {
-        myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner){
+        myGalleryActivityViewModel.nickname.observe(viewLifecycleOwner) {
             Log.d("확인", "initObserve: $it")
-            binding.tvPortfolioTitle.text  = "${it}님의 포트폴리오"
+            binding.tvPortfolioTitle.text = "${it}님의 포트폴리오"
         }
 
 
@@ -57,6 +58,8 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         portfolioViewModel.resultArtist.observe(viewLifecycleOwner) { artists ->
+            val fadeInAnimation =
+                AnimationUtils.loadAnimation(requireContext(), R.anim.artist_fade_in_slide_left)
 
             Glide.with(requireContext())
                 .load(artists[0].imageUrl)
@@ -83,12 +86,31 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             binding.tvRepresentArtist2.text = artists[1].korName
             binding.tvRepresentArtist3.text = artists[2].korName
 
+            binding.tvRepresentArtist.visibility = View.VISIBLE
+
             binding.ivRepresentArtist1.visibility = View.VISIBLE
             binding.ivRepresentArtist2.visibility = View.VISIBLE
             binding.ivRepresentArtist3.visibility = View.VISIBLE
+
             binding.tvRepresentArtist1.visibility = View.VISIBLE
             binding.tvRepresentArtist2.visibility = View.VISIBLE
             binding.tvRepresentArtist3.visibility = View.VISIBLE
+
+            binding.tvRepresentArtist.startAnimation(fadeInAnimation)
+
+            binding.tvRepresentArtist1.startAnimation(fadeInAnimation)
+            binding.tvRepresentArtist2.startAnimation(fadeInAnimation)
+            binding.tvRepresentArtist3.startAnimation(fadeInAnimation)
+
+            binding.ivRepresentArtist1.startAnimation(fadeInAnimation)
+            binding.ivRepresentArtist2.startAnimation(fadeInAnimation)
+            binding.ivRepresentArtist3.startAnimation(fadeInAnimation)
+
+            binding.tvRepresentArtist1.startAnimation(fadeInAnimation)
+            binding.tvRepresentArtist2.startAnimation(fadeInAnimation)
+            binding.tvRepresentArtist3.startAnimation(fadeInAnimation)
+
+
         }
     }
 
@@ -231,7 +253,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
             mainActivityViewModel.getLoginData().collect { userData ->
-                Log.d("확인","포폴에서 콜렉트 불림")
+                Log.d("확인", "포폴에서 콜렉트 불림")
                 userData?.let {
                     portfolioViewModel.getPortfolio(it.memberId)
                     userId = it.memberId
