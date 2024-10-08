@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.net.Uri
 import android.util.Log
@@ -25,6 +26,7 @@ class ImageUploadFragment :
 
     private val args: ImageUploadFragmentArgs by navArgs()
     private val imageUploadViewModel: ImageUploadViewModel by viewModels()
+    private var animator: Animator? = null
 
     private lateinit var image: MultipartBody.Part
     private var uri = ""
@@ -98,13 +100,18 @@ class ImageUploadFragment :
     }
 
     private fun startProgressBarAnimation(start: Int, end: Int) {
-        val animator = ValueAnimator.ofInt(start, end).apply {
+        animator = ValueAnimator.ofInt(start, end).apply {
             duration = 800
             addUpdateListener { animation ->
                 val progress = animation.animatedValue as Int
                 binding.progressBar.progress = progress
             }
         }
-        animator.start()
+        animator?.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        animator?.cancel()
     }
 }

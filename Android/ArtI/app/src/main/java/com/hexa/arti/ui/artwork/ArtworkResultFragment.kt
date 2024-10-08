@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.util.Log
 import android.view.View
@@ -33,6 +34,7 @@ class ArtworkResultFragment :
     private val artworkResultViewModel: ArtworkResultViewModel by viewModels()
     private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+    private var animator: Animator? = null
 
     data class Item(val id: Int, val name: String)
 
@@ -177,13 +179,18 @@ class ArtworkResultFragment :
     }
 
     private fun startProgressBarAnimation(start: Int, end: Int) {
-        val animator = ValueAnimator.ofInt(start, end).apply {
-            duration = 800 // 1초
+        animator = ValueAnimator.ofInt(start, end).apply {
+            duration = 800
             addUpdateListener { animation ->
                 val progress = animation.animatedValue as Int
                 binding.progressBar.progress = progress
             }
         }
-        animator.start()
+        animator?.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        animator?.cancel()
     }
 }

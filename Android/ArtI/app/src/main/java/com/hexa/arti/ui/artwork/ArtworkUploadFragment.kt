@@ -1,15 +1,19 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.view.animation.AnimationUtils
+import androidx.lifecycle.lifecycleScope
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentArtworkUploadBinding
 import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
+import kotlinx.coroutines.launch
 
 class ArtworkUploadFragment :
     BaseFragment<FragmentArtworkUploadBinding>(R.layout.fragment_artwork_upload) {
+    private var animator: Animator? = null
 
     override fun init() {
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.artwork_fade_in)
@@ -34,14 +38,21 @@ class ArtworkUploadFragment :
     }
 
     private fun startProgressBarAnimation(start: Int, end: Int) {
-        val animator = ValueAnimator.ofInt(start, end).apply {
-            duration = 800
-            addUpdateListener { animation ->
-                val progress = animation.animatedValue as Int
-                binding.progressBar.progress = progress
+        lifecycleScope.launch {
+            animator = ValueAnimator.ofInt(start, end).apply {
+                duration = 800
+                addUpdateListener { animation ->
+                    val progress = animation.animatedValue as Int
+                    binding.progressBar.progress = progress
+                }
             }
+            animator?.start()
         }
-        animator.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        animator?.cancel()
     }
 
 }

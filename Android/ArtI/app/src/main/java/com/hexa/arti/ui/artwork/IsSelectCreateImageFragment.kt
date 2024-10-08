@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.util.Log
 import android.view.animation.AnimationUtils
@@ -14,6 +15,7 @@ class IsSelectCreateImageFragment :
     BaseFragment<FragmentIsSelectCreateImageBinding>(R.layout.fragment_is_select_create_image) {
 
     private val args: IsSelectCreateImageFragmentArgs by navArgs()
+    private var animator: Animator? = null
 
     override fun init() {
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
@@ -58,14 +60,19 @@ class IsSelectCreateImageFragment :
     }
 
     private fun startProgressBarAnimation(start: Int, end: Int) {
-        val animator = ValueAnimator.ofInt(start, end).apply {
+        animator = ValueAnimator.ofInt(start, end).apply {
             duration = 800
             addUpdateListener { animation ->
                 val progress = animation.animatedValue as Int
                 binding.progressBar.progress = progress
             }
         }
-        animator.start()
+        animator?.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        animator?.cancel()
     }
 
 }

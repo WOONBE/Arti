@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.Animator
 import android.animation.ValueAnimator
 import android.view.KeyEvent
 import android.view.View.GONE
@@ -30,6 +31,7 @@ class SelectArtworkFragment :
     private val selectArtworkViewModel: SelectArtworkViewModel by viewModels()
     private lateinit var adapter: SelectArtworkAdapter
     private var isClicked = false
+    private var animator: Animator? = null
 
     override fun init() {
 
@@ -105,14 +107,19 @@ class SelectArtworkFragment :
     }
 
     private fun startProgressBarAnimation(start: Int, end: Int) {
-        val animator = ValueAnimator.ofInt(start, end).apply {
+        animator = ValueAnimator.ofInt(start, end).apply {
             duration = 800
             addUpdateListener { animation ->
                 val progress = animation.animatedValue as Int
                 binding.progressBar.progress = progress
             }
         }
-        animator.start()
+        animator?.start()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        animator?.cancel()
     }
 
 }
