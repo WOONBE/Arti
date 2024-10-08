@@ -69,13 +69,19 @@ if __name__ == "__main__":
     import nest_asyncio
     from pyngrok import ngrok
     import gc
+    import json
+
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    SECRET_FILE = os.path.join(BASE_DIR, 'ngrok.json')
+    secrets = json.loads(open(SECRET_FILE).read())
+    ngrok_token = secrets["ngrok"]
 
     # gc.disable()
     gc.enable()
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using {device} device")
-    ngrok.set_auth_token("2mdpOxrsU0FtqgSYHIfuPF2gmCC_2pB6jYnvRZcMKnKch8LFc")
+    ngrok.set_auth_token(ngrok_token.get("token"))
 
     # ngrok_tunnel = ngrok.connect(8000)
     public_url = ngrok.connect(addr="8000", domain="just-shiner-manually.ngrok-free.app")
