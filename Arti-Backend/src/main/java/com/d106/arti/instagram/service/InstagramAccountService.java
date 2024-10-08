@@ -77,11 +77,10 @@ public class InstagramAccountService {
         }
     }
 
-    public List<String> getInstagramMediaUrls(Principal connectedUser) {
-        Member currentMember = (Member) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+    public List<String> getInstagramMediaUrls(Member member) {
 
         // 회원의 Instagram 계정 정보 가져오기
-        InstagramAccount instagramAccount = instagramAccountRepository.findByMember(currentMember)
+        InstagramAccount instagramAccount = instagramAccountRepository.findByMember(member)
             .orElseThrow(() -> new RuntimeException("No Instagram account linked for this user."));
 
         // Instagram API에서 media_url 필드만 가져오기

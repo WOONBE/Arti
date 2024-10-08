@@ -1,6 +1,7 @@
 package com.d106.arti.instagram.controller;
 
 import com.d106.arti.instagram.service.InstagramAccountService;
+import com.d106.arti.member.domain.Member;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
@@ -9,6 +10,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,8 +58,9 @@ public class InstagramController {
 
     @GetMapping("/media")
     public ResponseEntity<?> getInstagramMediaUrls(Principal connectedUser) {
+        Member currentMember = (Member) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         return ResponseEntity.ok(
-            instagramAccountService.getInstagramMediaUrls(connectedUser));
+            instagramAccountService.getInstagramMediaUrls(currentMember));
     }
 
     private static Map<String, String> extractQueryParams(String uriString)

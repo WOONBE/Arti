@@ -1,5 +1,8 @@
 package com.d106.arti.member.controller;
 
+import com.d106.arti.instagram.service.InstagramAccountService;
+import com.d106.arti.member.domain.Member;
+import com.d106.arti.member.repository.MemberRepository;
 import com.d106.arti.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.security.Principal;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
 
     private final MemberService service;
+    private final MemberRepository memberRepository;
+    private final InstagramAccountService instagramAccountService;
 
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(
@@ -41,6 +46,12 @@ public class MemberController {
     @GetMapping("/nickname")
     public ResponseEntity<?> getNickname(Principal connectedUser) {
         return ResponseEntity.ok(service.getNickname(connectedUser));
+    }
+
+    @GetMapping("/{id}/instagram/media")
+    public ResponseEntity<?> getInstagramMedia(@PathVariable Integer id) {
+        Member member = memberRepository.findById(id).orElseThrow();
+        return ResponseEntity.ok(instagramAccountService.getInstagramMediaUrls(member));
     }
 
     // 미술관 구독 API
