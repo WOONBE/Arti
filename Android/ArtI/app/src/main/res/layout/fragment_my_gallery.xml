@@ -32,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="병현이의 미술관"
+                    android:singleLine="true"
                     android:maxLines="1"
                     android:maxLength="16"
                     android:background="@android:color/transparent"

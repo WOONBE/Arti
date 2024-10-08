@@ -11,6 +11,7 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:layout_height="wrap_content"
         android:text="병현이의 절망"
+        android:singleLine="true"
         android:paddingVertical="10dp"
         android:textStyle="bold"
         android:textSize="20dp"

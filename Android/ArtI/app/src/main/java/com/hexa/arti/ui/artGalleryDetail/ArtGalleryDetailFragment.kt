@@ -67,6 +67,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
             }
             if(isReady) {
                 if(code == 200) {
+                    Log.d(TAG, "init: aaaaaaaaaaa")
                     if (!isPlaying) {
                         binding.galleryBgmPlayPtn.visibility = View.GONE
                         binding.galleryBgmStopBtn.visibility = View.VISIBLE
@@ -152,6 +153,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
             if(it != "") {
                 musicStreamUrl = it
                 makeToast("셍성 완료")
+                isLoading = false
                 initMedia()
                 artGalleryViewModel.updateUrl()
             }
@@ -315,11 +317,6 @@ private fun initMedia(){
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
-        mainActivity.changeLandScope()
-    }
     // 뷰가 파괴될 때 MediaPlayer 해제
     override fun onDestroyView() {
         super.onDestroyView()

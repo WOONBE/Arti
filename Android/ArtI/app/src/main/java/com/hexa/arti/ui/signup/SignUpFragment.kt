@@ -77,6 +77,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
                         binding.signCertificationEt.isEnabled = false
                         binding.signCertificationBtn.isEnabled = false
                         binding.signCertificationBtn.text = "확인"
+                        makeToast("인증 되었습니다")
                     }
                     2->{
                         makeToast("인증번호를 다시 확인해주세요")
@@ -148,7 +149,11 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
                         binding.signCertificationBtn.text = "인증"
                     }
                 }
-                else makeToast("이메일 형식을 맞춰주세요")
+                else {
+                    makeToast("이메일 형식을 맞춰주세요")
+                    signEmailBtn.isEnabled = true
+                }
+
 
             }
 
