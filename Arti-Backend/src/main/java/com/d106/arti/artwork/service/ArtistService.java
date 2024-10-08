@@ -98,7 +98,7 @@ public class ArtistService {
 
     // 장르로 검색된 미술품들의 화가를 중복 없이 3명만 반환하는 메서드
     @Transactional(readOnly = true)
-    @Cacheable(value = "artistsByGenre", key = "#genreLabel")
+    @Cacheable(cacheNames = "genreArtists", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> getArtistsByGenre(String genreLabel) {
 
         String formattedGenreLabel = genreLabel.trim().toUpperCase();
@@ -116,17 +116,16 @@ public class ArtistService {
 
         List<NormalArtWork> artworks = artworkRepository.findAllByGenreContaining(genreLabelForSearch);
 
-        // 5. 화가 중복 없이 최대 3명 선택
-        Set<Artist> uniqueArtists = new HashSet<>(); // 중복 제거를 위한 Set 사용
+
+        Set<Artist> uniqueArtists = new HashSet<>();
         for (NormalArtWork artwork : artworks) {
             if (uniqueArtists.size() < 3) {
                 uniqueArtists.add(artwork.getArtist());
             } else {
-                break; // 화가가 3명이 되면 반복을 멈춤
+                break;
             }
         }
 
-        // 6. 선택된 화가를 ArtistResponse로 변환하여 반환
         return uniqueArtists.stream()
                 .map(ArtistResponse::toArtistResponse)
                 .collect(Collectors.toList());
