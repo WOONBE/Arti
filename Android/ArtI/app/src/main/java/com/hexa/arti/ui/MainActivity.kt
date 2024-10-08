@@ -38,6 +38,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val myGalleryActivityViewModel : MyGalleryActivityViewModel by viewModels()
     private lateinit var loadingDialog: LoadingDialog
     var userData: LoginResponse? = null
+    var isUp = true
+    var isDoubleUp = false
 
     private var mode = false
 

@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.ValueAnimator
 import android.util.Log
 import android.view.animation.AnimationUtils
 import androidx.navigation.fragment.navArgs
@@ -16,6 +17,13 @@ class IsSelectCreateImageFragment :
 
     override fun init() {
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        if (mainActivity.isUp) startProgressBarAnimation(40, 60)
+        else {
+            if (!mainActivity.isDoubleUp) startProgressBarAnimation(100, 60)
+            else startProgressBarAnimation(80, 60)
+        }
+        mainActivity.isUp = false
+
         with(binding) {
             artworkCommentTv.startAnimation(fadeInAnimation)
             artworkMaintainBtn.startAnimation(fadeInAnimation)
@@ -27,6 +35,7 @@ class IsSelectCreateImageFragment :
 
             //네
             artworkCreateBtn.setOnClickListener {
+                mainActivity.isUp = true
                 val action =
                     IsSelectCreateImageFragmentDirections.actionIsSelectCreateImageFragmentToImageUploadFragment(
                         args.artId
@@ -36,6 +45,7 @@ class IsSelectCreateImageFragment :
             // 아니오
             artworkMaintainBtn.setOnClickListener {
                 Log.d("확인", "init: ${args.artId.toString()}")
+                mainActivity.isDoubleUp = true
                 val action =
                     IsSelectCreateImageFragmentDirections.actionIsSelectCreateImageFragmentToArtworkResultFragment(
                         args.artId.toString(),
@@ -45,6 +55,17 @@ class IsSelectCreateImageFragment :
             }
         }
 
+    }
+
+    private fun startProgressBarAnimation(start: Int, end: Int) {
+        val animator = ValueAnimator.ofInt(start, end).apply {
+            duration = 800
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Int
+                binding.progressBar.progress = progress
+            }
+        }
+        animator.start()
     }
 
 }

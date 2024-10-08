@@ -1,18 +1,12 @@
 package com.hexa.arti.ui.artwork
 
-import android.annotation.SuppressLint
-import android.os.Bundle
+import android.animation.ValueAnimator
 import android.util.Log
-import android.util.TypedValue
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.net.toUri
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,13 +26,16 @@ import kotlinx.coroutines.launch
 private const val TAG = "확인"
 
 @AndroidEntryPoint
-class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layout.fragment_artwork_result) {
+class ArtworkResultFragment :
+    BaseFragment<FragmentArtworkResultBinding>(R.layout.fragment_artwork_result) {
 
-    private val args : ArtworkResultFragmentArgs by navArgs()
-    private val artworkResultViewModel : ArtworkResultViewModel by viewModels()
-    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by activityViewModels()
-    private val mainActivityViewModel : MainActivityViewModel by activityViewModels()
+    private val args: ArtworkResultFragmentArgs by navArgs()
+    private val artworkResultViewModel: ArtworkResultViewModel by viewModels()
+    private val myGalleryActivityViewModel: MyGalleryActivityViewModel by activityViewModels()
+    private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
+
     data class Item(val id: Int, val name: String)
+
     private val itemList = arrayListOf(
         Item(1, "aa"),
         Item(2, "bb"),
@@ -46,9 +43,9 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
         Item(4, "dd")
     )
     private var artworkType = "AI"
-    private var galleryId : Int = 0
-    private var themeId : Int = 0
-    private var userId : Int = 0
+    private var galleryId: Int = 0
+    private var themeId: Int = 0
+    private var userId: Int = 0
     override fun init() {
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
         binding.artworkResultTv.startAnimation(fadeInAnimation)
@@ -57,6 +54,11 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
         binding.artworkResultThemeTv.startAnimation(fadeInAnimation)
         binding.artworkResultThemeSpinner.startAnimation(fadeInAnimation)
         binding.artworkResultBtn.startAnimation(fadeInAnimation)
+
+        if (mainActivity.isDoubleUp)startProgressBarAnimation(60,100)
+        else startProgressBarAnimation(80,100)
+        mainActivity.isDoubleUp = false
+        mainActivity.isUp = false
 
         val fragmentManager = requireActivity().supportFragmentManager
         Log.d("BackStack", "Back stack entry count: ${fragmentManager.backStackEntryCount}")
@@ -70,18 +72,20 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
             }
         }
         Log.d(TAG, "init: 결과창")
-        with(binding){
+        with(binding) {
 
-            artworkResultViewModel.successStatus.observe(viewLifecycleOwner){
+            artworkResultViewModel.successStatus.observe(viewLifecycleOwner) {
                 mainActivity.hideLoadingDialog()
-                when(it){
-                    1->{
+                when (it) {
+                    1 -> {
                         myGalleryActivityViewModel.getMyGalleryTheme(galleryId)
                         makeToast("작품이 등록되었습니다.")
-                        val action = ArtworkResultFragmentDirections.actionArtworkResultFragmentToHomeFragment()
+                        val action =
+                            ArtworkResultFragmentDirections.actionArtworkResultFragmentToHomeFragment()
                         navigate(action)
                     }
-                    else ->{
+
+                    else -> {
 
                     }
                 }
@@ -89,24 +93,23 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
 
 
             // 기본 세팅
-            if(args.artType == 1){
+            if (args.artType == 1) {
                 Glide.with(requireContext())
                     .load(args.artId)
                     .into(artworkResultImg)
                 artworkResultEt.setText("")
-            }
-            else if(args.artType == 0){
+            } else if (args.artType == 0) {
                 artworkResultViewModel.getArtWork(args.artId.toInt())
             }
 
-            artworkResultViewModel.artworkResult.observe(viewLifecycleOwner){
+            artworkResultViewModel.artworkResult.observe(viewLifecycleOwner) {
                 artworkResultEt.setText(it.title)
                 Glide.with(requireContext())
                     .load(it.imageUrl)
                     .into(artworkResultImg)
             }
 
-            myGalleryActivityViewModel.myGalleryTheme.observe(viewLifecycleOwner){
+            myGalleryActivityViewModel.myGalleryTheme.observe(viewLifecycleOwner) {
                 itemList.clear()
 
                 // MyGalleryThemeItem 데이터를 Item으로 변환하여 리스트에 추가
@@ -117,7 +120,10 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
                     )
                     itemList.add(item)
                     //spinner
-                    artworkResultThemeSpinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, itemList.map { it.name }).apply {
+                    artworkResultThemeSpinner.adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_spinner_item,
+                        itemList.map { it.name }).apply {
                         setDropDownViewResource(R.layout.item_spinner_theme)
                     }
                 }
@@ -125,32 +131,39 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
 
             artworkResultThemeSpinner.dropDownWidth = ViewGroup.LayoutParams.MATCH_PARENT
             artworkResultThemeSpinner.dropDownWidth = ViewGroup.LayoutParams.WRAP_CONTENT
-            artworkResultThemeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                    val selectedItem = itemList[position]
-                    themeId = selectedItem.id
-                }
+            artworkResultThemeSpinner.onItemSelectedListener =
+                object : AdapterView.OnItemSelectedListener {
+                    override fun onItemSelected(
+                        parent: AdapterView<*>,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        val selectedItem = itemList[position]
+                        themeId = selectedItem.id
+                    }
 
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                    // 선택되지 않았을 때 처리할 내용
+                    override fun onNothingSelected(parent: AdapterView<*>) {
+                        // 선택되지 않았을 때 처리할 내용
+                    }
                 }
-            }
 
             artworkBackBtn.setOnClickListener {
                 popBackStack()
             }
             artworkResultBtn.setOnClickListener {
                 Log.d(TAG, "init: 1번 ${args.artType}")
-                if(args.artType == 1){
+                if (args.artType == 1) {
                     Log.d(TAG, "init: 2번 ${args.artType}")
-                    artworkResultViewModel.getAIArtworkId(ArtWorkAIDto(
-                        ai_artwork_title = artworkResultEt.text.toString(),
-                        artwork_type = artworkType,
-                        ai_img_url = args.artId,
-                        member_id = userId
-                        ),themeId)
-                }
-                else{
+                    artworkResultViewModel.getAIArtworkId(
+                        ArtWorkAIDto(
+                            ai_artwork_title = artworkResultEt.text.toString(),
+                            artwork_type = artworkType,
+                            ai_img_url = args.artId,
+                            member_id = userId
+                        ), themeId
+                    )
+                } else {
                     artworkResultViewModel.saveArtwork(
                         themeId = themeId,
                         artworkId = args.artId.toInt(),
@@ -163,4 +176,14 @@ class ArtworkResultFragment : BaseFragment<FragmentArtworkResultBinding>(R.layou
         }
     }
 
+    private fun startProgressBarAnimation(start: Int, end: Int) {
+        val animator = ValueAnimator.ofInt(start, end).apply {
+            duration = 800 // 1초
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Int
+                binding.progressBar.progress = progress
+            }
+        }
+        animator.start()
+    }
 }

@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.ValueAnimator
 import android.net.Uri
 import android.util.Log
 import android.view.animation.AnimationUtils
@@ -30,6 +31,10 @@ class ImageUploadFragment :
     override fun init() {
 
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+        if (mainActivity.isUp) startProgressBarAnimation(60, 80)
+        else startProgressBarAnimation(100, 80)
+        mainActivity.isUp = false
+        mainActivity.isDoubleUp = true
 
         with(binding) {
 
@@ -66,6 +71,8 @@ class ImageUploadFragment :
         imageUploadViewModel.imageResponse.observe(viewLifecycleOwner) {
             if (it.isNotEmpty()) {
                 mainActivity.hideLoadingDialog()
+                mainActivity.isUp = true
+                mainActivity.isDoubleUp = false
                 val action =
                     ImageUploadFragmentDirections.actionImageUploadFragmentToArtworkResultFragment(
                         it,
@@ -90,4 +97,14 @@ class ImageUploadFragment :
         getImageLauncher.launch("image/*")
     }
 
+    private fun startProgressBarAnimation(start: Int, end: Int) {
+        val animator = ValueAnimator.ofInt(start, end).apply {
+            duration = 800
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Int
+                binding.progressBar.progress = progress
+            }
+        }
+        animator.start()
+    }
 }

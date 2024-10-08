@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.artwork
 
+import android.animation.ValueAnimator
 import android.view.animation.AnimationUtils
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -12,11 +13,17 @@ class ArtworkUploadFragment :
 
     override fun init() {
         val fadeInAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.artwork_fade_in)
+        if (mainActivity.isUp) {
+            startProgressBarAnimation(0, 20)
+        }else {
+            startProgressBarAnimation(40, 20)
+        }
         with(binding) {
             artworkBackBtn.setOnClickListener {
                 popBackStack()
             }
             artworkNextBtn.setOnClickListener {
+                mainActivity.isUp = true
                 navigate(R.id.action_artworkUploadFragment_to_selectArtworkFragment)
             }
 
@@ -24,6 +31,17 @@ class ArtworkUploadFragment :
             artworkNextBtn.startAnimation(fadeInAnimation)
         }
 
+    }
+
+    private fun startProgressBarAnimation(start: Int, end: Int) {
+        val animator = ValueAnimator.ofInt(start, end).apply {
+            duration = 800
+            addUpdateListener { animation ->
+                val progress = animation.animatedValue as Int
+                binding.progressBar.progress = progress
+            }
+        }
+        animator.start()
     }
 
 }
