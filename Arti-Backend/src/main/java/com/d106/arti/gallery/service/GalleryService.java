@@ -116,7 +116,7 @@ public class GalleryService {
 
     // 1. 특정 미술관 id를 받아서 테마 전체 조회되게 변경
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "themesByGalleryId", key = "#galleryId", sync = true, cacheManager = "rcm")
+//    @Cacheable(cacheNames = "themesByGalleryId", key = "#galleryId", sync = true, cacheManager = "rcm")
     public List<ThemeResponse> getAllThemesByGalleryId(Integer galleryId) {
         List<Theme> themes = themeRepository.findByGalleryId(galleryId);
         return themes.stream()
@@ -226,7 +226,7 @@ public class GalleryService {
 
     // 테마에 담긴 모든 미술품 조회, 길이 너비 추가해야 할듯?
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "artworksByThemeId", key = "#themeId", sync = true, cacheManager = "rcm")
+//    @Cacheable(cacheNames = "artworksByThemeId", key = "#themeId", sync = true, cacheManager = "rcm")
     public List<ArtworkResponse> getArtworksByThemeId(Integer themeId) {
         // Theme 조회
         Theme theme = themeRepository.findById(themeId)
@@ -315,7 +315,7 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "subGalleriesByMemberId", key = "#memberId", sync = true, cacheManager = "rcm")
+//    @Cacheable(cacheNames = "subGalleriesByMemberId", key = "#memberId", sync = true, cacheManager = "rcm")
     public List<SubscribedGalleryResponse> getSubscribedGalleriesByMemberId(Integer memberId) {
         // memberId로 Member 조회
         Member member = memberRepository.findById(memberId)
@@ -372,7 +372,7 @@ public class GalleryService {
 
     // 특정 미술관 ID로 테마와 그 테마에 속한 모든 미술품 조회
     @Transactional(readOnly = true)
-    @Cacheable(value = "allGalleriesThings", key = "#galleryId", sync = true, cacheManager = "rcm")
+//    @Cacheable(value = "allGalleriesThings", key = "#galleryId", sync = true, cacheManager = "rcm")
     public List<ThemeWithArtworksResponse> getAllThemesWithArtworksByGalleryId(Integer galleryId) {
         // 특정 galleryId에 속한 테마 조회
         List<Theme> themes = themeRepository.findByGalleryId(galleryId);
