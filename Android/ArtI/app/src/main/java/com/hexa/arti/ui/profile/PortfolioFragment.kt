@@ -60,7 +60,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             val fadeInAnimation =
                 AnimationUtils.loadAnimation(requireContext(), R.anim.artist_fade_in_slide_left)
 
-            Log.d("확인","아티스트 ${artists}")
+            Log.d("확인", "아티스트 ${artists}")
             Glide.with(requireContext())
                 .load(artists[0].imageUrl)
                 .error(R.drawable.temp_represent_artist)
@@ -151,6 +151,8 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         englishName?.let {
             getRepresentArtists(it)
         }
+
+        binding.pcChart.visibility = View.VISIBLE
 
         binding.tvRepresentArtist.text = "대표 화가 : ${genres[0].genre}"
 
