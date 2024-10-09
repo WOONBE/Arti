@@ -32,7 +32,7 @@ class SubscribeViewModel @Inject constructor(
                     list.add(
                         Subscriber(data.galleryId,
                             data.galleryImage,
-                            data.galleryName,
+                            data.galleryName ?: "a",
                             data.ownerName ,
                             data.galleryDescription ?: " "
                             ,data.viewCount)
