@@ -1,7 +1,8 @@
 #  🎨 Arti - 추천을 통한 나만의 미술관 🎨
 <img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
 <br>
-Arti 서버 링크: https://j11d106.p.ssafy.io/
+Arti 서버 링크: https://j11d106.p.ssafy.io/ 
+
 Arti 앱 다운로드 링크:
 
 <br><br><br>
@@ -189,7 +190,7 @@ Arti 앱 다운로드 링크:
 
 ## 포팅 메뉴얼(파일 필요)
 
-[포팅 메뉴얼 링크!](넣어야함.)
+포팅 메뉴얼 링크: 
 
 <br><br>
 
