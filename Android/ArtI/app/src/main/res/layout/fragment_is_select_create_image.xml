@@ -58,7 +58,7 @@
             android:id="@+id/artwork_comment_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="사진을 등록하면 원하는\n 미술품으로 바꿔줄거에요"
+            android:text="사진을 등록하면 선택한 미술품의\n       스타일로 바꿔드릴게요"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -80,7 +80,7 @@
             android:minHeight="0dp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="50dp"
-            android:text="아니요 이대로가 좋아요"
+            android:text="이대로가 좋아요"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/artwork_comment_tv" />
@@ -94,7 +94,7 @@
             android:minHeight="0dp"
             android:paddingHorizontal="50dp"
             android:paddingVertical="10dp"
-            android:text="네 등록할께요"
+            android:text="네 바꿔주세요"
             app:layout_constraintEnd_toEndOf="@+id/artwork_maintain_btn"
             app:layout_constraintStart_toStartOf="@+id/artwork_maintain_btn"
             app:layout_constraintTop_toBottomOf="@+id/artwork_maintain_btn" />

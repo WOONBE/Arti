@@ -150,18 +150,16 @@ class CreateGalleryFragment :
             if (file.length() > maxSize) {
                 file = compressImage(file)
             }
-            binding.createGalleryThumbnailIv.setImageURI(imageUri)
-            val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-            createGalleryViewModel.updateThumbnail(
-                MultipartBody.Part.createFormData(
-                    "image",
-                    file.name,
-                    requestFile
-                )
-            )
-
-
         }
+        binding.createGalleryThumbnailIv.setImageURI(imageUri)
+        val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+        createGalleryViewModel.updateThumbnail(
+            MultipartBody.Part.createFormData(
+                "image",
+                file.name,
+                requestFile
+            )
+        )
 
     }
 }

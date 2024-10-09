@@ -142,6 +142,15 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
                 getRepresentArtists(it)
             }
         }
+
+        binding.tvRepresentGenre4.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre4.text}"
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre4.text.toString()]
+            englishName?.let {
+                getRepresentArtists(it)
+            }
+        }
     }
 
     private fun initChart(genres: List<PortfolioGenre>) {
