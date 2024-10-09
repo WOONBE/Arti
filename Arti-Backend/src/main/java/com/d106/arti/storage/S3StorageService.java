@@ -18,7 +18,6 @@ import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -81,7 +80,7 @@ public class S3StorageService implements StorageService {
         }
     }
 
-//    private String uploadImageToS3(MultipartFile image) throws IOException {
+    //    private String uploadImageToS3(MultipartFile image) throws IOException {
 //        String originalFilename = image.getOriginalFilename(); //원본 파일 명
 //        String extention = originalFilename.substring(originalFilename.lastIndexOf(".")); //확장자 명
 //
@@ -112,10 +111,11 @@ public class S3StorageService implements StorageService {
 //    }
     private String uploadImageToS3(MultipartFile image) throws IOException {
         String originalFilename = image.getOriginalFilename(); // 원본 파일 명
-        String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase(); // 확장자 명
+        String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1)
+            .toLowerCase(); // 확장자 명
 
         // UUID로 랜덤한 파일명 생성
-        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename;
+//        String s3FileName = UUID.randomUUID().toString().substring(0, 10) + originalFilename;
 
         InputStream is = image.getInputStream();
         byte[] bytes = IOUtils.toByteArray(is);
@@ -136,13 +136,15 @@ public class S3StorageService implements StorageService {
                 metadata.setContentType("image/gif");
                 break;
             default:
-                throw new S3Exception(ExceptionCode.INVALID_FILE_EXTENTION); // 지원되지 않는 확장자일 경우 예외 처리
+                throw new S3Exception(
+                    ExceptionCode.INVALID_FILE_EXTENTION); // 지원되지 않는 확장자일 경우 예외 처리
         }
 
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
 
         try {
-            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, s3FileName, byteArrayInputStream, metadata)
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, originalFilename,
+                byteArrayInputStream, metadata)
                 .withCannedAcl(CannedAccessControlList.PublicRead); // Public 읽기 권한 부여
             amazonS3.putObject(putObjectRequest); // S3에 이미지 업로드
         } catch (Exception e) {
@@ -152,7 +154,7 @@ public class S3StorageService implements StorageService {
             is.close();
         }
 
-        return amazonS3.getUrl(bucketName, s3FileName).toString(); // 업로드된 파일 URL 반환
+        return amazonS3.getUrl(bucketName, originalFilename).toString(); // 업로드된 파일 URL 반환
     }
 
     public void deleteImageFromS3(String imageAddress) {
