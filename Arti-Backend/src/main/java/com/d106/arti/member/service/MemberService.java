@@ -66,7 +66,7 @@ public class MemberService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = "subGalleriesByMemberId", key = "#memberId", cacheManager = "rcm")
+//    @CacheEvict(cacheNames = "subGalleriesByMemberId", key = "#memberId", cacheManager = "rcm")
     public Map<String, Object> subscribeGallery(Integer memberId, Integer galleryId) {
 
         Member member = memberRepository.findById(memberId)
@@ -87,7 +87,7 @@ public class MemberService {
     }
 
     @Transactional
-    @CacheEvict(cacheNames = "subGalleriesByMemberId", key = "#memberId", cacheManager = "rcm")
+//    @CacheEvict(cacheNames = "subGalleriesByMemberId", key = "#memberId", cacheManager = "rcm")
     public Map<String, Object> unsubscribeGallery(Integer memberId, Integer galleryId) {
         // 1. 회원 정보 조회
         Member member = memberRepository.findById(memberId)
