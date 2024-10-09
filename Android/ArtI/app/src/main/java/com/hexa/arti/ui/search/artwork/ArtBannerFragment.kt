@@ -54,9 +54,11 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     private fun initUserData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainActivityViewModel.getLoginData().collect { userData ->
-                    userData?.let {
-                        viewModel.getRecommendArtworks(userData.memberId)
+                if(viewModel.resultArtworks.value == null) {
+                    mainActivityViewModel.getLoginData().collect { userData ->
+                        userData?.let {
+                            viewModel.getRecommendArtworks(userData.memberId)
+                        }
                     }
                 }
             }
