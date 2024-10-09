@@ -18,6 +18,8 @@ import com.hexa.arti.data.model.portfolio.PortfolioGenre
 import com.hexa.arti.databinding.FragmentPortfolioBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.MyGalleryActivityViewModel
+import com.hexa.arti.ui.setting.SettingFragmentDirections
+import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -96,6 +98,29 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             binding.tvRepresentArtist2.visibility = View.VISIBLE
             binding.tvRepresentArtist3.visibility = View.VISIBLE
 
+            binding.ivRepresentArtist1.setOnClickListener {
+                val action =
+                    SettingFragmentDirections.actionSettingFragmentToArtistDetailFragment(
+                        artists[0]
+                    )
+                navigate(action)
+            }
+            binding.ivRepresentArtist2.setOnClickListener {
+                val action =
+                    SettingFragmentDirections.actionSettingFragmentToArtistDetailFragment(
+                        artists[1]
+                    )
+                navigate(action)
+            }
+            binding.ivRepresentArtist3.setOnClickListener {
+                val action =
+                    SettingFragmentDirections.actionSettingFragmentToArtistDetailFragment(
+                        artists[2]
+                    )
+                navigate(action)
+            }
+
+
             binding.tvRepresentArtist.startAnimation(fadeInAnimation)
 
             binding.tvRepresentArtist1.startAnimation(fadeInAnimation)
@@ -129,6 +154,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre2.text}"
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
+            Log.d("확인", " 화가 확인 ${binding.tvRepresentGenre2.text} ${englishName}")
             englishName?.let {
                 getRepresentArtists(it)
             }
@@ -138,6 +164,15 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre3.text}"
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
+            englishName?.let {
+                getRepresentArtists(it)
+            }
+        }
+
+        binding.tvRepresentGenre4.setOnClickListener {
+            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre4.text}"
+            val englishName =
+                ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre4.text.toString()]
             englishName?.let {
                 getRepresentArtists(it)
             }
@@ -182,6 +217,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         dataSet.setDrawValues(false)
 
         var data = PieData(dataSet)
+
 
         binding.pcChart.data = data
         binding.pcChart.description.isEnabled = false

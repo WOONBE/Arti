@@ -68,7 +68,8 @@
         android:id="@+id/portfolioFragment"
         android:name="com.hexa.arti.ui.profile.PortfolioFragment"
         android:label="fragment_portfolio"
-        tools:layout="@layout/fragment_portfolio" />
+        tools:layout="@layout/fragment_portfolio" >
+    </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.hexa.arti.ui.MainActivity"
@@ -232,6 +233,9 @@
         <action
             android:id="@+id/action_settingFragment_to_instagramFragment"
             app:destination="@id/instagramFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_artistDetailFragment"
+            app:destination="@id/artistDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/myGalleryHomeFragment"

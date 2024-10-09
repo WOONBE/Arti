@@ -1,6 +1,5 @@
 package com.hexa.arti.ui.search.artwork
 
-import android.view.View.GONE
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -15,8 +14,6 @@ import com.hexa.arti.ui.search.adapter.ArtworkAdapter
 import com.hexa.arti.util.LoadingRecommendDialog
 import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -57,7 +54,7 @@ class ArtBannerFragment : BaseFragment<FragmentArtBannerBinding>(R.layout.fragme
     private fun initUserData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                CoroutineScope(Dispatchers.Main).launch {
+                if(viewModel.resultArtworks.value == null) {
                     mainActivityViewModel.getLoginData().collect { userData ->
                         userData?.let {
                             viewModel.getRecommendArtworks(userData.memberId)

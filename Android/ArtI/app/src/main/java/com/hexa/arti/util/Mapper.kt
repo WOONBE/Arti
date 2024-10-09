@@ -27,7 +27,8 @@ fun GetArtWorkResponse.asArtwork() = Artwork(
     imageUrl = this.filename,
     title = this.title,
     description = this.description,
-    year = this.year
+    year = this.year,
+    artist = this.artist
 )
 
 fun GetSearchGalleryResponse.asGalleryBanner() = GalleryBanner(
