@@ -80,6 +80,7 @@
             android:hint="제목을 입력해주세요"
             android:paddingHorizontal="20dp"
             android:paddingVertical="5dp"
+            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@+id/artwork_result_tv"
             app:layout_constraintEnd_toEndOf="@+id/progressBar"
             app:layout_constraintStart_toEndOf="@+id/artwork_result_tv"
