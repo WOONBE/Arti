@@ -1,8 +1,11 @@
 package com.hexa.arti.ui
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
@@ -117,26 +120,9 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
             }
             onTrackingFailureChanged = { reason ->
                 this@ARActivity.trackingFailureReason = reason
+                Log.d("확인", "추적 실패: $reason")
             }
 
-//            setOnTouchListener { view, event ->
-//                if (event.action == MotionEvent.ACTION_DOWN) {
-//                    val session = sceneView.session
-//                    session?.let {
-//                        val frame: Frame = session.update()
-//                        val hitResults = frame.hitTest(event)
-//                        for (hit in hitResults) {
-//                            val trackable = hit.trackable
-//                            if (trackable is Plane && trackable.isPoseInPolygon(hit.hitPose)) {
-//                                addAnchorNode(hit.createAnchor())
-//                                break
-//                            }
-//                        }
-//                    }
-//                    view.performClick()
-//                }
-//                true
-//            }
             planeRenderer.isEnabled = false
 
         }
@@ -159,21 +145,62 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
         )
     }
 
+//    private fun buildImageNode(): ImageNode? {
+//
+//        imageBitmap ?: return null
+//
+//        val imageNode = ImageNode(
+//            materialLoader = sceneView.materialLoader,
+//            bitmap = imageBitmap!!,
+//            size = Size(0.5f, 0.5f)
+//        )
+//
+//        imageNode.rotation = Rotation(-90f, 0f, 0f)  // x축 기준 90도 회전
+//        imageNode.isEditable = true
+//        imageNode.editableScaleRange = 0.3f..5.0f
+//
+//        return imageNode
+//    }
+
     private fun buildImageNode(): ImageNode? {
 
         imageBitmap ?: return null
 
+        // 프레임 이미지 로드
+        val frameBitmap = BitmapFactory.decodeResource(resources, R.drawable.arframe)
+
+        // 원본 이미지와 프레임 이미지를 결합
+        val combinedBitmap = combineBitmaps(imageBitmap!!, frameBitmap)
+
+        // 결합된 Bitmap을 ImageNode에 적용
         val imageNode = ImageNode(
             materialLoader = sceneView.materialLoader,
-            bitmap = imageBitmap!!,
+            bitmap = combinedBitmap,
             size = Size(0.5f, 0.5f)
         )
 
         imageNode.rotation = Rotation(-90f, 0f, 0f)  // x축 기준 90도 회전
-        imageNode.isEditable = true
+        imageNode.isEditable = false
         imageNode.editableScaleRange = 0.3f..5.0f
 
         return imageNode
+    }
+
+    private fun combineBitmaps(baseBitmap: Bitmap, frameBitmap: Bitmap): Bitmap {
+        // 프레임 이미지 크기를 원본 이미지 크기에 맞게 스케일링
+        val scaledFrameBitmap = Bitmap.createScaledBitmap(frameBitmap, baseBitmap.width, baseBitmap.height, false)
+
+        // 두 개의 Bitmap을 결합할 새 Bitmap 생성
+        val combinedBitmap = Bitmap.createBitmap(baseBitmap.width, baseBitmap.height, baseBitmap.config)
+        val canvas = Canvas(combinedBitmap)
+
+        // 원본 이미지 먼저 그리기
+        canvas.drawBitmap(baseBitmap, 0f, 0f, null)
+
+        // 프레임 이미지 위에 그리기
+        canvas.drawBitmap(scaledFrameBitmap, 0f, 0f, null)
+
+        return combinedBitmap
     }
 
 
