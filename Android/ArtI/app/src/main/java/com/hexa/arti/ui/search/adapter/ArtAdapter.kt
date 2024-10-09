@@ -55,7 +55,7 @@ class ArtworkAdapter(
             Glide.with(binding.root.context)
                 .load(artwork.imageUrl)
                 .placeholder(circularProgressDrawable)
-                .override(200, 200)
+                .override(240, 167)
                 .into(binding.ivArt)
 
             binding.tvArtTitle.text = artwork.title
