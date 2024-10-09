@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.search.paging
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -47,6 +48,7 @@ class ArtworkPagingAdapter(
             binding.tvArtTitle.text = artwork.title
 
             itemView.setOnClickListener {
+                Log.d("확안","작품 확인 $artwork")
                 onItemClick(artwork)
             }
         }
