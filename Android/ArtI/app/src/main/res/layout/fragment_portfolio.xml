@@ -29,15 +29,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pc_chart"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_marginTop="16dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_portfolio_title" />
-
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cl_genre"
@@ -53,6 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_chart_circle"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_represent_genre1"
@@ -64,6 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:src="@drawable/temp_represent1"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/iv_chart_circle1"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,6 +79,7 @@
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="팝아트"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre1"
                     app:layout_constraintEnd_toStartOf="@id/tv_percentage1"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre1"
@@ -91,6 +96,7 @@
                     android:text="25%"
                     android:textColor="@color/grey"
                     android:textSize="24sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre1" />
@@ -102,6 +108,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/ic_chart_circle"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre2"
@@ -114,6 +121,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/temp_represent1"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/iv_chart_circle2"
                     app:layout_constraintTop_toBottomOf="@id/iv_represent_genre1" />
 
@@ -125,6 +133,7 @@
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="인상주의"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre2"
                     app:layout_constraintEnd_toStartOf="@id/tv_percentage2"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre2"
@@ -141,6 +150,7 @@
                     android:text="20%"
                     android:textColor="@color/grey"
                     android:textSize="24sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre2" />
@@ -151,6 +161,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_chart_circle"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/iv_represent_genre3"
@@ -163,6 +174,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/temp_represent1"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/iv_chart_circle3"
                     app:layout_constraintTop_toBottomOf="@id/iv_represent_genre2" />
 
@@ -174,6 +186,7 @@
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="르네상스"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre3"
                     app:layout_constraintEnd_toStartOf="@id/tv_percentage3"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre3"
@@ -190,6 +203,7 @@
                     android:text="15%"
                     android:textColor="@color/grey"
                     android:textSize="24sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre3" />
@@ -200,6 +214,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:src="@drawable/ic_chart_circle"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/iv_represent_genre4"
@@ -212,6 +227,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:src="@drawable/temp_represent1"
+                    android:visibility="gone"
                     app:layout_constraintStart_toEndOf="@id/iv_chart_circle4"
                     app:layout_constraintTop_toBottomOf="@id/iv_represent_genre3" />
 
@@ -223,6 +239,7 @@
                     android:fontFamily="@font/inter_28pt_black"
                     android:text="입체파"
                     android:textSize="16sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre4"
                     app:layout_constraintEnd_toStartOf="@id/tv_percentage4"
                     app:layout_constraintStart_toEndOf="@id/iv_represent_genre4"
@@ -239,6 +256,7 @@
                     android:text="8%"
                     android:textColor="@color/grey"
                     android:textSize="24sp"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_represent_genre4"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/iv_represent_genre4" />

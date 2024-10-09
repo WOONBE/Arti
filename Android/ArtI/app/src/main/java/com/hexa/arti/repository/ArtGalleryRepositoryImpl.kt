@@ -33,7 +33,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
         if (result.isSuccessful) {
             result.body()?.let {
-                Log.d("확인","토탈 띰 $galleryId $it")
+                Log.d("확인", "토탈 띰 $galleryId $it")
                 return Result.success(it)
             }
             return Result.failure(Exception())
@@ -187,7 +187,7 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
         if (result.isSuccessful) {
             result.body()?.let {
-
+                Log.d("확인", "구독확인 ${result}")
                 return Result.success(it)
             }
             return Result.failure(Exception())

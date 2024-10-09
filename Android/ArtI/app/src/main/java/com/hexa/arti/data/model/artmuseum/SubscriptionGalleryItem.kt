@@ -7,7 +7,7 @@ data class SubscriptionGalleryItem(
     val galleryImage: String,
     @SerializedName("galleryDescription")
     val galleryDescription: String,
-    val galleryName: String,
+    val galleryName: String?= null,
     val ownerName: String,
     val viewCount: Int
 )
