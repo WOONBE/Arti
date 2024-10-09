@@ -23,7 +23,7 @@ public class RouteStorageService {
     private String query;
     @Value("${elasticsearch.url}")
     private String url;
-    @Value("${cloud.aws.s3.base-url}")
+    @Value("${server.image.base-url}")
     private String baseUrl;
 
     private final ViewCountRepository viewCountRepository;
@@ -65,11 +65,11 @@ public class RouteStorageService {
                 for (ViewCount viewCount : viewCounts) {
 
                     try {
+                        String filename = viewCount.getRequestURI().replace("/static/", "");
                         s3StorageService.storeFile(
-                            downloadImageAsMultipartFile(viewCount.getRequestURI()));
+                            downloadImageAsMultipartFile(filename));
                     } catch (IOException e) {
-                        sink.error(new RuntimeException(e));
-                        return;
+                        e.printStackTrace();
                     }
                 }
                 viewCountRepository.saveAll(viewCounts);
@@ -79,7 +79,7 @@ public class RouteStorageService {
 
     public MultipartFile downloadImageAsMultipartFile(String imageUrl) throws IOException {
         // 이미지 다운로드
-        URL url = new URL(imageUrl);
+        URL url = new URL(baseUrl + imageUrl);
         InputStream inputStream = url.openStream();
 
         // 이미지 바이트 배열로 변환
