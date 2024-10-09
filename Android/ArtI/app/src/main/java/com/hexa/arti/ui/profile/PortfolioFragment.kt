@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.profile
 
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -129,6 +130,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre2.text}"
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
+            Log.d("확인"," 화가 확인 ${binding.tvRepresentGenre2.text} ${englishName}")
             englishName?.let {
                 getRepresentArtists(it)
             }
@@ -191,6 +193,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         dataSet.setDrawValues(false)
 
         var data = PieData(dataSet)
+
 
         binding.pcChart.data = data
         binding.pcChart.description.isEnabled = false
