@@ -16,6 +16,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,6 +66,7 @@ public class MemberService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "subGalleriesByMemberId", key = "#memberId", cacheManager = "rcm")
     public Map<String, Object> subscribeGallery(Integer memberId, Integer galleryId) {
 
         Member member = memberRepository.findById(memberId)
@@ -85,6 +87,7 @@ public class MemberService {
     }
 
     @Transactional
+    @CacheEvict(cacheNames = "subGalleriesByMemberId", key = "#memberId", cacheManager = "rcm")
     public Map<String, Object> unsubscribeGallery(Integer memberId, Integer galleryId) {
         // 1. 회원 정보 조회
         Member member = memberRepository.findById(memberId)
