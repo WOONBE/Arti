@@ -133,33 +133,47 @@ class CreateGalleryFragment :
         return file
     }
 
-    private fun compressImage(file: File): File {
+    private fun compressImage(file: File, quality : Int): File {
         val bitmap = BitmapFactory.decodeFile(file.path)
         val compressedFile = File(file.parent, "compressed_${file.name}")
         FileOutputStream(compressedFile).use { outputStream ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% 압축 품질
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream) // 80% 압축 품질
         }
         return compressedFile
     }
 
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
-
+        Log.d(TAG, "handleImage: ${file.length()}")
         val maxSize = 1024 * 1024 // 10MB
-        while (file.length() > maxSize) {
+        if (file.length() > maxSize) {
+            file = compressImage(file,80)
+            Log.d("확인", "handleImage: ${file.length()}")
             if (file.length() > maxSize) {
-                file = compressImage(file)
+                file = compressImage(file,50)
+                Log.d(TAG, "handleImage 1: ${file.length()}")
+                if (file.length() > maxSize) {
+                    file = compressImage(file, 30)
+                    Log.d(TAG, "handleImage 1: ${file.length()}")
+                    if (file.length() > maxSize) {
+                        makeToast("File size still exceeds limit after compression")
+                        return
+                    }
+                }
             }
         }
-        binding.createGalleryThumbnailIv.setImageURI(imageUri)
-        val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-        createGalleryViewModel.updateThumbnail(
-            MultipartBody.Part.createFormData(
-                "image",
-                file.name,
-                requestFile
+        Log.d(TAG, "handleImage 2: ${file.length()}")
+            binding.createGalleryThumbnailIv.setImageURI(imageUri)
+            val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+            createGalleryViewModel.updateThumbnail(
+                MultipartBody.Part.createFormData(
+                    "image",
+                    file.name,
+                    requestFile
+                )
             )
-        )
+
+
 
     }
 }

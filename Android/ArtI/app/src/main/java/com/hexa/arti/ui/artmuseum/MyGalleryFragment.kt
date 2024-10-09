@@ -264,11 +264,11 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         return file
     }
 
-    private fun compressImage(file: File): File {
+    private fun compressImage(file: File, quality:Int): File {
         val bitmap = BitmapFactory.decodeFile(file.path)
         val compressedFile = File(file.parent, "compressed_${file.name}")
         FileOutputStream(compressedFile).use { outputStream ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% 압축 품질
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream) // 80% 압축 품질
         }
         return compressedFile
     }
@@ -276,14 +276,18 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private fun handleImage(imageUri: Uri) {
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize = 512 * 512 // 1MB
-        Log.d(TAG, "handleImage: ${file.length()}")
+        val maxSize = 1024 * 1024  // 1MB
         if (file.length() > maxSize) {
-            file = compressImage(file)
-            Log.d(TAG, "handleImage: ${file.length()}")
+            file = compressImage(file,80)
             if (file.length() > maxSize) {
-                makeToast("File size still exceeds limit after compression")
-                return
+                file = compressImage(file,50)
+                if (file.length() > maxSize) {
+                    file = compressImage(file, 30)
+                    if (file.length() > maxSize) {
+                        makeToast("File size still exceeds limit after compression")
+                        return
+                    }
+                }
             }
         }
         Log.d(TAG, "handleImage: ${file.length()}")
