@@ -112,8 +112,6 @@ Arti 앱 다운로드 링크:
 
     - Spring Web
 
-    - Spring WebFlux
-
 - **AWS S3**
 
 - **JWT (JSON Web Token)**
