@@ -104,11 +104,9 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
                     else -> Config.DepthMode.DISABLED
                 }
 
-
-
                 config.focusMode = Config.FocusMode.AUTO
                 config.planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-//                config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+                config.updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
 
 
                 config.instantPlacementMode = Config.InstantPlacementMode.LOCAL_Y_UP
@@ -142,6 +140,7 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
             AnchorNode(sceneView.engine, anchor)
                 .apply {
                     isEditable = true
+                    isRotationEditable = false
                     lifecycleScope.launch {
                         isLoading = true
                         buildImageNode()?.let { addChildNode(it) }
@@ -183,11 +182,13 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
         val imageNode = ImageNode(
             materialLoader = sceneView.materialLoader,
             bitmap = combinedBitmap,
-            size = Size(0.5f, 0.5f)
+            size = Size(0.5f, 0.5f),
         )
 
         imageNode.rotation = Rotation(-90f, 0f, 0f)  // x축 기준 90도 회전
         imageNode.isEditable = false
+        imageNode.isRotationEditable = false
+
         imageNode.editableScaleRange = 0.3f..5.0f
 
         return imageNode

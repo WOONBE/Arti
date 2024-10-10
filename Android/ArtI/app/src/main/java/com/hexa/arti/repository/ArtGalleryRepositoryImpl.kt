@@ -172,19 +172,19 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             return Result.failure(Exception())
         }
         // 오류 응답 처리
-        val errorBody = result.errorBody()?.string()
-        val errorResponse = if (errorBody != null) {
-            Gson().fromJson(errorBody, ErrorResponse::class.java)
-        } else {
-            ErrorResponse(code = result.code(), message = "Unknown error")
-        }
-
         return Result.failure(
             ApiException(
-                code = errorResponse.code,
-                message = errorResponse.message
+                code = 9999,
+                message = "통신에러"
             )
         )
+//        val errorBody = result.errorBody()?.string()
+//        val errorResponse = if (errorBody != null) {
+//            Gson().fromJson(errorBody, ErrorResponse::class.java)
+//        } else {
+//            ErrorResponse(code = result.code(), message = "Unknown error")
+//        }
+
     }
 
     override suspend fun getSubscriptionGalleries(memberId: Int): Result<SubscriptionGallery> {
