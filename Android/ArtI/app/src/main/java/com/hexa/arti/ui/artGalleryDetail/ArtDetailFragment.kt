@@ -84,7 +84,7 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
 
                 AlertDialog.Builder(requireContext())
                     .setTitle("설명")
-                    .setMessage("작품에 대해 설명헤주세요")
+                    .setMessage("작품에 대해 설명해주세요")
                     .setView(description)
                     .setPositiveButton(
                         "확인"

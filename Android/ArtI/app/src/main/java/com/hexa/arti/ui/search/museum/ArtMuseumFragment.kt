@@ -4,6 +4,9 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -161,11 +164,15 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
     }
 
     private fun initUserData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            mainActivityViewModel.getLoginData().collect { userData ->
-                userData?.let {
-                    memberId = userData.memberId
-                    viewModel.getSubscriptionGalleries(userData.memberId)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainActivityViewModel.getLoginData().collect { userData ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        userData?.let {
+                            memberId = userData.memberId
+                            viewModel.getSubscriptionGalleries(userData.memberId)
+                        }
+                    }
                 }
             }
         }
