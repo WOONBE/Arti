@@ -29,6 +29,8 @@ import java.util.Collections;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,6 +80,7 @@ public class GalleryService {
     }
 
     @Transactional
+    @CacheEvict(value = "randomGalleries", allEntries = true, cacheManager = "rcm")
     public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto, MultipartFile image) {
         Gallery gallery = galleryRepository.findById(galleryId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_GALLERY_ID));
