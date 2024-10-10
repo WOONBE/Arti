@@ -121,35 +121,13 @@
             app:layout_constraintTop_toTopOf="@+id/my_page_logout_btn" />
 
         <ImageView
-            android:id="@+id/my_page_delete_btn"
-            style="@style/MyPageIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/ic_delete_outline_24"
-            app:layout_constraintEnd_toStartOf="@id/my_page_delete_tv"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/my_page_logout_btn" />
-
-        <TextView
-            android:id="@+id/my_page_delete_tv"
-            style="@style/MyPageMenuText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="회원탈퇴"
-            app:layout_constraintBottom_toBottomOf="@+id/my_page_delete_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/my_page_delete_btn"
-            app:layout_constraintTop_toTopOf="@+id/my_page_delete_btn" />
-
-        <ImageView
             android:id="@+id/iv_instagram"
             android:layout_width="26dp"
             android:layout_height="26dp"
             android:layout_marginTop="30dp"
             android:src="@drawable/instagram"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/my_page_delete_btn" />
+            app:layout_constraintTop_toBottomOf="@+id/my_page_logout_btn"/>
 
         <TextView
             android:id="@+id/tv_instagram"
@@ -160,7 +138,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_instagram"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_instagram"
-            app:layout_constraintTop_toTopOf="@+id/iv_instagram" />
+            app:layout_constraintTop_toTopOf="@+id/iv_instagram"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

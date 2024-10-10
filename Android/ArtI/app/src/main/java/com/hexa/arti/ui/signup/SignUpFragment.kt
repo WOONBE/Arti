@@ -57,6 +57,7 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
             signStatus.observe(viewLifecycleOwner) { status ->
                 when (status) {
                     1 -> {
+                        makeToast("회원가입 완료")
                         loginActivity.moveLogin()
                     }
 
