@@ -52,7 +52,7 @@ Arti 앱 다운로드 링크:
   | 이름   | 역할          | 개발 내용                   |
     | ------ | ------------- | --------------------------- |
   | 황병현 | 팀장<br/>Data | - EfficientNetV2를 활용한 미술관 및 미술품 추천<br/>- Fast-Style-Transfer를 활용한 content이미지에 style이미지 합성<br/>- BILP, MusicGen을 활용한 image2music생성<br/>- 데이터 전처리 |
-  | 김헌우 | Backend       | - a<br/>- b<br/>- c<br/>- d |
+  | 김헌우 | Backend       | - 미술품, 미술관 관련 기능 구현<br/>- 구독, 화가, 테마 관련 기능 구현<br/>- 검색 및 랜덤 조회 로직 구현<br/>- 세부 예외처리 로직 구현 및 캐싱, 쿼리 최적화를 통한 조회 속도 최적화 |
   | 김주현 | Backend       | - a<br/>- b<br/>- c<br/>- d |
   | 박민희 | Backend       | - ELK Stack 활용하여 이미지 조회수 기간별로 집계 및 그에 따른 이미지 저장 위치 분리 로직 구현<br/>- JWT 인증 구현<br/>- 인스타그램 API 연동<br/>- CI/CD |
   | 김민조 | Android       | - 이미지 다운샘플링을 통한 통신 속도 최적화 <br/> - ARSceneview 를 활용한 AR 구현<br/> - PieChart 구현 <br/>- 추천 데이터 표시 |
