@@ -175,7 +175,7 @@ Arti 앱 다운로드 링크:
 
 <br><br>
 
-## 포팅 메뉴얼(파일 필요)
+## 포팅 메뉴얼
 
 포팅 메뉴얼 링크: [포팅 메뉴얼](./exec/README.md)
 
@@ -196,38 +196,10 @@ Arti 앱 다운로드 링크:
 <img width="900" alt="image" src="/uploads/71c9f98142a1b2cc4af1c2c3791839d0/Arti_ERD.png">
 <br><br>
 
-## UCC 및 시연영상(gif 업로드 필요)
+## UCC 및 시연영상
 
 - UCC - 유튜브 링크
 - 시연영상 - 유튜브 링크 혹은 gif
   <br><br>
 
-## 주요 서비스 화면(gif 추후 기입 예정)
 
-### 1. 회원가입
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
-
-### 2. 미술관 페이지
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
-
-### 3. 검색 및 추천
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
-
-### 4. AI 음악 생성
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
-
-### 5. AI 작품 생성
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
-
-### 6. 구독
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
-
-### 7. 나만의 포트폴리오
-<img width="350" alt="image" src="/uploads/d38d43c1c034b140a5fe333b4ec41c19/Arti_로고.png">
-<br><br><br>
