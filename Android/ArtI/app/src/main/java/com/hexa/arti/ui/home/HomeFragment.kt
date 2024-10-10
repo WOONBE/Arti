@@ -37,27 +37,29 @@ class HomeFragment :
         onNormal = {
             binding.viewpager2.isUserInputEnabled = true
         },
+        onRefresh = {
+            initUserData()
+        }
     )
 
     override fun init() {
         initAdapter()
         initObserve()
         initViews()
-        initUserData()
+        if (mainActivityViewModel.isRecommended) {
+            viewpageAdapter.submitList(mainActivityViewModel.recommendedData)
+        } else {
+            mainActivityViewModel.isRecommended = true
+            initUserData()
+        }
     }
 
     private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
-//            if (viewModel.resultGalleries.value == null) {
-            if (mainActivityViewModel.isRecommended){
-                viewpageAdapter.submitList(mainActivityViewModel.recommendedData)
-            } else {
-                showLoadingDialog()
-                mainActivityViewModel.getLoginData().collect { userData ->
-                    userData?.let {
-                        mainActivityViewModel.isRecommended = true
-                        viewModel.getRecommendGalleries(userData.memberId)
-                    }
+            showLoadingDialog()
+            mainActivityViewModel.getLoginData().collect { userData ->
+                userData?.let {
+                    viewModel.getRecommendGalleries(userData.memberId)
                 }
             }
         }

@@ -14,6 +14,7 @@ class ViewpageAdapter(
     private val onPlayClick: (GetRecommendGalleriesResponse) -> Unit,
     private val onSliding: () -> Unit,
     private val onNormal: () -> Unit,
+    private val onRefresh: () -> Unit,
 ) : RecyclerView.Adapter<ViewpageAdapter.ViewHolder>() {
 
     private val items = mutableListOf<GetRecommendGalleriesResponse>()
@@ -23,6 +24,7 @@ class ViewpageAdapter(
         private val onPlayClick: (GetRecommendGalleriesResponse) -> Unit,
         private val onSliding: () -> Unit,
         private val onNormal: () -> Unit,
+        private val onRefresh: () -> Unit,
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -32,6 +34,10 @@ class ViewpageAdapter(
             val bottomSheet = binding.includeBottomSheet.bottomSheetLayout
             val bottomSheetBehavior: BottomSheetBehavior<View> =
                 BottomSheetBehavior.from(bottomSheet)
+
+            binding.ivRefresh.setOnClickListener {
+                onRefresh()
+            }
 
             bottomSheetBehavior.apply {
                 isHideable = false
@@ -105,7 +111,7 @@ class ViewpageAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
             ItemHomepageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, onPlayClick, onSliding, onNormal)
+        return ViewHolder(binding, onPlayClick, onSliding, onNormal, onRefresh)
     }
 
     override fun getItemCount(): Int {
