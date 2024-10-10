@@ -58,7 +58,7 @@ async def generation_music(gallery_id: int, db: Session):
         print(f'text generation : {end - start}')
 
         inputs = musicgen_processor(
-            text=[result[0]['generated_text'], 'piano and cello'],
+            text=[result[0]['generated_text'], 'An elegant classical piece with flowing violin, gentle harp, and warm woodwinds, evoking a sense of beauty and grace as if walking through an exhibit of timeless masterpieces.'],
             padding=True,
             return_tensors="pt",
         ).to(device)
