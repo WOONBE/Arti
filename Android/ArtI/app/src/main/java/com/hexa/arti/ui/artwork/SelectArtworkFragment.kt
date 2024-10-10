@@ -2,10 +2,12 @@ package com.hexa.arti.ui.artwork
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.content.Context
 import android.view.KeyEvent
 import android.view.View.GONE
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -93,6 +95,10 @@ class SelectArtworkFragment :
                         event?.action == KeyEvent.ACTION_DOWN && event.keyCode == KeyEvent.KEYCODE_ENTER
                     ) {
                         // 검색 또는 엔터 키가 눌렸을 때
+                        val imm =
+                            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+
                         isClicked = true
                         selectArtworkViewModel.getArtworkByString(artworkSearchEt.text.toString())
                         mainActivity.showLoadingDialog()
