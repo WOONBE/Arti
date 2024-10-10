@@ -15,16 +15,24 @@
 
 개발도구
 ----------------
- - Visual Studio Code : 1.93
- - Android Studio : Koala 1.1|
+- Backend
+    - Intellij Ultimate 2024.1.4
+    - Visual Studio Code : 1.93
+- Android
+    - Android Studio : Koala 1.1
 
 개발환경
 ----------------
 **BackEnd**
-|언어|버전|
-|------|---|
-|Python|3.10.6|
-|FastAPI|0.114.1|
+| 언어 | 버전 |
+| --- | --- |
+| Python | 3.10.6 |
+| FastAPI | 0.114.1 |
+| Java | 17 |
+| Springboot | 3.3.3 |
+| Spring Security | newest |
+| Spring Data JPA | newest |
+| Spring Data Redis | newest |
 
 **Android**
 |언어|버전|
@@ -40,13 +48,12 @@ Redis :
 ## 프로젝트에서 사용하는 외부 서비스 정보를 정리한 문서
 | 소셜 인증, 포톤 클라우드, 코드 컴파일 등에 활용 된 '외부 서비스'가입 및 활용에 필요한 정보
  - Ngrok : backend(AI)/src/ngrok.json에 해당 내용 있음(FastAPI 도메인을 열기위해 필요)
+ - application-dev.properties : S3 Secret Key 및 연동 계정 정보, java mail 인증용 ID, Instagram 개발용 계정 정보, elastic search 사용에 필요한 연동 정보, Redis 연동 정보 (gitignore로 커밋 방지)
 
 ## DB 덤프 파일 최신본
 
 ## 시연 시나리오
 | 시연 순서에 따른 site 화면별, 실행별(클릭 위치 등) 상세 설명
-
-# 프로젝트 이미지 갤러리
 
 # 프로젝트 이미지 갤러리
 
