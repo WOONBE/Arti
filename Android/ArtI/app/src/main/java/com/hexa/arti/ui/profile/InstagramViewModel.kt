@@ -19,7 +19,7 @@ class InstagramViewModel @Inject constructor(
     fun postInstagramUrl(url: String) {
         viewModelScope.launch {
             instagramRepository.postInstagramUrl(url).onSuccess {
-                _resultString.value = "인스타 그램 연동 성공"
+                _resultString.value = "인스타그램 연동 성공"
             }.onFailure {
                 _resultString.value = "서버에러"
             }
