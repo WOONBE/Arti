@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.home
 
+import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
@@ -46,11 +47,11 @@ class HomeFragment :
         initAdapter()
         initObserve()
         initViews()
-        if (mainActivityViewModel.isRecommended) {
-            viewpageAdapter.submitList(mainActivityViewModel.recommendedData)
-        } else {
-            mainActivityViewModel.isRecommended = true
+        Log.d("확인","최초화면 ${mainActivityViewModel.recommendedData}")
+        if (mainActivityViewModel.recommendedData.isEmpty()) {
             initUserData()
+        } else {
+            viewpageAdapter.submitList(mainActivityViewModel.recommendedData)
         }
     }
 
@@ -59,6 +60,7 @@ class HomeFragment :
             showLoadingDialog()
             mainActivityViewModel.getLoginData().collect { userData ->
                 userData?.let {
+                    Log.d("확인","유저데이터 ${userData}")
                     viewModel.getRecommendGalleries(userData.memberId)
                 }
             }

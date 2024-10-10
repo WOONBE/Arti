@@ -55,9 +55,6 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             }
             // 로그아웃
             myPageLogoutTv.setOnClickListener { mainActivity.moveLogin() }
-            // 회원 탈퇴
-            myPageDeleteTv.setOnClickListener { mainActivity.moveLogin() }
-
         }
 
     }
