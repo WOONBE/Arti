@@ -154,6 +154,7 @@ class ArtworkResultFragment :
                 popBackStack()
             }
             artworkResultBtn.setOnClickListener {
+                mainActivity.isUp = true
                 Log.d(TAG, "init: 1번 ${args.artType}")
                 if (args.artType == 1) {
                     Log.d(TAG, "init: 2번 ${args.artType}")
