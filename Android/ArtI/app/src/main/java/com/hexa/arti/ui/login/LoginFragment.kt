@@ -2,23 +2,13 @@ package com.hexa.arti.ui.login
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.Fragment
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
-import com.hexa.arti.databinding.FragmentHomeBinding
 import com.hexa.arti.databinding.FragmentLoginBinding
-import com.hexa.arti.ui.LoginActivity
 import com.hexa.arti.ui.MainActivity
-import com.hexa.arti.ui.signup.SignUpFragment
-import com.hexa.arti.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.log
 
 @AndroidEntryPoint
 class LoginFragment :
@@ -29,6 +19,11 @@ class LoginFragment :
     override fun init() {
         initObserve()
         with(binding) {
+            clTotal.setOnClickListener {
+                val imm =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(view?.windowToken, 0)
+            }
             loginBtn.setOnClickListener {
 //                startActivity(Intent(requireContext(), MainActivity::class.java))
                 if(!loginIdEt.text.isNullOrBlank() && !loginPwEt.text.isNullOrBlank() ){

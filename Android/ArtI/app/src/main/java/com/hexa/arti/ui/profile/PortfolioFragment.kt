@@ -33,6 +33,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
     private val portfolioViewModel: PortfolioViewModel by viewModels()
     private var userId: Int = -1
+    private var clickedGenre = ""
 
     override fun init() {
         binding.pcChart.setNoDataText("")
@@ -68,7 +69,8 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
             val fadeInAnimation =
                 AnimationUtils.loadAnimation(requireContext(), R.anim.artist_fade_in_slide_left)
 
-            Log.d("확인", "아티스트 ${artists}")
+            binding.tvRepresentArtist.text = "대표 화가 : ${clickedGenre}"
+
             Glide.with(requireContext())
                 .load(artists[0].imageUrl)
                 .error(R.drawable.temp_represent_artist)
@@ -148,7 +150,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private fun initViews() {
 
         binding.tvRepresentGenre1.setOnClickListener {
-            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre1.text}"
+            clickedGenre = binding.tvRepresentGenre1.text.toString()
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre1.text.toString()]
             englishName?.let {
@@ -157,17 +159,16 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         binding.tvRepresentGenre2.setOnClickListener {
-            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre2.text}"
+            clickedGenre = binding.tvRepresentGenre2.text.toString()
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre2.text.toString()]
-            Log.d("확인", " 화가 확인 ${binding.tvRepresentGenre2.text} ${englishName}")
             englishName?.let {
                 getRepresentArtists(it)
             }
         }
 
         binding.tvRepresentGenre3.setOnClickListener {
-            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre3.text}"
+            clickedGenre = binding.tvRepresentGenre3.text.toString()
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre3.text.toString()]
             englishName?.let {
@@ -176,7 +177,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         }
 
         binding.tvRepresentGenre4.setOnClickListener {
-            binding.tvRepresentArtist.text = "대표 화가 : ${binding.tvRepresentGenre4.text}"
+            clickedGenre = binding.tvRepresentGenre4.text.toString()
             val englishName =
                 ApplicationClass.KOREAN_TO_ENGLISH_MAP[binding.tvRepresentGenre4.text.toString()]
             englishName?.let {
@@ -195,7 +196,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
         binding.pcChart.visibility = View.VISIBLE
 
-        binding.tvRepresentArtist.text = "대표 화가 : ${genres[0].genre}"
+        clickedGenre = genres[0].genre
 
         val dataList = ArrayList<PieEntry>()
 
