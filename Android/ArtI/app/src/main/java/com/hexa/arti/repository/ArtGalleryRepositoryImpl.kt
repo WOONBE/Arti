@@ -33,7 +33,6 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
         if (result.isSuccessful) {
             result.body()?.let {
-                Log.d("확인", "토탈 띰 $galleryId $it")
                 return Result.success(it)
             }
             return Result.failure(Exception())
@@ -58,14 +57,20 @@ class ArtGalleryRepositoryImpl @Inject constructor(
             }
             return Result.failure(Exception())
         } else {
-            val errorResponse =
-                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
             return Result.failure(
                 ApiException(
-                    code = errorResponse.code,
-                    message = errorResponse.message
+                    code = 1000,
+                    message = "통신에러"
                 )
             )
+//            val errorResponse =
+//                Gson().fromJson(result.errorBody()?.string(), ErrorResponse::class.java)
+//            return Result.failure(
+//                ApiException(
+//                    code = errorResponse.code,
+//                    message = errorResponse.message
+//                )
+//            )
         }
     }
 
@@ -187,7 +192,6 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
         if (result.isSuccessful) {
             result.body()?.let {
-                Log.d("확인", "구독확인 ${result}")
                 return Result.success(it)
             }
             return Result.failure(Exception())

@@ -18,8 +18,6 @@ import kotlinx.coroutines.launch
 class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(R.layout.fragment_subscribe) {
 
     private val mainActivityViewModel: MainActivityViewModel by activityViewModels()
-    private val subscribeViewModel: SubscribeViewModel by viewModels()
-    private var userId: Int = 0
     private lateinit var adapter: SubScribeAdapter
     override fun init() {
         adapter = SubScribeAdapter(requireContext(), onClick = {

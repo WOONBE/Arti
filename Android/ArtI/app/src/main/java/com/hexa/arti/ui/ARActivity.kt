@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +33,9 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
     lateinit var sceneView: ARSceneView
     lateinit var loadingView: View
     var imageUrl: String? = ""
+    private val guideTextView by lazy {
+        findViewById<TextView>(R.id.tv_guide_text)
+    }
 
     var isLoading = false
         set(value) {
@@ -59,6 +63,8 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
 
         imageUrl = intent.getStringExtra("image")
 
@@ -131,6 +137,7 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
     }
 
     private fun addAnchorNode(anchor: Anchor) {
+        guideTextView.visibility = View.GONE
         sceneView.addChildNode(
             AnchorNode(sceneView.engine, anchor)
                 .apply {
@@ -188,10 +195,12 @@ class ARActivity : AppCompatActivity(R.layout.activity_aractivity) {
 
     private fun combineBitmaps(baseBitmap: Bitmap, frameBitmap: Bitmap): Bitmap {
         // 프레임 이미지 크기를 원본 이미지 크기에 맞게 스케일링
-        val scaledFrameBitmap = Bitmap.createScaledBitmap(frameBitmap, baseBitmap.width, baseBitmap.height, false)
+        val scaledFrameBitmap =
+            Bitmap.createScaledBitmap(frameBitmap, baseBitmap.width, baseBitmap.height, false)
 
         // 두 개의 Bitmap을 결합할 새 Bitmap 생성
-        val combinedBitmap = Bitmap.createBitmap(baseBitmap.width, baseBitmap.height, baseBitmap.config)
+        val combinedBitmap =
+            Bitmap.createBitmap(baseBitmap.width, baseBitmap.height, baseBitmap.config)
         val canvas = Canvas(combinedBitmap)
 
         // 원본 이미지 먼저 그리기
