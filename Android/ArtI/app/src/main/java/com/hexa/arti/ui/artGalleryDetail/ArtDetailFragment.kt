@@ -3,6 +3,7 @@ package com.hexa.arti.ui.artGalleryDetail
 import android.app.AlertDialog
 import android.content.Intent
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import android.widget.RadioButton
@@ -80,30 +81,31 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
             artDetailSubmitBtn.setOnClickListener {
                 Log.d("Selected Theme ID", "Selected Theme ID: $selectedThemeId")
 
-                val description = EditText(requireContext())
+                val inflater = LayoutInflater.from(requireContext())
+                val dialogView = inflater.inflate(R.layout.custom_edit_text, null) // 커스텀 뷰 인플레이트
+                val descriptionEditText = dialogView.findViewById<EditText>(R.id.editTextDescription) // EditText 참조
 
                 AlertDialog.Builder(requireContext())
                     .setTitle("설명")
                     .setMessage("작품에 대해 설명해주세요")
-                    .setView(description)
-                    .setPositiveButton(
-                        "확인"
-                    ) { dialog, which ->
+                    .setView(dialogView) // 인플레이트한 커스텀 뷰 설정
+                    .setPositiveButton("확인") { dialog, which ->
+                        // descriptionEditText에서 입력된 텍스트 가져오기
+                        val description = descriptionEditText.text.toString()
                         artDetailViewModel.postArtwork(
                             themeId = selectedThemeId,
                             args.imgId,
-                            description.text.toString()
+                            description
                         )
                         artDetailCl.visibility = View.VISIBLE
                         artDetailThemeCl.visibility = View.GONE
                     }
-                    .setNegativeButton(
-                        "취소"
-                    ) { dialog, which ->
+                    .setNegativeButton("취소") { dialog, which ->
                         dialog.dismiss()
                     }
                     .create()
                     .show()
+
             }
             artDetailSaveBtn.setOnClickListener {
                 artDetailCl.visibility = View.GONE
