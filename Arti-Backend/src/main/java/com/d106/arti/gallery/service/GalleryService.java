@@ -83,7 +83,7 @@ public class GalleryService {
     @Transactional
     @Caching(evict = {
         @CacheEvict(value = "randomGalleries", allEntries = true, cacheManager = "rcm"),
-        @CacheEvict(value = "searchGalleries", key = "#requestDto.name", cacheManager = "rcm")
+        @CacheEvict(value = "searchGalleries", allEntries = true, cacheManager = "rcm")
     })
     public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto, MultipartFile image) {
         Gallery gallery = galleryRepository.findById(galleryId)
