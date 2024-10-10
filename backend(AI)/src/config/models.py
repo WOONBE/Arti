@@ -59,7 +59,6 @@ class Member(Base):
     email = Column(VARCHAR(255))
     nickname = Column(VARCHAR(255))
     password = Column(VARCHAR(255))
-    image = Column(VARCHAR(255))
 
     artworks = relationship("Artwork", back_populates="member")
     galleries = relationship("Gallery", back_populates="member")
