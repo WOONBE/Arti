@@ -1,0 +1,9 @@
+services:
+  arti:
+    image: hwangbyounghyeon/fastapi:latest
+    container_name: fastapi
+    volumes:
+      - /home/ubuntu/artwork:/artwork/images
+      - /home/ubuntu/music:/music/audio
+    ports:
+      - 9000:8080
