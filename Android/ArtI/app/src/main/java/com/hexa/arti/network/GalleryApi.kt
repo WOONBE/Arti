@@ -84,4 +84,10 @@ interface GalleryApi {
         @Path("themeId") themeId: Int,
         @Path("artworkId") artworkId: Int
     ): Response<ResponseBody>
+
+    @DELETE("/galleries/themes/{themeId}/aiartworks/{artworkId}")
+    suspend fun deleteThemeArtworkAI(
+        @Path("themeId") themeId: Int,
+        @Path("artworkId") artworkId: Int
+    ): Response<ResponseBody>
 }

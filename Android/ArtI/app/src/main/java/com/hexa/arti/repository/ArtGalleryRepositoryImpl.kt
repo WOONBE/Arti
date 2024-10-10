@@ -142,10 +142,12 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
     override suspend fun getArtGalleryThemes(galleryId: Int): Result<List<MyGalleryThemeItem>> {
         val result = galleryAPI.getGalleryTheme(galleryId)
-
+        Log.d("확인", "getArtGalleryThemes: $galleryId")
         if (result.isSuccessful) {
             result.body()?.let {
+                Log.d("확인", "getArtGalleryThemes: $it")
                 val myGalleryThemeItems = it.map { themeItem ->
+                    Log.d("확인", "getArtGalleryThemes: $themeItem")
                     // 각 테마 ID에 대해 테마 이미지 가져오기
                     val artworkResult = galleryAPI.getGalleryThemeArtwork(themeItem.id)
                     if (artworkResult.isSuccessful) {
@@ -368,6 +370,31 @@ class ArtGalleryRepositoryImpl @Inject constructor(
 
     override suspend fun deleteThemeArtWork(themeId: Int, artworkId: Int): Result<ResponseBody> {
         val result = galleryAPI.deleteThemeArtwork(themeId, artworkId)
+        if (result.isSuccessful) {
+            result.body()?.let {
+                return Result.success(it)
+            }
+
+            return Result.failure(Exception())
+        }
+        // 오류 응답 처리
+        val errorBody = result.errorBody()?.string()
+        val errorResponse = if (errorBody != null) {
+            Gson().fromJson(errorBody, ErrorResponse::class.java)
+        } else {
+            ErrorResponse(code = result.code(), message = "Unknown error")
+        }
+
+        return Result.failure(
+            ApiException(
+                code = errorResponse.code,
+                message = errorResponse.message
+            )
+        )
+    }
+
+    override suspend fun deleteThemeArtWorkAI(themeId: Int, artworkId: Int): Result<ResponseBody> {
+        val result = galleryAPI.deleteThemeArtworkAI(themeId, artworkId)
         if (result.isSuccessful) {
             result.body()?.let {
                 return Result.success(it)

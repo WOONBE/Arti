@@ -71,4 +71,10 @@ interface ArtGalleryRepository {
         artworkId: Int
     ): Result<ResponseBody>
 
+
+    suspend fun deleteThemeArtWorkAI(
+        themeId: Int,
+        artworkId: Int
+    ): Result<ResponseBody>
+
 }
