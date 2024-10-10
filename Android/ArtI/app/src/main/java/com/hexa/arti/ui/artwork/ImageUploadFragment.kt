@@ -2,7 +2,11 @@ package com.hexa.arti.ui.artwork
 
 import android.animation.Animator
 import android.animation.ValueAnimator
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.util.Log
 import android.view.animation.AnimationUtils
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,11 +16,14 @@ import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentImageUploadBinding
-import com.hexa.arti.util.handleImage
 import com.hexa.arti.util.navigate
 import com.hexa.arti.util.popBackStack
 import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.io.FileOutputStream
 
 private const val TAG = "ImageUploadFragment"
 
@@ -89,7 +96,7 @@ class ImageUploadFragment :
     private val getImageLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                image = handleImage(it, requireContext(), name = "content_image")
+                handleImage(it, name = "content_image")
                 binding.sourceImg.setImageURI(it)
                 this.uri = it.toString()
             }
@@ -99,7 +106,67 @@ class ImageUploadFragment :
         getImageLauncher.launch("image/*")
     }
 
-    private fun startProgressBarAnimation(start: Int, end: Int) {
+    private val allowedMimeTypes = listOf("image/jpeg", "image/png")
+
+    private fun uriToFile(context: Context, uri: Uri): File {
+        val contentResolver = context.contentResolver
+        val file =
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image${System.currentTimeMillis()}.jpg")
+
+        contentResolver.openInputStream(uri)?.use { inputStream ->
+            FileOutputStream(file).use { outputStream ->
+                val buffer = ByteArray(1024)
+                var length: Int
+                while (inputStream.read(buffer).also { length = it } > 0) {
+                    outputStream.write(buffer, 0, length)
+                }
+            }
+        }
+        return file
+    }
+
+    private fun compressImage(file: File): File {
+        val bitmap = BitmapFactory.decodeFile(file.path)
+        val compressedFile = File(file.parent, "compressed_${file.name}")
+        FileOutputStream(compressedFile).use { outputStream ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outputStream) // 80% 압축 품질
+        }
+        return compressedFile
+    }
+
+    fun handleImage(imageUri: Uri,  name :String) {
+        var file = uriToFile(requireContext(), imageUri)
+
+        val contentResolver = requireContext().contentResolver
+        val mimeType = contentResolver.getType(imageUri)
+        if (!allowedMimeTypes.contains(mimeType)) {
+            makeToast("지원하지 않는 파일 형식입니다. jpeg, jpg, png 형식의 파일만 허용됩니다.")
+            return
+        }
+        val maxSize = 10 * 1024 * 1024 // 10MB
+        if (file.length() > maxSize) {
+            file = compressImage(file)
+
+            if (file.length() > maxSize) {
+
+                makeToast("파일크기 너무 큽니다 10MB 미만으로 넣어주세요.")
+                return
+            }
+        }
+
+
+        val requestFile = file.asRequestBody("image/jpg".toMediaTypeOrNull())
+
+        image = MultipartBody.Part.createFormData(
+            name,
+            file.name,
+            requestFile
+        )
+
+    }
+
+
+        private fun startProgressBarAnimation(start: Int, end: Int) {
         animator = ValueAnimator.ofInt(start, end).apply {
             duration = 800
             addUpdateListener { animation ->
