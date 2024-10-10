@@ -160,6 +160,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 R.id.myGalleryHomeFragment ->{
                     changePortrait()
                     hideBottomNav(false)
+                    mainActivityViewModel.setFragmentState(MainActivityViewModel.SUBSCRIBE_FRAGMENT)
                     Log.d(TAG, "setBottomNavHide: myGallery")
                 }
                 R.id.settingFragment ->{
