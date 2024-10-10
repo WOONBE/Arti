@@ -25,7 +25,7 @@ public class Gallery extends BaseEntity {
 
     @Id
     @Column(name = "GALLERY_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "GALLERY_TITLE")
