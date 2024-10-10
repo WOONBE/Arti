@@ -142,15 +142,26 @@ class CreateGalleryFragment :
         return compressedFile
     }
 
+    private val allowedMimeTypes = listOf("image/jpeg", "image/png")
+
     private fun handleImage(imageUri: Uri) {
+        val contentResolver = requireContext().contentResolver
+        val mimeType = contentResolver.getType(imageUri)
+
+        if (!allowedMimeTypes.contains(mimeType)) {
+            makeToast("지원하지 않는 파일 형식입니다. jpeg, jpg, png 형식의 파일만 허용됩니다.")
+            return
+        }
+
         var file = uriToFile(requireContext(), imageUri)
         Log.d(TAG, "handleImage: ${file.length()}")
+
         val maxSize = 1024 * 1024 // 10MB
         if (file.length() > maxSize) {
-            file = compressImage(file,80)
-            Log.d("확인", "handleImage: ${file.length()}")
+            file = compressImage(file, 80)
+            Log.d(TAG, "handleImage: ${file.length()}")
             if (file.length() > maxSize) {
-                file = compressImage(file,50)
+                file = compressImage(file, 50)
                 Log.d(TAG, "handleImage 1: ${file.length()}")
                 if (file.length() > maxSize) {
                     file = compressImage(file, 30)
@@ -162,18 +173,16 @@ class CreateGalleryFragment :
                 }
             }
         }
+
         Log.d(TAG, "handleImage 2: ${file.length()}")
-            binding.createGalleryThumbnailIv.setImageURI(imageUri)
-            val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
-            createGalleryViewModel.updateThumbnail(
-                MultipartBody.Part.createFormData(
-                    "image",
-                    file.name,
-                    requestFile
-                )
+        binding.createGalleryThumbnailIv.setImageURI(imageUri)
+        val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
+        createGalleryViewModel.updateThumbnail(
+            MultipartBody.Part.createFormData(
+                "image",
+                file.name,
+                requestFile
             )
-
-
-
+        )
     }
 }

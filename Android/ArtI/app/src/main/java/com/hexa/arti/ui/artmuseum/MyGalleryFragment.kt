@@ -280,10 +280,20 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         return compressedFile
     }
 
+    private val allowedMimeTypes = listOf("image/jpeg", "image/png")
+
     private fun handleImage(imageUri: Uri) {
+        val contentResolver = requireContext().contentResolver
+        val mimeType = contentResolver.getType(imageUri)
+
+        if (!allowedMimeTypes.contains(mimeType)) {
+            makeToast("지원하지 않는 파일 형식입니다. jpeg, jpg, png 형식의 파일만 허용됩니다.")
+            return
+        }
+
         var file = uriToFile(requireContext(), imageUri)
 
-        val maxSize = 1024 * 1024  // 1MB
+        val maxSize = 1024 * 1024 // 10MB
         if (file.length() > maxSize) {
             file = compressImage(file, 80)
             if (file.length() > maxSize) {
@@ -297,7 +307,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 }
             }
         }
-        Log.d(TAG, "handleImage: ${file.length()}")
+
         val requestFile = file.asRequestBody("application/octet-stream".toMediaTypeOrNull())
         myGalleryViewModel.updateThumbnail(
             MultipartBody.Part.createFormData(
