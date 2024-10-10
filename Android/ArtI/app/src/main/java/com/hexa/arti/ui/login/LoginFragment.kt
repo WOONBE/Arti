@@ -50,7 +50,6 @@ class LoginFragment :
 
     private fun initObserve() {
         loginViewModel.loginStatus.observe(viewLifecycleOwner) { status ->
-            Log.d("확인", "initObserve: $status")
             when (status) {
                 1 -> {
                     loginActivity.hideLoadingDialog()

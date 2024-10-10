@@ -45,7 +45,6 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             val list = arrayListOf<Subscriber>()
             artGalleryRepository.getSubscriptionGalleries(memberId).onSuccess {
-                Log.d("확인", "getSubscriptionGalleries:  성공 $it")
                 it.forEach { data ->
                     list.add(
                         Subscriber(

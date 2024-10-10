@@ -17,7 +17,7 @@ private const val TAG = "PictureUtil"
 private fun uriToFile(context: Context, uri: Uri): File {
     val contentResolver = context.contentResolver
     val file =
-        File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg")
+        File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image${System.currentTimeMillis()}.jpg")
 
     contentResolver.openInputStream(uri)?.use { inputStream ->
         FileOutputStream(file).use { outputStream ->

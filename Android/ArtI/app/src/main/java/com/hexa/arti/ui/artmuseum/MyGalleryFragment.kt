@@ -63,9 +63,13 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                     // 테마 내부 이미지 삭제
                     myGalleryViewModel.deleteThemeDelete(themeId, artWorkId)
                 }, onTextClick = {
-                    val scrollAmount = dpToPx(250, requireContext()) 
+                    val scrollAmount = dpToPx(250, requireContext())
                     binding.scrollView.post {
-                        ObjectAnimator.ofInt(binding.scrollView, "scrollY", binding.scrollView.scrollY + scrollAmount).apply {
+                        ObjectAnimator.ofInt(
+                            binding.scrollView,
+                            "scrollY",
+                            binding.scrollView.scrollY + scrollAmount
+                        ).apply {
                             duration = 400L
                             start()
                         }
@@ -93,9 +97,12 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
                 myGallery.observe(viewLifecycleOwner) {
                     Log.d(TAG, "init 11: $it")
                     myGalleryNameTv.setText(it.name)
+                    Log.d("확인", "썸넬 이미지 ${it.image}")
+
                     Glide.with(requireContext())
                         .load(it.image)
                         .into(myGalleryThumbnailIv)
+
                     myGalleryInfoEt.setText(it.description)
 
                     myGalleryViewModel.getGalleryDto(
@@ -250,7 +257,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
     private fun uriToFile(context: Context, uri: Uri): File {
         val contentResolver = context.contentResolver
         val file =
-            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image.jpg")
+            File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "temp_image${System.currentTimeMillis()}.jpg")
 
         contentResolver.openInputStream(uri)?.use { inputStream ->
             FileOutputStream(file).use { outputStream ->
@@ -264,7 +271,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
         return file
     }
 
-    private fun compressImage(file: File, quality:Int): File {
+    private fun compressImage(file: File, quality: Int): File {
         val bitmap = BitmapFactory.decodeFile(file.path)
         val compressedFile = File(file.parent, "compressed_${file.name}")
         FileOutputStream(compressedFile).use { outputStream ->
@@ -278,9 +285,9 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
 
         val maxSize = 1024 * 1024  // 1MB
         if (file.length() > maxSize) {
-            file = compressImage(file,80)
+            file = compressImage(file, 80)
             if (file.length() > maxSize) {
-                file = compressImage(file,50)
+                file = compressImage(file, 50)
                 if (file.length() > maxSize) {
                     file = compressImage(file, 30)
                     if (file.length() > maxSize) {
