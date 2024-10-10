@@ -1,5 +1,6 @@
 package com.hexa.arti.ui.profile
 
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -217,7 +218,6 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         dataSet.setDrawValues(false)
 
         var data = PieData(dataSet)
-
 
         binding.pcChart.data = data
         binding.pcChart.description.isEnabled = false
