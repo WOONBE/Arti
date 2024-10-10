@@ -28,7 +28,7 @@ public class RedisCacheConfig {
             .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
             // Jackson을 사용하여 직렬화 및 역직렬화
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new Jackson2JsonRedisSerializer<>(Object.class)))
-            .entryTtl(Duration.ofMinutes(30L));
+            .entryTtl(Duration.ofMinutes(3L));
 
 
         return RedisCacheManager
