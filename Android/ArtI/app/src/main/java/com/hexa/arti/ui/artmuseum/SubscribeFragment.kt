@@ -1,9 +1,8 @@
 package com.hexa.arti.ui.artmuseum
 
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
@@ -12,7 +11,6 @@ import com.hexa.arti.databinding.FragmentSubscribeBinding
 import com.hexa.arti.ui.MainActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.SubScribeAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(R.layout.fragment_subscribe) {
@@ -39,13 +37,18 @@ class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(R.layout.fragme
         binding.subscribeRecyclerview.adapter = adapter
 
         mainActivityViewModel.subscriptionGallery.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            if (it.size == 0) {
+                binding.tvNoSubscribe.visibility = View.VISIBLE
+            } else {
+                binding.tvNoSubscribe.visibility = View.GONE
+                adapter.submitList(it)
+            }
         }
 
         initObserve()
     }
 
-    private fun initObserve(){
+    private fun initObserve() {
         mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
             if (state == MainActivityViewModel.SUBSCRIBE_FRAGMENT) {
                 mainActivityViewModel.getSubscriptionGalleries(mainActivityViewModel.userId)

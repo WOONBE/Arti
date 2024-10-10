@@ -1,6 +1,5 @@
 package com.hexa.arti.ui.profile
 
-import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -36,6 +35,7 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
     private var userId: Int = -1
 
     override fun init() {
+        binding.pcChart.setNoDataText("")
         initUserData()
         initObserve()
         initViews()
@@ -48,7 +48,12 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
 
 
         portfolioViewModel.resultGenres.observe(viewLifecycleOwner) { genres ->
-            initChart(genres)
+            if (genres.isEmpty()) {
+                binding.tvNoData.visibility = View.VISIBLE
+            } else {
+                binding.tvNoData.visibility = View.GONE
+                initChart(genres)
+            }
         }
 
         mainActivityViewModel.fragmentState.observe(viewLifecycleOwner) { state ->
@@ -225,7 +230,6 @@ class PortfolioFragment : BaseFragment<FragmentPortfolioBinding>(R.layout.fragme
         binding.pcChart.isRotationEnabled = false
         binding.pcChart.legend.isEnabled = false
         binding.pcChart.isDrawHoleEnabled = true
-
         binding.pcChart.animateY(500)
         binding.pcChart.invalidate()
 
