@@ -12,7 +12,6 @@ import com.hexa.arti.util.navigate
 class InstagramSurveyFragment : BaseFragment<FragmentInstargramSurveyBinding>(R.layout.fragment_instargram_survey) {
 
     private val instagramSurveyViewModel : InstagramSurveyViewModel by viewModels()
-
     override fun init() {
 
         if(instagramSurveyViewModel.status == 2){
