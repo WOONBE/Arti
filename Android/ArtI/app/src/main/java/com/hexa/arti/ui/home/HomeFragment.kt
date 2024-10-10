@@ -1,6 +1,5 @@
 package com.hexa.arti.ui.home
 
-import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
@@ -38,23 +37,29 @@ class HomeFragment :
         onNormal = {
             binding.viewpager2.isUserInputEnabled = true
         },
+        onRefresh = {
+            initUserData()
+        }
     )
 
     override fun init() {
         initAdapter()
         initObserve()
         initViews()
-        initUserData()
+        if (mainActivityViewModel.isRecommended) {
+            viewpageAdapter.submitList(mainActivityViewModel.recommendedData)
+        } else {
+            mainActivityViewModel.isRecommended = true
+            initUserData()
+        }
     }
 
     private fun initUserData() {
         CoroutineScope(Dispatchers.Main).launch {
-            if (viewModel.resultGalleries.value == null) {
-                showLoadingDialog()
-                mainActivityViewModel.getLoginData().collect { userData ->
-                    userData?.let {
-                        viewModel.getRecommendGalleries(userData.memberId)
-                    }
+            showLoadingDialog()
+            mainActivityViewModel.getLoginData().collect { userData ->
+                userData?.let {
+                    viewModel.getRecommendGalleries(userData.memberId)
                 }
             }
         }
@@ -63,6 +68,7 @@ class HomeFragment :
     private fun initObserve() {
         viewModel.resultGalleries.observe(viewLifecycleOwner) {
             viewpageAdapter.submitList(it)
+            mainActivityViewModel.recommendedData = it
             hideLoadingDialog()
         }
 

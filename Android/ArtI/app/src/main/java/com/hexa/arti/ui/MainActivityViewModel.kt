@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.hexa.arti.data.model.home.GetRecommendGalleriesResponse
 import com.hexa.arti.data.model.login.LoginResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,9 @@ class MainActivityViewModel @Inject constructor(
 
     private val _fragmentState = MutableLiveData<Int>()
     val fragmentState: MutableLiveData<Int> = _fragmentState
+
+    var isRecommended = false
+    var recommendedData = listOf<GetRecommendGalleriesResponse>()
 
     // JWT 토큰 읽기
     fun getLoginData(): Flow<LoginResponse?> {

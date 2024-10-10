@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.hexa.arti.R
 import com.hexa.arti.data.model.artwork.Artwork
@@ -33,10 +34,18 @@ class SelectArtworkAdapter(val onClick: (Int) -> Unit) :
 
         fun bind(artwork: Artwork) {
             with(imageView) {
+
+                val circularProgressDrawable = CircularProgressDrawable(binding.root.context)
+                circularProgressDrawable.strokeWidth = 5f
+                circularProgressDrawable.centerRadius = 30f
+                circularProgressDrawable.start()
+
                 Glide.with(binding.root.context)
                     .load(artwork.imageUrl)
-                    .error(R.drawable.gallery_sample1)
+                    .placeholder(circularProgressDrawable)
+                    .override(200, 200)
                     .into(binding.selectArtIv)
+
                 setOnClickListener {
                     onClick(artwork.artworkId)
                 }
