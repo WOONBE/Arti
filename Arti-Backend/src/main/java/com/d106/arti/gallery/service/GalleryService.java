@@ -69,6 +69,7 @@ public class GalleryService {
 
         // Gallery 엔티티 생성 및 저장
         Gallery gallery = Gallery.builder()
+            .id(owner.getId())
             .name(requestDto.getName())
             .description(requestDto.getDescription())
             .image(imageUrl)  // 저장한 이미지 URL 설정
