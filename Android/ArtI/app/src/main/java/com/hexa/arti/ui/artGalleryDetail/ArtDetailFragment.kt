@@ -97,6 +97,7 @@ class ArtDetailFragment : BaseFragment<FragmentArtDetailBinding>(R.layout.fragme
                             args.imgId,
                             description
                         )
+                        makeToast("작품이 등록되었습니다")
                         artDetailCl.visibility = View.VISIBLE
                         artDetailThemeCl.visibility = View.GONE
                     }
