@@ -228,21 +228,22 @@ Arti 앱 다운로드 링크:
 
 - 화가 랜덤 검색
 
-  <img width="350" alt="image" src="(/uploads/ec7bde9396163bdfdaef18cfce448eb4/2._미술관_추천_및_랜덤_조회_-_화가_랜덤_검색.gif">
+  <img width="350" alt="image" src="/uploads/ec7bde9396163bdfdaef18cfce448eb4/2._미술관_추천_및_랜덤_조회_-_화가_랜덤_검색.gif">
   <br><br><br>
 
 - 장르 랜덤 검색
 
-  <img width="350" alt="image" src="(/uploads/5bd8a2ae1e8ee4b097f222a879e15716/2._미술관_추천_및_랜덤_조회_-_장르_검색.gif">
+  <img width="350" alt="image" src="/uploads/5bd8a2ae1e8ee4b097f222a879e15716/2._미술관_추천_및_랜덤_조회_-_장르_검색.gif">
   <br><br><br>
 
 - 미술관 랜덤 검색
 
-  <img width="350" alt="image" src="(/uploads/3f75e6645d6a41a55f70e9217ab8a887/2._미술관_추천_및_랜덤_조회_-_미술관_검색.gif">
+  <img width="350" alt="image" src="/uploads/3f75e6645d6a41a55f70e9217ab8a887/2._미술관_추천_및_랜덤_조회_-_미술관_검색.gif">
   <br><br><br>
 
 ### 3. AI 이미지 생성
 - 기존의 유명한 작품의 화풍을 유저가 제공하는 이미지에 적용
+
   <img width="350" alt="image" src="/uploads/39fc643fc09fbb97cf3d94bac97aae9d/3._AI_이미지_생성_원본.gif">
   <br><br><br>
 
@@ -253,12 +254,13 @@ Arti 앱 다운로드 링크:
 <br><br><br>
 
 ### 5. 미술관 상세 페이지
-- 실제 미술관에 온 것처럼 미술 작품들을 감상 가능.
+- 해당 미술관에 어울리는 배경음악을 AI가 생성후, 실제 미술관에 방문한 것처럼 미술 작품들을 감상 가능.
 
   <img width="350" alt="image" src="/uploads/4df00abeec0a3cbb4f1d1d0b696de90b/5._미술관_내부_페이지.gif">
   <br><br><br>
 
 - AR 기능으로, 실제 유저가 있는 공간에 작품을 전시할 수 있음.
+  
   <img width="350" alt="image" src="/uploads/98d5c259a635c1a1bd6b2015ea347801/5._ar.gif">
   <br><br><br>
 
