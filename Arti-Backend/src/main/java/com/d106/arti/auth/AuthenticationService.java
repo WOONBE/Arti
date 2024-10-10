@@ -2,6 +2,7 @@ package com.d106.arti.auth;
 
 import com.d106.arti.config.JwtService;
 import com.d106.arti.gallery.repository.GalleryRepository;
+import com.d106.arti.login.service.VerificationService;
 import com.d106.arti.member.domain.Role;
 import com.d106.arti.token.Token;
 import com.d106.arti.token.TokenRepository;
@@ -29,8 +30,17 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final GalleryRepository galleryRepository;
+    private final VerificationService verificationService;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            throw new IllegalStateException("이미 등록된 이메일입니다.");
+        }
+
+        if (!verificationService.isVerifiedEmail(request.getEmail())) {
+            throw new IllegalStateException("이메일 인증이 완료되지 않았습니다.");
+        }
+
         var user = Member.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))

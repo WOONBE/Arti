@@ -30,10 +30,20 @@ public class VerificationService {
 
     public boolean verifyCode(String email, String code) {
         Verification storedCode = verificationRepository.findById(email).orElse(null);
+
+        // 코드가 없거나 만료되었으면 실패
         if (storedCode == null || storedCode.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return false;  // 코드가 없거나 만료되었으면 실패
+            return false;
         }
-        return storedCode.getCode().equals(code);  // 코드가 일치하면 성공
+
+        // 이메일 인증 성공 시 인증 상태를 업데이트
+        if (storedCode.getCode().equals(code)) {
+            storedCode.setVerified(true);
+            verificationRepository.save(storedCode);  // 저장
+            return true;
+        }
+        // 코드가 일치하지 않으면 실패
+        return false;
     }
 
     public boolean isVerifiedEmail(String email) {
@@ -41,7 +51,7 @@ public class VerificationService {
         return verification != null && verification.getExpiryDate().isAfter(LocalDateTime.now());  // 이메일이 존재하고 만료되지 않은 경우
     }
 
-    @Transactional  // 트랜잭션을 보장
+    @Transactional
     @Scheduled(fixedRate = 600000)  // 10분 간격으로 실행
     public void deleteExpiredCodes() {
         verificationRepository.deleteAllByExpiryDateBefore(LocalDateTime.now());
