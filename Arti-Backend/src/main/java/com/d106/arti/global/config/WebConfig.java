@@ -16,6 +16,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new ImageInterceptor()).order(1).addPathPatterns("/static/**");
-        registry.addInterceptor(staticRequestInterceptor).order(2).addPathPatterns("/static/**");
+//        registry.addInterceptor(staticRequestInterceptor).order(2).addPathPatterns("/static/**");
     }
 }

@@ -9,7 +9,6 @@ import java.util.Base64;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -29,7 +28,7 @@ public class RouteStorageService {
 
     private final ViewCountRepository viewCountRepository;
 
-    @Scheduled(cron = "0 0 0 * * *")
+    //    @Scheduled(cron = "0 0 0 * * *")
     public String routeStorage() {
         String credentials = "elastic:changeme";
         String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
