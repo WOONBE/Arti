@@ -1,16 +1,10 @@
 package com.hexa.arti.ui.artmuseum
 
-import android.content.Context
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseFragment
 import com.hexa.arti.databinding.FragmentMyGalleryHomeBinding
-import com.hexa.arti.ui.MainActivity
-import com.hexa.arti.ui.MyGalleryActivityViewModel
 import com.hexa.arti.ui.artmuseum.adpater.MyGalleryAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +18,7 @@ class MyGalleryHomeFragment :
     override fun init() {
         with(binding) {
 
-            // ViewPager의 어댑터 설정
+            myGalleryViewPager.isSaveEnabled = false
             myGalleryViewPager.adapter = MyGalleryAdapter(requireActivity())
 
             // 현재 항목 설정

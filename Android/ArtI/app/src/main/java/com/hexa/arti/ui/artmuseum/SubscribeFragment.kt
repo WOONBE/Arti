@@ -38,8 +38,10 @@ class SubscribeFragment : BaseFragment<FragmentSubscribeBinding>(R.layout.fragme
 
         mainActivityViewModel.subscriptionGallery.observe(viewLifecycleOwner) {
             if (it.size == 0) {
+                binding.subscribeRecyclerview.visibility = View.GONE
                 binding.tvNoSubscribe.visibility = View.VISIBLE
             } else {
+                binding.subscribeRecyclerview.visibility = View.VISIBLE
                 binding.tvNoSubscribe.visibility = View.GONE
                 adapter.submitList(it)
             }
