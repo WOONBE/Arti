@@ -3,6 +3,7 @@ package com.hexa.arti.ui.artwork
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View.GONE
 import android.view.animation.AnimationUtils
