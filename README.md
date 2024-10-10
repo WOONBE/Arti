@@ -51,7 +51,7 @@ Arti 앱 다운로드 링크:
 
   | 이름   | 역할          | 개발 내용                   |
     | ------ | ------------- | --------------------------- |
-  | 황병현 | 팀장<br/>Data | - a<br/>- b<br/>- c<br/>- d |
+  | 황병현 | 팀장<br/>Data | - EfficientNetV2를 활용한 미술관 및 미술품 추천<br/>- Fast-Style-Transfer를 활용한 content이미지에 style이미지 합성<br/>- BILP, MusicGen을 활용한 image2music생성<br/>- 데이터 전처리 |
   | 김헌우 | Backend       | - a<br/>- b<br/>- c<br/>- d |
   | 김주현 | Backend       | - a<br/>- b<br/>- c<br/>- d |
   | 박민희 | Backend       | - ELK Stack 활용하여 이미지 조회수 기간별로 집계 및 그에 따른 이미지 저장 위치 분리 로직 구현<br/>- JWT 인증 구현<br/>- 인스타그램 API 연동<br/>- CI/CD |
@@ -147,11 +147,6 @@ Arti 앱 다운로드 링크:
 - **Machine Learning Utilities:**
     - Faiss
     - Opt-einsum
-- **Speech & Text Processing:**
-    - Google Cloud Text-to-Speech (Google TTS Cloud AI)
-    - AWS Transcribe (AWS Transcribe)
-    - TensorBoard
-    - Web Speech API
 - **Data Processing:**
     - Pandas
     - Numpy
@@ -161,12 +156,6 @@ Arti 앱 다운로드 링크:
 - **Model Deployment:**
     - Uvicorn for ASGI server
     - FastAPI for API development
-- **Optimization and Performance:**
-    - Cython
-    - Zstandard
-- **Logging and Monitoring:**
-    - Loguru
-    - Rich
 
 ### CI/CD
 
