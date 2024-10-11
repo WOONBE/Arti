@@ -106,6 +106,12 @@
             app:argType="integer">
 
         </argument>
+        <argument
+            android:name="galleryName"
+            android:defaultValue="1"
+            app:argType="string">
+
+        </argument>
         <action
             android:id="@+id/action_artGalleryDetailFragment_to_artDetailFragment"
             app:destination="@id/artDetailFragment" />

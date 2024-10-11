@@ -31,7 +31,7 @@ class HomeFragment :
     private val viewpageAdapter = ViewpageAdapter(
         onPlayClick = { item ->
             val action =
-                HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(item.homeGallery.galleryId)
+                HomeFragmentDirections.actionHomeFragmentToArtGalleryDetailFragment(galleryId = item.homeGallery.galleryId, galleryName= item.homeGallery.galleryTitle)
             navigate(action)
         },
         onSliding = {

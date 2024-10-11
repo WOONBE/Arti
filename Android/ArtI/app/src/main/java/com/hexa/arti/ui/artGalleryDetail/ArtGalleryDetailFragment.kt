@@ -57,7 +57,7 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
         galleryId = args.galleryId
         artGalleryViewModel.getGallery(galleryId)
         artGalleryViewModel.getMusic(galleryId)
-
+        binding.galleryMenuNameTv.text = args.galleryName
         initMedia()
         // 음악 시작
         binding.galleryBgmPlayPtn.setOnClickListener {
@@ -139,6 +139,9 @@ class ArtGalleryDetailFragment : BaseFragment<FragmentArtGalleryDetailBinding>(R
 
         // 테마 데이터를 관찰하고 업데이트
         artGalleryViewModel.galleryDetail.observe(viewLifecycleOwner) { themes ->
+
+            Log.d(TAG, "init: ${themes}")
+            
             if (themes != null) {
                 // 테마와 이미지를 처리하여 ViewPager와 메뉴를 설정
                 setupViewPager(themes)
@@ -301,9 +304,10 @@ private fun initMedia(){
     }
 
     private fun setupMenu(themes: List<MyGalleryThemeItem>) {
+        Log.d(TAG, "setupMenu: $themes")
         val themeTitles = themes.map { it.title }
         binding.galleryThemeRv.adapter = GalleryThemeMenuAdapter(themeTitles) { position ->
-
+            
             if (themes[position].images.isEmpty()) {
                 // 이미지가 없으면 테마 변경을 막음
                 makeToast("선택된 테마는 작품이 없습니다.")

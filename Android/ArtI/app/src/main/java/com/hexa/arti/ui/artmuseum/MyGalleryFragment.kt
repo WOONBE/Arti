@@ -231,7 +231,7 @@ class MyGalleryFragment : BaseFragment<FragmentMyGalleryBinding>(R.layout.fragme
             myGalleryPlayBtn.setOnClickListener {
                 val action =
                     MyGalleryHomeFragmentDirections.actionMyGalleryHomeFragmentToArtGalleryDetailFragment(
-                        galleryId
+                        galleryId = galleryId, galleryName =  myGalleryNameTv.text.toString()
                     )
                 navigate(action)
             }

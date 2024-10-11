@@ -141,7 +141,7 @@ class ArtMuseumFragment : BaseFragment<FragmentArtMuseumBinding>(R.layout.fragme
         binding.ivPlay.setOnClickListener {
             navigate(
                 ArtMuseumFragmentDirections.actionArtMuseumFragmentToArtGalleryDetailFragment(
-                    args.gallery.galleryId
+                    galleryId = args.gallery.galleryId, galleryName = binding.tvMuseumTitle.text.toString()
                 )
             )
         }
