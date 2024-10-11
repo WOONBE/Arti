@@ -1,6 +1,8 @@
 package com.hexa.arti.ui.home
 
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.hexa.arti.R
@@ -44,6 +46,14 @@ class HomeFragment :
     )
 
     override fun init() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    showExitConfirmationDialog()
+                }
+            })
+
         initAdapter()
         initObserve()
         initViews()
@@ -107,5 +117,14 @@ class HomeFragment :
         }
     }
 
-
+    private fun showExitConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setMessage("정말 종료하시겠습니까?")
+            .setCancelable(false)
+            .setPositiveButton("예") { _, _ ->
+                requireActivity().finish()
+            }
+            .setNegativeButton("아니오", null)
+            .show()
+    }
 }

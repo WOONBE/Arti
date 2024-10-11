@@ -7,16 +7,12 @@ import android.util.Log
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.hexa.arti.R
 import com.hexa.arti.config.BaseActivity
@@ -33,9 +29,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private var isFirst = true
     private var isShowDialog = false
-    lateinit var navController : NavController
-    private val mainActivityViewModel : MainActivityViewModel by viewModels()
-    private val myGalleryActivityViewModel : MyGalleryActivityViewModel by viewModels()
+    lateinit var navController: NavController
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
+    private val myGalleryActivityViewModel: MyGalleryActivityViewModel by viewModels()
     private lateinit var loadingDialog: LoadingDialog
     var userData: LoginResponse? = null
     var isUp = true
@@ -52,17 +48,16 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             insets
         }
         showLoadingDialog()
-        with(myGalleryActivityViewModel){
+        with(myGalleryActivityViewModel) {
             // Coroutine 내에서 값을 수집
             lifecycleScope.launch {
 
                 mainActivityViewModel.getLoginData().collect { d ->
                     Log.d(TAG, "onCreate: ${d?.galleryId}")
                     userData = d
-                    if(d?.galleryId == -1){
+                    if (d?.galleryId == -1) {
                         isFirst = true
-                    }
-                    else {
+                    } else {
                         isFirst = false
                         getMyGallery(d!!.galleryId)
                         getMyGalleryTheme(d.galleryId)
@@ -111,7 +106,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     // 가로 모드
     fun changeLandScope() {
 
-        if(!mode) {
+        if (!mode) {
 
             mode = true
             // 가로모드로 고정
@@ -128,7 +123,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     fun changePortrait() {
 
-        if(mode) {
+        if (mode) {
             mode = false
             // 기본 모드로 복원
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -138,46 +133,52 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
     }
 
-    fun moveLogin(){
-        startActivity(Intent(this,LoginActivity::class.java))
+    fun moveLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
 
     /** 바텀 네비게이션 숨기는 기능 */
     private fun setBottomNavHide() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when(destination.id){
+            when (destination.id) {
                 R.id.homeFragment -> {
                     changePortrait()
                     hideBottomNav(false)
                     Log.d(TAG, "setBottomNavHide: home")
                 }
+
                 R.id.searchFragment -> {
                     changePortrait()
                     hideBottomNav(false)
                     Log.d(TAG, "setBottomNavHide: search")
                 }
-                R.id.myGalleryHomeFragment ->{
+
+                R.id.myGalleryHomeFragment -> {
                     changePortrait()
                     hideBottomNav(false)
                     mainActivityViewModel.setFragmentState(MainActivityViewModel.SUBSCRIBE_FRAGMENT)
                     Log.d(TAG, "setBottomNavHide: myGallery")
                 }
-                R.id.settingFragment ->{
+
+                R.id.settingFragment -> {
                     hideBottomNav(false)
                     changePortrait()
                     mainActivityViewModel.setFragmentState(MainActivityViewModel.PORTFOLIO_FRAGMENT)
                     Log.d(TAG, "setBottomNavHide: setting")
                 }
+
                 R.id.artGalleryDetailFragment -> {
                     hideBottomNav(true)
                     changeLandScope()
                 }
-                R.id.artDetailFragment ->{
+
+                R.id.artDetailFragment -> {
                     hideBottomNav(true)
                     changeLandScope()
                 }
-                else ->{
+
+                else -> {
                     hideBottomNav(true)
                     changePortrait()
                     Log.d(TAG, "setBottomNavHide: etc")
@@ -188,7 +189,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
 
     fun showLoadingDialog() {
-        if(!isShowDialog){
+        if (!isShowDialog) {
             isShowDialog = true
             loadingDialog = LoadingDialog()
             loadingDialog.isCancelable = false
@@ -197,7 +198,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     }
 
     fun hideLoadingDialog() {
-        if(isShowDialog){
+        if (isShowDialog) {
             isShowDialog = false
             loadingDialog.dismiss()
         }
