@@ -56,7 +56,7 @@ Arti 앱 다운로드 링크:
   | 김주현 | Backend       | - a<br/>- b<br/>- c<br/>- d |
   | 박민희 | Backend       | - ELK Stack 활용하여 이미지 조회수 기간별로 집계 및 그에 따른 이미지 저장 위치 분리 로직 구현<br/>- JWT 인증 구현<br/>- 인스타그램 API 연동<br/>- CI/CD |
   | 김민조 | Android       | - 이미지 다운샘플링을 통한 통신 속도 최적화 <br/> - ARSceneview 를 활용한 AR 구현<br/> - PieChart 구현 <br/>- 추천 데이터 표시 |
-  | 문동진 | Android       | - a<br/>- b<br/>- c<br/>- d |
+  | 문동진 | Android       | - 회원 관리 구현<br/>- 미술관 UI 구현<br/>- dataStore를 통한 데이터 관리<br/>- 음악 및 파일처리 |
 
 <br><br>
 
