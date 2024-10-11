@@ -15,11 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.d106.arti.gallery.domain.GalleryViewRecord;
-
-import java.awt.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Builder
@@ -30,7 +25,7 @@ public class Gallery extends BaseEntity {
 
     @Id
     @Column(name = "GALLERY_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "GALLERY_TITLE")

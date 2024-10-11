@@ -7,6 +7,7 @@ import com.d106.arti.gallery.dto.request.ThemeRequest;
 import com.d106.arti.gallery.dto.response.GalleryResponse;
 import com.d106.arti.gallery.dto.response.SubscribedGalleryResponse;
 import com.d106.arti.gallery.dto.response.ThemeResponse;
+import com.d106.arti.gallery.dto.response.ThemeWithArtworksResponse;
 import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.gallery.service.GalleryService;
 import com.d106.arti.member.domain.Member;
@@ -52,11 +53,27 @@ public class GalleryController {
         return ResponseEntity.ok().build();
     }
 
+    // 3.5 테마에 AI미술품 추가
+    @PostMapping("/themes/{themeId}/aiartworks/{artworkId}")
+    @Operation(summary = "테마에 AI미술품 추가", description = "특정 테마에 AI미술품을 추가하는 API")
+    public ResponseEntity<Void> addAiArtworkToTheme(@PathVariable Integer themeId, @PathVariable Integer artworkId, @RequestParam String description) {
+        galleryService.addAiArtworkToTheme(themeId, artworkId, description);
+        return ResponseEntity.ok().build();
+    }
+
     // 4. 테마에서 미술품 삭제
     @DeleteMapping("/themes/{themeId}/artworks/{artworkId}")
     @Operation(summary = "테마의 미술품 삭제", description = "특정 테마의 미술품을 삭제하는 API")
     public ResponseEntity<Void> removeArtworkFromTheme(@PathVariable Integer themeId, @PathVariable Integer artworkId) {
         galleryService.removeArtworkFromTheme(themeId, artworkId);
+        return ResponseEntity.ok().build();
+    }
+
+    // 4.5 테마에서 AI미술품 삭제
+    @DeleteMapping("/themes/{themeId}/aiartworks/{artworkId}")
+    @Operation(summary = "테마의 Ai미술품 삭제", description = "특정 테마의 Ai미술품을 삭제하는 API")
+    public ResponseEntity<Void> removeAiArtworkFromTheme(@PathVariable Integer themeId, @PathVariable Integer artworkId) {
+        galleryService.removeAiArtworkFromTheme(themeId, artworkId);
         return ResponseEntity.ok().build();
     }
 
@@ -127,9 +144,9 @@ public class GalleryController {
     @GetMapping("/artworks/random")
     @Operation(summary = "특정 장르의 미술품 랜덤 조회", description = "특정 장르에 속한 미술품을 랜덤하게 50개 조회하는 API, 검색시 _중간에 넣고 검색")
     public ResponseEntity<List<ArtworkResponse>> getRandomArtworksByGenre(@RequestParam String genreLabel) {
-        // 장르 레이블로 미술품 조회 서비스 호출
+
         List<ArtworkResponse> randomArtworks = galleryService.getRandomArtworksByGenre(genreLabel);
-        // 조회된 미술품 목록을 반환
+
         return ResponseEntity.ok(randomArtworks);
     }
 
@@ -137,9 +154,9 @@ public class GalleryController {
     @Operation(summary = "사용자가 구독한 미술관 목록 조회", description = "사용자가 구독한 미술관 정보를 모두 조회하는 API")
     public ResponseEntity<List<SubscribedGalleryResponse>> getSubscribedGalleries(@PathVariable Integer memberId) {
 
-        // 서비스에서 구독한 갤러리 목록을 조회
+
         List<SubscribedGalleryResponse> subscribedGalleries = galleryService.getSubscribedGalleriesByMemberId(memberId);
-        // 조회 결과를 반환
+
         return ResponseEntity.ok(subscribedGalleries);
     }
 
@@ -152,7 +169,14 @@ public class GalleryController {
 
 
 
+    // 특정 미술관의 테마와 테마에 속한 모든 미술품 조회
+    @GetMapping("/{galleryId}/themes-with-artworks")
+    @Operation(summary = "미술관 내부 테마 및 미술품 전체 조회", description = "미술관 내부 테마 및 미술품 전체 조회하는 API")
+    public ResponseEntity<List<ThemeWithArtworksResponse>> getAllThemesWithArtworksByGalleryId(
+        @PathVariable Integer galleryId) {
 
-
+        List<ThemeWithArtworksResponse> themesWithArtworks = galleryService.getAllThemesWithArtworksByGalleryId(galleryId);
+        return ResponseEntity.ok(themesWithArtworks);
+    }
 
 }

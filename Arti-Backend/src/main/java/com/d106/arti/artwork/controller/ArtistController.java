@@ -62,6 +62,13 @@ public class ArtistController {
         return ResponseEntity.ok(randomArtists);  
     }
 
+    @GetMapping("/by-genre")
+    @Operation(summary = "장르별 대표 화가 조회", description = "장르별 대표 화가를 3명까지 조회하는 API")
+    public ResponseEntity<List<ArtistResponse>> getArtistsByGenre(@RequestParam String genre) {
+        List<ArtistResponse> artists = artistService.getArtistsByGenre(genre);
+        return ResponseEntity.ok(artists);
+    }
+
 
 
 

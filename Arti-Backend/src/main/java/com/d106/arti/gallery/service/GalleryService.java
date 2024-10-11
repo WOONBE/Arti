@@ -1,13 +1,5 @@
 package com.d106.arti.gallery.service;
 
-import static com.d106.arti.global.exception.ExceptionCode.INVALID_ARTWORK_TYPE;
-import static com.d106.arti.global.exception.ExceptionCode.INVALID_GENRE;
-import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_ARTWORK_ID;
-import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_GALLERY_ID;
-import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_OWNER_ID;
-import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_THEME_ID;
-import static com.d106.arti.global.exception.ExceptionCode.NOT_FOUND_THEME_WITH_GALLERY;
-
 import com.d106.arti.artwork.domain.AiArtwork;
 import com.d106.arti.artwork.domain.Artwork;
 import com.d106.arti.artwork.domain.ArtworkTheme;
@@ -25,24 +17,30 @@ import com.d106.arti.gallery.dto.request.ThemeRequest;
 import com.d106.arti.gallery.dto.response.GalleryResponse;
 import com.d106.arti.gallery.dto.response.SubscribedGalleryResponse;
 import com.d106.arti.gallery.dto.response.ThemeResponse;
+import com.d106.arti.gallery.dto.response.ThemeWithArtworksResponse;
 import com.d106.arti.gallery.repository.GalleryRepository;
 import com.d106.arti.gallery.repository.ThemeRepository;
 import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.member.domain.Member;
 import com.d106.arti.member.repository.MemberRepository;
 import com.d106.arti.storage.StorageService;
-import jakarta.persistence.EntityNotFoundException;
+
 import java.util.Collections;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.web.multipart.MultipartFile;
+
+import static com.d106.arti.global.exception.ExceptionCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -71,6 +69,7 @@ public class GalleryService {
 
         // Gallery 엔티티 생성 및 저장
         Gallery gallery = Gallery.builder()
+            .id(owner.getId())
             .name(requestDto.getName())
             .description(requestDto.getDescription())
             .image(imageUrl)  // 저장한 이미지 URL 설정
@@ -83,6 +82,10 @@ public class GalleryService {
     }
 
     @Transactional
+    @Caching(evict = {
+        @CacheEvict(value = "randomGalleries", allEntries = true, cacheManager = "rcm"),
+        @CacheEvict(value = "searchGalleries", allEntries = true, cacheManager = "rcm")
+    })
     public GalleryResponse updateGallery(Integer galleryId, GalleryRequest requestDto, MultipartFile image) {
         Gallery gallery = galleryRepository.findById(galleryId)
             .orElseThrow(() -> new BadRequestException(NOT_FOUND_GALLERY_ID));
@@ -121,6 +124,7 @@ public class GalleryService {
 
     // 1. 특정 미술관 id를 받아서 테마 전체 조회되게 변경
     @Transactional(readOnly = true)
+//    @Cacheable(cacheNames = "themesByGalleryId", key = "#galleryId", sync = true, cacheManager = "rcm")
     public List<ThemeResponse> getAllThemesByGalleryId(Integer galleryId) {
         List<Theme> themes = themeRepository.findByGalleryId(galleryId);
         return themes.stream()
@@ -160,6 +164,14 @@ public class GalleryService {
         themeRepository.save(theme);
     }
 
+    @Transactional
+    public void addAiArtworkToTheme(Integer themeId, Integer artworkId, String description) {
+        Theme theme = themeRepository.findById(themeId).orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
+        Artwork artwork = aiArtworkRepository.findById(artworkId).orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK_ID));
+        theme.addArtwork(artwork, description);
+        themeRepository.save(theme);
+    }
+
 
     // 4. 테마에서 미술품 삭제
     @Transactional
@@ -167,6 +179,14 @@ public class GalleryService {
         Theme theme = themeRepository.findById(themeId).orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
         Artwork artwork = artworkRepository.findById(artworkId).orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK_ID));
 
+        theme.removeArtwork(artwork);
+        themeRepository.save(theme);
+    }
+
+    @Transactional
+    public void removeAiArtworkFromTheme(Integer themeId, Integer artworkId) {
+        Theme theme = themeRepository.findById(themeId).orElseThrow(() -> new BadRequestException(NOT_FOUND_THEME_ID));
+        Artwork artwork = aiArtworkRepository.findById(artworkId).orElseThrow(() -> new BadRequestException(NOT_FOUND_ARTWORK_ID));
         theme.removeArtwork(artwork);
         themeRepository.save(theme);
     }
@@ -214,6 +234,7 @@ public class GalleryService {
 
     // 테마에 담긴 모든 미술품 조회, 길이 너비 추가해야 할듯?
     @Transactional(readOnly = true)
+//    @Cacheable(cacheNames = "artworksByThemeId", key = "#themeId", sync = true, cacheManager = "rcm")
     public List<ArtworkResponse> getArtworksByThemeId(Integer themeId) {
         // Theme 조회
         Theme theme = themeRepository.findById(themeId)
@@ -234,7 +255,7 @@ public class GalleryService {
                         .title(aiArtwork.getAiArtworkTitle()) // AI 작품의 제목 사용
                         .description(aiArtwork.getArtworkImage()) // 이미지를 설명으로 예시
                         .imageUrl(aiArtwork.getArtworkImage())
-                        .year(aiArtwork.getCreateDate().toString())
+                        .year(aiArtwork.getYear())
                         .artist(aiArtwork.getMember().getNickname())
                         .build();
                 } else if (artwork instanceof NormalArtWork) {
@@ -256,7 +277,7 @@ public class GalleryService {
 
     // 장르에 해당하는 미술품 50개 랜덤으로 가져오기
     @Transactional(readOnly = true)
-    @Cacheable(value = "artworksByGenre", key = "#genreLabel")
+    @Cacheable(cacheNames = "artworksByGenre", key = "#genreLabel", sync = true, cacheManager = "rcm")
     public List<ArtworkResponse> getRandomArtworksByGenre(String genreLabel) {
         // 1. 입력받은 genreLabel을 대문자로 변환하여 Enum에서 확인
         String formattedGenreLabel = genreLabel.trim().toUpperCase();  // 입력값을 대문자로 변환
@@ -302,10 +323,11 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
+//    @Cacheable(cacheNames = "subGalleriesByMemberId", key = "#memberId", sync = true, cacheManager = "rcm")
     public List<SubscribedGalleryResponse> getSubscribedGalleriesByMemberId(Integer memberId) {
         // memberId로 Member 조회
         Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new IllegalArgumentException("Invalid memberId: " + memberId));
+            .orElseThrow(() -> new BadRequestException(NOT_FOUND_MEMBER_ID));
 
         // Member의 구독된 갤러리 ID 리스트 조회
         List<Integer> subscribedGalleryIds = member.getSubscribedGalleryIds();
@@ -320,7 +342,7 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "randomGalleriesCache", key = "'galleries-50'")
+    @Cacheable(value = "randomGalleries", key = "#root.target + #root.methodName", sync = true, cacheManager = "rcm")
     public List<GalleryResponse> getRandomGalleries() {
         // 모든 미술관을 조회
         List<Gallery> galleries = galleryRepository.findAll();
@@ -341,6 +363,7 @@ public class GalleryService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "searchGalleries", key = "#keyword", sync = true, cacheManager = "rcm")
     public List<GalleryResponse> searchGalleryByName(String keyword) {
         // GalleryRepository에서 부분 검색 수행
         List<Gallery> galleries = galleryRepository.findByNameContaining(keyword);
@@ -352,6 +375,55 @@ public class GalleryService {
         // 검색된 갤러리를 GalleryResponse로 변환하여 반환
         return galleries.stream()
             .map(GalleryResponse::fromEntity)
+            .collect(Collectors.toList());
+    }
+
+    // 특정 미술관 ID로 테마와 그 테마에 속한 모든 미술품 조회
+    @Transactional(readOnly = true)
+//    @Cacheable(value = "allGalleriesThings", key = "#galleryId", sync = true, cacheManager = "rcm")
+    public List<ThemeWithArtworksResponse> getAllThemesWithArtworksByGalleryId(Integer galleryId) {
+        // 특정 galleryId에 속한 테마 조회
+        List<Theme> themes = themeRepository.findByGalleryId(galleryId);
+
+        // 각 테마에 속한 미술품들을 조회하고, 함께 DTO로 변환
+        return themes.stream()
+            .map(theme -> {
+                List<ArtworkResponse> artworks = theme.getArtworks().stream()
+                    .map(ArtworkTheme::getArtwork)
+                    .map(artwork -> {
+                        if (artwork instanceof AiArtwork) {
+                            AiArtwork aiArtwork = (AiArtwork) artwork;
+                            return ArtworkResponse.builder()
+                                .id(aiArtwork.getId())
+                                .title(aiArtwork.getAiArtworkTitle())
+                                .description(aiArtwork.getArtworkImage())
+                                .imageUrl(aiArtwork.getArtworkImage())
+                                .artist(aiArtwork.getMember().getNickname())
+                                .year(aiArtwork.getYear())
+                                .build();
+                        } else if (artwork instanceof NormalArtWork) {
+                            NormalArtWork normalArtwork = (NormalArtWork) artwork;
+                            return ArtworkResponse.builder()
+                                .id(normalArtwork.getId())
+                                .title(normalArtwork.getTitle())
+                                .artist(normalArtwork.getArtist().getEngName())
+                                .year(normalArtwork.getYear())
+                                .description(normalArtwork.getDescription())
+                                .imageUrl(imageBaseUrl + normalArtwork.getFilename())
+                                .build();
+                        } else {
+                            throw new BadRequestException(INVALID_ARTWORK_TYPE);
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+                // 테마와 해당 미술품들을 ThemeWithArtworksResponse로 변환하여 반환
+                return ThemeWithArtworksResponse.builder()
+                    .themeId(theme.getId())
+                    .themeName(theme.getName())
+                    .artworks(artworks)
+                    .build();
+            })
             .collect(Collectors.toList());
     }
 
