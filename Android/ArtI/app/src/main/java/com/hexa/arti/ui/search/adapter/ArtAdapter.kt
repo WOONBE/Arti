@@ -1,6 +1,7 @@
 package com.hexa.arti.ui.search.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -52,12 +53,19 @@ class ArtworkAdapter(
             circularProgressDrawable.centerRadius = 30f
             circularProgressDrawable.start()
 
+            val startTime = System.currentTimeMillis()
+
             Glide.with(binding.root.context)
                 .load(artwork.imageUrl)
                 .placeholder(circularProgressDrawable)
                 .override(240, 167)
                 .into(binding.ivArt)
 
+            val endTime = System.currentTimeMillis()
+            val executionTime = endTime - startTime
+            
+            Log.d("확인","이미지 로딩 속도 확인 $executionTime")
+            
             binding.tvArtTitle.text = artwork.title
 
             itemView.setOnClickListener {
