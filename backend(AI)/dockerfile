@@ -1,0 +1,14 @@
+FROM python:3.10.6
+
+COPY ./requirements.txt /src/requirements.txt
+
+COPY ./src /src
+
+WORKDIR /src
+
+RUN pip install -r requirements.txt
+
+RUN wget https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow_cpu-2.15.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+RUN pip install --no-cache-dir tensorflow_cpu-2.15.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -45,14 +45,14 @@ Arti 앱 다운로드 링크:
 - 팀원 :  
   육각형 6조(D106)의 팀원들을 소개합니다!
 
-  | 이름   | 역할          | 개발 내용                                               |
-      | ------ | ------------- |-----------------------------------------------------|
-  | 황병현 | 팀장<br/>Data | - a<br/>- b<br/>- c<br/>- d                         |
-  | 김헌우 | Backend       | - a<br/>- b<br/>- c<br/>- d                         |
-  | 김주현 | Backend       | - 회원가입을 위한 이메일 인증 구현<br/>- 프로젝트 문서화|
-  | 박민희 | Backend       | - a<br/>- b<br/>- c<br/>- d                         |
-  | 김민조 | Android       | - a<br/>- b<br/>- c<br/>- d                         |
-  | 문동진 | Android       | - a<br/>- b<br/>- c<br/>- d                         |
+  | 이름   | 역할          | 개발 내용                   |
+    | ------ | ------------- | --------------------------- |
+  | 황병현 | 팀장<br/>Data | - EfficientNetV2를 활용한 미술관 및 미술품 추천<br/>- Fast-Style-Transfer를 활용한 content이미지에 style이미지 합성<br/>- BILP, MusicGen을 활용한 image2music생성<br/>- 데이터 전처리 |
+  | 김헌우 | Backend       | - 미술품, 미술관 관련 기능 구현<br/>- 구독, 화가, 테마 관련 기능 구현<br/>- 검색 및 랜덤 조회 로직 구현<br/>- 세부 예외처리 로직 구현 및 캐싱, 쿼리 최적화를 통한 조회 속도 최적화 |
+  | 김주현 | Backend       | - a<br/>- b<br/>- c<br/>- d |
+  | 박민희 | Backend       | - ELK Stack 활용하여 이미지 조회수 기간별로 집계 및 그에 따른 이미지 저장 위치 분리 로직 구현<br/>- JWT 인증 구현<br/>- 인스타그램 API 연동<br/>- CI/CD |
+  | 김민조 | Android       | - 이미지 다운샘플링을 통한 통신 속도 최적화 <br/> - ARSceneview 를 활용한 AR 구현<br/> - PieChart 구현 <br/>- 추천 데이터 표시 |
+  | 문동진 | Android       | - 회원 관리 구현<br/>- 미술관 UI 구현<br/>- dataStore를 통한 데이터 관리<br/>- 음악 및 파일처리 |
 
 <br><br>
 
@@ -108,8 +108,6 @@ Arti 앱 다운로드 링크:
 
   - Spring Web
 
-  - Spring WebFlux
-
 - **AWS S3**
 
 - **JWT (JSON Web Token)**
@@ -143,13 +141,8 @@ Arti 앱 다운로드 링크:
   - HuggingFace Transformers
   - Tokenizers
 - **Machine Learning Utilities:**
-  - Faiss
-  - Opt-einsum
-- **Speech & Text Processing:**
-  - Google Cloud Text-to-Speech (Google TTS Cloud AI)
-  - AWS Transcribe (AWS Transcribe)
-  - TensorBoard
-  - Web Speech API
+    - Faiss
+    - Opt-einsum
 - **Data Processing:**
   - Pandas
   - Numpy
@@ -157,14 +150,8 @@ Arti 앱 다운로드 링크:
 - **GPU Support:**
   - CUDA
 - **Model Deployment:**
-  - Uvicorn for ASGI server
-  - FastAPI for API development
-- **Optimization and Performance:**
-  - Cython
-  - Zstandard
-- **Logging and Monitoring:**
-  - Loguru
-  - Rich
+    - Uvicorn for ASGI server
+    - FastAPI for API development
 
 ### CI/CD
 
@@ -184,9 +171,9 @@ Arti 앱 다운로드 링크:
 
 <br><br>
 
-## 포팅 메뉴얼(파일 필요)
+## 포팅 메뉴얼
 
-[포팅 메뉴얼 링크!](넣어야함.)
+포팅 메뉴얼 링크: [포팅 메뉴얼](./exec/README.md)
 
 <br><br>
 
