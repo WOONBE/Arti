@@ -19,23 +19,20 @@ Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9x
 ## 주요 기능
 
 - 회원가입 및 콜드스타트 해결
-    - 사용자가 처음 앱을 사용하면, 추천을 위한 데이터를 확보하기 위해 기본 정보를 수집하고 맞춤형 작품을 제공합니다. 이를 통해 콜드스타트 문제를 해결하고, 빠르게 사용자가 흥미를 느낄 수 있도록 지원합니다.
-
-- 인스타그램 연동
-    - 사용자의 본인 인스타 계정을 연동해서 자신이 업로드했던 이미지를 가져올 수 있습니다.
+  - 사용자가 처음 앱을 사용하면, 추천을 위한 데이터를 확보하기 위해 사용자의 인스타그램에 있는 이미지를 가져오는 등 사용자의 정보를 수집하고 맞춤형 작품을 제공합니다. 이를 통해 콜드스타트 문제를 해결하고, 빠르게 사용자가 흥미를 느낄 수 있도록 지원합니다.
 
 - 미술관 페이지(음악 생성, AR)
-    - 사용자가 소유한 미술관 페이지에서는 실시간으로 생성된 음악을 배경으로 감상할 수 있으며, 증강현실(AR)을 통해 작품을 더욱 생생하게 경험할 수 있습니다.
+  - 사용자가 소유한 미술관 페이지에서는 실시간으로 생성된 음악을 배경으로 감상할 수 있으며, 증강현실(AR)을 통해 작품을 더욱 생생하게 경험할 수 있습니다.
 
 - 검색 및 추천 기능
-    - 사용자는 검색 페이지에서 화가, 장르, 미술관을 랜덤으로 추천받을 수 있습니다.
-    - 추천 시스템을 통해 사용자의 최근 관심사에 맞는 작품을 추천받을 수 있습니다.
+  - 추천 시스템을 통해 사용자의 최근 관심사에 맞는 작품을 추천받을 수 있습니다.
+  - 사용자는 검색 페이지에서 화가, 장르, 미술관을 랜덤으로 추천받을 수 있습니다.
 
 - 구독한 미술관 저장
-    - 사용자는 자신이 관심 있는 미술관을 구독하고 저장할 수 있습니다. 구독한 미술관을 통해 새로운 작품이나 전시 정보를 빠르게 확인할 수 있습니다.
+  - 사용자는 자신이 관심 있는 미술관을 구독하고 저장할 수 있습니다.
 
 - 포트폴리오 관리
-    - 포트폴리오 기능을 통해 사용자는 자신이 좋아하는 장르의 비율을 분석하고, 관심 있는 화가를 조회할 수 있습니다. 이를 통해 사용자들은 자신의 취향을 더 명확히 알 수 있습니다.
+  - 포트폴리오 기능을 통해 사용자는 자신이 좋아하는 장르의 비율을 분석하고, 관심 있는 화가를 조회할 수 있습니다. 이를 통해 사용자들은 자신의 취향을 더 명확히 알 수 있습니다.
 
 <br><br>
 
@@ -68,31 +65,31 @@ Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9x
 ### **Android**
 
 - **Build Tools:**
-    - Gradle
-    - Hilt
-    - Kotlin KAPT
+  - Gradle
+  - Hilt
+  - Kotlin KAPT
 - **Libraries:**
-    - Core KTX
-    - AppCompat
-    - Material Components
-    - ConstraintLayout
+  - Core KTX
+  - AppCompat
+  - Material Components
+  - ConstraintLayout
 - **Dependency Injection:**
-    - Hilt
+  - Hilt
 - **Networking:**
-    - Retrofit
-    - OkHttp Logging Interceptor
+  - Retrofit
+  - OkHttp Logging Interceptor
 - **Coroutines:**
-    - Kotlin Coroutines Core
-    - Kotlin Coroutines Android
+  - Kotlin Coroutines Core
+  - Kotlin Coroutines Android
 - **ViewModel:**
-    - AndroidX Lifecycle ViewModel KTX
+  - AndroidX Lifecycle ViewModel KTX
 - **Navigation:**
-    - AndroidX Navigation Fragment KTX
-    - AndroidX Navigation UI KTX
+  - AndroidX Navigation Fragment KTX
+  - AndroidX Navigation UI KTX
 - **Logging:**
-    - Timber
+  - Timber
 - **AR (Augmented Reality):**
-    - ARSceneView
+  - ARSceneView
 
 ### Backend
 
@@ -100,17 +97,17 @@ Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9x
 
 - **Spring Boot**
 
-    - Spring Data JPA
+  - Spring Data JPA
 
-    - Spring Data Redis
+  - Spring Data Redis
 
-    - Spring Mail
+  - Spring Mail
 
-    - Spring Security
+  - Spring Security
 
-    - Spring Validation
+  - Spring Validation
 
-    - Spring Web
+  - Spring Web
 
 - **AWS S3**
 
@@ -130,29 +127,29 @@ Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9x
 
 - **사용한 외부 API**
 
-    - Google HTTP Client
+  - Google HTTP Client
 
-    - SpringDoc OpenAPI
+  - SpringDoc OpenAPI
 
 
 
 ### **AI**
 
 - **Deep Learning Frameworks:**
-    - TensorFlow
-    - PyTorch
+  - TensorFlow
+  - PyTorch
 - **NLP (Natural Language Processing):**
-    - HuggingFace Transformers
-    - Tokenizers
+  - HuggingFace Transformers
+  - Tokenizers
 - **Machine Learning Utilities:**
     - Faiss
     - Opt-einsum
 - **Data Processing:**
-    - Pandas
-    - Numpy
-    - Scipy
+  - Pandas
+  - Numpy
+  - Scipy
 - **GPU Support:**
-    - CUDA
+  - CUDA
 - **Model Deployment:**
     - Uvicorn for ASGI server
     - FastAPI for API development
@@ -204,3 +201,60 @@ Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9x
   <br><br>
 
 
+## 주요 서비스 화면
+
+### 1. 홈
+- 접속한 유저를 위한 미술관을 추천
+
+<img width="350" alt="image" src="/uploads/8c0d585d0422aa35f106f6c48087ee3a/1._홈-미술관_추천.gif">
+<br><br><br>
+
+### 2. 검색
+- 미술품 추천
+
+  <img width="350" alt="image" src="/uploads/6f258830e4ca48d448b7fa895f9003b5/2._미술관_추천_및_랜덤_조회_-_미술품_추천.gif">
+<br><br><br>
+
+- 화가 랜덤 검색
+
+  <img width="350" alt="image" src="/uploads/ec7bde9396163bdfdaef18cfce448eb4/2._미술관_추천_및_랜덤_조회_-_화가_랜덤_검색.gif">
+  <br><br><br>
+
+- 장르 랜덤 검색
+
+  <img width="350" alt="image" src="/uploads/5bd8a2ae1e8ee4b097f222a879e15716/2._미술관_추천_및_랜덤_조회_-_장르_검색.gif">
+  <br><br><br>
+
+- 미술관 랜덤 검색
+
+  <img width="350" alt="image" src="/uploads/3f75e6645d6a41a55f70e9217ab8a887/2._미술관_추천_및_랜덤_조회_-_미술관_검색.gif">
+  <br><br><br>
+
+### 3. AI 이미지 생성
+- 기존의 유명한 작품의 화풍을 유저가 제공하는 이미지에 적용
+
+  <img width="350" alt="image" src="/uploads/39fc643fc09fbb97cf3d94bac97aae9d/3._AI_이미지_생성_원본.gif">
+  <br><br><br>
+
+### 4. 미술관
+- 구독한 미술관과 내 미술관을 조회
+
+  <img width="350" alt="image" src="/uploads/a08bb4a65ab28474e0278bc5bd3b5ac1/4._미술관_페이지_구독과_내_미술관_.gif">
+<br><br><br>
+
+### 5. 미술관 상세 페이지
+- 해당 미술관에 어울리는 배경음악을 AI가 생성후, 실제 미술관에 방문한 것처럼 미술 작품들을 감상 가능.
+
+  <img width="350" alt="image" src="/uploads/4df00abeec0a3cbb4f1d1d0b696de90b/5._미술관_내부_페이지.gif">
+  <br><br><br>
+
+- AR 기능으로, 실제 유저가 있는 공간에 작품을 전시할 수 있음.
+  
+  <img width="350" alt="image" src="/uploads/98d5c259a635c1a1bd6b2015ea347801/5._ar.gif">
+  <br><br><br>
+
+### 6. 포트폴리오
+- 유저의 예술 성향을 파악할 수 있음.
+
+  <img width="350" alt="image" src="/uploads/e9bb6d39319b837a42005e56df95c59f/6._포트폴리오_원본.gif">
+<br><br><br>
