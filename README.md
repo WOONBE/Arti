@@ -198,7 +198,9 @@ Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9x
 
 ## UCC 및 시연영상
 
-- UCC - 
+- UCC 링크: https://youtu.be/EFBWKJcovHE
+
+[![Video Label](http://img.youtube.com/vi/EFBWKJcovHE/0.jpg)](https://youtu.be/EFBWKJcovHE)
   <br><br>
 
 
