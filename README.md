@@ -3,7 +3,7 @@
 <br>
 Arti 서버 링크: https://j11d106.p.ssafy.io/ 
 
-Arti 앱 다운로드 링크:
+Arti 앱 다운로드 링크: https://drive.google.com/file/d/1q8peKZ60zqSLBoF9xtDdnVBwqG_QEvJO/view?usp=drive_link
 
 <br><br><br>
 
@@ -53,7 +53,7 @@ Arti 앱 다운로드 링크:
     | ------ | ------------- | --------------------------- |
   | 황병현 | 팀장<br/>Data | - EfficientNetV2를 활용한 미술관 및 미술품 추천<br/>- Fast-Style-Transfer를 활용한 content이미지에 style이미지 합성<br/>- BILP, MusicGen을 활용한 image2music생성<br/>- 데이터 전처리 |
   | 김헌우 | Backend       | - 미술품, 미술관 관련 기능 구현<br/>- 구독, 화가, 테마 관련 기능 구현<br/>- 검색 및 랜덤 조회 로직 구현<br/>- 세부 예외처리 로직 구현 및 캐싱, 쿼리 최적화를 통한 조회 속도 최적화 |
-  | 김주현 | Backend       | - a<br/>- b<br/>- c<br/>- d |
+  | 김주현 | Backend       | - 회원가입을 위한 이메일 인증 구현<br/>- 프로젝트 문서화 |
   | 박민희 | Backend       | - ELK Stack 활용하여 이미지 조회수 기간별로 집계 및 그에 따른 이미지 저장 위치 분리 로직 구현<br/>- JWT 인증 구현<br/>- 인스타그램 API 연동<br/>- CI/CD |
   | 김민조 | Android       | - 이미지 다운샘플링을 통한 통신 속도 최적화 <br/> - ARSceneview 를 활용한 AR 구현<br/> - PieChart 구현 <br/>- 추천 데이터 표시 |
   | 문동진 | Android       | - 회원 관리 구현<br/>- 미술관 UI 구현<br/>- dataStore를 통한 데이터 관리<br/>- 음악 및 파일처리 |
@@ -193,13 +193,12 @@ Arti 앱 다운로드 링크:
 
 ### ERD
 
-<img width="900" alt="image" src="/uploads/71c9f98142a1b2cc4af1c2c3791839d0/Arti_ERD.png">
+<img width="900" alt="image" src="/uploads/6673a47659901d1a58fdded46fe4cef1/erd_update.png">
 <br><br>
 
 ## UCC 및 시연영상
 
-- UCC - 유튜브 링크
-- 시연영상 - 유튜브 링크 혹은 gif
+- UCC - 
   <br><br>
 
 
