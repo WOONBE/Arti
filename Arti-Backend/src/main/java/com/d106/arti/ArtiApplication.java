@@ -15,7 +15,7 @@ import static com.d106.arti.member.domain.Role.ADMIN;
 import static com.d106.arti.member.domain.Role.MANAGER;
 
 
-@EnableScheduling // 인증번호 저장 및 만료를 위해(mysql사용)
+@EnableScheduling
 @EnableJpaAuditing
 @EnableCaching
 @SpringBootApplication
