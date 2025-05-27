@@ -11,4 +11,5 @@ public interface ArtworkRepository extends JpaRepository<NormalArtWork, Integer>
     @Query("SELECT a FROM NormalArtWork a WHERE a.genre LIKE %?1%")
     List<NormalArtWork> findAllByGenreContaining(String genre);
 
+    boolean existsByFilename(String filename);
 }

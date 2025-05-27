@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Configuration
 @RequiredArgsConstructor
 public class ArtistBatchConfig {
@@ -39,9 +42,21 @@ public class ArtistBatchConfig {
                 .build();
     }
 
+//    @Bean
+//    public ItemWriter<Artist> artistWriter() {
+//        return artistRepository::saveAll;
+//    }
     @Bean
     public ItemWriter<Artist> artistWriter() {
-        return artistRepository::saveAll;
+        return items -> {
+            List<Artist> filtered = new ArrayList<>();
+            for (Artist artist : items) {
+                if (artist == null) continue;
+                if (artistRepository.existsByKorName(artist.getEngName())) continue; // 중복 체크
+                filtered.add(artist);
+            }
+            artistRepository.saveAll(filtered);
+        };
     }
 
     @Bean

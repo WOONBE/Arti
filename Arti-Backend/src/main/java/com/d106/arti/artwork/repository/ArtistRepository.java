@@ -26,6 +26,8 @@ public interface ArtistRepository extends JpaRepository<Artist, Integer> {
 
     List<Artist> findAll();
 
+    boolean existsByKorName(String engName);
+
 
 //    List<Artist> findByEngNameContainingOrKorNameContainingOrSummaryContaining(
 //        String engName, String korName, String summary

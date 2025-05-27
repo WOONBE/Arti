@@ -64,18 +64,31 @@ public class ArtworkBatchConfig {
                 .build();
     }
 
+//    @Bean
+//    public ItemWriter<NormalArtWork> artworkWriter() {
+//        return items -> {
+//            List<NormalArtWork> filtered = new ArrayList<>();
+//            for (NormalArtWork item : items) {
+//                if (item != null) {
+//                    filtered.add(item);
+//                }
+//            }
+//            artworkRepository.saveAll(filtered);
+//        };
+//    }
     @Bean
     public ItemWriter<NormalArtWork> artworkWriter() {
         return items -> {
             List<NormalArtWork> filtered = new ArrayList<>();
             for (NormalArtWork item : items) {
-                if (item != null) {
-                    filtered.add(item);
-                }
+                if (item == null) continue;
+                if (artworkRepository.existsByFilename(item.getFilename())) continue; // 중복 체크
+                filtered.add(item);
             }
             artworkRepository.saveAll(filtered);
         };
     }
+
 
     @Bean
     public Step artworkStep() {
