@@ -29,42 +29,84 @@ public class ArtistService {
 
     private final ArtistRepository artistRepository;
     private final ArtworkRepository artworkRepository;
+    private final ArtistAsyncService artistAsyncService;
+
+//    @Transactional(readOnly = true)
+//    public List<ArtistResponse> searchByEngName(String engName) {
+//        return artistRepository.findByEngNameContaining(engName)
+//            .stream()
+//            .map(ArtistResponse::toArtistResponse)
+//            .collect(Collectors.toList());
+//    }
+//
+//    @Transactional(readOnly = true)
+//    public List<ArtistResponse> searchByKorName(String korName) {
+//        return artistRepository.findByKorNameContaining(korName)
+//            .stream()
+//            .map(ArtistResponse::toArtistResponse)
+//            .collect(Collectors.toList());
+//    }
+//    @Transactional(readOnly = true)
+//    @Cacheable(cacheNames = "searchArtists", key = "#keyword", sync = true, cacheManager = "rcm")
+//    public List<ArtistResponse> search(String keyword) {
+//        Set<Artist> resultSet = new HashSet<>();
+//
+//        if (keyword != null && !keyword.isEmpty()) {
+//            resultSet.addAll(artistRepository.findByEngNameContaining(keyword));
+//            resultSet.addAll(artistRepository.findByKorNameContaining(keyword));
+//        }
+//
+//        List<ArtistResponse> resultList = resultSet.stream()
+//            .map(ArtistResponse::toArtistResponse)
+//            .collect(Collectors.toList());
+//
+//        if (resultList.isEmpty()) {
+//            throw new BadRequestException(NOT_FOUND_ARTIST);
+//        }
+//
+//        return resultList;
+//    }
 
     @Transactional(readOnly = true)
-    public List<ArtistResponse> searchByEngName(String engName) {
-        return artistRepository.findByEngNameContaining(engName)
-            .stream()
-            .map(ArtistResponse::toArtistResponse)
-            .collect(Collectors.toList());
-    }
+    @Cacheable(
+            cacheNames = "searchArtists",
+            key = "'kor_en::' + #keyword",
+            sync = true,
+            cacheManager = "rcm"
+    )
 
-    @Transactional(readOnly = true)
-    public List<ArtistResponse> searchByKorName(String korName) {
-        return artistRepository.findByKorNameContaining(korName)
-            .stream()
-            .map(ArtistResponse::toArtistResponse)
-            .collect(Collectors.toList());
-    }
-    @Transactional(readOnly = true)
-    @Cacheable(cacheNames = "searchArtists", key = "#keyword", sync = true, cacheManager = "rcm")
     public List<ArtistResponse> search(String keyword) {
-        Set<Artist> resultSet = new HashSet<>();
-
-        if (keyword != null && !keyword.isEmpty()) {
-            resultSet.addAll(artistRepository.findByEngNameContaining(keyword));
-            resultSet.addAll(artistRepository.findByKorNameContaining(keyword));
-        }
-
-        List<ArtistResponse> resultList = resultSet.stream()
-            .map(ArtistResponse::toArtistResponse)
-            .collect(Collectors.toList());
-
-        if (resultList.isEmpty()) {
+        if (keyword == null || keyword.trim().isEmpty()) {
             throw new BadRequestException(NOT_FOUND_ARTIST);
         }
 
-        return resultList;
+        String trimmedKeyword = keyword.trim();
+
+        CompletableFuture<List<Artist>> engFuture = artistAsyncService.findByEngNameContaining(trimmedKeyword);
+        CompletableFuture<List<Artist>> korFuture = artistAsyncService.findByKorNameContaining(trimmedKeyword);
+
+
+        CompletableFuture.allOf(engFuture, korFuture).join();
+
+        try {
+            Set<Artist> uniqueArtists = new HashSet<>();
+            uniqueArtists.addAll(engFuture.get());
+            uniqueArtists.addAll(korFuture.get());
+
+            if (uniqueArtists.isEmpty()) {
+                throw new BadRequestException(NOT_FOUND_ARTIST);
+            }
+
+            return uniqueArtists.stream()
+                    .map(ArtistResponse::toArtistResponse)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            throw new RuntimeException("검색 중 오류 발생", e);
+        }
     }
+
+
     // ID로 단건 조회
     @Transactional(readOnly = true)
     public ArtistResponse findArtistById(Integer artistId) {

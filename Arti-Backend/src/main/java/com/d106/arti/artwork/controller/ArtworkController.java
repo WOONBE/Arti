@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,8 +93,8 @@ public class ArtworkController {
         @RequestParam String keyword, // 검색 키워드
         @RequestParam(defaultValue = "1") int page  // 기본적으로 1 페이지부터 시작
     ) {
-        Page<NormalArtworkResponse> artworks = artworkService.searchArtworks(keyword, page);
-        return ResponseEntity.ok(artworks);
+        CompletableFuture<Page<NormalArtworkResponse>> artworks = artworkService.searchArtworksAsync(keyword, page);
+        return ResponseEntity.ok((Page<NormalArtworkResponse>) artworks);
     }
 
     // 단건 조회 엔드포인트

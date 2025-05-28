@@ -24,19 +24,19 @@ public class ArtistController {
 
     private final ArtistService artistService;
 
-    // 영어 이름으로 검색
-    @GetMapping("/search/artist/eng-name")
-    public ResponseEntity<List<ArtistResponse>> searchByEngName(@RequestParam String engName) {
-        List<ArtistResponse> artists = artistService.searchByEngName(engName);
-        return ResponseEntity.ok(artists);
-    }
-
-    // 한국어 이름으로 검색
-    @GetMapping("/search/artist/kor-name")
-    public ResponseEntity<List<ArtistResponse>> searchByKorName(@RequestParam String korName) {
-        List<ArtistResponse> artists = artistService.searchByKorName(korName);
-        return ResponseEntity.ok(artists);
-    }
+//    // 영어 이름으로 검색
+//    @GetMapping("/search/artist/eng-name")
+//    public ResponseEntity<List<ArtistResponse>> searchByEngName(@RequestParam String engName) {
+//        List<ArtistResponse> artists = artistService.searchByEngName(engName);
+//        return ResponseEntity.ok(artists);
+//    }
+//
+//    // 한국어 이름으로 검색
+//    @GetMapping("/search/artist/kor-name")
+//    public ResponseEntity<List<ArtistResponse>> searchByKorName(@RequestParam String korName) {
+//        List<ArtistResponse> artists = artistService.searchByKorName(korName);
+//        return ResponseEntity.ok(artists);
+//    }
 
     // 한글 이름, 영문 이름 포함하여 통합 검색
     @GetMapping("/search")

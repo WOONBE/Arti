@@ -13,6 +13,7 @@ import com.d106.arti.artwork.repository.ArtworkRepository;
 import com.d106.arti.global.exception.BadRequestException;
 import com.d106.arti.global.exception.ExceptionCode;
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,6 +56,30 @@ public class ArtworkService {
         // 검색 결과를 NormalArtworkResponse로 변환하여 반환
         return artworksPage.map(artwork -> NormalArtworkResponse.fromEntity(artwork, imageBaseUrl));
     }
+
+    @Async
+    @Transactional(readOnly = true)
+    @Cacheable(
+            cacheNames = "searchArtworks",
+            key = "'keyword=' + #keyword + ':page=' + #page",
+            sync = true,
+            cacheManager = "rcm"
+    )
+    public CompletableFuture<Page<NormalArtworkResponse>> searchArtworksAsync(String keyword, int page) {
+        Pageable pageable = PageRequest.of(page - 1, 30);
+        Page<NormalArtWork> artworksPage = artworkRepository.search(keyword, pageable);
+
+        if (artworksPage.isEmpty()) {
+            throw new BadRequestException(NOT_FOUND_ARTWORK);
+        }
+
+        Page<NormalArtworkResponse> responsePage = artworksPage.map(
+                artwork -> NormalArtworkResponse.fromEntity(artwork, imageBaseUrl)
+        );
+
+        return CompletableFuture.completedFuture(responsePage);
+    }
+
 
     // 단건 조회 메서드
     @Transactional(readOnly = true)
